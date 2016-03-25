@@ -27,6 +27,13 @@
     "type": "git",
     "url": "https://github.com/antoor/antSword"
   },
+  "update": {
+    "md5": "6eaa05e4a615e0301e8b39523a0dc8a4",
+    "logs": "新增在线更新功能\n新增文件管理模块双击文件打开编辑窗口(如果文件大小<100kb)",
+    "sources": {
+      "github": "https://github.com/antoor/antSword/releases/download/1.1.0/app.asar.zip"
+    }
+  },
   "bugs": {
     "url": "https://github.com/antoor/antSword/issues"
   },
