@@ -9,6 +9,7 @@
     "babel-preset-es2015": "^6.6.0",
     "babel-preset-stage-0": "^6.5.0",
     "electron-prebuilt": "^0.36.10",
+    "extract-zip": "^1.5.0",
     "iconv-lite": "^0.4.13",
     "lib-qqwry": "^0.0.5",
     "log4js": "^0.6.29",
@@ -28,11 +29,11 @@
     "url": "https://github.com/antoor/antSword"
   },
   "update": {
-    "md5": "6eaa05e4a615e0301e8b39523a0dc8a4",
+    "md5": "f65b2d13c639ac1a21bb859c242dc033",
     "logs": "新增在线更新功能\n新增文件管理模块双击文件打开编辑窗口(如果文件大小<100kb)",
     "sources": {
       "github": "https://github.com/antoor/antSword/releases/download/1.1.0/app.asar.zip",
-      "local": "http://localhost:8000/app.asar.zip"
+      "local": "http://localhost:8000/1.1.0/update.zip"
     }
   },
   "bugs": {
