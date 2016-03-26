@@ -9,7 +9,7 @@
   *   2. mysql 数据库支持
   *   3. 支持 base64 和 hex 编码
   **/
-  String Pwd = "a";   //连接密码
+  String Pwd = "ant";   //连接密码
 	String encoder = "base64"; // 数据编码
 	//String encoder = "hex";
   String cs = "UTF-8";

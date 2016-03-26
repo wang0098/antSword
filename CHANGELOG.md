@@ -6,7 +6,7 @@
 
 ### /26
   1. 文件管理双击：size < 100kb ? 编辑 : 下载
-  2. 调整 Custom 方式数据库部分代码
+  2. 调整 Custom 方式数据库部分代码 // 2-4:感谢[@Medicean](https://github.com/Medicean)
   3. 添加 Shells 目录, 用于存放 shell 样本代码
   4. 添加 `custom.jsp` 服务端样本代码
 
