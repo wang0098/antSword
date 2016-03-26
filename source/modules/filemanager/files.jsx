@@ -346,14 +346,14 @@ class Files {
       bmenu.hide();
     });
 
-    // 双击::列出数据&&查看/编辑/下载文件(支持查看程序(png|jpg|gif..)则查看
-    //支持编辑文件(php,js,txt..)则启动编辑器，如果是二进制或压缩等文件(exe,dll,zip,rar..)则下载)
+    // 双击文件
+    // :如果size < 100kb，则进行编辑，否则进行下载
     grid.attachEvent('onRowDblClicked', (id, lid, event) => {
       const fname = grid.getRowAttribute(id, 'fname');
       const fsize = grid.getRowAttribute(id, 'fsize');
       if (!fname.endsWith('/')) {
         // 双击编辑size < 100kb 文件
-        fsize <= 100 * 1024 ? manager.editFile(fname) : null;
+        fsize <= 100 * 1024 ? manager.editFile(fname) : manager.downloadFile(fname, fsize);
       }else{
         self.gotoPath(fname);
       }
