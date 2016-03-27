@@ -1,6 +1,6 @@
 {
   "name": "antsword",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "中国蚁剑是一款跨平台的开源网站管理工具",
   "main": "app.js",
   "dependencies": {
@@ -28,7 +28,7 @@
     "type": "git",
     "url": "https://github.com/antoor/antSword"
   },
-  "debug": false,
+  "debug": true,
   "update": {
     "md5": "f7287aa765941d1e039f5b654344ccc5",
     "logs": "测试更新日志1\n测试更新日志2\n新增在线更新功能\n新增文件管理模块双击文件打开编辑窗口(如果文件大小<100kb)",
