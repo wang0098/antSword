@@ -1,7 +1,7 @@
-// 
+//
 // 数据库驱动::ASP
 // 支持数据库:access,sqlserver,mysql
-// 
+//
 
 class ASP {
 
@@ -9,9 +9,9 @@ class ASP {
     this.opt = opt;
     this.core = this.opt.core;
     this.manager = this.opt.super;
-    // 
+    //
     // * 数据库驱动列表
-    // 
+    //
     this.conns = {
       'mysql': 'com.mysql.jdbc.Driver\r\njdbc:mysql://localhost/test?user=root&password=123456',
       'sqlserver': 'com.microsoft.sqlserver.jdbc.SQLServerDriver\r\njdbc:sqlserver://127.0.0.1:1433;databaseName=test;user=sa;password=123456',
@@ -71,10 +71,11 @@ class ASP {
         // 生成查询SQL语句
         case 'column':
           let _co = arr[1].split(':');
+          const db = new Buffer(_co[1], 'base64').toString();
           const table = new Buffer(_co[2], 'base64').toString();
           const column = new Buffer(_co[3], 'base64').toString();
 
-          const sql = `SELECT TOP 20 [${column}] FROM [${table}] ORDER BY 1 DESC;`;
+          const sql = `SELECT ${column} FROM ${db}.${table} ORDER BY 1 DESC;`;
           this.manager.query.editor.session.setValue(sql);
           break;
       }
@@ -253,7 +254,7 @@ class ASP {
     {
       conn: conf['conn'],
       encode: this.manager.opt.encode,
-      dbname: ['access', 'microsoft_jet_oledb_4_0'].indexOf(conf['type']) > -1 ? conf['conn'].match(/[\w]+.mdb$/) : 'database'
+      db: ['access', 'microsoft_jet_oledb_4_0'].indexOf(conf['type']) > -1 ? conf['conn'].match(/[\w]+.mdb$/) : 'database'
     }, (ret) => {
       const arr = ret.split('\t');
       if (arr.length === 1 && ret === '') {
@@ -293,7 +294,7 @@ class ASP {
     {
       conn: conf['conn'],
       encode: this.manager.opt.encode,
-      dbname: db
+      db: db
     }, (ret) => {
       const arr = ret.split('\t');
       const _db = new Buffer(db).toString('base64');
@@ -329,7 +330,8 @@ class ASP {
     {
       conn: conf['conn'],
       encode: this.manager.opt.encode,
-      table: conf['type'] === 'oracle' ? `SELECT * FROM (SELECT A.*,ROWNUM N FROM ${table} A) WHERE N=1` : `SELECT TOP 1 * FROM ${table}`
+      db: db,
+      table: table
     }, (ret) => {
       const arr = ret.split('\t');
       const _db = new Buffer(db).toString('base64');
@@ -352,8 +354,8 @@ class ASP {
       // 更新编辑器SQL语句
       this.manager.query.editor.session.setValue(
         conf['type'] === 'oracle'
-        ? `SELECT * FROM (SELECT A.*,ROWNUM N FROM ${table} A ORDER BY 1 DESC) WHERE N>0 AND N<=20`
-        : `SELECT TOP 20 * FROM ${table} ORDER BY 1 DESC;`);
+        ? `SELECT * FROM (SELECT A.*,ROWNUM N FROM ${db}.${table} A ORDER BY 1 DESC) WHERE N>0 AND N<=20`
+        : `SELECT * FROM ${db}.${table} ORDER BY 1 DESC LIMIT 0,20;`);
       this.manager.list.layout.progressOff();
     });
   }

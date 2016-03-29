@@ -3,6 +3,7 @@
 // 
 
 const LANG = antSword['language']['settings']['update'];
+const LANG_T = antSword['language']['toastr'];
 
 class Update {
   constructor(sidebar) {
@@ -15,19 +16,152 @@ class Update {
     // toolbar
     const toolbar = cell.attachToolbar();
     toolbar.loadStruct([
-      { id: 'check', type: 'button', text: LANG['toolbar']['check'], disabled: true, icon: 'check-square-o' },
-      { type: 'separator' }
+      {
+        id: 'check',
+        type: 'button',
+        // 调试或者windows平台不支持更新
+        disabled: antSword['package']['debug'] || process.platform === 'win',
+        text: LANG['toolbar']['check'], icon: 'check-square-o'
+      }, { type: 'separator' }
     ]);
+
+    // toolbar点击事件
+    toolbar.attachEvent('onClick', (id) => {
+      switch(id) {
+        case 'check':
+          this.checkUpdate();
+          break;
+      }
+    });
 
     // status
     cell.attachHTMLString(`
-
-      当前版本：1.0.0
-      <br/>
-      暂不支持在线更新！
-      <br />
-      请访问<strong style="color:#0099FF">https://github.com/antoor/antSword</strong>获取最新版本！
+      ${LANG['current']}: ${antSword['package']['version']}
     `);
+
+
+    this.cell = cell;
+  }
+
+  // 检查更新
+  checkUpdate() {
+    this.cell.progressOn();
+    toastr.info(LANG['check']['ing'], LANG_T['info']);
+    // 后台检查更新
+    antSword['ipcRenderer']
+      .on('update-check', (event, ret) => {
+        this.cell.progressOff();
+        const info = ret['retVal'];
+        // 木有更新
+        if (!ret['hasUpdate']) {
+          return typeof info === 'string'
+            ? toastr.error(LANG['check']['fail'](info), LANG_T['error'])
+            : toastr.info(LANG['check']['none'](info['version']), LANG_T['info']);
+        }
+        // 发现更新
+        toastr.success(LANG['check']['found'](info['version']), LANG_T['success']);
+        // 更新来源html
+        let sources_html = `<select id="ant-update-source">`;
+        for (let s in info['update']['sources']) {
+          sources_html += `<option value="${s}">${s}</option>`;
+        }
+        sources_html += `</select>`;
+        // 提示更新
+        layer.open({
+          type: 1,
+          shift: 2,
+          skin: 'ant-update',
+          btn: [LANG['prompt']['btns']['ok'], LANG['prompt']['btns']['no']],
+          closeBtn: 0,
+          title: `<i class="fa fa-cloud-download"></i> ${LANG['prompt']['title']}[v${info['version']}]`,
+          content: `
+            <strong>${LANG['prompt']['changelog']}</strong>
+            <ol>
+              <li>${info['update']['logs'].split('\n').join('</li><li>')}
+            </ol>
+            <strong>${LANG['prompt']['sources']}</strong>${sources_html}
+          `,
+          yes: () => {
+            // 获取更新选择地址
+            const download_source = $('#ant-update-source').val();
+            // 开始更新
+            // 更新动画
+            this.updateLoading();
+            // 通知后台
+            antSword['ipcRenderer']
+              .on('update-download', (event, ret) => {
+                // 下载失败
+                console.log(ret);
+                if (!ret['done']) {
+                  if (typeof ret['retVal'] === 'object') {
+                    switch(ret['retVal']['type']) {
+                      case 'md5':
+                        this.updateFail(LANG['prompt']['fail']['md5']);
+                        break;
+                      case 'unzip':
+                        this.updateFail(LANG['prompt']['fail']['unzip'](ret['retVal']['err']));
+                        break;
+                      default:
+                        this.updateFail(ret['retVal']);
+                    }
+                  } else {
+                    this.updateFail(ret['retVal']);
+                  }
+                  return;
+                }
+                this.updateSuccess();
+              })
+              .send('update-download', download_source);
+          }
+        });
+
+      })
+      .send('update-check', {
+        local_ver: antSword['package']['version']
+      });
+  }
+
+  // 更新动画
+  updateLoading() {
+    // 删除按钮
+    $('.layui-layer-btn').remove();
+    // 加载动画
+    $('.layui-layer-content').html(`
+      <div class="pacman">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <p align="center"><strong>${LANG['message']['ing']}</strong></p>
+    `);
+  }
+
+  // 更新失败提示界面
+  updateFail(tip) {
+    $('.layui-layer-content').html(`
+      <div align="center" style="color: red">
+        <i class="fa fa-times-circle update-icon" />
+        <p><strong>${LANG['message']['fail'](tip)}</strong></p>
+      </div>
+    `);
+    toastr.error(LANG['message']['fail'](tip), LANG_T['error']);
+    setTimeout(layer.closeAll, 1024 * 5);
+  }
+
+  // 更新成功提示界面
+  updateSuccess() {
+    $('.layui-layer-content').html(`
+      <div align="center" style="color: green">
+        <i class="fa fa-check-circle update-icon" />
+        <p><strong>${LANG['message']['success']}</strong></p>
+      </div>
+    `);
+    toastr.success(LANG['message']['success'], LANG_T['success']);
+    setTimeout(() => {
+      antSword['ipcRenderer'].send('quit');
+    }, 1024 * 3);
   }
 }
 

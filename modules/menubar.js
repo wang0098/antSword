@@ -4,6 +4,11 @@
 
 'use strict';
 
+// 读取package.json信息
+const info = JSON.parse(
+  require('fs').readFileSync(require('path').join(__dirname, '../package.json'))
+);
+
 class Menubar {
 
   constructor(electron, app, mainWindow) {
@@ -14,6 +19,7 @@ class Menubar {
     Menu.setApplicationMenu(Menu.buildFromTemplate([]));
     // 监听重载菜单事件
     ipcMain.on('menubar', this.reload.bind(this));
+    ipcMain.on('quit', app.quit.bind(app));
 
     this.electron = electron;
     this.app = app;
@@ -95,8 +101,11 @@ class Menubar {
             click: event.sender.send.bind(event.sender, 'menubar', 'tabbar-close')
           }
         ]
-      }, {
-        // 调试
+      }
+    ];
+    // 调试菜单
+    if (info['debug']) {
+      template.push({
         label: LANG['debug']['title'],
         submenu: [
           {
@@ -109,51 +118,49 @@ class Menubar {
             click: this.mainWindow.webContents.toggleDevTools.bind(this.mainWindow.webContents)
           }
         ]
-      }
-    ];
-    // OSX主菜单
-    // if (process.platform === 'darwin') {
-      template.unshift({
-        label: LANG['main']['title'],
-        submenu: [
-          {
-            label: LANG['main']['about'],
-            accelerator: 'Shift+CmdOrCtrl+I',
-            click: event.sender.send.bind(event.sender, 'menubar', 'settings-about')
-          }, {
-            label: LANG['main']['language'],
-            accelerator: 'Shift+CmdOrCtrl+L',
-            click: event.sender.send.bind(event.sender, 'menubar', 'settings-language')
-          }, {
-            label: LANG['main']['aproxy'],
-            accelerator: 'Shift+CmdOrCtrl+A',
-            click: event.sender.send.bind(event.sender, 'menubar', 'settings-aproxy')
-          }, {
-            label: LANG['main']['update'],
-            accelerator: 'Shift+CmdOrCtrl+U',
-            click: event.sender.send.bind(event.sender, 'menubar', 'settings-update')
-          }, {
-            type: 'separator'
-          }, {
-            label: LANG['main']['settings'],
-            accelerator: 'Shift+CmdOrCtrl+S',
-            click: event.sender.send.bind(event.sender, 'menubar', 'settings')
-          }, {
-            type: 'separator'
-          }, {
-            label: LANG['main']['plugin'],
-            accelerator: 'Shift+CmdOrCtrl+P',
-            click: event.sender.send.bind(event.sender, 'menubar', 'plugin')
-          }, {
-            type: 'separator'
-          }, {
-            label: LANG['main']['quit'],
-            accelerator: 'Command+Q',
-            click: this.app.quit.bind(this.app)
-          },
-        ]
       });
-    // };
+    };
+    // 主菜单
+    template.unshift({
+      label: LANG['main']['title'],
+      submenu: [
+        {
+          label: LANG['main']['about'],
+          accelerator: 'Shift+CmdOrCtrl+I',
+          click: event.sender.send.bind(event.sender, 'menubar', 'settings-about')
+        }, {
+          label: LANG['main']['language'],
+          accelerator: 'Shift+CmdOrCtrl+L',
+          click: event.sender.send.bind(event.sender, 'menubar', 'settings-language')
+        }, {
+          label: LANG['main']['aproxy'],
+          accelerator: 'Shift+CmdOrCtrl+A',
+          click: event.sender.send.bind(event.sender, 'menubar', 'settings-aproxy')
+        }, {
+          label: LANG['main']['update'],
+          accelerator: 'Shift+CmdOrCtrl+U',
+          click: event.sender.send.bind(event.sender, 'menubar', 'settings-update')
+        }, {
+          type: 'separator'
+        }, {
+          label: LANG['main']['settings'],
+          accelerator: 'Shift+CmdOrCtrl+S',
+          click: event.sender.send.bind(event.sender, 'menubar', 'settings')
+        }, {
+          type: 'separator'
+        }, {
+          label: LANG['main']['plugin'],
+          accelerator: 'Shift+CmdOrCtrl+P',
+          click: event.sender.send.bind(event.sender, 'menubar', 'plugin')
+        }, {
+          type: 'separator'
+        }, {
+          label: LANG['main']['quit'],
+          accelerator: 'Command+Q',
+          click: this.app.quit.bind(this.app)
+        },
+      ]
+    });
     // 更新菜单栏
     this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(template));
   }
