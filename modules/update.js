@@ -54,7 +54,7 @@ class Update {
   check(localVer, callback) {
     logger.debug('check', localVer);
     superagent
-      .get('https://raw.githubusercontent.com/antoor/antSword/v1.1-dev/package.json')
+      .get('https://raw.githubusercontent.com/antoor/antSword/master/package.json')
       .timeout(9527)
       .end((err, res) => {
         if (err) { return callback(false, err.toString()) };
