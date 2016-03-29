@@ -403,8 +403,33 @@ module.exports = {
     },
     update: {
       title: 'Check update',
+      current: 'Current version',
       toolbar: {
         check: 'Check'
+      },
+      check: {
+        ing: 'Check for updates..',
+        fail: (err) => `Check for update failed!<br/>${err}`,
+        none: (ver) => `After examination, no update![v${ver}]`,
+        found: (ver) => `Found a new version [v${ver}]`
+      },
+      prompt: {
+        btns: {
+          ok: 'Update',
+          no: 'Cancel'
+        },
+        title: 'Update to version',
+        changelog: 'Change Logs: ',
+        sources: 'Download source: ',
+        fail: {
+          md5: 'File MD5 value check failed!',
+          unzip: (err) => `Unzip the file failed! [${err}]`
+        }
+      },
+      message: {
+        ing: 'Downloading..',
+        fail: (err) => `Update failed! [${err}]`,
+        success: 'Update success! Please manually restart the application later!'
       }
     },
     aproxy: {

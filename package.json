@@ -1,6 +1,6 @@
 {
   "name": "antsword",
-  "version": "1.1.2",
+  "version": "1.1.1",
   "description": "中国蚁剑是一款跨平台的开源网站管理工具",
   "main": "app.js",
   "dependencies": {
@@ -8,12 +8,13 @@
     "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.6.0",
     "babel-preset-stage-0": "^6.5.0",
-    "electron-prebuilt": "^0.36.10",
+    "electron-prebuilt": "^0.37.3",
     "extract-zip": "^1.5.0",
     "iconv-lite": "^0.4.13",
     "lib-qqwry": "^0.0.5",
     "log4js": "^0.6.29",
     "nedb": "^1.5.1",
+    "nugget": "^2.0.0",
     "superagent": "^1.6.1",
     "superagent-proxy": "^1.0.0",
     "webpack": "^1.12.14"
@@ -28,14 +29,11 @@
     "type": "git",
     "url": "https://github.com/antoor/antSword"
   },
-  "debug": true,
+  "debug": false,
   "update": {
-    "md5": "f7287aa765941d1e039f5b654344ccc5",
-    "logs": "测试更新日志1\n测试更新日志2\n新增在线更新功能\n新增文件管理模块双击文件打开编辑窗口(如果文件大小<100kb)",
-    "sources": {
-      "test": "http://192.168.1.6:8000/1.1.0/update.zip",
-      "github": "https://github.com/antoor/antSword/releases/download/1.1.0/app.asar.zip"
-    }
+    "md5": "",
+    "logs": "",
+    "sources": {}
   },
   "bugs": {
     "url": "https://github.com/antoor/antSword/issues"

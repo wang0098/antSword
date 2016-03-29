@@ -5,10 +5,11 @@ const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 
 // 导入模块
+const Cache = require('./modules/cache');
+const Update = require('./modules/update');
 const Menubar = require('./modules/menubar');
 const Request = require('./modules/request');
 const Database = require('./modules/database');
-const Cache = require('./modules/cache');
 
 // electron.crashReporter.start();
 
@@ -58,5 +59,8 @@ app
 
     // 初始化缓存模块
     new Cache(electron);
+
+    // 监听更新请求
+    new Update(electron);
 
   });

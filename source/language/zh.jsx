@@ -404,8 +404,33 @@ module.exports = {
     },
     update: {
       title: '检查更新',
+      current: '当前版本',
       toolbar: {
         check: '检查'
+      },
+      check: {
+        ing: '检查更新中。。',
+        fail: (err) => `检查更新失败！<br/>${err}`,
+        none: (ver) => `检查完毕，暂无更新！【v${ver}】`,
+        found: (ver) => `发现新版本【v${ver}】`
+      },
+      prompt: {
+        btns: {
+          ok: '更新',
+          no: '取消'
+        },
+        title: '版本更新',
+        changelog: '更新日志：',
+        sources: '更新来源：',
+        fail: {
+          md5: '文件MD5值校验失败！',
+          unzip: (err) => `解压文件失败！【${err}】`
+        }
+      },
+      message: {
+        ing: '努力更新中。。',
+        fail: (err) => `更新失败！【${err}】`,
+        success: '更新成功！请稍后手动重启应用！'
       }
     },
     aproxy: {
