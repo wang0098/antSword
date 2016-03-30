@@ -20,7 +20,7 @@ class Update {
         id: 'check',
         type: 'button',
         // 调试或者windows平台不支持更新
-        disabled: antSword['package']['debug'] || process.platform === 'win',
+        disabled: antSword['package']['debug'] || process.platform === 'win32',
         text: LANG['toolbar']['check'], icon: 'check-square-o'
       }, { type: 'separator' }
     ]);
