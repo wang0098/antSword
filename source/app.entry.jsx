@@ -57,7 +57,7 @@ ipcRenderer.send('aproxy', {
 antSword['ipcRenderer'] = ipcRenderer;
 antSword['CacheManager'] = CacheManager;
 antSword['menubar'] = new Menubar();
-antSword['package'] = global.require('../package'));
+antSword['package'] = global.require('../package');
 
 // 加载模块列表
 // antSword['tabbar'] = new dhtmlXTabBar(document.getElementById('container'));
