@@ -4,15 +4,6 @@ const electron = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 
-// 导入模块
-const Cache = require('./modules/cache');
-const Update = require('./modules/update');
-const Menubar = require('./modules/menubar');
-const Request = require('./modules/request');
-const Database = require('./modules/database');
-
-// electron.crashReporter.start();
-
 app
   .on('window-all-closed', app.quit)
   .on('ready', () => {
@@ -22,12 +13,10 @@ app
       minWidth: 1040,
       minHeight: 699,
       webgl: false,
-      title: 'AntSword',
-      // autoHideMenuBar: true,
-      // transparent: false,
-      // frame: false
-      // resizable: false
+      title: 'AntSword'
     });
+
+    // 加载views
     mainWindow.loadURL(`file:\/\/${__dirname}/views/index.html`);
 
     // 调整部分UI
@@ -37,7 +26,9 @@ app
           antSword.modules.shellmanager.category.cell.setWidth(222);
         }, 500);
       `);
-    }
+    };
+
+    // 窗口事件监听
     mainWindow
       .on('closed', () => { mainWindow = null })
       .on('resize', reloadUI)
@@ -49,18 +40,9 @@ app
     // 打开调试控制台
     // mainWindow.webContents.openDevTools();
 
-    new Menubar(electron, app, mainWindow);
-
-    // 监听Request请求
-    new Request(electron);
-
-    // 初始化数据库
-    new Database(electron);
-
-    // 初始化缓存模块
-    new Cache(electron);
-
-    // 监听更新请求
-    new Update(electron);
+    // 初始化模块
+    ['menubar', 'request', 'database', 'cache', 'update'].map((_) => {
+      new ( require(`./modules/${_}`) )(electron, app, mainWindow);
+    });
 
   });
