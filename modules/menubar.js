@@ -5,9 +5,7 @@
 'use strict';
 
 // 读取package.json信息
-const info = JSON.parse(
-  require('fs').readFileSync(require('path').join(__dirname, '../package.json'))
-);
+const info = require('../package');
 
 class Menubar {
 

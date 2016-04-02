@@ -2,13 +2,11 @@
 // 程序入口
 // -------
 // create: 2015/12/20
-// update: 2016/01/20
+// update: 2016/04/02
 //
 
 'use strict';
 
-const fs = global.require('fs');
-const path = global.require('path');
 const electron = global.require('electron');
 const remote = electron.remote;
 const ipcRenderer = electron.ipcRenderer;
@@ -59,7 +57,7 @@ ipcRenderer.send('aproxy', {
 antSword['ipcRenderer'] = ipcRenderer;
 antSword['CacheManager'] = CacheManager;
 antSword['menubar'] = new Menubar();
-antSword['package'] = JSON.parse(fs.readFileSync(path.join(global.__dirname, '../package.json')));
+antSword['package'] = global.require('../package'));
 
 // 加载模块列表
 // antSword['tabbar'] = new dhtmlXTabBar(document.getElementById('container'));
