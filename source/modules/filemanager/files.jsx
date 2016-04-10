@@ -1,6 +1,6 @@
-// 
+//
 // 文件管理 模块
-// 
+//
 
 const LANG_T = antSword['language']['toastr'];
 const LANG = antSword['language']['filemanager']['files'];
@@ -189,7 +189,7 @@ class Files {
       ${LANG['grid']['header']['size']},
       ${LANG['grid']['header']['attr']}
     `);
-    grid.setColTypes("ro,ro,ro,ro,ro"); 
+    grid.setColTypes("ro,ro,ro,ro,ro");
     grid.setColSorting('str,str,str,str,str');
     grid.setInitWidths("40,*,150,100,100");
     grid.setColAlign("center,left,left,right,center");
@@ -413,6 +413,8 @@ class Files {
         id: _id,
         fname: file['name'],
         fsize: parseInt(file['size']),
+        // 如果是可执行文件（exe、dll..），则设置为红色字体
+        style: /.exe$|.dll$|.bat$|.sh$|.com$/.test(file['name']) ? 'color:red' : '',
         data: [
           self.fileIcon(file['name']),
           antSword.noxss(file['name'].replace(/\/$/, '')),
