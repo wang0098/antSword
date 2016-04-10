@@ -414,7 +414,7 @@ class Files {
         fname: file['name'],
         fsize: parseInt(file['size']),
         // 如果是可执行文件（exe、dll..），则设置为红色字体
-        style: /.exe$|.dll$|.bat$|.sh$|.com$/.test(file['name']) ? 'color:red' : '',
+        style: /\.exe$|\.dll$|\.bat$|\.sh$|\.com$/.test(file['name']) ? 'color:red' : '',
         data: [
           self.fileIcon(file['name']),
           antSword.noxss(file['name'].replace(/\/$/, '')),
