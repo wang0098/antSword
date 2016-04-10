@@ -18,11 +18,21 @@ const antSword = window.antSword = {
   noxss: (html) => {
     return String(html).replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
   },
-  modules: {}
+  core: {},
+  modules: {},
+  // localStorage存储
+  // 参数{key:存储键值,[value]:存储内容,[def]:默认内容}
+  storage: (key, value, def) => {
+    // 读取
+    if (!value) {
+      return localStorage.getItem(key) || def;
+    };
+    // 设置
+    localStorage.setItem(key, value);
+  }
 };
 
 // 加载模板代码
-antSword['core'] = {};
 ['php', 'asp', 'aspx', 'custom'].map((_) => {
   antSword['core'][_] = require(`./core/${_}/index`);
 });
@@ -33,22 +43,23 @@ _lang = ['en', 'zh'].indexOf(_lang) === -1 ? 'en' : _lang;
 antSword['language'] = require(`./language/${_lang}`);
 
 // 加载代理
-var _aproxymode = localStorage.getItem('aproxymode') || "noproxy";
-var _aproxyprotocol = localStorage.getItem('aproxyprotocol');
-var _aproxyserver = localStorage.getItem('aproxyserver');
-var _aproxyport = localStorage.getItem('aproxyport');
-var _aproxyusername = localStorage.getItem('aproxyusername');
-var _aproxypassword = localStorage.getItem('aproxypassword');
-
-antSword['aproxymode'] = _aproxymode;
-
-if (_aproxyusername == "" || _aproxyusername == null || _aproxypassword == "" || _aproxypassword == null) {
-  antSword['aproxyauth'] = "";
-}else{
-  antSword['aproxyauth'] = _aproxyusername + ":" + _aproxypassword;
+const aproxy = {
+  mode: antSword['storage']('aproxymode', false, 'noproxy'),
+  port: antSword['storage']('aproxyport'),
+  server: antSword['storage']('aproxyserver'),
+  password: antSword['storage']('aproxypassword'),
+  username: antSword['storage']('aproxyusername'),
+  protocol: antSword['storage']('aproxyprotocol')
 }
-antSword['aproxyuri'] = _aproxyprotocol + "://" + antSword['aproxyauth']+ "@" + _aproxyserver + ":" + _aproxyport;
+antSword['aproxymode'] = aproxy['mode'];
 
+antSword['aproxyauth'] = (
+  !aproxy['username'] || !aproxy['password']
+) ? '' : `${aproxy['username']}:${aproxy['password']}`;
+
+antSword['aproxyuri'] = `${aproxy['protocol']}:\/\/${antSword['aproxyauth']}@${aproxy['server']}:${aproxy['port']}`;
+
+// 通知后端设置代理
 ipcRenderer.send('aproxy', {
   aproxymode: antSword['aproxymode'],
   aproxyuri: antSword['aproxyuri']
