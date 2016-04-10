@@ -1,6 +1,6 @@
-// 
+//
 // 任务管理 模块
-// 
+//
 
 /*
   用法：
@@ -18,6 +18,8 @@ class Tasks {
   constructor(cell, manager) {
     cell.setText(`<i class="fa fa-tasks"></i> ${LANG['title']}`);
     cell.setHeight(250);
+    // 默认折叠panel
+    cell.collapse();
 
     // 创建表格
     let grid = cell.attachGrid();
@@ -29,7 +31,7 @@ class Tasks {
       ${LANG['grid']['header']['stime']},
       ${LANG['grid']['header']['etime']}
     `);
-    grid.setColTypes("ro,ro,ro,ro,ro"); 
+    grid.setColTypes("ro,ro,ro,ro,ro");
     grid.setInitWidths("100,*,150,150,150");
     grid.setColAlign("left,left,left,left,left");
 
@@ -44,6 +46,8 @@ class Tasks {
   // task.update('20%');
   // task.end('100%');
   new(name, desc, progress) {
+    // 展开panel
+    this.cell.expand();
     // 创建一个随机ID
     const hash = String(+new Date() + Math.random()).replace('.', '_');
     this.grid.addRow(
