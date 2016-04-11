@@ -34,7 +34,8 @@
     "md5": "13f38b143dfabf90ea296269acd5b547",
     "logs": "添加 PHP Custom Spy，及多个 Shell 样本\n增加文件管理中可执行文件的提示样式\n调整文件管理中任务面板默认折叠（当有任务时自动展开",
     "sources": {
-      "coding.net": "https://coding.net/api/share/download/573ed38e-ab89-4b16-86ff-2d0d58517a3f"
+      "coding.net": "https://coding.net/api/share/download/573ed38e-ab89-4b16-86ff-2d0d58517a3f",
+      "github": "https://github.com/antoor/antSword/releases/download/1.1.2/update.zip"
     }
   },
   "bugs": {
