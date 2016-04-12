@@ -1,6 +1,6 @@
-// 
+//
 // 左侧目录 模块
-// 
+//
 
 const LANG_T = antSword['language']['toastr'];
 const LANG = antSword['language']['filemanager']['folder'];
@@ -74,8 +74,8 @@ class Folder {
       for (let _ in obj) {
         let _path = path + _;
         let _obj = {
-          id: _path,
-          text: (_.length === 1 || (_.endsWith(':/') && _.length === 3)) ? _ : _.replace(/\/$/, '')
+          id: antSword.noxss(_path),
+          text: antSword.noxss((_.length === 1 || (_.endsWith(':/') && _.length === 3)) ? _ : _.replace(/\/$/, ''))
         };
         let _result = parseItem(obj[_], _path);
         if (_result) {
