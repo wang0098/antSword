@@ -54,8 +54,13 @@ $ npm start
   * HomePage: [http://uyu.us][url-homepage]
   * MyWeibo: [http://weibo.com/antoor][url-weibo]
 
+## License
+This project is licensed under the terms of the [MIT license][url-mit]
+
+
 [url-doccn]: README_CN.md
 [url-changelog]: CHANGELOG.md
 [url-homepage]: http://uyu.us
 [url-email]: mailto:u@uyu.us
 [url-weibo]: http://weibo.com/antoor
+[url-mit]: LICENSE
