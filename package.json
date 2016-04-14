@@ -1,6 +1,6 @@
 {
   "name": "antsword",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "中国蚁剑是一款跨平台的开源网站管理工具",
   "main": "app.js",
   "dependencies": {
@@ -17,6 +17,7 @@
     "nugget": "^2.0.0",
     "superagent": "^1.6.1",
     "superagent-proxy": "^1.0.0",
+    "through": "^2.3.8",
     "webpack": "^1.12.14"
   },
   "scripts": {
@@ -29,14 +30,11 @@
     "type": "git",
     "url": "https://github.com/antoor/antSword"
   },
-  "debug": false,
+  "debug": true,
   "update": {
-    "md5": "13f38b143dfabf90ea296269acd5b547",
-    "logs": "添加 PHP Custom Spy，及多个 Shell 样本\n增加文件管理中可执行文件的提示样式\n调整文件管理中任务面板默认折叠（当有任务时自动展开",
-    "sources": {
-      "coding.net": "https://coding.net/api/share/download/573ed38e-ab89-4b16-86ff-2d0d58517a3f",
-      "github": "https://github.com/antoor/antSword/releases/download/1.1.2/update.zip"
-    }
+    "md5": "",
+    "logs": "",
+    "sources": {}
   },
   "bugs": {
     "url": "https://github.com/antoor/antSword/issues"
