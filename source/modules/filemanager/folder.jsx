@@ -11,7 +11,6 @@ class Folder {
   // 1.cell: 左侧layout.cell对象
   constructor(cell, manager) {
     cell.setWidth(250);
-    cell.setText(`<i class="fa fa-folder-o"></i> ${LANG['title']}`);
     // 创建tree
     let tree = cell.attachTree();
     // tree事件
@@ -23,6 +22,7 @@ class Folder {
     this.cell = cell;
     this.cache = {};
     this.manager = manager;
+    this.setTitle(0);
 
   }
 
@@ -44,12 +44,15 @@ class Folder {
       self.cache[curPath] = 0;
     });
     // 2. 解析当前子目录
+    let folderNum = 0;
     files.map((f) => {
       let _ = f['name'];
       if (!_.endsWith('/') || ['./', '../'].indexOf(_) !== -1) {return};
       self.cache[`${curPath}${_}`] = 0;
+      folderNum ++;
     });
-
+    // 设置标题
+    this.setTitle(folderNum);
 
     // 3. 解析缓存为树形菜单虚拟对象
     // /var/www/html 根据/分割为数组，循环，相加，增加到虚拟缓存
@@ -98,6 +101,14 @@ class Folder {
     }, 'json');
 
     this.cell.progressOff();
+  }
+
+  /**
+   * 设置标题
+   * @param {Number} num 当前目录数
+   */
+  setTitle(num) {
+    this.cell.setText(`<i class="fa fa-folder-o"></i> ${LANG['title']} (${num})`);
   }
 
 }

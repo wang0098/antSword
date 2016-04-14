@@ -33,9 +33,7 @@ const antSword = window.antSword = {
 };
 
 // 加载模板代码
-['php', 'asp', 'aspx', 'custom'].map((_) => {
-  antSword['core'][_] = require(`./core/${_}/index`);
-});
+antSword['core'] = require('./core/index');
 
 // 加载显示语言
 let _lang = localStorage.getItem('language') || navigator.language;
