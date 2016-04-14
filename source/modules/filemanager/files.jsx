@@ -194,7 +194,7 @@ class Files {
     grid.setInitWidths("40,*,150,100,100");
     grid.setColAlign("center,left,left,right,center");
     grid.enableMultiselect(true);
-    grid.enableDragAndDrop(true);
+    // grid.enableDragAndDrop(true);
     // grid.enableMultiline(true);
 
     // grid右键
