@@ -1,13 +1,8 @@
-// 
-// 默认数据库操作代码模板
-// 
+/**
+ * 默认数据库操作代码模板
+ */
 
-import {
-  arg1, arg2, arg3,
-  arg4, arg5, arg6
-} from '../argv';
-
-module.exports = {
+module.exports = (arg1, arg2, arg3, arg4, arg5, arg6) => ({
   // 显示所有数据库
   show_databases: {
     _:
@@ -34,4 +29,4 @@ module.exports = {
     [arg1]: '#{hex::conn}',
     [arg2]: '#{hex::sql}',
   }
-}
+})

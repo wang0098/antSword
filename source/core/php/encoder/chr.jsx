@@ -1,10 +1,8 @@
-// 
-// encoder::chr
-// 
-// chr编码器
-// --------
-// 利用php函数`chr`进行编码处理
-// 
+/**
+ * php::chr编码器
+ * ? 利用php的chr函数进行编码处理
+ */
+
 'use strict'
 
 module.exports = (pwd, data) => {

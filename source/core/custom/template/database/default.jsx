@@ -8,7 +8,7 @@
 // :db      数据库名
 // :table   表名
 
-module.exports = {
+module.exports = () => ({
   show_databases: {
     _: 'N',
     'z0': '#{encode}',
@@ -33,4 +33,4 @@ module.exports = {
     'z1': '#{conn}',
     'z2': '#{sql}'
   }
-}
+})

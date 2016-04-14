@@ -1,14 +1,9 @@
-// 
-// 数据库管理模板::mssql
-// 
-// :分隔符为  ->  \t|\t
+/**
+ * 数据库管理模板::mssql
+ * i 数据分隔符号 => \t|\t
+ */
 
-import {
-  arg1, arg2, arg3,
-  arg4, arg5, arg6
-} from '../argv';
-
-module.exports = {
+module.exports = (arg1, arg2, arg3, arg4, arg5, arg6) => ({
   // 显示所有数据库
   show_databases: {
     _:
@@ -46,4 +41,4 @@ module.exports = {
     [arg4]: '#{db}',
     [arg5]: '#{base64::sql}'
   }
-}
+})

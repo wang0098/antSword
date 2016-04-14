@@ -1,14 +1,8 @@
-// 
-// ASPX::oracle数据库驱动代码模板
-// 
+/**
+ * ASPX::oracle数据库驱动代码模板
+ */
 
-
-import {
-  arg1, arg2, arg3,
-  arg4, arg5, arg6
-} from '../argv';
-
-module.exports = {
+module.exports = (arg1, arg2, arg3, arg4, arg5, arg6) => ({
   // 显示所有数据库
   show_databases: {
     _:
@@ -38,4 +32,4 @@ module.exports = {
     // SELECT * FROM (SELECT A.*,ROWNUM N FROM table2 A ORDER BY 1) WHERE N>0 AND N<=20
     [arg2]: '#{base64::sql}',
   }
-}
+})

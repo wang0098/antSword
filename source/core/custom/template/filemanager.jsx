@@ -1,8 +1,8 @@
-// 
+//
 // 文件管理模板
-// 
+//
 
-module.exports = {
+module.exports = () => ({
   dir: {
     _: 'B',
     'z1': '#{path}'
@@ -63,4 +63,4 @@ module.exports = {
     'z1': '#{url}',
     'z2': '#{path}'
   }
-}
+})
