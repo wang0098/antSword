@@ -1,6 +1,6 @@
-// 
+//
 // Shell管理模块
-// 
+//
 
 'use strict';
 
@@ -40,7 +40,7 @@ class ShellManager {
     antSword['menubar'].reg('shell-add', this::this.addData);
 
     this.loadData();
-    
+
   }
   // 清空缓存
   clearCache(id) {
@@ -123,37 +123,30 @@ class ShellManager {
         })() },
         { type: 'combo', label: LANG['list']['add']['form']['type'], name: 'type', readonly: true, options: (() => {
           let ret = [];
-          [
-            { name: 'php', encoder: ['base64', 'chr'] },
-            { name: 'asp', encoder: [] },
-            { name: 'aspx', encoder: [] },
-            // { name: 'jsp', encoder: [] },
-            // { name: 'py', encoder: [] },
-            // { name: 'cfm', encoder: [] },
-            // { name: 'nodejs', encoder: ['base64', 'aes', 'urlencode'] },
-            { name: 'custom', encoder: ['base64', 'hex'] }
-          ].map((_) => {
-            let obj = {
-              text: _['name'].toUpperCase(),
-              value: _['name'],
-              selected: _['name'] === 'php',
-              list: [
-                { type: 'settings', position: 'label-right', offsetLeft: 60, labelWidth: 100 },
-                { type: 'label', label: LANG['list']['add']['form']['encoder'] },
-                { type: 'radio', name: 'encoder_' + _['name'], value: 'default', label: 'default', checked: true }
-              ]
-            };
-            // 编码器对象
-            _['encoder'].map((e) => {
-              obj['list'].push({
-                type: 'radio',
-                name: 'encoder_' + _['name'],
-                value: e,
-                label: e
-              });
+          for (let c in antSword['core']) {
+            let encoders = antSword['core'][c].prototype.encoders;
+            ret.push({
+              text: c.toUpperCase(),
+              value: c,
+              selected: c === 'php',
+              list: ((c) => {
+                let _ = [
+                  { type: 'settings', position: 'label-right', offsetLeft: 60, labelWidth: 100 },
+                  { type: 'label', label: LANG['list']['add']['form']['encoder'] },
+                  { type: 'radio', name: `encoder_${c}`, value: 'default', label: 'default', checked: true }
+                ];
+                encoders.map((e) => {
+                  _.push({
+                    type: 'radio',
+                    name: `encoder_${c}`,
+                    value: e,
+                    label: e
+                  })
+                });
+                return _;
+              })(c)
             });
-            ret.push(obj);
-          });
+          }
           return ret;
         })() }
       ]}
@@ -245,35 +238,38 @@ class ShellManager {
           return ret;
         })() },
         { type: 'combo', label: LANG['list']['edit']['form']['type'], name: 'type', readonly: true, options: (() => {
+
           let ret = [];
-          [
-            { name: 'php', encoder: ['base64', 'chr'] },
-            { name: 'asp', encoder: [] },
-            { name: 'aspx', encoder: [] },
-            { name: 'custom', encoder: ['base64', 'hex'] }
-          ].map((_) => {
-            let obj = {
-              text: _['name'].toUpperCase(),
-              value: _['name'],
-              selected: data['type'] === _['name'],
-              list: [
-                { type: 'settings', position: 'label-right', offsetLeft: 60, labelWidth: 100 },
-                { type: 'label', label: LANG['list']['edit']['form']['encoder'] },
-                { type: 'radio', name: 'encoder_' + _['name'], value: 'default', label: 'default', checked: (data['encoder'] === 'default') || (_['name'] !== data['type']) || (!_['encoder'].indexOf(data['encoder'])) }
-              ]
-            };
-            // 编码器对象
-            _['encoder'].map((e) => {
-              obj['list'].push({
-                type: 'radio',
-                name: 'encoder_' + _['name'],
-                value: e,
-                label: e,
-                checked: data['encoder'] === e
-              });
+          for (let c in antSword['core']) {
+            let encoders = antSword['core'][c].prototype.encoders;
+            ret.push({
+              text: c.toUpperCase(),
+              value: c,
+              selected: data['type'] === c,
+              list: ((c) => {
+                let _ = [
+                  { type: 'settings', position: 'label-right', offsetLeft: 60, labelWidth: 100 },
+                  { type: 'label', label: LANG['list']['add']['form']['encoder'] },
+                  { type: 'radio', name: `encoder_${c}`, value: 'default', label: 'default',
+                    checked: (
+                      data['encoder'] === 'default') ||
+                      (c !== data['type']) ||
+                      (!encoders.indexOf(data['encoder']))
+                  }
+                ];
+                encoders.map((e) => {
+                  _.push({
+                    type: 'radio',
+                    name: `encoder_${c}`,
+                    value: e,
+                    label: e,
+                    checked: data['encoder'] === e
+                  })
+                });
+                return _;
+              })(c)
             });
-            ret.push(obj);
-          });
+          }
           return ret;
         })() }
       ]}
