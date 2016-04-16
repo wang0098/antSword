@@ -3,6 +3,11 @@
  */
 'use strict';
 
+const languages = {
+  'en': 'English',
+  'zh': '简体中文'
+}
+
 // 获取本地设置语言（如若没有，则获取浏览器语言
 let lang = antSword['storage']('language',
   false,
@@ -10,7 +15,10 @@ let lang = antSword['storage']('language',
 );
 
 // 判断本地设置语言是否符合语言模板
-lang = ['en', 'zh'].indexOf(lang) === -1 ? 'en' : lang;
+lang = languages[lang] ? lang : 'en';
 
 // 返回语言模板
-module.exports = require(`./${lang}`);
+let langModule = require(`./${lang}`);
+langModule.__languages__ = languages;
+
+module.exports = langModule;
