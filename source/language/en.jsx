@@ -391,9 +391,7 @@ module.exports = {
         save: 'Save'
       },
       form: {
-        label: 'Select language',
-        zh: '简体中文',
-        en: 'English'
+        label: 'Select language'
       },
       success: 'Setting language success!',
       confirm: {
