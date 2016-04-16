@@ -7,7 +7,7 @@
 [![node](https://img.shields.io/badge/node-4.0+-green.svg?style=flat-square)][url-nodejs-download]
 [![release](https://img.shields.io/badge/release-v1.1.2-blue.svg?style=flat-square)][url-release]
 
-[英文文档][url-docen] | [开发文档][url-document] | [CHANGELOG][url-changelog]
+[英文说明][url-docen] | [开发文档][url-document] | [CHANGELOG][url-changelog]
 
 ## 开发栈
  - [Electron][url-electron]
