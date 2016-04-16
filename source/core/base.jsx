@@ -187,16 +187,16 @@ class Base {
    */
   request(code, chunkCallBack) {
     const opt = this.complete(code);
-    return new Promise((ret, rej) => {
+    return new Promise((res, rej) => {
       // 随机ID(用于监听数据来源)
       const hash = (String(+new Date) + String(Math.random())).substr(10, 10).replace('.', '_');
       // 监听数据返回
       antSword['ipcRenderer']
         // 请求完毕返回数据{text,buff}
-        .once(`request-${hash}`, (event, arg) => {
-          return ret({
-            'text': arg['text'],
-            'buff': arg['buff']
+        .once(`request-${hash}`, (event, ret) => {
+          return res({
+            'text': ret['text'],
+            'buff': ret['buff']
           });
         })
         // HTTP请求返回字节流
@@ -205,7 +205,7 @@ class Base {
         })
         // 数据请求错误
         .once(`request-error-${hash}`, (event, ret) => {
-          throw new Error(ret);
+          return rej(ret);
         })
         // 发送请求数据
         .send('request', {
