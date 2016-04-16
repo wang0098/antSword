@@ -5,7 +5,7 @@
 [![node](https://img.shields.io/badge/node-4.0+-green.svg?style=flat-square)](https://nodejs.org/en/download/)
 [![release](https://img.shields.io/badge/release-v1.1.2-blue.svg?style=flat-square)](https://github.com/antoor/antSword/releases/tag/1.1.2)
 
-[中文文档][url-doccn] | [CHANGELOG][url-changelog]
+[中文说明][url-doccn] | [开发文档][url-document] | [CHANGELOG][url-changelog]
 
 ## Start
 If you do not care about how to write the code, you can go to the [Release Page](https://github.com/antoor/antSword/releases) to download the corresponding archive decompression, and then executed directly to use!
@@ -64,3 +64,4 @@ This project is licensed under the terms of the [MIT license][url-mit]
 [url-email]: mailto:u@uyu.us
 [url-weibo]: http://weibo.com/antoor
 [url-mit]: LICENSE
+[url-document]: http://doc.uyu.us
