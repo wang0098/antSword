@@ -19,9 +19,17 @@ class CUSTOM extends Base {
       this.parseTemplate(`./custom/template/${_}`);
     });
     // 解析编码器
-    [].map((_) => {
+    this.encoders.map((_) => {
       this.parseEncoder(`./custom/encoder/${_}`);
     });
+  }
+
+  /**
+   * 获取编码器列表
+   * @return {array} 编码器列表
+   */
+  get encoders() {
+    return [];
   }
 
   /**

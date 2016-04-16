@@ -22,11 +22,18 @@ class PHP extends Base {
       this.parseTemplate(`./php/template/${_}`);
     });
     // 解析编码器
-    [
-      'chr', 'base64'
-    ].map((_) => {
+    this.encoders.map((_) => {
       this.parseEncoder(`./php/encoder/${_}`);
     });
+  }
+
+  /**
+   * 获取编码器列表
+   * ? 可以在antSword.core.php.prototype.encoders中获取此变量
+   * @return {array} 编码器列表
+   */
+  get encoders() {
+    return ['chr', 'base64'];
   }
 
   /**

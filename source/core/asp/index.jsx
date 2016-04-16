@@ -22,9 +22,17 @@ class ASP extends Base {
       this.parseTemplate(`./asp/template/${_}`);
     });
     // 解析编码器
-    [].map((_) => {
+    this.encoders.map((_) => {
       this.parseEncoder(`./asp/encoder/${_}`);
     });
+  }
+
+  /**
+   * 获取编码器列表
+   * @return {array} 编码器列表
+   */
+  get encoders() {
+    return [];
   }
 
   /**
