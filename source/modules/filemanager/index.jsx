@@ -1,6 +1,9 @@
-// 
-// 文件管理模块
-// 
+/**
+ * 文件管理模板
+ * 更新：2016/04/13
+ * 作者：蚁逅 <https://github.com/antoor>
+ */
+'use strict';
 
 import Files from './files';
 import Tasks from './tasks';
@@ -25,13 +28,15 @@ class FileManager {
 
     tabbar.addTab(
       `tab_filemanager_${hash}`,
-      // `<i class="fa fa-folder-o"></i> ${LANG['title']} \/\/ ${opts['ip']}`,
       `<i class="fa fa-folder-o"></i> ${opts['ip']}`,
       null, null, true, true
     );
 
     // 创建框架
     const cell = tabbar.cells(`tab_filemanager_${hash}`);
+    // 增加到全局变量方便调试
+    antSword['modules']['filemanager'] = antSword['modules']['filemanager'] || {};
+    antSword['modules']['filemanager'][hash] = this;
 
     this.isWin = true;
     this.path = '/';
@@ -51,14 +56,24 @@ class FileManager {
       this.initUI(cache_info);
     }else{
       this.cell.progressOn();
-      this.core.base.info((ret) => {
-        this.initUI(ret);
+      this.core.request(
+        this.core.base.info()
+      ).then((ret) => {
+        this.initUI(ret['text']);
         this.cell.progressOff();
-      }, (err) => {
+      }).catch((err) => {
         this.cell.progressOff();
         this.cell.close();
         toastr.error((typeof(err) === 'object') ? JSON.stringify(err) : String(err), LANG_T['error']);
       });
+      // this.core.base.info((ret) => {
+      //   this.initUI(ret);
+      //   this.cell.progressOff();
+      // }, (err) => {
+      //   this.cell.progressOff();
+      //   this.cell.close();
+      //   toastr.error((typeof(err) === 'object') ? JSON.stringify(err) : String(err), LANG_T['error']);
+      // });
     }
   }
 
@@ -131,9 +146,12 @@ class FileManager {
       return callback(JSON.parse(cache));
     };
 
-    this.core.filemanager.dir({
-      path: path
-    }, (ret) => {
+    this.core.request(
+      this.core.filemanager.dir({
+        path: path
+      })
+    ).then((res) => {
+      let ret = res['text'];
       // 判断是否出错
       if (ret.startsWith('ERROR://')) {
         callback([]);
@@ -167,9 +185,49 @@ class FileManager {
       // 增加缓存
       // self.cache[path] = data;
       this.cache.set(cache_tag, JSON.stringify(data));
-    }, (err) => {
+    }).catch((err) => {
       toastr.error((err instanceof Object) ? JSON.stringify(err) : String(err), LANG_T['error']);
-    });
+    })
+
+    // this.core.filemanager.dir({
+    //   path: path
+    // }, (ret) => {
+    //   // 判断是否出错
+    //   if (ret.startsWith('ERROR://')) {
+    //     callback([]);
+    //     return toastr.error(ret.substr(9), LANG_T['error']);
+    //   };
+    //   let tmp = ret.split('\n');
+    //
+    //   tmp.sort();
+    //
+    //   let folders = [];
+    //   let files = [];
+    //
+    //   tmp.map( (t) => {
+    //     let _ = t.split('\t');
+    //     let d = {
+    //       name: _[0],
+    //       time: _[1],
+    //       size: _[2],
+    //       attr: _[3]
+    //     }
+    //     if (_[0].endsWith('/')) {
+    //       folders.push(d);
+    //     }else{
+    //       files.push(d);
+    //     }
+    //   } );
+    //
+    //   let data = folders.concat(files);
+    //   callback(data);
+    //
+    //   // 增加缓存
+    //   // self.cache[path] = data;
+    //   this.cache.set(cache_tag, JSON.stringify(data));
+    // }, (err) => {
+    //   toastr.error((err instanceof Object) ? JSON.stringify(err) : String(err), LANG_T['error']);
+    // });
   }
 
   // 更改目录，返回最终绝对路径
@@ -225,9 +283,12 @@ class FileManager {
           ((p) => {
             const path = this.path + p;
             this.files.cell.progressOn();
-            this.core.filemanager.delete({
-              path: path
-            }, (ret) => {
+            this.core.request(
+              this.core.filemanager.delete({
+                path: path
+              })
+            ).then((res) => {
+              let ret = res['text'];
               this.files.cell.progressOff();
               if (ret === '1') {
                 toastr.success(LANG['delete']['success'](path), LANG_T['success']);
@@ -235,10 +296,24 @@ class FileManager {
               }else{
                 toastr.error(LANG['delete']['error'](path, ret === '0' ? false : ret), LANG_T['error']);
               }
-            }, (err) => {
+            }).catch((err) => {
               this.files.cell.progressOff();
               toastr.error(LANG['delete']['error'](path, err), LANG_T['error']);
-            })
+            });
+            // this.core.filemanager.delete({
+            //   path: path
+            // }, (ret) => {
+            //   this.files.cell.progressOff();
+            //   if (ret === '1') {
+            //     toastr.success(LANG['delete']['success'](path), LANG_T['success']);
+            //     this.files.refreshPath();
+            //   }else{
+            //     toastr.error(LANG['delete']['error'](path, ret === '0' ? false : ret), LANG_T['error']);
+            //   }
+            // }, (err) => {
+            //   this.files.cell.progressOff();
+            //   toastr.error(LANG['delete']['error'](path, err), LANG_T['error']);
+            // })
           })(p);
         });
       }
@@ -254,10 +329,13 @@ class FileManager {
     const target = this.path + name;
 
     this.files.cell.progressOn();
-    this.core.filemanager.copy({
-      path: source,
-      target: target
-    }, (ret) => {
+    this.core.request(
+      this.core.filemanager.copy({
+        path: source,
+        target: target
+      })
+    ).then((res) => {
+      let ret = res['text'];
       this.files.cell.progressOff();
       if (ret === '1') {
         // 刷新目录
@@ -268,7 +346,7 @@ class FileManager {
       }else{
         toastr.error(LANG['paste']['error'](name, ret === '0' ? false : ret), LANG_T['error']);
       }
-    }, (err) => {
+    }).catch((err) => {
       toastr.error(LANG['paste']['error'](name, err), LANG_T['error']);
     });
   }
@@ -281,10 +359,13 @@ class FileManager {
       title: `<i class="fa fa-fa fa-font"></i> ${LANG['rename']['title']} (${antSword.noxss(name)})`
     }, (value, index, elem) => {
       this.files.cell.progressOn();
-      this.core.filemanager.rename({
-        path: this.path + name,
-        name: this.path + value + ((isDir && !value.endsWith('/')) ? '/' : '')
-      }, (ret) => {
+      this.core.request(
+        this.core.filemanager.rename({
+          path: this.path + name,
+          name: this.path + value + ((isDir && !value.endsWith('/')) ? '/' : '')
+        })
+      ).then((res) => {
+        let ret = res['text'];
         this.files.cell.progressOff();
         if (ret === '1') {
           this.files.refreshPath();
@@ -292,7 +373,7 @@ class FileManager {
         }else{
           toastr.error(LANG['rename']['error'](ret === '0' ? false : ret), LANG_T['error']);
         }
-      }, (err) => {
+      }).catch((err) => {
         toastr.error(LANG['rename']['error'](err), LANG_T['error']);
       });
       layer.close(index);
@@ -306,9 +387,12 @@ class FileManager {
       title: `<i class="fa fa-folder"></i> ${LANG['createFolder']['title']}`
     }, (value, i, e) => {
       this.files.cell.progressOn();
-      this.core.filemanager.mkdir({
-        path: this.path + value
-      }, (ret) => {
+      this.core.request(
+        this.core.filemanager.mkdir({
+          path: this.path + value
+        })
+      ).then((res) => {
+        let ret = res['text'];
         this.files.cell.progressOff();
         if (ret === '1') {
           this.files.refreshPath();
@@ -316,7 +400,7 @@ class FileManager {
         }else{
           toastr.error(LANG['createFolder']['error'](value, ret === '0' ? false : ret), LANG_T['error']);
         }
-      }, (err) => {
+      }).catch((err) => {
         toastr.error(LANG['createFolder']['error'](value, err), LANG_T['error']);
       });
       layer.close(i);
@@ -330,10 +414,15 @@ class FileManager {
       title: `<i class="fa fa-file"></i> ${LANG['createFile']['title']}`
     }, (value, i, e) => {
       this.files.cell.progressOn();
-      this.core.filemanager.create_file({
-        path: this.path + value,
-        content: '\0'
-      }, (ret) => {
+
+      // 发起http请求
+      this.core.request(
+        this.core.filemanager.create_file({
+          path: this.path + value,
+          content: 'Halo ANT!'
+        })
+      ).then((res) => {
+        let ret = res['text'];
         this.files.cell.progressOff();
         if (ret === '1') {
           this.files.refreshPath();
@@ -341,7 +430,7 @@ class FileManager {
         }else{
           toastr.error(LANG['createFile']['error'](value, ret === '0' ? false : ret), LANG_T['error']);
         }
-      }, (err) => {
+      }).catch((err) => {
         toastr.error(LANG['createFile']['error'](value, err), LANG_T['error']);
       });
       layer.close(i);
@@ -356,10 +445,15 @@ class FileManager {
       content: `<input type="text" class="layui-layer-input" onClick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'});" value="${oldtime}">`
     }, (value, i, e) => {
       this.files.cell.progressOn();
-      this.core.filemanager.retime({
-        path: this.path + name,
-        time: value
-      }, (ret) => {
+
+      // http request
+      this.core.request(
+        this.core.filemanager.retime({
+          path: this.path + name,
+          time: value
+        })
+      ).then((res) => {
+        let ret = res['text'];
         this.files.cell.progressOff();
         if (ret === '1') {
           this.files.refreshPath();
@@ -367,7 +461,7 @@ class FileManager {
         }else{
           toastr.error(LANG['retime']['error'](name, ret === '0' ? false : ret), LANG_T['error']);
         }
-      }, (err) => {
+      }).catch((err) => {
         toastr.error(LANG['retime']['error'](name, err), LANG_T['error']);
       });
       layer.close(i);
@@ -384,16 +478,18 @@ class FileManager {
     win.cell.lastChild['style']['textAlign'] = 'center';
     let data = 'data:image/png;base64,';
     let buff = '';
-    this.core.filemanager.download_file({
-      path: path
-    }, (ret, buff) => {
-      let imgData = new Buffer(buff).toString('base64');
-      win.attachHTMLString(`<img src="data:/image/png;base64,${imgData}"/>`);
-    }, (err) => {
 
-    }, (chunk) => {
-      buff += chunk;
-      let imgData = data + new Buffer(buff).toString('base64');
+    this.core.request(
+      this.core.filemanager.download_file()
+      , (chunk) => {
+        buff += chunk;
+        let imgData = data + new Buffer(buff).toString('base64');
+      }
+    ).then((res) => {
+      let imgData = new Buffer(res['buff']).toString('base64');
+      win.attachHTMLString(`<img src="data:/image/png;base64,${imgData}"/>`);
+    }).catch((err) => {
+
     });
   }
 
@@ -408,41 +504,39 @@ class FileManager {
     }, (filePath) => {
       if (!filePath) { return task.end(LANG['download']['task']['cancel']) };
       task.update(LANG['download']['task']['start']);
-      // setTimeout(() => {
-        let down_size = 0;
-        this.core.filemanager.download_file({
+      let down_size = 0;
+      // 删除旧文件（如果存在
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+      this.core.download(
+        filePath
+        , this.core.filemanager.download_file({
           path: path
-        }, (ret, buff) => {
-          // 保存文件
-          // fs.writeFileSync(filePath+'_bak', new global.Buffer(buff));
-          // 检测文件大小是否一致
-          if (buff.length === size) {
-            task.success(LANG['download']['task']['success']);
-            toastr.success(LANG['download']['success'](name), LANG_T['success']);
-          }else if (buff.length === 21) {
-            task.failed(buff.toString());
-          }else{
-            // task.failed(`FileSize(${buff.length} != ${size}`);
-            task.failed(LANG['download']['task']['error'](`SizeErr: ${buff.length} != ${size}`))
-          }
-        }, (err) => {
-          task.failed(LANG['download']['task']['error'](err));
-          toastr.error(LANG['download']['error'](name, err), LANG_T['error']);
-        }, (chunk) => {
-          // 写入文件
-          fs.writeFileSync(filePath, new global.Buffer(chunk), {
-            flag: 'a'
-          });
+        })
+        , (_size) => {
           // 计算进度百分比
-          down_size += chunk.length;
+          down_size += _size;
           let down_progress = parseInt(parseFloat(down_size / size).toFixed(2) * 100);
 
           if (!(down_progress % 5)) {
             task.update(down_progress + '%');
           };
-          // task.update(`${parseFloat(down_size/size).toFixed(0) * 100} %`);
-        });
-      // }, 200);
+        }
+      ).then((_size) => {
+        if (_size === size) {
+          task.success(LANG['download']['task']['success']);
+          toastr.success(LANG['download']['success'](name), LANG_T['success']);
+        // }else if (_size === 21) {
+        //   task.failed('len=' + _size);
+        }else{
+          throw Error(`SizeErr: ${_size} != ${size}`);
+          // task.failed(LANG['download']['task']['error']())
+        }
+      }).catch((err) => {
+        task.failed(LANG['download']['task']['error'](err));
+        toastr.error(LANG['download']['error'](name, err), LANG_T['error']);
+      });
     });
   }
 
@@ -472,19 +566,24 @@ class FileManager {
         };
         const task = this.tasks.new(LANG['wget']['task']['name'], `${url} -> ${path}`);
         task.update(LANG['wget']['task']['start']);
-        this.core.filemanager.wget({
-          url: url,
-          path: path
-        }, (ret) => {
-            // 下载成功？当前目录？刷新：删除缓存
-            if (ret === '1') {
-              task.success(LANG['wget']['task']['success']);
-              let _ = path.substr(0, path.lastIndexOf('/') + 1);
-              this.files.refreshPath((_ === self.path) ? false : _);
-            }else{
-              task.failed(LANG['wget']['task']['failed'](ret));
-            }
-        }, (err) => {
+
+        // http request
+        this.core.request(
+          this.core.filemanager.wget({
+            url: url,
+            path: path
+          })
+        ).then((res) => {
+          let ret = res['text'];
+          // 下载成功？当前目录？刷新：删除缓存
+          if (ret === '1') {
+            task.success(LANG['wget']['task']['success']);
+            let _ = path.substr(0, path.lastIndexOf('/') + 1);
+            this.files.refreshPath((_ === self.path) ? false : _);
+          }else{
+            task.failed(LANG['wget']['task']['failed'](ret));
+          }
+        }).catch((err) => {
           task.failed(LANG['wget']['task']['error'](err));
         });
         layer.close(i);
@@ -493,83 +592,109 @@ class FileManager {
     $(`#layui-layer${_index}`).css('width', '400px');
   }
 
-  // 上传文件
-  uploadFile() {
-    const path = this.path;
+  /**
+   * 上传文件
+   * @param  {Array} _filePaths 要上传的本地文件路径（可选，如未指定，则调用文件选择框
+   * @return {None}            [description]
+   */
+  uploadFile(_filePaths) {
+    // 任务列表
     let tasks = {};
-    const upload = (filePaths) => {
-      if (!filePaths[0]) {
-        return false;
-      };
-      const filePath = filePaths[0];
-
-      let i = 0;
-      let buff = [];
-      // 数据分段上传，一次上传512kb=1024*512
-      let split = 1024 * 512;
-      const task = tasks[filePath];
-      // 获取文件名
-      const fileName = filePath.substr(filePath.lastIndexOf('/') + 1);
-      let fileBuff;
-      // 读取文件buffer
-      try{
-        fileBuff = fs.readFileSync(filePath);
-      }catch(e) {
-        return task.failed(e);
+    // 上传路径
+    let path = this.path;
+    new Promise((res, rej) => {
+      // 获取要上传的文件列表
+      if (Array.isArray(_filePaths) && _filePaths.length > 0) {
+        return res(_filePaths);
       }
-
-      while (true) {
-        const _ = fileBuff.slice(i, i + split);
-        i += split;
-        if (_.length === 0) { break };
-        buff.push(_);
-      }
-
-      const all_num = buff.length;
-      const upload_func = (arr) => {
-        if (!arr[0]) {
-          // 上传完毕
-          task.success('100%');
-          // 刷新目录
-          toastr.success(LANG['upload']['success'](fileName), LANG_T['success']);
-          // 刷新目录缓存
-          this.files.refreshPath(path === this.path ? '' : path);
-          return upload(filePaths);
-        };
-        // 更新进度条
-        task.update(`${parseInt((all_num - arr.length) / all_num * 100)}%`);
-        // 开始上传分段数据
-        this.core.filemanager.upload_file({
-          path: path + fileName,
-          content: arr[0]
-        }, (ret) => {
-          if (ret === '1') {
-            // 继续上传
-            arr.shift();
-            upload_func(arr);
-          }else{
-            task.failed(LANG['upload']['task']['failed'](ret));
-            toastr.error(LANG['upload']['error'](fileName, ret === '0' ? '' : '<br/>' + ret), LANG_T['error']);
-          }
-        }, (err) => {
-          task.failed(LANG['upload']['task']['error'](err));
-          toastr.error(LANG['upload']['error'](fileName, err), LANG_T['error']);
-        });
-      }
-
-      upload_func(buff);
-      filePaths.shift();
-    }
-    dialog.showOpenDialog({
-      properties: [ 'openFile', 'multiSelections' ]
-    }, (filePaths) => {
-      if (!filePaths) { return };
-      // 逐个文件上传
-      filePaths.map((_) => {
-        const fileName = _.substr(_.lastIndexOf('/') + 1);
-        tasks[_] = this.tasks.new(LANG['upload']['task']['name'], `${fileName} => ${path}`, '准备上传..');
+      dialog.showOpenDialog({
+        properties: [ 'openFile', 'multiSelections' ]
+      }, (_filePaths) => {
+        if (!_filePaths) { return };
+        return res(_filePaths);
+      })
+    }).then((filePaths) => {
+      // 初始化任务
+      filePaths.map((f) => {
+        const fileName = f.substr(f.lastIndexOf('/') + 1);
+        tasks[f] = this.tasks.new(LANG['upload']['task']['name'], `${fileName} => ${path}`, 'Waiting for uploading..');
       });
-      upload(filePaths);
+      return filePaths;
+    }).then((filePaths) => {
+      // 文件上传（逐个队列上传
+      const upload = () => {
+        new Promise((res, rej) => {
+          // 获取单个上传文件
+          let filePath = filePaths.shift();
+          if (filePath) {
+            res(filePath);
+          }
+        }).then((filePath) => {
+          // 上传单个
+          let buffIndex = 0;
+          let buff = [];
+          // 分段上传大小，默认1M
+          let dataSplit = 1024 * 1024;
+          let task = tasks[filePath];
+          // 获取文件名
+          let fileName = filePath.substr(filePath.lastIndexOf('/') + 1);
+          // 读取文件buff
+          let fileBuff;
+          try {
+            fileBuff = fs.readFileSync(filePath);
+          } catch (e) {
+            return task.failed(e);
+          }
+          // 文件数据分段
+          let buffLength = fileBuff.length;
+          while (buffIndex <= buffLength) {
+            let buffSplit = fileBuff.slice(buffIndex, buffIndex + dataSplit);
+            buffIndex += dataSplit;
+            buff.push(buffSplit);
+          }
+          // 开始上传
+          const uploadBuffFunc = (_buff) => {
+            new Promise((res, rej) => {
+              let _b = _buff.shift();
+              if (_b) {
+                res(_b);
+              }else{
+                // 上传完毕
+                task.success('100%');
+                toastr.success(LANG['upload']['success'](fileName), LANG_T['success']);
+                // 刷新缓存
+                this.files.refreshPath(path === this.path ? '' : path);
+                // 继续上传
+                return upload();
+              }
+            }).then((b) => {
+              // 更新进度条
+              task.update(`${parseInt((buffLength - _buff.length) / buffLength * 100)}%`);
+              this.core.request(
+                this.core.filemanager.upload_file({
+                  path: path + fileName,
+                  content: b
+                })
+              ).then((res) => {
+                let ret = res['text'];
+                if (ret === '1') {
+                  return uploadBuffFunc(_buff);
+                }
+                task.failed(LANG['upload']['task']['failed'](ret));
+                toastr.error(LANG['upload']['error'](
+                  fileName,
+                  ret === '0' ? '' : `<br/>${ret}`
+                ), LANG_T['error']);
+              }).catch((err) => {
+                task.failed(LANG['upload']['task']['error'](err));
+                toastr.error(LANG['upload']['error'](fileName, err), LANG_T['error']);
+              });
+            })
+          }
+          uploadBuffFunc(buff);
+        });
+      };
+      upload();
     });
   }
 
@@ -590,34 +715,13 @@ class FileManager {
     // 检测文件后缀
     let ext = name.substr(name.lastIndexOf('.') + 1);
     let ext_dict = {
-      'php': 'php',
-      'c': 'c_cpp',
-      'cpp': 'c_cpp',
-      'h': 'c_cpp',
-      'coffee': 'coffee',
-      'cfm': 'coldfusion',
-      'css': 'css',
-      // 'ejs': 'ejs',
-      'go': 'golang',
-      'html': 'html',
-      'ini': 'ini',
-      'conf': 'ini',
-      'jade': 'jade',
-      'java': 'java',
-      'js': 'javascript',
-      'json': 'json',
-      'jsp': 'jsp',
-      'jsx': 'jsx',
-      'less': 'less',
-      'lua': 'lua',
-      'md': 'markdown',
-      'sql': 'sql',
-      'pl': 'perl',
-      'py': 'python',
-      'rb': 'ruby',
-      'sh': 'sh',
-      'txt': 'text',
-      'xml': 'xml'
+      'php': 'php', 'c': 'c_cpp', 'cpp': 'c_cpp', 'h': 'c_cpp',
+      'coffee': 'coffee', 'cfm': 'coldfusion', 'css': 'css',
+      'go': 'golang', 'html': 'html', 'ini': 'ini', 'conf': 'ini',
+      'jade': 'jade', 'java': 'java', 'js': 'javascript', 'json': 'json',
+      'jsp': 'jsp', 'jsx': 'jsx', 'less': 'less', 'lua': 'lua', 'md': 'markdown',
+      'sql': 'sql', 'pl': 'perl', 'py': 'python', 'rb': 'ruby',
+      'sh': 'sh', 'txt': 'text', 'xml': 'xml'
     }
     if (!(ext in ext_dict)) { ext = 'txt' };
     // 创建窗口工具栏
@@ -665,21 +769,24 @@ class FileManager {
       if (id === 'save') {
         // 保存代码
         win.progressOn();
-        // self.ajax(
-        self.core.filemanager.create_file({
-          path: path,
-          content: editor.session.getValue() || '\0'
-        }, (ret) => {
-            win.progressOff();
-            if (ret === '1') {
-              toastr.success(LANG['editor']['success'](path), LANG_T['success']);
-              // 刷新目录（显示更改时间、大小等）
-              self.files.refreshPath();
-            }else{
-              toastr.error(LANG['editor']['error'](path, ret === '0' ? '' : '<br/>' + ret), LANG_T['error']);
-            }
+        self.core.request(
+          self.core.filemanager.create_file({
+            path: path,
+            content: editor.session.getValue() || 'Halo ANT!'
+          })
+        ).then((res) => {
+          let ret = res['text'];
+          win.progressOff();
+          if (ret === '1') {
+            toastr.success(LANG['editor']['success'](path), LANG_T['success']);
+            // 刷新目录（显示更改时间、大小等）
+            self.files.refreshPath();
+          }else{
+            toastr.error(LANG['editor']['error'](path, ret === '0' ? '' : '<br/>' + ret), LANG_T['error']);
           }
-        )
+        }).catch((err) => {
+
+        });
       }else if (id.startsWith('mode_')) {
         let mode = id.split('_')[1];
         editor.session.setMode(`ace/mode/${mode}`);
@@ -692,9 +799,12 @@ class FileManager {
     });
 
     // 获取文件代码
-    this.core.filemanager.read_file({
-      path: path
-    }, (ret) => {
+    this.core.request(
+      this.core.filemanager.read_file({
+        path: path
+      })
+    ).then((res) => {
+      let ret = res['text'];
       codes = ret;
       win.progressOff();
 
@@ -732,7 +842,7 @@ class FileManager {
         clearInterval(inter);
         return true;
       });
-    }, (err) => {
+    }).catch((err) => {
       toastr.error(LANG['editor']['loadErr'](err), LANG_T['error']);
       win.close();
     });

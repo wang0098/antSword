@@ -194,6 +194,7 @@ class Files {
     grid.setInitWidths("40,*,150,100,100");
     grid.setColAlign("center,left,left,right,center");
     grid.enableMultiselect(true);
+    // grid.enableDragAndDrop(true);
     // grid.enableMultiline(true);
 
     // grid右键
@@ -368,6 +369,23 @@ class Files {
 
     // 剪贴板
     this.Clipboard = {};
+
+    // 文件拖拽上传
+    $(this.cell.cell).on({
+      dragleave: (e) => { e.preventDefault() },
+      drop: (e) => {
+        e.preventDefault();
+        let filePaths = [];
+        let files = e.originalEvent['dataTransfer']['files'] || {};
+        for (let i = 0; i < files.length; i++) {
+          let f = files.item(i);
+          filePaths.push(f['path']);
+        }
+        this.manager.uploadFile(filePaths);
+      },
+      dragenter: (e) => { e.preventDefault() },
+      dragover: (e) => { e.preventDefault() }
+    });
   }
 
   // 刷新当前目录

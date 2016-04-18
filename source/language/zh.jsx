@@ -392,9 +392,7 @@ module.exports = {
         save: '保存'
       },
       form: {
-        label: '选择显示语言',
-        zh: '简体中文',
-        en: 'English'
+        label: '选择显示语言'
       },
       success: '保存语言设置成功！',
       confirm: {

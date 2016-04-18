@@ -1,9 +1,9 @@
-//
-// 程序入口
-// -------
-// create: 2015/12/20
-// update: 2016/04/02
-//
+/**
+ * 中国蚁剑::程序入口
+ * 创建：2015/12/20
+ * 更新：2016/04/16
+ * 作者：蚁逅 <https://github.com/antoor>
+ */
 
 'use strict';
 
@@ -15,13 +15,32 @@ import Menubar from './base/menubar';
 import CacheManager from './base/cachemanager';
 
 const antSword = window.antSword = {
+  /**
+   * XSS过滤函数
+   * @param  {String} html 过滤前字符串
+   * @return {String}      过滤后的字符串
+   */
   noxss: (html) => {
     return String(html).replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
   },
+  /**
+   * 核心模块
+   * @type {Object}
+   */
   core: {},
+  /**
+   * 操作模块
+   * @type {Object}
+   */
   modules: {},
-  // localStorage存储
-  // 参数{key:存储键值,[value]:存储内容,[def]:默认内容}
+  /**
+   * localStorage存储API
+   * ? 如果只有一个key参数，则返回内容，否则进行设置
+   * @param  {String} key   存储键值，必选
+   * @param  {String} value 存储内容，可选
+   * @param  {String} def   默认内容，可选
+   * @return {None}       [description]
+   */
   storage: (key, value, def) => {
     // 读取
     if (!value) {
@@ -32,15 +51,11 @@ const antSword = window.antSword = {
   }
 };
 
-// 加载模板代码
-['php', 'asp', 'aspx', 'custom'].map((_) => {
-  antSword['core'][_] = require(`./core/${_}/index`);
-});
+// 加载核心模板
+antSword['core'] = require('./core/index');
 
-// 加载显示语言
-let _lang = localStorage.getItem('language') || navigator.language;
-_lang = ['en', 'zh'].indexOf(_lang) === -1 ? 'en' : _lang;
-antSword['language'] = require(`./language/${_lang}`);
+// 加载语言模板
+antSword['language'] = require('./language/index');
 
 // 加载代理
 const aproxy = {

@@ -4,6 +4,8 @@
 
 'use strict';
 
+const fs = require('fs');
+const through = require('through');
 const log4js = require('log4js');
 const iconv = require('iconv-lite');
 const superagent = require('superagent');
@@ -35,10 +37,10 @@ class Request {
         .end((err, ret) => {
           if (err) {
             logger.debug("[aProxy] Test Error");
-            return event.sender.send('aproxytest-error', err);
+            return event.sender.send('aproxytest-error-' + opts['hash'], err);
           }else{
             logger.debug("[aProxy] Test Success");
-            return event.sender.send('aproxytest-success', ret);
+            return event.sender.send('aproxytest-success-' + opts['hash'], ret);
           }
         });
     });
@@ -85,44 +87,105 @@ class Request {
           });
         });
     });
+    /**
+     * 监听文件下载请求
+     * - 技术实现：通过pipe进行数据流逐步解析，当遇到截断符，则标记，最后数据传输完成，利用标记点进行数据截取，最后保存。
+     * @opts  {Object:path,url,data,tag_s,tag_e}
+     */
+    ipcMain.on('download', (event, opts) => {
+      logger.debug('DOWNLOAD', opts);
+
+      // 创建文件流
+      const rs = fs.createWriteStream(opts['path']);
+
+      let indexStart = -1;
+      let indexEnd = -1;
+      let tempData = [];
+
+      // 开始HTTP请求
+      superagent
+        .post(opts['url'])
+        .set('User-Agent', userAgent)
+        .proxy(aproxyuri)
+        .type('form')
+        // 设置超时会导致文件过大时写入出错
+        // .timeout(timeout)
+        .send(opts['data'])
+        .pipe(through(
+          (chunk) => {
+            // 判断数据流中是否包含后截断符？长度++
+            let temp = chunk.indexOf(opts['tag_e']);
+            if (temp !== -1) {
+              indexEnd = Buffer.concat(tempData).length + temp;
+            };
+            tempData.push(chunk);
+            event.sender.send('download-progress-' + opts['hash'], chunk.length);
+          },
+          () => {
+            let tempDataBuffer = Buffer.concat(tempData);
+
+            indexStart = tempDataBuffer.indexOf(opts['tag_s']) || 0;
+            // 截取最后的数据
+            let finalData = new Buffer(tempDataBuffer.slice(
+              indexStart + opts['tag_s'].length,
+              indexEnd
+            ), 'binary');
+            // 写入文件流&&关闭
+            rs.write(finalData);
+            rs.close();
+            event.sender.send('download-' + opts['hash'], finalData.length);
+            // 删除内存数据
+            finalData = tempDataBuffer = tempData = null;
+          }
+        ));
+    });
   }
 
   // 二进制数据流解析
-  parse(tag_s, tag_e, hook, res, callback) {
+  parse(tag_s, tag_e, chunkCallBack, res, callback) {
     // 数据转换二进制处理
     res.setEncoding('binary');
     res.data = '';
+    // 2. 把分隔符转换为16进制
+    const tagHexS = new Buffer(tag_s).toString('hex');
+    const tagHexE = new Buffer(tag_e).toString('hex');
+
     let foundTagS = false;
     let foundTagE = false;
     res.on('data', (chunk) => {
-      let temp = '';
 
+      // 这样吧，我们尝试一种新的数据截取算法：
+      // 1. 把数据流转换为16进制
+      let chunkHex = new Buffer(chunk).toString('hex');
+      // 3. 根据分隔符进行判断截断数据流
+      let temp = '';
       // 如果包含前后截断，则截取中间
-      if (chunk.indexOf(tag_s) >= 0 && chunk.lastIndexOf(tag_e) >= 0) {
-        const index_s = chunk.indexOf(tag_s);
-        const index_e = chunk.lastIndexOf(tag_e);
-        temp = chunk.substr(index_s + tag_s.length, index_e - index_s - tag_e.length);
+      if (chunkHex.indexOf(tagHexS) >= 0 && chunkHex.lastIndexOf(tagHexE) >= 0) {
+        let index_s = chunkHex.indexOf(tagHexS);
+        let index_e = chunkHex.lastIndexOf(tagHexE);
+        temp = chunkHex.substr(index_s + tagHexS.length, index_e - index_s - tagHexE.length);
         foundTagS = foundTagE = true;
       }
       // 如果只包含前截断，则截取后边
-      else if (chunk.indexOf(tag_s) >= 0 && chunk.lastIndexOf(tag_e) === -1) {
-        temp = chunk.split(tag_s)[1];
+      else if (chunkHex.indexOf(tagHexS) >= 0 && chunkHex.lastIndexOf(tagHexE) === -1) {
+        temp = chunkHex.split(tagHexS)[1];
         foundTagS = true;
       }
       // 如果只包含后截断，则截取前边
-      else if (chunk.indexOf(tag_s) === -1 && chunk.lastIndexOf(tag_e) >= 0) {
-        temp = chunk.split(tag_e)[0];
+      else if (chunkHex.indexOf(tagHexS) === -1 && chunkHex.lastIndexOf(tagHexE) >= 0) {
+        temp = chunkHex.split(tagHexE)[0];
         foundTagE = true;
       }
       // 如果有没有，那就是中途迷路的数据啦 ^.^
       else if (foundTagS && !foundTagE) {
-        temp = chunk;
+        temp = chunkHex;
       }
+      // 4. 十六进制还原为二进制
+      let finalData = new Buffer(temp, 'hex');
+      // 5. 返回还原好的数据
+      chunkCallBack(finalData);
 
-      // 回调实时获取数据hook
-      hook(new Buffer(temp, 'binary'));
-
-      res.data += temp;
+      res.data += finalData;
     });
     res.on('end', () => {
       logger.info('end::size=' + res.data.length, res.data.length < 10 ? res.data : '');

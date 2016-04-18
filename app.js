@@ -44,5 +44,4 @@ app
     ['menubar', 'request', 'database', 'cache', 'update'].map((_) => {
       new ( require(`./modules/${_}`) )(electron, app, mainWindow);
     });
-
   });

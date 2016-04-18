@@ -250,12 +250,14 @@ class ASP {
       _id: this.manager.opt['_id'],
       id: id
     });
-    this.core[`database_${conf['type']}`].show_databases(
-    {
-      conn: conf['conn'],
-      encode: this.manager.opt.encode,
-      db: ['access', 'microsoft_jet_oledb_4_0'].indexOf(conf['type']) > -1 ? conf['conn'].match(/[\w]+.mdb$/) : 'database'
-    }, (ret) => {
+    this.core.request(
+      this.core[`database_${conf['type']}`].show_databases({
+        conn: conf['conn'],
+        encode: this.manager.opt.encode,
+        db: ['access', 'microsoft_jet_oledb_4_0'].indexOf(conf['type']) > -1 ? conf['conn'].match(/[\w]+.mdb$/) : 'database'
+      })
+    ).then((res) => {
+      let ret = res['text'];
       const arr = ret.split('\t');
       if (arr.length === 1 && ret === '') {
         toastr.warning('执行完毕，没有结果返回')
@@ -276,7 +278,7 @@ class ASP {
           this.manager.list.imgs[1]);
       });
       this.manager.list.layout.progressOff();
-    }, (err) => {
+    }).catch((err) => {
       toastr.error('获取数据库列表失败！' + err['status'] || JSON.stringify(err), 'ERROR');
       this.manager.list.layout.progressOff();
     });
@@ -290,12 +292,16 @@ class ASP {
       _id: this.manager.opt['_id'],
       id: id
     });
-    this.core[`database_${conf['type']}`].show_tables(
-    {
-      conn: conf['conn'],
-      encode: this.manager.opt.encode,
-      db: db
-    }, (ret) => {
+
+    this.core.request(
+      this.core[`database_${conf['type']}`].show_tables(
+      {
+        conn: conf['conn'],
+        encode: this.manager.opt.encode,
+        db: db
+      })
+    ).then((res) => {
+      let ret = res['text'];
       const arr = ret.split('\t');
       const _db = new Buffer(db).toString('base64');
       // 删除子节点
@@ -326,13 +332,17 @@ class ASP {
       _id: this.manager.opt['_id'],
       id: id
     });
-    this.core[`database_${conf['type']}`].show_columns(
-    {
-      conn: conf['conn'],
-      encode: this.manager.opt.encode,
-      db: db,
-      table: table
-    }, (ret) => {
+
+    this.core.request(
+      this.core[`database_${conf['type']}`].show_columns(
+      {
+        conn: conf['conn'],
+        encode: this.manager.opt.encode,
+        db: db,
+        table: table
+      })
+    ).then((res) => {
+      let ret = res['text'];
       const arr = ret.split('\t');
       const _db = new Buffer(db).toString('base64');
       const _table = new Buffer(table).toString('base64');
@@ -363,15 +373,19 @@ class ASP {
   // 执行SQL
   execSQL(sql) {
     this.manager.query.layout.progressOn();
-    this.core[`database_${this.dbconf['type']}`].query({
-      conn: this.dbconf['conn'],
-      encode: this.manager.opt.encode,
-      sql: sql
-    }, (ret) => {
+
+    this.core.request(
+      this.core[`database_${this.dbconf['type']}`].query({
+        conn: this.dbconf['conn'],
+        encode: this.manager.opt.encode,
+        sql: sql
+      })
+    ).then((res) => {
+      let ret = res['text'];
       // 更新执行结果
       this.updateResult(ret);
       this.manager.query.layout.progressOff();
-    }, (err) => {
+    }).catch((err) => {
       console.error(err);
     });
   }

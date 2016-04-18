@@ -1,6 +1,6 @@
 {
   "name": "antsword",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "中国蚁剑是一款跨平台的开源网站管理工具",
   "main": "app.js",
   "dependencies": {
@@ -17,6 +17,7 @@
     "nugget": "^2.0.0",
     "superagent": "^1.6.1",
     "superagent-proxy": "^1.0.0",
+    "through": "^2.3.8",
     "webpack": "^1.12.14"
   },
   "scripts": {
@@ -29,13 +30,13 @@
     "type": "git",
     "url": "https://github.com/antoor/antSword"
   },
-  "debug": false,
+  "debug": true,
   "update": {
-    "md5": "13f38b143dfabf90ea296269acd5b547",
-    "logs": "添加 PHP Custom Spy，及多个 Shell 样本\n增加文件管理中可执行文件的提示样式\n调整文件管理中任务面板默认折叠（当有任务时自动展开",
+    "md5": "9632088a0be879fad2682793a8facd81",
+    "logs": "修复文件管理模板XSS安全问题\n完全重写优化核心代码架构\n增强文件下载功能，支持稳定下载大文件\n优化HTTP请求函数\n增加显示文件管理左侧目录数\n增加文件管理模块拖拽文件上传功能\n重新架构核心模块编码器\n优化shellmanager添加/编辑功能\n重构语言模板加载方案\n增加中文部分开发文档",
     "sources": {
-      "coding.net": "https://coding.net/api/share/download/573ed38e-ab89-4b16-86ff-2d0d58517a3f",
-      "github": "https://github.com/antoor/antSword/releases/download/1.1.2/update.zip"
+      "coding.net": "https://coding.net/api/share/download/e821cb92-3654-419d-894d-a1a2d9cdf2a5",
+      "github": "https://github.com/antoor/antSword/releases/download/1.2.0/update.zip"
     }
   },
   "bugs": {

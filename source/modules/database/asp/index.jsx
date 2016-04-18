@@ -1,7 +1,7 @@
-// 
+//
 // 数据库驱动::ASP
 // 支持数据库:access,sqlserver,mysql
-// 
+//
 
 class ASP {
 
@@ -9,9 +9,9 @@ class ASP {
     this.opt = opt;
     this.core = this.opt.core;
     this.manager = this.opt.super;
-    // 
+    //
     // * 数据库驱动列表
-    // 
+    //
     this.conns = {
       'dsn': 'Dsn=DsnName;',
       'mysql': 'Driver={MySQL};Server=localhost;database=mysql;UID=root;PWD=',
@@ -254,11 +254,15 @@ class ASP {
       _id: this.manager.opt['_id'],
       id: id
     });
-    this.core[`database_${conf['type']}`].show_databases(
-    {
-      conn: conf['conn'],
-      dbname: ['access', 'microsoft_jet_oledb_4_0'].indexOf(conf['type']) > -1 ? conf['conn'].match(/[\w]+.mdb$/) : 'database'
-    }, (ret) => {
+
+    this.core.request(
+      this.core[`database_${conf['type']}`].show_databases(
+      {
+        conn: conf['conn'],
+        dbname: ['access', 'microsoft_jet_oledb_4_0'].indexOf(conf['type']) > -1 ? conf['conn'].match(/[\w]+.mdb$/) : 'database'
+      })
+    ).then((res) => {
+      let ret = res['text'];
       const arr = ret.split('\t');
       if (arr.length === 1 && ret === '') {
         toastr.warning('执行完毕，没有结果返回')
@@ -279,7 +283,7 @@ class ASP {
           this.manager.list.imgs[1]);
       });
       this.manager.list.layout.progressOff();
-    }, (err) => {
+    }).catch((err) => {
       toastr.error('获取数据库列表失败！' + err['status'] || JSON.stringify(err), 'ERROR');
       this.manager.list.layout.progressOff();
     });
@@ -293,11 +297,15 @@ class ASP {
       _id: this.manager.opt['_id'],
       id: id
     });
-    this.core[`database_${conf['type']}`].show_tables(
-    {
-      conn: conf['conn'],
-      dbname: db
-    }, (ret) => {
+
+    this.core.request(
+      this.core[`database_${conf['type']}`].show_tables(
+      {
+        conn: conf['conn'],
+        dbname: db
+      })
+    ).then((res) => {
+      let ret = res['text'];
       const arr = ret.split('\t');
       const _db = new Buffer(db).toString('base64');
       // 删除子节点
@@ -328,11 +336,15 @@ class ASP {
       _id: this.manager.opt['_id'],
       id: id
     });
-    this.core[`database_${conf['type']}`].show_columns(
-    {
-      conn: conf['conn'],
-      table: conf['type'] === 'oracle' ? `SELECT * FROM (SELECT A.*,ROWNUM N FROM ${table} A) WHERE N=1` : `SELECT TOP 1 * FROM ${table}`
-    }, (ret) => {
+
+    this.core.request(
+      this.core[`database_${conf['type']}`].show_columns(
+      {
+        conn: conf['conn'],
+        table: conf['type'] === 'oracle' ? `SELECT * FROM (SELECT A.*,ROWNUM N FROM ${table} A) WHERE N=1` : `SELECT TOP 1 * FROM ${table}`
+      })
+    ).then((res) => {
+      let ret = res['text'];
       const arr = ret.split('\t');
       const _db = new Buffer(db).toString('base64');
       const _table = new Buffer(table).toString('base64');
@@ -363,14 +375,18 @@ class ASP {
   // 执行SQL
   execSQL(sql) {
     this.manager.query.layout.progressOn();
-    this.core[`database_${this.dbconf['type']}`].query({
-      conn: this.dbconf['conn'],
-      sql: sql
-    }, (ret) => {
+
+    this.core.request(
+      this.core[`database_${this.dbconf['type']}`].query({
+        conn: this.dbconf['conn'],
+        sql: sql
+      })
+    ).then((res) => {
+      let ret = res['text'];
       // 更新执行结果
       this.updateResult(ret);
       this.manager.query.layout.progressOff();
-    }, (err) => {
+    }).catch((err) => {
       console.error(err);
     });
   }

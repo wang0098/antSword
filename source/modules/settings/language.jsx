@@ -1,6 +1,6 @@
-// 
-// 语言设置
-// 
+/**
+ * 语言设置
+ */
 
 const LANG = antSword['language']['settings']['language'];
 const LANG_T = antSword['language']['toastr'];
@@ -22,14 +22,22 @@ class Language {
     ]);
 
     // 表单
-    const _language = localStorage.getItem('language') || 'en';
+    const _language = antSword['storage']('language', false, 'en');
     const form = cell.attachForm([
       { type: 'settings', position: 'label-left', labelWidth: 100, inputWidth: 150 },
       { type: 'block', inputWidth: 'auto', offsetTop: 12, list: [
-        { type: 'combo', label: LANG['form']['label'], readonly: true, name: 'language', options: [
-          { text: LANG['form']['zh'], value: 'zh', selected: _language === 'zh' },
-          { text: LANG['form']['en'], value: 'en', selected: _language === 'en' }
-        ] }
+        { type: 'combo', label: LANG['form']['label'], readonly: true, name: 'language',
+        options: (() => {
+          let _ = [];
+          for (let l in antSword['language']['__languages__']) {
+            _.push({
+              text: antSword['language']['__languages__'][l],
+              value: l,
+              selected: _language === l
+            });
+          }
+          return _;
+        })() }
       ]}
     ], true);
 

