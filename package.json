@@ -32,9 +32,12 @@
   },
   "debug": true,
   "update": {
-    "md5": "",
-    "logs": "",
-    "sources": {}
+    "md5": "9632088a0be879fad2682793a8facd81",
+    "logs": "修复文件管理模板XSS安全问题\n完全重写优化核心代码架构\n增强文件下载功能，支持稳定下载大文件\n优化HTTP请求函数\n增加显示文件管理左侧目录数\n增加文件管理模块拖拽文件上传功能\n重新架构核心模块编码器\n优化shellmanager添加/编辑功能\n重构语言模板加载方案\n增加中文部分开发文档",
+    "sources": {
+      "coding.net": "https://coding.net/api/share/download/e821cb92-3654-419d-894d-a1a2d9cdf2a5",
+      "github": "https://github.com/antoor/antSword/releases/download/1.2.0/update.zip"
+    }
   },
   "bugs": {
     "url": "https://github.com/antoor/antSword/issues"

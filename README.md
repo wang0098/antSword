@@ -3,7 +3,7 @@
 > You can use it easily and intuitively to management your website(webshell).
 
 [![node](https://img.shields.io/badge/node-4.0+-green.svg?style=flat-square)](https://nodejs.org/en/download/)
-[![release](https://img.shields.io/badge/release-v1.1.2-blue.svg?style=flat-square)](https://github.com/antoor/antSword/releases/tag/1.1.2)
+[![release](https://img.shields.io/badge/release-v1.2.0-blue.svg?style=flat-square)](https://github.com/antoor/antSword/releases/tag/1.2.0)
 
 [中文说明][url-doccn] | [开发文档][url-document] | [CHANGELOG][url-changelog]
 
