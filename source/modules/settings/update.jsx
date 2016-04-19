@@ -1,6 +1,6 @@
-// 
-// 检查更新
-// 
+/**
+ * 检查更新模块
+ */
 
 const LANG = antSword['language']['settings']['update'];
 const LANG_T = antSword['language']['toastr'];
@@ -13,7 +13,7 @@ class Update {
     });
     const cell = sidebar.cells('update');
 
-    // toolbar
+    // 初始化toolbar
     const toolbar = cell.attachToolbar();
     toolbar.loadStruct([
       {
@@ -34,24 +34,26 @@ class Update {
       }
     });
 
-    // status
+    // 显示当前版本号
     cell.attachHTMLString(`
       ${LANG['current']}: ${antSword['package']['version']}
     `);
 
-
     this.cell = cell;
   }
 
-  // 检查更新
+  /**
+   * 检查更新
+   * @return {None} [description]
+   */
   checkUpdate() {
     this.cell.progressOn();
     toastr.info(LANG['check']['ing'], LANG_T['info']);
     // 后台检查更新
     antSword['ipcRenderer']
-      .on('update-check', (event, ret) => {
+      .once('update-check', (event, ret) => {
         this.cell.progressOff();
-        const info = ret['retVal'];
+        let info = ret['retVal'];
         // 木有更新
         if (!ret['hasUpdate']) {
           return typeof info === 'string'
@@ -89,7 +91,7 @@ class Update {
             this.updateLoading();
             // 通知后台
             antSword['ipcRenderer']
-              .on('update-download', (event, ret) => {
+              .once('update-download', (event, ret) => {
                 // 下载失败
                 console.log(ret);
                 if (!ret['done']) {
@@ -121,7 +123,10 @@ class Update {
       });
   }
 
-  // 更新动画
+  /**
+   * 更新动画进度
+   * @return {[type]} [description]
+   */
   updateLoading() {
     // 删除按钮
     $('.layui-layer-btn').remove();
@@ -138,7 +143,11 @@ class Update {
     `);
   }
 
-  // 更新失败提示界面
+  /**
+   * 更新失败提示界面
+   * @param  {String} tip 失败信息
+   * @return {[type]}     [description]
+   */
   updateFail(tip) {
     $('.layui-layer-content').html(`
       <div align="center" style="color: red">
@@ -150,7 +159,10 @@ class Update {
     setTimeout(layer.closeAll, 1024 * 5);
   }
 
-  // 更新成功提示界面
+  /**
+   * 更新成功提示界面
+   * @return {None} [description]
+   */
   updateSuccess() {
     $('.layui-layer-content').html(`
       <div align="center" style="color: green">
