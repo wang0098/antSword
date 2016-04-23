@@ -14,6 +14,7 @@ class Settings {
     ['about', 'update', 'language', 'aproxy'].map((_) => {
       antSword['menubar'].reg(`settings-${_}`, this.setActive.bind(this, _));
     });
+    return this;
   }
 
   open() {
@@ -33,10 +34,10 @@ class Settings {
       template: 'text',
       width: 200
     });
-    new About(sidebar);
-    new Language(sidebar);
-    new Update(sidebar);
-    new AProxy(sidebar);
+    this.about = new About(sidebar);
+    this.language = new Language(sidebar);
+    this.update = new Update(sidebar);
+    this.aproxy = new AProxy(sidebar);
 
     this.cell = cell;
     this.sidebar = sidebar;
