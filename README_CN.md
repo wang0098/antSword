@@ -5,7 +5,7 @@
 **任何人不得将其用于非法用途以及盈利等目的，也禁止未经允许私自修改打包进行发布，否则后果自行承担并将追究其相关责任！**
 
 [![node](https://img.shields.io/badge/node-4.0+-green.svg?style=flat-square)][url-nodejs-download]
-[![release](https://img.shields.io/badge/release-v1.2.0-blue.svg?style=flat-square)][url-release]
+[![release](https://img.shields.io/badge/release-v1.2.1-blue.svg?style=flat-square)][url-release]
 
 [英文说明][url-docen] | [开发文档][url-document] | [CHANGELOG][url-changelog]
 
@@ -93,7 +93,7 @@ $ npm start
 [url-changelog]: CHANGELOG.md
 [url-document]: http://doc.uyu.us
 [url-nodejs-download]: https://nodejs.org/en/download/
-[url-release]: https://github.com/antoor/antSword/releases/tag/1.2.0
+[url-release]: https://github.com/antoor/antSword/releases/tag/1.2.1
 [url-electron]: http://electron.atom.io/
 [url-es6]: http://es6.ruanyifeng.com/
 [url-webpack]: http://webpack.github.io/
