@@ -10,7 +10,7 @@ import AProxy from './aproxy'
 class Settings {
 
   constructor() {
-    antSword['menubar'].reg('settings', this::this.open);
+    antSword['menubar'].reg('settings', this.open.bind(this));
     ['about', 'update', 'language', 'aproxy'].map((_) => {
       antSword['menubar'].reg(`settings-${_}`, this.setActive.bind(this, _));
     });

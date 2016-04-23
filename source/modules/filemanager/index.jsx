@@ -837,7 +837,7 @@ class FileManager {
       editor.session.setValue(ret);
 
       // 定时刷新
-      const inter = setInterval(editor::editor.resize, 200);
+      const inter = setInterval(editor.resize.bind(editor), 200);
       win.attachEvent('onClose', () => {
         clearInterval(inter);
         return true;
