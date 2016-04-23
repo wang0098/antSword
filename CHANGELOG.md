@@ -6,6 +6,7 @@
 
 ### /23
   1. 更新美化关于页面
+  2. 修正 Aspx 中代码根据用户配置自动编码
 
 ### /22
   1. 修补 aspx 连接和文件管理的 Bug // &2:Thanks [@Medicean][medicaean-github]
