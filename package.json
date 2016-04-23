@@ -35,7 +35,8 @@
     "md5": "1d21b4f1fb4ddc9a8014020a37b96777",
     "logs": "修补 aspx 连接和文件管理的 Bug\n新添加了 aspx base64 编码器\n更新美化关于页面\n修正 Aspx 中代码根据用户配置自动编码\n重写前端资源加载方案\n优化部分ES6代码",
     "sources": {
-      "coding.net": "https://coding.net/api/share/download/4aaf3221-af66-4f63-824d-37b81bc68711"
+      "coding.net": "https://coding.net/api/share/download/4aaf3221-af66-4f63-824d-37b81bc68711",
+      "github": "https://github.com/antoor/antSword/releases/download/1.2.1/update.zip"
     }
   },
   "bugs": {
