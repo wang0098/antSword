@@ -1,6 +1,6 @@
-//
-// Shell管理模块
-//
+/**
+ * Shell管理模块
+ */
 
 'use strict';
 
@@ -37,7 +37,7 @@ class ShellManager {
     this.win.attachViewportTo(cell.cell);
 
     // 监听菜单栏消息
-    antSword['menubar'].reg('shell-add', this::this.addData);
+    antSword['menubar'].reg('shell-add', this.addData.bind(this));
 
     this.loadData();
 

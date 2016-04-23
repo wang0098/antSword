@@ -93,13 +93,13 @@ class ASP {
         {
           text: '添加配置',
           icon: 'fa fa-plus-circle',
-          action: this::this.addConf
+          action: this.addConf.bind(this)
         }, {
           divider: true
         }, {
           text: '删除配置',
           icon: 'fa fa-remove',
-          action: this::this.delConf
+          action: this.delConf.bind(this)
         }
       ], event);
     });
@@ -456,7 +456,7 @@ class ASP {
   // 禁用SQL编辑框
   disableEditor() {
     ['exec', 'clear'].map(
-      this.manager.query.toolbar::this.manager.query.toolbar.disableItem
+      this.manager.query.toolbar.disableItem.bind(this.manager.query.toolbar)
     );
     this.manager.query.editor.setReadOnly(true);
   }
@@ -464,7 +464,7 @@ class ASP {
   // 启用SQL编辑框
   enableEditor() {
     ['exec', 'clear'].map(
-      this.manager.query.toolbar::this.manager.query.toolbar.enableItem
+      this.manager.query.toolbar.enableItem.bind(this.manager.query.toolbar)
     );
     this.manager.query.editor.setReadOnly(false);
   }

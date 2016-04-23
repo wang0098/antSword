@@ -1,8 +1,7 @@
-// 
-// 左侧shell数据管理模块
-// 
+/**
+ * 左侧shell数据管理模块
+ */
 
-// import Db from '../../database/';
 import Terminal from '../terminal/';
 import Database from '../database/';
 import FileManager from '../filemanager/';
@@ -36,7 +35,7 @@ class List {
       ${LANG['list']['grid']['ctime']},
       ${LANG['list']['grid']['utime']}
     `);
-    grid.setColTypes("ro,ro,ro,ro,ro"); 
+    grid.setColTypes("ro,ro,ro,ro,ro");
     grid.setColSorting('str,str,str,str,str');
     grid.setInitWidths("200,120,*,140,140");
     grid.setColAlign("left,left,left,center,center");
@@ -82,7 +81,7 @@ class List {
         { text: LANG['contextmenu']['plugin'], icon: 'fa fa-puzzle-piece', disabled: !id || ids.length !== 1 || true, subMenu: [] },
         { text: LANG['contextmenu']['pluginCenter'], icon: 'fa fa-cart-arrow-down',  action: antSword['menubar'].run.bind(antSword['menubar'], 'plugin') },
         { divider: true },
-        { text: LANG['contextmenu']['add'], icon: 'fa fa-plus-circle', action: manager::manager.addData },
+        { text: LANG['contextmenu']['add'], icon: 'fa fa-plus-circle', action: manager.addData.bind(manager) },
         { text: LANG['contextmenu']['edit'], icon: 'fa fa-edit', disabled: !id || ids.length !== 1, action: () => {
           manager.editData(id);
         } },
@@ -118,12 +117,12 @@ class List {
           });
           return ret;
         })() },
-        { text: LANG['contextmenu']['search'], icon: 'fa fa-search', action: manager::manager.searchData, disabled: true },
+        { text: LANG['contextmenu']['search'], icon: 'fa fa-search', action: manager.searchData.bind(manager), disabled: true },
         { divider: true },
         { text: LANG['contextmenu']['clearCache'], icon: 'fa fa-trash-o', disabled: !id, action: () => {
           manager.clearCache(id);
         } },
-        { text: LANG['contextmenu']['clearAllCache'], icon: 'fa fa-trash', action: manager::manager.clearAllCache }
+        { text: LANG['contextmenu']['clearAllCache'], icon: 'fa fa-trash', action: manager.clearAllCache.bind(manager) }
       ], event);
 
       return true;

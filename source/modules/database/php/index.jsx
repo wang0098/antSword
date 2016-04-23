@@ -84,13 +84,13 @@ class PHP {
         {
           text: LANG['list']['menu']['add'],
           icon: 'fa fa-plus-circle',
-          action: this::this.addConf
+          action: this.addConf.bind(this)
         }, {
           divider: true
         }, {
           text: LANG['list']['menu']['del'],
           icon: 'fa fa-remove',
-          action: this::this.delConf
+          action: this.delConf.bind(this)
         }
       ], event);
     });
@@ -481,7 +481,7 @@ class PHP {
   // 禁用SQL编辑框
   disableEditor() {
     ['exec', 'clear'].map(
-      this.manager.query.toolbar::this.manager.query.toolbar.disableItem
+      this.manager.query.toolbar.disableItem.bind(this.manager.query.toolbar)
     );
     this.manager.query.editor.setReadOnly(true);
   }
@@ -489,7 +489,7 @@ class PHP {
   // 启用SQL编辑框
   enableEditor() {
     ['exec', 'clear'].map(
-      this.manager.query.toolbar::this.manager.query.toolbar.enableItem
+      this.manager.query.toolbar.enableItem.bind(this.manager.query.toolbar)
     );
     this.manager.query.editor.setReadOnly(false);
   }

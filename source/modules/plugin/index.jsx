@@ -1,6 +1,6 @@
-// 
+//
 // 插件中心
-// 
+//
 
 const LANG = antSword['language']['plugin'];
 const LANG_T = antSword['language']['toastr'];
@@ -8,7 +8,7 @@ const LANG_T = antSword['language']['toastr'];
 class Plugin {
 
   constructor() {
-    antSword['menubar'].reg('plugin', this::this.open);
+    antSword['menubar'].reg('plugin', this.open.bind(this));
     this.homepage = 'http://u.uyu.us/';
   }
 
@@ -24,9 +24,9 @@ class Plugin {
       null, null, true, true
     );
     const cell = tabbar.tabs('tab_plugin');
-    // 
+    //
     // @创建浏览器工具栏:后退、前进、刷新、主页、停止
-    // 
+    //
     const toolbar = cell.attachToolbar();
     toolbar.loadStruct([
       { id: 'back', type: 'button', text: '', icon: 'chevron-left' },
@@ -39,8 +39,8 @@ class Plugin {
     // 开始加载web
     cell.progressOn();
     const frame = cell.attachURI(this.homepage);
-    frame.addEventListener('did-start-loading', cell::cell.progressOn);
-    frame.addEventListener('did-finish-load', cell::cell.progressOff);
+    frame.addEventListener('did-start-loading', cell.progressOn.bind(cell));
+    frame.addEventListener('did-finish-load', cell.progressOff.bind(cell));
     frame.addEventListener('did-fail-load', (err) => {
       cell.progressOff();
       // cell.close();

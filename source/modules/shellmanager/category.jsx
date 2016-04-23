@@ -1,6 +1,6 @@
-// 
-// 右侧目录管理模块
-// 
+/**
+ * 右侧目录管理模块
+ */
 
 'use strict';
 
@@ -95,7 +95,7 @@ class Category {
                 sidebar.callEvent('onSelect', ['default']);
                 // 3. 删除侧边栏
                 sidebar.items(category).remove();
-                setTimeout(this::this.updateTitle, 100);
+                setTimeout(this.updateTitle.bind(this), 100);
               }else{
                 return toastr.error(LANG['category']['del']['error'](category, ret.toString()), LANG_T['error']);
               }

@@ -1,6 +1,6 @@
-// 
-// 菜单栏模块
-// 
+/**
+ * 菜单栏模块
+ */
 
 'use strict';
 
@@ -81,9 +81,6 @@ class Menubar {
           }
         ]
       }, {
-        // 
-        // @窗口
-        // 
         label: LANG['window']['title'],
         submenu: [
           {
