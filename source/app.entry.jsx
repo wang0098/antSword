@@ -8,6 +8,7 @@
 'use strict';
 
 const electron = global.require('electron');
+const shell = electron.shell;
 const remote = electron.remote;
 const ipcRenderer = electron.ipcRenderer;
 
@@ -80,6 +81,7 @@ ipcRenderer.send('aproxy', {
   aproxyuri: antSword['aproxyuri']
 });
 
+antSword['shell'] = shell;
 antSword['ipcRenderer'] = ipcRenderer;
 antSword['CacheManager'] = CacheManager;
 antSword['menubar'] = new Menubar();
