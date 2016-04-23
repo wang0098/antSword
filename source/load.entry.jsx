@@ -81,6 +81,8 @@ $(document).ready(() => {
     return loadCSS('../static/libs/dhtmlx/codebase/dhtmlx.css');
   }).then(() => {
     return loadCSS('../static/libs/dhtmlx/skins/mytheme/dhtmlx.css');
+  }).then(() => {
+    return loadCSS('../static/css/index.css');
   });
 
   // 加载js资源
