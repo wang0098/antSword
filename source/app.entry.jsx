@@ -96,8 +96,8 @@ antSword['tabbar'] = new dhtmlXTabBar(document.body);
   'settings',
   'plugin'
 ].map((_) => {
-  let _module = require(`./modules/${_}/index`);
-  antSword['modules'][_] = new _module.default();
+  let _module = require(`./modules/${_}/`);
+  antSword['modules'][_] = new _module();
 });
 // 移除加载界面&&设置标题
 $('#loading').remove();

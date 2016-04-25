@@ -1,3 +1,10 @@
+/**
+ * 中国蚁剑::前端加载模块
+ * 开写: 2016/04/23
+ * 更新: 2016/04/24
+ * 作者: 蚁逅 <https://github.com/antoor>
+ */
+
 'use strict';
 
 // 加载jQuery
@@ -101,7 +108,7 @@ $(document).ready(() => {
   }).then(() => {
     return loadJS('../static/libs/terminal/js/jquery.terminal-src.js');
   }).then(() => {
-    return loadJS('../static/libs/dhtmlx/codebase/dhtmlx_pro.js');
+    return loadJS('../static/libs/dhtmlx/codebase/dhtmlx.js');
   }).then(() => {
     /**
      * 配置layer弹出层
@@ -109,7 +116,9 @@ $(document).ready(() => {
      * @return {[type]}          [description]
      */
     layer.config({extend: 'extend/layer.ext.js'});
+    // 加载babel引擎
+    require('babel/register')();
     // 加载程序入口
-    return loadJS('../static/build/app.bundle.js');
+    require('./app.entry.jsx');
   });
 });
