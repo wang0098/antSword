@@ -36,7 +36,7 @@ class ASPX extends Base {
    * @return {array} 编码器列表
    */
   get encoders() {
-    return ['base64'];
+    return ['base64', 'hex'];
   }
 
   /**
