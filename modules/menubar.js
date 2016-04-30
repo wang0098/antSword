@@ -4,6 +4,8 @@
 
 'use strict';
 
+const CONF = require('./config');
+
 class Menubar {
 
   constructor(electron, app, mainWindow) {
@@ -100,7 +102,8 @@ class Menubar {
       }
     ];
     // 调试菜单
-    if (process.env['npm_package_debug']) {
+    // if (process.env['npm_package_debug']) {
+    if (CONF['package']['debug']) {
       template.push({
         label: LANG['debug']['title'],
         submenu: [

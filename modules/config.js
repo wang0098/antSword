@@ -42,6 +42,14 @@ class Conf {
     return _;
   }
 
+  /**
+   * 获取package.json配置信息
+   * @return {Object} [description]
+   */
+  get package() {
+    return require('../package.json');
+  }
+
 }
 
 module.exports = new Conf();
