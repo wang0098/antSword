@@ -1,7 +1,7 @@
 /**
  * 中国蚁剑::前端加载模块
  * 开写: 2016/04/23
- * 更新: 2016/04/24
+ * 更新: 2016/04/28
  * 作者: 蚁逅 <https://github.com/antoor>
  */
 
@@ -9,6 +9,9 @@
 
 // 加载jQuery
 window.$ = window.jQuery = require('../static/libs/jquery/dist/jquery.min.js');
+
+// 开始加载时间
+let APP_START_TIME = +new Date;
 
 $(document).ready(() => {
   /**
@@ -120,5 +123,19 @@ $(document).ready(() => {
     require('babel/register')();
     // 加载程序入口
     require('./app.entry.jsx');
+    // LOGO
+    console.log(`%c
+        _____     _   _____                 _
+       |  _  |___| |_|   __|_ _ _ ___ ___ _| |
+       |     |   |  _|__   | | | | . |  _| . |
+       |__|__|_|_|_| |_____|_____|___|_| |___|%c
+
+   ->| Ver: %c${antSword.package.version}%c
+ -+=>| Git: %c${antSword.package.repository['url']}%c
+   -*| End: %c${+new Date - APP_START_TIME}%c/ms`,
+    'color: #F44336;', 'color: #9E9E9E;',
+    'color: #4CAF50;', 'color: #9E9E9E;',
+    'color: #2196F3;', 'color: #9E9E9E;',
+    'color: #FF9800;', 'color: #9E9E9E;');
   });
 });
