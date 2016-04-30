@@ -4,20 +4,18 @@
 
 'use strict';
 
-// 读取package.json信息
-const info = require('../package');
-
 class Menubar {
 
   constructor(electron, app, mainWindow) {
 
     const Menu = electron.Menu;
-    const ipcMain = electron.ipcMain;
+
     // 清空菜单栏
     Menu.setApplicationMenu(Menu.buildFromTemplate([]));
     // 监听重载菜单事件
-    ipcMain.on('menubar', this.reload.bind(this));
-    ipcMain.on('quit', app.quit.bind(app));
+    electron.ipcMain
+      .on('quit', app.quit.bind(app))
+      .on('menubar', this.reload.bind(this));
 
     this.electron = electron;
     this.app = app;
@@ -25,7 +23,12 @@ class Menubar {
     this.mainWindow = mainWindow;
   }
 
-  // 刷新菜单
+  /**
+   * 重新载入菜单
+   * @param  {Object} event ipcMain对象
+   * @param  {Object} LANG  语言模板
+   * @return {[type]}       [description]
+   */
   reload(event, LANG) {
     // 菜单模板
     const template = [
@@ -36,9 +39,7 @@ class Menubar {
           {
             label: LANG['shell']['add'],
             accelerator: 'Shift+A',
-            click: () => {
-              event.sender.send('menubar', 'shell-add');
-            }
+            click: event.sender.send.bind(event.sender, 'menubar', 'shell-add')
           }, {
             label: LANG['shell']['search'],
             accelerator: 'Shift+S',
@@ -99,7 +100,7 @@ class Menubar {
       }
     ];
     // 调试菜单
-    if (info['debug']) {
+    if (process.env['npm_package_debug']) {
       template.push({
         label: LANG['debug']['title'],
         submenu: [
