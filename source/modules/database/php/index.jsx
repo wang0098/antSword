@@ -172,6 +172,22 @@ class PHP {
             })() }
 
           ] },
+          { text: 'MYSQLI', value: 'mysqli', list: [
+
+            { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
+            { type: 'label', label: LANG['form']['encode'] },
+            { type: 'combo', label: '', name: 'encode', options: (() => {
+              let ret = [];
+              ['utf8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'].map((_) => {
+                ret.push({
+                  text: _,
+                  value: _
+                });
+              })
+              return ret;
+            })() }
+
+          ] },
           { text: 'MSSQL', value: 'mssql' },
           { text: 'ORACLE', value: 'oracle' },
           { text: 'INFORMIX', value: 'informix' }
@@ -186,6 +202,7 @@ class PHP {
       if (_ !== 'type') { return };
       switch(id) {
         case 'mysql':
+        case 'mysqli':
           form.setFormData({
             user: 'root',
             passwd: ''
