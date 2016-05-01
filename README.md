@@ -3,7 +3,7 @@
 > You can use it easily and intuitively to management your website(webshell).
 
 [![node](https://img.shields.io/badge/node-4.0+-green.svg?style=flat-square)](https://nodejs.org/en/download/)
-[![release](https://img.shields.io/badge/release-v1.2.1-blue.svg?style=flat-square)][url-release]
+[![release](https://img.shields.io/badge/release-v1.3.0-blue.svg?style=flat-square)][url-release]
 
 [中文说明][url-doccn] | [开发文档][url-document] | [CHANGELOG][url-changelog]
 
@@ -37,13 +37,7 @@ $ cd antSword
 $ npm install
 ```
 
-#### 0x03. Build the sources
-
-``` sh
-$ npm run build
-```
-
-#### 0x04. Began to enjoy
+#### 0x03. Began to enjoy
 
 ``` sh
 $ npm start
@@ -65,4 +59,4 @@ This project is licensed under the terms of the [MIT license][url-mit]
 [url-weibo]: http://weibo.com/antoor
 [url-mit]: LICENSE
 [url-document]: http://doc.uyu.us
-[url-release]: https://github.com/antoor/antSword/releases/tag/1.2.1
+[url-release]: https://github.com/antoor/antSword/releases/tag/1.3.0

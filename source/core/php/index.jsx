@@ -15,6 +15,7 @@ class PHP extends Base {
     [
       'base', 'command', 'filemanager',
       'database/mysql',
+      'database/mysqli',
       'database/mssql',
       'database/oracle',
       'database/informix'

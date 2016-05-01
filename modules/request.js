@@ -1,147 +1,188 @@
-//
-// Superagent发包模块
-//
+/**
+ * HTTP后端数据发送处理函数
+ * 更新: 2016/04/25
+ */
 
 'use strict';
 
-const fs = require('fs');
-const through = require('through');
-const log4js = require('log4js');
-const iconv = require('iconv-lite');
-const superagent = require('superagent');
+const fs = require('fs'),
+  iconv = require('iconv-lite'),
+  logger = require('log4js').getLogger('Request'),
+  through = require('through'),
+  superagent = require('superagent'),
+  superagentProxy = require('superagent-proxy');
 
-const logger = log4js.getLogger('Request');
+// 请求UA
+const USER_AGENT = 'antSword/v1.3';
 
-var aproxymode = "noproxy";
-var aproxyuri = "";
+// 请求超时
+const REQ_TIMEOUT = 5000;
+
+// 代理配置
+const APROXY_CONF = {
+  mode: 'noproxy',
+  uri: ''
+}
 
 class Request {
 
   constructor(electron) {
-    // 监听请求
-    const userAgent = 'antSword/1.1';
-    const timeout = 5000;
     const ipcMain = electron.ipcMain;
 
-    // 代理测试
-    ipcMain.on('aproxytest', (event, opts) => {
-      var _superagent = require('superagent');
-      var _aproxyuri = opts['aproxyuri'];
-      logger.debug("[aProxy] Test Proxy - " + _aproxyuri + " - Connect to " + opts['url']);
-      require('superagent-proxy')(superagent);
-      _superagent
-        .get(opts['url'])
-        .set('User-Agent', userAgent)
-        .proxy(_aproxyuri)
-        .timeout(timeout)
-        .end((err, ret) => {
-          if (err) {
-            logger.debug("[aProxy] Test Error");
-            return event.sender.send('aproxytest-error-' + opts['hash'], err);
-          }else{
-            logger.debug("[aProxy] Test Success");
-            return event.sender.send('aproxytest-success-' + opts['hash'], ret);
-          }
-        });
-    });
-    // 加载代理设置
-    ipcMain.on('aproxy', (event, opts) => {
-      aproxymode = opts['aproxymode'];
-      aproxyuri = opts['aproxyuri'];
-      logger.debug("[aProxy] Set Proxy Mode - " + (aproxymode == "manualproxy" ? aproxyuri : " noproxy"));
-      if (aproxymode == "noproxy") {
-        superagent.Request.prototype.proxy=function(arg) {
-          return this;
-        };
-      }else{
-        require('superagent-proxy')(superagent);
-      };
-    });
-    // 监听请求
-    ipcMain.on('request', (event, opts) => {
-      logger.debug("[aProxy] Connect mode - " + (aproxymode == "manualproxy" ? aproxyuri : " noproxy"));
-      logger.debug(opts['url'] + '\n', opts['data']);
-      superagent
-        .post(opts['url'])
-        .set('User-Agent', userAgent)
-        .proxy(aproxyuri)
-        .type('form')
-        .timeout(timeout)
-        .send(opts['data'])
-        .parse((res, callback) => {
-          this.parse(opts['tag_s'], opts['tag_e'], (chunk) => {
-            event.sender.send('request-chunk-' + opts['hash'], chunk);
-          }, res, callback);
-        })
-        .end((err, ret) => {
-          if (err) {
-            return event.sender.send('request-error-' + opts['hash'], err);
-          };
-          const buff = ret.body;
-          // 解码
-          const text = iconv.decode(buff, opts['encode']);
-          // 回调数据
-          event.sender.send('request-' + opts['hash'], {
-            text: text,
-            buff: buff
-          });
-        });
-    });
-    /**
-     * 监听文件下载请求
-     * - 技术实现：通过pipe进行数据流逐步解析，当遇到截断符，则标记，最后数据传输完成，利用标记点进行数据截取，最后保存。
-     * @opts  {Object:path,url,data,tag_s,tag_e}
-     */
-    ipcMain.on('download', (event, opts) => {
-      logger.debug('DOWNLOAD', opts);
-
-      // 创建文件流
-      const rs = fs.createWriteStream(opts['path']);
-
-      let indexStart = -1;
-      let indexEnd = -1;
-      let tempData = [];
-
-      // 开始HTTP请求
-      superagent
-        .post(opts['url'])
-        .set('User-Agent', userAgent)
-        .proxy(aproxyuri)
-        .type('form')
-        // 设置超时会导致文件过大时写入出错
-        // .timeout(timeout)
-        .send(opts['data'])
-        .pipe(through(
-          (chunk) => {
-            // 判断数据流中是否包含后截断符？长度++
-            let temp = chunk.indexOf(opts['tag_e']);
-            if (temp !== -1) {
-              indexEnd = Buffer.concat(tempData).length + temp;
-            };
-            tempData.push(chunk);
-            event.sender.send('download-progress-' + opts['hash'], chunk.length);
-          },
-          () => {
-            let tempDataBuffer = Buffer.concat(tempData);
-
-            indexStart = tempDataBuffer.indexOf(opts['tag_s']) || 0;
-            // 截取最后的数据
-            let finalData = new Buffer(tempDataBuffer.slice(
-              indexStart + opts['tag_s'].length,
-              indexEnd
-            ), 'binary');
-            // 写入文件流&&关闭
-            rs.write(finalData);
-            rs.close();
-            event.sender.send('download-' + opts['hash'], finalData.length);
-            // 删除内存数据
-            finalData = tempDataBuffer = tempData = null;
-          }
-        ));
-    });
+    ipcMain.on('aproxy', this.onAproxy.bind(this));
+    ipcMain.on('aproxytest', this.onAproxyTest.bind(this));
+    ipcMain.on('request', this.onRequest.bind(this));
+    ipcMain.on('download', this.onDownlaod.bind(this));
   }
 
-  // 二进制数据流解析
+
+  /**
+   * 加载代理配置
+   * @param  {Object} event ipcMain事件
+   * @param  {Object} opts  代理配置
+   * @return {[type]}       [description]
+   */
+  onAproxy(event, opts) {
+    logger.debug(
+      'aProxy::Set Proxy Mode -',
+      APROXY_CONF['mode'] === 'manualproxy' ? APROXY_CONF['uri'] : 'noproxy'
+    );
+
+    APROXY_CONF['mode'] = opts['aproxymode'];
+    APROXY_CONF['uri'] = opts['aproxyuri'];
+
+    if (APROXY_CONF['mode'] === 'noproxy') {
+      return superagent.Request.prototype.proxy = function() { return this };
+    }
+    superagentProxy(superagent);
+  }
+
+  /**
+   * 监听代理连接测试
+   * @param  {Object} event ipcMain事件
+   * @param  {Object} opts  测试配置
+   * @return {[type]}       [description]
+   */
+  onAproxyTest(event, opts) {
+    logger.debug('aProxy::Test Proxy -', opts['aproxyuri'], '- Connect to ', opts['url']);
+    superagentProxy(superagent);
+    superagent
+      .get(opts['url'])
+      .set('User-Agent', USER_AGENT)
+      .proxy(opts['aproxyuri'])
+      .timeout(REQ_TIMEOUT)
+      .end((err, ret) => {
+        if (err) {
+          logger.error("aProxy::Test Error", err);
+          return event.sender.send('aproxytest-error-' + opts['hash'], err);
+        }else{
+          logger.info("aProxy::Test Success");
+          return event.sender.send('aproxytest-success-' + opts['hash'], ret);
+        }
+      });
+  }
+
+
+  /**
+   * 监听HTTP请求
+   * @param  {Object} event ipcMain事件对象
+   * @param  {Object} opts  请求配置
+   * @return {[type]}       [description]
+   */
+  onRequest(event, opts) {
+
+    logger.debug('onRequest::url', opts['url']);
+    logger.debug('onRequest::data', opts['data']);
+    superagent
+      .post(opts['url'])
+      .set('User-Agent', USER_AGENT)
+      .proxy(APROXY_CONF['uri'])
+      .type('form')
+      .timeout(REQ_TIMEOUT)
+      .send(opts['data'])
+      .parse((res, callback) => {
+        this.parse(opts['tag_s'], opts['tag_e'], (chunk) => {
+          event.sender.send('request-chunk-' + opts['hash'], chunk);
+        }, res, callback);
+      })
+      .end((err, ret) => {
+        if (err) {
+          return event.sender.send('request-error-' + opts['hash'], err);
+        };
+        let buff = ret.body;
+        // 解码
+        let text = iconv.decode(buff, opts['encode']);
+        // 回调数据
+        event.sender.send('request-' + opts['hash'], {
+          text: text,
+          buff: buff
+        });
+      });
+  }
+
+  /**
+   * 监听下载请求
+   * @param  {Object} event ipcMain事件对象
+   * @param  {Object} opts  下载配置
+   * @return {[type]}       [description]
+   */
+  onDownlaod(event, opts) {
+    logger.debug('onDownlaod', opts);
+
+    // 创建文件流
+    const rs = fs.createWriteStream(opts['path']);
+
+    let indexStart = -1;
+    let indexEnd = -1;
+    let tempData = [];
+
+    // 开始HTTP请求
+    superagent
+      .post(opts['url'])
+      .set('User-Agent', USER_AGENT)
+      .proxy(APROXY_CONF['uri'])
+      .type('form')
+      // 设置超时会导致文件过大时写入出错
+      // .timeout(timeout)
+      .send(opts['data'])
+      .pipe(through(
+        (chunk) => {
+          // 判断数据流中是否包含后截断符？长度++
+          let temp = chunk.indexOf(opts['tag_e']);
+          if (temp !== -1) {
+            indexEnd = Buffer.concat(tempData).length + temp;
+          };
+          tempData.push(chunk);
+          event.sender.send('download-progress-' + opts['hash'], chunk.length);
+        },
+        () => {
+          let tempDataBuffer = Buffer.concat(tempData);
+
+          indexStart = tempDataBuffer.indexOf(opts['tag_s']) || 0;
+          // 截取最后的数据
+          let finalData = new Buffer(tempDataBuffer.slice(
+            indexStart + opts['tag_s'].length,
+            indexEnd
+          ), 'binary');
+          // 写入文件流&&关闭
+          rs.write(finalData);
+          rs.close();
+          event.sender.send('download-' + opts['hash'], finalData.length);
+          // 删除内存数据
+          finalData = tempDataBuffer = tempData = null;
+        }
+      ));
+  }
+
+  /**
+   * 二进制数据流解析
+   * @param  {String}   tag_s         数据截断符号(前)
+   * @param  {String}   tag_e         数据截断符号(后)
+   * @param  {Function}   chunkCallBack 数据流回调函数
+   * @param  {Object}   res           Superagent::res对象
+   * @param  {Function} callback      数据获取完毕回调事件
+   * @return {[type]}                 [description]
+   */
   parse(tag_s, tag_e, chunkCallBack, res, callback) {
     // 数据转换二进制处理
     res.setEncoding('binary');

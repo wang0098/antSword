@@ -1,7 +1,17 @@
+/**
+ * 中国蚁剑::前端加载模块
+ * 开写: 2016/04/23
+ * 更新: 2016/04/28
+ * 作者: 蚁逅 <https://github.com/antoor>
+ */
+
 'use strict';
 
 // 加载jQuery
-window.$ = window.jQuery = require('../static/libs/jquery/dist/jquery.min.js');
+window.$ = window.jQuery = require('../static/libs/jquery/jquery.js');
+
+// 开始加载时间
+let APP_START_TIME = +new Date;
 
 $(document).ready(() => {
   /**
@@ -64,7 +74,7 @@ $(document).ready(() => {
   loadCSS(
     '../static/libs/bmenu/bmenu.css'
   ).then(() => {
-    return loadCSS('../static/libs/toastr/toastr.css');
+    return loadCSS('../static/libs/toastr/toastr.min.css');
   }).then(() => {
     return loadCSS('../static/libs/layer/src/skin/layer.css');
   }).then(() => {
@@ -76,7 +86,7 @@ $(document).ready(() => {
   }).then(() => {
     return loadCSS('../static/libs/terminal/css/jquery.terminal.css');
   }).then(() => {
-    return loadCSS('../static/libs/font-awesome/css/font-awesome.css');
+    return loadCSS('../static/libs/font-awesome/css/font-awesome.min.css');
   }).then(() => {
     return loadCSS('../static/libs/dhtmlx/codebase/dhtmlx.css');
   }).then(() => {
@@ -99,9 +109,9 @@ $(document).ready(() => {
   }).then(() => {
     return loadJS('../static/libs/laydate/laydate.js');
   }).then(() => {
-    return loadJS('../static/libs/terminal/js/jquery.terminal-src.js');
+    return loadJS('../static/libs/terminal/js/jquery.terminal-min.js');
   }).then(() => {
-    return loadJS('../static/libs/dhtmlx/codebase/dhtmlx_pro.js');
+    return loadJS('../static/libs/dhtmlx/codebase/dhtmlx.js');
   }).then(() => {
     /**
      * 配置layer弹出层
@@ -109,7 +119,23 @@ $(document).ready(() => {
      * @return {[type]}          [description]
      */
     layer.config({extend: 'extend/layer.ext.js'});
+    // 加载babel引擎
+    require('babel/register')();
     // 加载程序入口
-    return loadJS('../static/build/app.bundle.js');
+    require('./app.entry.jsx');
+    // LOGO
+    console.log(`%c
+        _____     _   _____                 _
+       |  _  |___| |_|   __|_ _ _ ___ ___ _| |
+       |     |   |  _|__   | | | | . |  _| . |
+       |__|__|_|_|_| |_____|_____|___|_| |___|%c
+
+   ->| Ver: %c${antSword.package.version}%c
+ -+=>| Git: %c${antSword.package.repository['url']}%c
+   -*| End: %c${+new Date - APP_START_TIME}%c/ms`,
+    'color: #F44336;', 'color: #9E9E9E;',
+    'color: #4CAF50;', 'color: #9E9E9E;',
+    'color: #2196F3;', 'color: #9E9E9E;',
+    'color: #FF9800;', 'color: #9E9E9E;');
   });
 });

@@ -5,8 +5,8 @@ const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 
 app
-  .on('window-all-closed', app.quit)
-  .on('ready', () => {
+  .once('window-all-closed', app.quit)
+  .once('ready', () => {
     let mainWindow = new BrowserWindow({
       width: 1040,
       height: 699,
