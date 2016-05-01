@@ -8,7 +8,7 @@
 'use strict';
 
 // 加载jQuery
-window.$ = window.jQuery = require('../static/libs/jquery/dist/jquery.min.js');
+window.$ = window.jQuery = require('../static/libs/jquery/jquery.js');
 
 // 开始加载时间
 let APP_START_TIME = +new Date;
@@ -74,7 +74,7 @@ $(document).ready(() => {
   loadCSS(
     '../static/libs/bmenu/bmenu.css'
   ).then(() => {
-    return loadCSS('../static/libs/toastr/toastr.css');
+    return loadCSS('../static/libs/toastr/toastr.min.css');
   }).then(() => {
     return loadCSS('../static/libs/layer/src/skin/layer.css');
   }).then(() => {
@@ -86,7 +86,7 @@ $(document).ready(() => {
   }).then(() => {
     return loadCSS('../static/libs/terminal/css/jquery.terminal.css');
   }).then(() => {
-    return loadCSS('../static/libs/font-awesome/css/font-awesome.css');
+    return loadCSS('../static/libs/font-awesome/css/font-awesome.min.css');
   }).then(() => {
     return loadCSS('../static/libs/dhtmlx/codebase/dhtmlx.css');
   }).then(() => {
@@ -109,7 +109,7 @@ $(document).ready(() => {
   }).then(() => {
     return loadJS('../static/libs/laydate/laydate.js');
   }).then(() => {
-    return loadJS('../static/libs/terminal/js/jquery.terminal-src.js');
+    return loadJS('../static/libs/terminal/js/jquery.terminal-min.js');
   }).then(() => {
     return loadJS('../static/libs/dhtmlx/codebase/dhtmlx.js');
   }).then(() => {

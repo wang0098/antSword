@@ -12,7 +12,7 @@ const fs = require('fs'),
   CONF = require('./config'),
   logger = require('log4js').getLogger('Database'),
   Datastore = require('nedb'),
-  qqwry = require("lib-qqwry").info();
+  qqwry = require("geoips").info();
 
 class Database {
 
