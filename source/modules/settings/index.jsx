@@ -36,7 +36,7 @@ class Settings {
     });
     this.about = new About(sidebar);
     this.language = new Language(sidebar);
-    this.update = new Update(sidebar);
+    // this.update = new Update(sidebar);
     this.aproxy = new AProxy(sidebar);
 
     this.cell = cell;
