@@ -1,8 +1,14 @@
+/**
+ * 中国蚁剑::主程序入口
+ * 更新：2016/05/02
+ * 作者：蚁逅 <https://github.com/antoor>
+ */
+
 'use strict';
 
-const electron = require('electron');
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
+const electron = require('electron'),
+  app = electron.app,
+  BrowserWindow = electron.BrowserWindow;
 
 app
   .once('window-all-closed', app.quit)
@@ -10,8 +16,8 @@ app
     let mainWindow = new BrowserWindow({
       width: 1040,
       height: 699,
-      minWidth: 1040,
-      minHeight: 699,
+      minWidth: 888,
+      minHeight: 555,
       webgl: false,
       title: 'AntSword'
     });
