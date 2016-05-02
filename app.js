@@ -26,13 +26,10 @@ app
     mainWindow.loadURL(`file:\/\/${__dirname}/views/index.html`);
 
     // 调整部分UI
-    const reloadUI = () => {
-      mainWindow.webContents.executeJavaScript(`
-        setTimeout(() => {
-          antSword.modules.shellmanager.category.cell.setWidth(222);
-        }, 500);
-      `);
-    };
+    const reloadUI = mainWindow.webContents.send.bind(
+      mainWindow.webContents,
+      'reloadui', true
+    );
 
     // 窗口事件监听
     mainWindow
@@ -46,6 +43,7 @@ app
     // 打开调试控制台
     // mainWindow.webContents.openDevTools();
 
+    electron.Logger = require('./modules/logger')(mainWindow);
     // 初始化模块
     ['menubar', 'request', 'database', 'cache', 'update'].map((_) => {
       new ( require(`./modules/${_}`) )(electron, app, mainWindow);

@@ -18,12 +18,17 @@ const os = require('os'),
   unzip = require('extract-zip'),
   crypto = require('crypto'),
   nugget = require('nugget'),
-  logger = require('log4js').getLogger('Update'),
+  // logger = require('log4js').getLogger('Update'),
+  // Logger = require('./logger'),
+  // logger = null,
   superagent = require('superagent');
+
+let logger;
 
 class Update {
 
   constructor(electron) {
+    logger = new electron.Logger('Update');
     const ipcMain = electron.ipcMain;
     this.info = {};
     ipcMain

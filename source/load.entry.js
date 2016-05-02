@@ -129,7 +129,8 @@ $(document).ready(() => {
     // 加载程序入口
     require('./app.entry');
     // LOGO
-    console.log(`%c
+    console.log(
+`%c
         _____     _   _____                 _
        |  _  |___| |_|   __|_ _ _ ___ ___ _| |
        |     |   |  _|__   | | | | . |  _| . |
@@ -137,10 +138,13 @@ $(document).ready(() => {
 
    ->| Ver: %c${antSword.package.version}%c
  -+=>| Git: %c${antSword.package.repository['url']}%c
-   -*| End: %c${+new Date - APP_START_TIME}%c/ms`,
+   -*| End: %c${+new Date - APP_START_TIME}%c/ms
+
+`,
     'color: #F44336;', 'color: #9E9E9E;',
     'color: #4CAF50;', 'color: #9E9E9E;',
     'color: #2196F3;', 'color: #9E9E9E;',
-    'color: #FF9800;', 'color: #9E9E9E;');
+    'color: #FF9800;', 'color: #9E9E9E;'
+    );
   });
 });

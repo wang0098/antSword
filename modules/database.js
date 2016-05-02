@@ -10,9 +10,13 @@ const fs = require('fs'),
   dns = require('dns'),
   path = require('path'),
   CONF = require('./config'),
-  logger = require('log4js').getLogger('Database'),
+  // Logger = require('./logger'),
+  // logger = null,
+  // logger = require('log4js').getLogger('Database'),
   Datastore = require('nedb'),
   qqwry = require("geoips").info();
+
+let logger;
 
 class Database {
 
@@ -22,6 +26,7 @@ class Database {
    * @return {[type]}          [description]
    */
   constructor(electron) {
+    logger = new electron.Logger('Database');
     this.cursor = new Datastore({
       filename: CONF.dataPath,
       autoload: true

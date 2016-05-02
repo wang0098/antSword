@@ -27,6 +27,11 @@ const antSword = window.antSword = {
     return String(html).replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
   },
   /**
+   * 终端日志数据
+   * @type {Array}
+   */
+  logs: [],
+  /**
    * 核心模块
    * @type {Object}
    */
@@ -104,3 +109,34 @@ antSword['tabbar'] = new dhtmlXTabBar(document.body);
 // 移除加载界面&&设置标题
 $('#loading').remove();
 document.title = antSword['language']['title'] || 'AntSword';
+
+
+ipcRenderer
+  /**
+   * 刷新UI（shellmanager侧边栏
+   * @param  {[type]} 'reloadui' [description]
+   * @param  {[type]} (          [description]
+   * @return {[type]}            [description]
+   */
+  .on('reloadui', () => {
+    setTimeout(() => {
+      antSword.modules.shellmanager.category.cell.setWidth(222);
+    }, 555);
+  })
+  /**
+   * 后端日志输出
+   * + 用于在前端控制台输出后端的日志
+   * - 可使用`antSword.logs[id]`来获取详细日志
+   */
+  .on('logger-debug', (e, opt) => {
+    console.log(`%c${antSword['logs'].push(opt[1]) - 1}\t${opt[0]}`, 'color:#607D8B');
+  })
+  .on('logger-info', (e, opt) => {
+    console.log(`%c${antSword['logs'].push(opt[1]) - 1}\t${opt[0]}`, 'color:#009688');
+  })
+  .on('logger-warn', (e, opt) => {
+    console.log(`%c${antSword['logs'].push(opt[1]) - 1}\t${opt[0]}`, 'color:#FF9800');
+  })
+  .on('logger-fatal', (e, opt) => {
+    console.log(`%c${antSword['logs'].push(opt[1]) - 1}\t${opt[0]}`, 'color:#E91E63');
+  });

@@ -7,11 +7,13 @@
 
 const fs = require('fs'),
   iconv = require('iconv-lite'),
-  logger = require('log4js').getLogger('Request'),
+  // logger = require('log4js').getLogger('Request'),
+  // Logger = require('./logger'),
   through = require('through'),
   superagent = require('superagent'),
   superagentProxy = require('superagent-proxy');
 
+let logger;
 // 请求UA
 const USER_AGENT = 'antSword/v1.3';
 
@@ -27,6 +29,7 @@ const APROXY_CONF = {
 class Request {
 
   constructor(electron) {
+    logger = new electron.Logger('Request');
     const ipcMain = electron.ipcMain;
 
     ipcMain.on('aproxy', this.onAproxy.bind(this));
