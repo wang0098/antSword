@@ -384,7 +384,11 @@ module.exports = {
   },
   settings: {
     about: {
-      title: '关于程序'
+      title: '关于程序',
+      header: '中国蚁剑',
+      homepage: '主页',
+      document: '文档',
+      qqgroup: 'Q群'
     },
     language: {
       title: '语言设置',

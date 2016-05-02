@@ -190,6 +190,10 @@ html, body, #container, #loading {
 .about > p {
   color: #ececec;
 }
+.about > h2 > span {
+  font-size: 14px;
+  color: #9E9E9E;
+}
 .about a {
   text-decoration: blink;
   color: #795548;

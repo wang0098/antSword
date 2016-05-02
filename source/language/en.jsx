@@ -383,7 +383,11 @@ module.exports = {
   },
   settings: {
     about: {
-      title: 'About'
+      title: 'About',
+      header: 'AntSword',
+      homepage: 'Home',
+      document: 'Document',
+      qqgroup: 'QQ Group'
     },
     language: {
       title: 'Language setting',
