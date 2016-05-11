@@ -46,8 +46,8 @@ class ASP extends Base {
     let tag_s = '->|';
     let tag_e = '|<-';
 
-    let formatter = new this.format(this.__opts__['encode']);
-
+    // let formatter = new this.format(this.__opts__['encode']);
+    let formatter = Base.prototype.format(this.__opts__['encode']);
     // hex编码一次数据
     let hexCode = formatter['hex'](data['_']);
 
