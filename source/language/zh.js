@@ -339,9 +339,11 @@ module.exports = {
       title: '配置列表',
       add: '添加',
       del: '删除',
+      edit: '编辑',
       menu: {
         add: '添加配置',
-        del: '删除配置'
+        del: '删除配置',
+        edit: '编辑配置'
       }
     },
     query: {

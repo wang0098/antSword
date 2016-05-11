@@ -338,9 +338,11 @@ module.exports = {
       title: 'Config list',
       add: 'Add',
       del: 'Del',
+      edit: 'Edit',
       menu: {
         add: 'Add conf',
-        del: 'Del conf'
+        del: 'Del conf',
+        edit: 'Edit conf'
       }
     },
     query: {
