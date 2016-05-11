@@ -88,6 +88,12 @@ class PHP {
         }, {
           divider: true
         }, {
+          text: LANG['list']['menu']['edit'],
+          icon: 'fa fa-edit',
+          action: this.editConf.bind(this)
+        }, {
+          divider: true
+        }, {
           text: LANG['list']['menu']['del'],
           icon: 'fa fa-remove',
           action: this.delConf.bind(this)
@@ -252,6 +258,11 @@ class PHP {
           break;
       }
     });
+  }
+
+  // 编辑配置
+  editConf(){
+
   }
 
   // 删除配置
@@ -488,11 +499,13 @@ class PHP {
   // 禁用toolbar按钮
   disableToolbar() {
     this.manager.list.toolbar.disableItem('del');
+    this.manager.list.toolbar.disableItem('edit');
   }
 
   // 启用toolbar按钮
   enableToolbar() {
     this.manager.list.toolbar.enableItem('del');
+    this.manager.list.toolbar.enableItem('edit');
   }
 
   // 禁用SQL编辑框
