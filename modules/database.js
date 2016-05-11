@@ -265,17 +265,16 @@ class Database {
   /**
    * 修改数据库配置
    * @param {Object} event ipcMain对象
-   * @param {Object} opts  配置（_id,data
+   * @param {Object} opts  配置（_id,id,data
    */
   editDataConf(event, opts) {
-    logger.info('shell-editDataConf', opts);
+    logger.info('editDataConf', opts);
     // 1. 获取原配置列表
     this.cursor.findOne({
       _id: opts['_id']
     }, (err, ret) => {
       let confs = ret['database'] || {};
       // 添加到配置
-      logger.info('shell-editDataConf-opts["id"]', opts['id']);
       confs[opts['id']] = opts['data'];
       // 更新数据库
       this.cursor.update({

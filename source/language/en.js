@@ -366,7 +366,8 @@ module.exports = {
       title: 'Add conf',
       toolbar: {
         add: 'Add',
-        clear: 'Clear'
+        clear: 'Clear',
+        edit: 'Edit'
       },
       type: 'Database type',
       encode: 'Database encode',

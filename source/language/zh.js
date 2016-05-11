@@ -367,7 +367,8 @@ module.exports = {
       title: '添加配置',
       toolbar: {
         add: '添加',
-        clear: '清空'
+        clear: '清空',
+        edit: '编辑'
       },
       type: '数据库类型',
       encode: '数据库编码',

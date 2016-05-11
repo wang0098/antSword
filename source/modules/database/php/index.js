@@ -279,10 +279,10 @@ class PHP {
     // 工具栏
     const toolbar = win.attachToolbar();
     toolbar.loadStruct([{
-      id: 'add',
+      id: 'edit',
       type: 'button',
-      icon: 'plus-circle',
-      text: LANG['form']['toolbar']['add']
+      icon: 'edit',
+      text: LANG['form']['toolbar']['edit']
     }, {
       type: 'separator'
     }, {
@@ -371,7 +371,7 @@ class PHP {
         case 'clear':
           form.clear();
           break;
-        case 'add':
+        case 'edit':
           if (!form.validate()) {
             return toastr.warning(LANG['form']['warning'], LANG_T['warning']);
           };
