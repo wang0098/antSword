@@ -41,6 +41,7 @@ class Database {
       .on('shell-clear', this.clearShell.bind(this))
       .on('shell-findOne', this.findOneShell.bind(this))
       .on('shell-addDataConf', this.addDataConf.bind(this))
+      .on('shell-editDataConf', this.editDataConf.bind(this))
       .on('shell-delDataConf', this.delDataConf.bind(this))
       .on('shell-getDataConf', this.getDataConf.bind(this))
       .on('shell-renameCategory', this.renameShellCategory.bind(this));
@@ -257,6 +258,35 @@ class Database {
         }
       }, (_err, _ret) => {
         event.returnValue = random_id;
+      });
+    });
+  }
+
+  /**
+   * 修改数据库配置
+   * @param {Object} event ipcMain对象
+   * @param {Object} opts  配置（_id,data
+   */
+  editDataConf(event, opts) {
+    logger.info('shell-editDataConf', opts);
+    // 1. 获取原配置列表
+    this.cursor.findOne({
+      _id: opts['_id']
+    }, (err, ret) => {
+      let confs = ret['database'] || {};
+      // 添加到配置
+      logger.info('shell-editDataConf-opts["id"]', opts['id']);
+      confs[opts['id']] = opts['data'];
+      // 更新数据库
+      this.cursor.update({
+        _id: opts['_id']
+      }, {
+        $set: {
+          database: confs,
+          utime: +new Date
+        }
+      }, (_err, _ret) => {
+        event.returnValue = opts['id'];
       });
     });
   }
