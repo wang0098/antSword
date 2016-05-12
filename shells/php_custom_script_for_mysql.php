@@ -134,7 +134,7 @@ function executeSQL($encode, $conf, $sql, $columnsep, $rowsep, $needcoluname){
     $conn = @mysqli_connect($host, $user, $password);
     $res = @mysqli_query($conn, $sql);
     if (is_bool($res)) {
-        return "Status".$columnsep.$rowsep.($res?"VHJ1ZQ==":"RmFsc2U=").$columnsep.$rowsep;
+        return "Status".$columnsep.$rowsep.($res?"True":"False").$columnsep.$rowsep;
     }
     $i=0;
     if ($needcoluname) {
