@@ -369,6 +369,7 @@ module.exports = {
         clear: 'Clear',
         edit: 'Edit'
       },
+      conn: 'Connection String',
       type: 'Database type',
       encode: 'Database encode',
       host: 'Host',

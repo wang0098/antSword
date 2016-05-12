@@ -370,6 +370,7 @@ module.exports = {
         clear: '清空',
         edit: '编辑'
       },
+      conn: '连接字符串',
       type: '数据库类型',
       encode: '数据库编码',
       host: '数据库地址',
