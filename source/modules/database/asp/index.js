@@ -204,7 +204,7 @@ class ASP {
         case 'add':
           if (!form.validate()) {
             // return '填写完整！';
-            return toastr.warning(LANG['list']['add']['warning'], LANG_T['warning']);
+            return toastr.warning(LANG['form']['warning'], LANG_T['warning']);
           };
           // 解析数据
           let data = form.getValues();
@@ -231,7 +231,87 @@ class ASP {
 
   // 修改配置
   editConf() {
+    const id = this.tree.getSelected().split('::')[1];
+    // 获取配置
+    const conf = antSword['ipcRenderer'].sendSync('shell-getDataConf', {
+      _id: this.manager.opt['_id'],
+      id: id
+    });
+    const hash = (+new Date * Math.random()).toString(16).substr(2, 8);
+    // 创建窗口
+    const win = this.manager.win.createWindow(hash, 0, 0, 450, 300);
+    win.setText(LANG['form']['title']);
+    win.centerOnScreen();
+    win.button('minmax').hide();
+    win.setModal(true);
+    win.denyResize();
+    // 工具栏
+    const toolbar = win.attachToolbar();
+    toolbar.loadStruct([{
+      id: 'edit',
+      type: 'button',
+      icon: 'edit',
+      text: LANG['form']['toolbar']['edit']
+    }, {
+      type: 'separator'
+    }, {
+      id: 'clear',
+      type: 'button',
+      icon: 'remove',
+      text: LANG['form']['toolbar']['clear']
+    }]);
 
+    // form
+    const form = win.attachForm([
+      { type: 'settings', position: 'label-left', labelWidth: 80, inputWidth: 280 },
+      { type: 'block', inputWidth: 'auto', offsetTop: 12, list: [
+        { type: 'combo', label: LANG['form']['type'], readonly: true, name: 'type', options: (() => {
+          let ret = [];
+          for (let _ in this.conns) {
+            ret.push({
+              text: _.toUpperCase(),
+              value: _,
+              selected: conf['type'] === _
+            });
+          }
+          return ret;
+        })() },
+        { type: 'input', label: LANG['form']['conn'], name: 'conn', required: true, value: conf['conn'], rows: 9 }
+      ]}
+    ], true);
+
+    form.attachEvent('onChange', (_, id) => {
+      if (_ !== 'type') { return };
+      form.setFormData({
+        conn: this.conns[id]
+      });
+    });
+
+    // 工具栏点击事件
+    toolbar.attachEvent('onClick', (id) => {
+      switch(id) {
+        case 'clear':
+          form.clear();
+          break;
+        case 'edit':
+          if (!form.validate()) {
+            return toastr.warning(LANG['form']['warning'], LANG_T['warning']);
+          };
+          // 解析数据
+          let data = form.getValues();
+          // 验证是否连接成功(获取数据库列表)
+          const id = antSword['ipcRenderer'].sendSync('shell-editDataConf', {
+            _id: this.manager.opt['_id'],
+            id: this.tree.getSelected().split('::')[1],
+            data: data
+          });
+          win.close();
+          toastr.success(LANG['form']['success'], LANG_T['success']);
+          // 刷新 UI
+          this.parse();
+          break;
+      }
+    });
   }
 
   // 删除配置
