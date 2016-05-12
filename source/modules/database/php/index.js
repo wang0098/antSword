@@ -88,6 +88,12 @@ class PHP {
         }, {
           divider: true
         }, {
+          text: LANG['list']['menu']['edit'],
+          icon: 'fa fa-edit',
+          action: this.editConf.bind(this)
+        }, {
+          divider: true
+        }, {
           text: LANG['list']['menu']['del'],
           icon: 'fa fa-remove',
           action: this.delConf.bind(this)
@@ -249,6 +255,138 @@ class PHP {
             this.manager.list.imgs[0],
             this.manager.list.imgs[0]
           );
+          break;
+      }
+    });
+  }
+
+  // 编辑配置
+  editConf(){
+    const id = this.tree.getSelected().split('::')[1];
+    // 获取配置
+    const conf = antSword['ipcRenderer'].sendSync('shell-getDataConf', {
+      _id: this.manager.opt['_id'],
+      id: id
+    });
+    const hash = (+new Date * Math.random()).toString(16).substr(2, 8);
+    // 创建窗口
+    const win = this.manager.win.createWindow(hash, 0, 0, 450, 300);
+    win.setText(LANG['form']['title']);
+    win.centerOnScreen();
+    win.button('minmax').hide();
+    win.setModal(true);
+    win.denyResize();
+    // 工具栏
+    const toolbar = win.attachToolbar();
+    toolbar.loadStruct([{
+      id: 'edit',
+      type: 'button',
+      icon: 'edit',
+      text: LANG['form']['toolbar']['edit']
+    }, {
+      type: 'separator'
+    }, {
+      id: 'clear',
+      type: 'button',
+      icon: 'remove',
+      text: LANG['form']['toolbar']['clear']
+    }]);
+
+    // form
+    const form = win.attachForm([
+      { type: 'settings', position: 'label-left', labelWidth: 90, inputWidth: 250 },
+      { type: 'block', inputWidth: 'auto', offsetTop: 12, list: [
+        { type: 'combo', label: LANG['form']['type'], readonly: true, name: 'type', options: [
+          { text: 'MYSQL', value: 'mysql', selected: conf['type'] === 'mysql', list: [
+
+            { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
+            { type: 'label', label: LANG['form']['encode'] },
+            { type: 'combo', label: '', name: 'encode', options: (() => {
+              let ret = [];
+              ['utf8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'].map((_) => {
+                ret.push({
+                  text: _,
+                  value: _,
+                  selected: conf['encode'] === _
+                });
+              })
+              return ret;
+            })() }
+
+          ] },
+          { text: 'MYSQLI', value: 'mysqli', selected: conf['type'] === 'mysqli', list: [
+
+            { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
+            { type: 'label', label: LANG['form']['encode'] },
+            { type: 'combo', label: '', name: 'encode', options: (() => {
+              let ret = [];
+              ['utf8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'].map((_) => {
+                ret.push({
+                  text: _,
+                  value: _,
+                  selected: conf['encode'] === _
+                });
+              })
+              return ret;
+            })() }
+
+          ] },
+          { text: 'MSSQL', value: 'mssql', selected: conf['type'] === 'mssql' },
+          { text: 'ORACLE', value: 'oracle', selected: conf['type'] === 'oracle' },
+          { text: 'INFORMIX', value: 'informix', selected: conf['type'] === 'informix' }
+        ] },
+        { type: 'input', label: LANG['form']['host'], name: 'host', required: true, value: conf['host'] },
+        { type: 'input', label: LANG['form']['user'], name: 'user', required: true, value: conf['user'] },
+        { type: 'input', label: LANG['form']['passwd'], name: 'passwd', value: conf['passwd'] }
+      ]}
+    ], true);
+
+    form.attachEvent('onChange', (_, id) => {
+      if (_ !== 'type') { return };
+      switch(id) {
+        case 'mysql':
+        case 'mysqli':
+          form.setFormData({
+            user: conf['user'],
+            passwd: conf['passwd']
+          });
+          break;
+        case 'mssql':
+          form.setFormData({
+            user: conf['user'],
+            passwd: conf['passwd']
+          });
+          break;
+        default:
+          form.setFormData({
+            user: conf['user'],
+            passwd: conf['passwd']
+          });
+      }
+    });
+
+    // 工具栏点击事件
+    toolbar.attachEvent('onClick', (id) => {
+      switch(id) {
+        case 'clear':
+          form.clear();
+          break;
+        case 'edit':
+          if (!form.validate()) {
+            return toastr.warning(LANG['form']['warning'], LANG_T['warning']);
+          };
+          // 解析数据
+          let data = form.getValues();
+          // 验证是否连接成功(获取数据库列表)
+          const id = antSword['ipcRenderer'].sendSync('shell-editDataConf', {
+            _id: this.manager.opt['_id'],
+            id: this.tree.getSelected().split('::')[1],
+            data: data
+          });
+          win.close();
+          toastr.success(LANG['form']['success'], LANG_T['success']);
+          // 刷新 UI
+          this.parse();
           break;
       }
     });
@@ -488,11 +626,13 @@ class PHP {
   // 禁用toolbar按钮
   disableToolbar() {
     this.manager.list.toolbar.disableItem('del');
+    this.manager.list.toolbar.disableItem('edit');
   }
 
   // 启用toolbar按钮
   enableToolbar() {
     this.manager.list.toolbar.enableItem('del');
+    this.manager.list.toolbar.enableItem('edit');
   }
 
   // 禁用SQL编辑框

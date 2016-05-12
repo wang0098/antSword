@@ -65,8 +65,8 @@ class Database {
     const toolbar = layout.attachToolbar();
     toolbar.loadStruct([
       { id: 'add', text: LANG['list']['add'], icon: 'plus-circle', type: 'button' },
-      // { type: 'separator' },
-      // { id: 'edit', text: '编辑', icon: 'edit', type: 'button', disabled: true },
+      { type: 'separator' },
+      { id: 'edit', text: LANG['list']['edit'], icon: 'edit', type: 'button', disabled: true },
       { type: 'separator' },
       { id: 'del', text: LANG['list']['del'], icon: 'trash-o', type: 'button', disabled: true }
     ]);
@@ -78,9 +78,9 @@ class Database {
         case 'del':
           this.drive.delConf();
           break;
-        // case 'edit':
-        //   this.drive.editConf();
-        //   break;
+        case 'edit':
+          this.drive.editConf();
+          break;
       }
     });
     return {
