@@ -1,9 +1,12 @@
 //
-// 数据库驱动::ASP
-// 支持数据库:access,sqlserver,mysql
+// 数据库驱动::CUSTOM
+// 支持数据库: Any
 //
 
-class ASP {
+const LANG = antSword['language']['database'];
+const LANG_T = antSword['language']['toastr'];
+
+class CUSTOM {
 
   constructor(opt) {
     this.opt = opt;
@@ -87,13 +90,19 @@ class ASP {
       this.tree.callEvent('onClick', [id]);
       bmenu([
         {
-          text: '添加配置',
+          text: LANG['list']['menu']['add'],
           icon: 'fa fa-plus-circle',
           action: this.addConf.bind(this)
         }, {
           divider: true
         }, {
-          text: '删除配置',
+          text: LANG['list']['menu']['edit'],
+          icon: 'fa fa-edit',
+          action: this.editConf.bind(this)
+        }, {
+          divider: true
+        }, {
+          text: LANG['list']['menu']['del'],
           icon: 'fa fa-remove',
           action: this.delConf.bind(this)
         }
@@ -136,7 +145,7 @@ class ASP {
     const hash = (+new Date * Math.random()).toString(16).substr(2, 8);
     // 创建窗口
     const win = this.manager.win.createWindow(hash, 0, 0, 450, 300);
-    win.setText('添加配置');
+    win.setText(LANG['form']['title']);
     win.centerOnScreen();
     win.button('minmax').hide();
     win.setModal(true);
@@ -147,21 +156,21 @@ class ASP {
       id: 'add',
       type: 'button',
       icon: 'plus-circle',
-      text: '添加'
+      text: LANG['form']['toolbar']['add']
     }, {
       type: 'separator'
     }, {
       id: 'clear',
       type: 'button',
       icon: 'remove',
-      text: '清空'
+      text: LANG['form']['toolbar']['clear']
     }]);
 
     // form
     const form = win.attachForm([
       { type: 'settings', position: 'label-left', labelWidth: 80, inputWidth: 280 },
       { type: 'block', inputWidth: 'auto', offsetTop: 12, list: [
-        { type: 'combo', label: '数据库类型', readonly: true, name: 'type', options: (() => {
+        { type: 'combo', label: LANG['form']['type'], readonly: true, name: 'type', options: (() => {
           let ret = [];
           for (let _ in this.conns) {
             ret.push({
@@ -171,7 +180,7 @@ class ASP {
           }
           return ret;
         })() },
-        { type: 'input', label: '连接字符串', name: 'conn', required: true, value: 'com.mysql.jdbc.Driver\r\njdbc:mysql://localhost/test?user=root&password=123456', rows: 9 }
+        { type: 'input', label: LANG['form']['conn'], name: 'conn', required: true, value: 'com.mysql.jdbc.Driver\r\njdbc:mysql://localhost/test?user=root&password=123456', rows: 9 }
       ]}
     ], true);
 
@@ -190,8 +199,8 @@ class ASP {
           break;
         case 'add':
           if (!form.validate()) {
-            return '填写完整！';
-            // return toastr.warning(LANG['list']['add']['warning'], LANG_T['warning']);
+            // return '填写完整！';
+            return toastr.warning(LANG['form']['warning'], LANG_T['warning']);
           };
           // 解析数据
           let data = form.getValues();
@@ -201,7 +210,7 @@ class ASP {
             data: data
           });
           win.close();
-          toastr.success('添加配置成功!');
+          toastr.success(LANG['form']['success'], LANG_T['success']);
           this.tree.insertNewItem(0,
             `conn::${id}`,
             // `${data['type']}:\/\/${data['user']}@${data['host']}`,
@@ -216,12 +225,98 @@ class ASP {
     });
   }
 
+  // 修改配置
+  editConf() {
+    const id = this.tree.getSelected().split('::')[1];
+    // 获取配置
+    const conf = antSword['ipcRenderer'].sendSync('shell-getDataConf', {
+      _id: this.manager.opt['_id'],
+      id: id
+    });
+    const hash = (+new Date * Math.random()).toString(16).substr(2, 8);
+    // 创建窗口
+    const win = this.manager.win.createWindow(hash, 0, 0, 450, 300);
+    win.setText(LANG['form']['title']);
+    win.centerOnScreen();
+    win.button('minmax').hide();
+    win.setModal(true);
+    win.denyResize();
+    // 工具栏
+    const toolbar = win.attachToolbar();
+    toolbar.loadStruct([{
+      id: 'edit',
+      type: 'button',
+      icon: 'edit',
+      text: LANG['form']['toolbar']['edit']
+    }, {
+      type: 'separator'
+    }, {
+      id: 'clear',
+      type: 'button',
+      icon: 'remove',
+      text: LANG['form']['toolbar']['clear']
+    }]);
+
+    // form
+    const form = win.attachForm([
+      { type: 'settings', position: 'label-left', labelWidth: 80, inputWidth: 280 },
+      { type: 'block', inputWidth: 'auto', offsetTop: 12, list: [
+        { type: 'combo', label: LANG['form']['type'], readonly: true, name: 'type', options: (() => {
+          let ret = [];
+          for (let _ in this.conns) {
+            ret.push({
+              text: _.toUpperCase(),
+              value: _,
+              selected: conf['type'] === _
+            });
+          }
+          return ret;
+        })() },
+        { type: 'input', label: LANG['form']['conn'], name: 'conn', required: true, value: conf['conn'], rows: 9 }
+      ]}
+    ], true);
+
+    form.attachEvent('onChange', (_, id) => {
+      if (_ !== 'type') { return };
+      form.setFormData({
+        conn: this.conns[id]
+      });
+    });
+
+    // 工具栏点击事件
+    toolbar.attachEvent('onClick', (id) => {
+      switch(id) {
+        case 'clear':
+          form.clear();
+          break;
+        case 'edit':
+          if (!form.validate()) {
+            // return '填写完整！';
+            return toastr.warning(LANG['form']['warning'], LANG_T['warning']);
+          };
+          // 解析数据
+          let data = form.getValues();
+          // 验证是否连接成功(获取数据库列表)
+          const id = antSword['ipcRenderer'].sendSync('shell-editDataConf', {
+            _id: this.manager.opt['_id'],
+            id: this.tree.getSelected().split('::')[1],
+            data: data
+          });
+          win.close();
+          toastr.success(LANG['form']['success'], LANG_T['success']);
+          // 刷新 UI
+          this.parse();
+          break;
+      }
+    });
+  }
+
   // 删除配置
   delConf() {
     const id = this.tree.getSelected().split('::')[1];
-    layer.confirm('确定删除此配置吗？', {
+    layer.confirm(LANG['form']['del']['confirm'], {
       icon: 2, shift: 6,
-      title: '删除配置'
+      title: LANG['form']['del']['title']
     }, (_) => {
       layer.close(_);
       const ret = antSword['ipcRenderer'].sendSync('shell-delDataConf', {
@@ -229,7 +324,7 @@ class ASP {
         id: id
       });
       if (ret === 1) {
-        toastr.success('删除配置成功！');
+        toastr.success(LANG['form']['del']['success'], LANG_T['success']);
         this.tree.deleteItem(`conn::${id}`);
         // 禁用按钮
         this.disableToolbar();
@@ -237,7 +332,7 @@ class ASP {
         // ['edit', 'del'].map(this.toolbar::this.toolbar.disableItem);
         // this.parse();
       }else{
-        toastr.error('删除配置失败！<br/>' + ret);
+        toastr.error(LANG['form']['del']['error'](ret), LANG_T['error']);
       }
     });
   }
@@ -260,7 +355,7 @@ class ASP {
       let ret = res['text'];
       const arr = ret.split('\t');
       if (arr.length === 1 && ret === '') {
-        toastr.warning('执行完毕，没有结果返回')
+        toastr.warning(LANG['result']['warning'], LANG_T['warning'])
         return this.manager.list.layout.progressOff();
       };
       // 删除子节点
@@ -279,7 +374,7 @@ class ASP {
       });
       this.manager.list.layout.progressOff();
     }).catch((err) => {
-      toastr.error('获取数据库列表失败！' + err['status'] || JSON.stringify(err), 'ERROR');
+      toastr.error(LANG['result']['error']['database'](err['status'] || JSON.stringify(err)), LANG_T['error']);
       this.manager.list.layout.progressOff();
     });
   }
@@ -320,6 +415,9 @@ class ASP {
           this.manager.list.imgs[2]
         );
       });
+      this.manager.list.layout.progressOff();
+    }).catch((err) => {
+      toastr.error(LANG['result']['error']['table'](err['status'] || JSON.stringify(err)), LANG_T['error']);
       this.manager.list.layout.progressOff();
     });
   }
@@ -367,6 +465,9 @@ class ASP {
         ? `SELECT * FROM (SELECT A.*,ROWNUM N FROM ${db}.${table} A ORDER BY 1 DESC) WHERE N>0 AND N<=20`
         : `SELECT * FROM ${db}.${table} ORDER BY 1 DESC LIMIT 0,20;`);
       this.manager.list.layout.progressOff();
+    }).catch((err) => {
+      toastr.error(LANG['result']['error']['column'](err['status'] || JSON.stringify(err)), LANG_T['error']);
+      this.manager.list.layout.progressOff();
     });
   }
 
@@ -386,7 +487,8 @@ class ASP {
       this.updateResult(ret);
       this.manager.query.layout.progressOff();
     }).catch((err) => {
-      console.error(err);
+      toastr.error(LANG['result']['error']['query'](err['status'] || JSON.stringify(err)), LANG_T['error']);
+      this.manager.query.layout.progressOff();
     });
   }
 
@@ -401,12 +503,12 @@ class ASP {
     // console.log(_arr, arr);
     // 2.判断数据
     if (arr.length < 2) {
-      return console.log('数据不正确');
+      return toastr.error(LANG['result']['error']['parse'], LANG_T['error']);
     };
     // 3.行头
     let header_arr = arr[0].split('\t|\t');
     if (header_arr.length === 1) {
-      return toastr.warning('没有查询结果');
+      return toastr.warning(LANG['result']['error']['noresult'], LANG_T['warning']);
     };
     if (header_arr[header_arr.length - 1] === '\r') {
       header_arr.pop();
@@ -445,11 +547,13 @@ class ASP {
   // 禁用toolbar按钮
   disableToolbar() {
     this.manager.list.toolbar.disableItem('del');
+    this.manager.list.toolbar.disableItem('edit');
   }
 
   // 启用toolbar按钮
   enableToolbar() {
     this.manager.list.toolbar.enableItem('del');
+    this.manager.list.toolbar.enableItem('edit');
   }
 
   // 禁用SQL编辑框
@@ -470,4 +574,4 @@ class ASP {
 
 }
 
-module.exports = ASP;
+module.exports = CUSTOM;

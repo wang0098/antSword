@@ -339,9 +339,11 @@ module.exports = {
       title: 'Config list',
       add: 'Add',
       del: 'Del',
+      edit: 'Edit',
       menu: {
         add: 'Add conf',
-        del: 'Del conf'
+        del: 'Del conf',
+        edit: 'Edit conf'
       }
     },
     query: {
@@ -365,8 +367,10 @@ module.exports = {
       title: 'Add conf',
       toolbar: {
         add: 'Add',
-        clear: 'Clear'
+        clear: 'Clear',
+        edit: 'Edit'
       },
+      conn: 'Connection String',
       type: 'Database type',
       encode: 'Database encode',
       host: 'Host',

@@ -340,9 +340,11 @@ module.exports = {
       title: '配置列表',
       add: '添加',
       del: '删除',
+      edit: '编辑',
       menu: {
         add: '添加配置',
-        del: '删除配置'
+        del: '删除配置',
+        edit: '编辑配置'
       }
     },
     query: {
@@ -366,8 +368,10 @@ module.exports = {
       title: '添加配置',
       toolbar: {
         add: '添加',
-        clear: '清空'
+        clear: '清空',
+        edit: '编辑'
       },
+      conn: '连接字符串',
       type: '数据库类型',
       encode: '数据库编码',
       host: '数据库地址',
