@@ -1,10 +1,14 @@
 /**
  * 文件管理模板
- * 更新：2016/05/14
+ * 更新：2016/04/13
  * 作者：蚁逅 <https://github.com/antoor>
  */
 'use strict';
 
+// import Files from './files';
+// import Tasks from './tasks';
+// import Folder from './folder';
+// import ENCODES from '../../base/encodes';
 const Files = require('./files');
 const Tasks = require('./tasks');
 const Folder = require('./folder');
@@ -13,7 +17,8 @@ const ENCODES = require('../../base/encodes');
 const fs = require('fs');
 const iconv = require('iconv-lite');
 const crypto = require('crypto');
-const dialog = antSword.remote.dialog;
+const remote = require('remote');
+const dialog = remote.require('dialog');
 
 // 加载语言模板
 const LANG = antSword['language']['filemanager'];

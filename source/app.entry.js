@@ -1,39 +1,30 @@
 /**
  * 中国蚁剑::程序入口
  * 创建：2015/12/20
- * 更新：2016/05/02
+ * 更新：2016/04/16
  * 作者：蚁逅 <https://github.com/antoor>
  */
 
 'use strict';
 
-const fs = require('fs'),
-  path = require('path'),
-  electron = require('electron'),
-  shell = electron.shell,
-  remote = electron.remote,
-  ipcRenderer = electron.ipcRenderer;
+const electron = require('electron');
+const shell = electron.shell;
+const remote = electron.remote;
+const ipcRenderer = electron.ipcRenderer;
 
+// import Menubar from './base/menubar';
+// import CacheManager from './base/cachemanager';
 const Menubar = require('./base/menubar');
 const CacheManager = require('./base/cachemanager');
 
 const antSword = window.antSword = {
   /**
    * XSS过滤函数
-   * @param  {String}  html 过滤前字符串
-   * @param  {Boolean} wrap 是否过滤换行
-   * @return {String}       过滤后的字符串
+   * @param  {String} html 过滤前字符串
+   * @return {String}      过滤后的字符串
    */
-  noxss: (html = '', wrap = true) => {
-    let _html = String(html)
-      .replace(/&/g, "&amp;")
-      .replace(/>/g, "&gt;")
-      .replace(/</g, "&lt;")
-      .replace(/"/g, "&quot;");
-    if (wrap) {
-      _html = _html.replace(/\n/g, '<br/>');
-    }
-    return _html;
+  noxss: (html) => {
+    return String(html).replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
   },
   /**
    * 终端日志数据
@@ -45,11 +36,6 @@ const antSword = window.antSword = {
    * @type {Object}
    */
   core: {},
-  /**
-   * 插件列表
-   * @type {Object}
-   */
-  plugins: {},
   /**
    * 操作模块
    * @type {Object}
@@ -70,44 +56,6 @@ const antSword = window.antSword = {
     };
     // 设置
     localStorage.setItem(key, value);
-  },
-  /**
-   * 重新加载插件（包含开发者&&本地插件库
-   * @return {[type]} [description]
-   */
-  reloadPlug() {
-    antSword['plugins'] = {};
-    // 加载插件：：本地
-    let pluginHome = ipcRenderer.sendSync('store-config-plugPath');
-    fs.readdirSync(pluginHome).map((_) => {
-      let pluginPath = path.join(pluginHome, _);
-      // 如果不是目录，则跳过
-      if (!fs.lstatSync(pluginPath).isDirectory()) { return }
-      // 存储路径&&package信息到全局变量antSword['plugins']
-      antSword['plugins'][_] = {
-        _id: _,
-        path: pluginPath,
-        info: JSON.parse(fs.readFileSync(path.join(pluginPath, 'package.json')))
-      }
-    });
-    // 加载插件：：开发
-    let devPlugPath = antSword.storage('dev-plugPath');
-    if (
-      antSword.storage('isDev') === '1' &&
-      fs.existsSync(devPlugPath) &&
-      fs.lstatSync(devPlugPath).isDirectory()
-    ) {
-      fs.readdirSync(devPlugPath).map((_) => {
-        let _path = path.join(devPlugPath, _);
-        // 如果不是目录，则跳过
-        if (!fs.lstatSync(_path).isDirectory()) { return }
-        antSword['plugins'][_] = {
-          _id: _,
-          path: _path,
-          info: JSON.parse(fs.readFileSync(path.join(_path, 'package.json')))
-        }
-      });
-    }
   }
 };
 
@@ -141,13 +89,14 @@ ipcRenderer.send('aproxy', {
 });
 
 antSword['shell'] = shell;
-antSword['remote'] = remote;
 antSword['ipcRenderer'] = ipcRenderer;
 antSword['CacheManager'] = CacheManager;
 antSword['menubar'] = new Menubar();
 antSword['package'] = require('../package');
 
 // 加载模块列表
+// antSword['tabbar'] = new dhtmlXTabBar(document.getElementById('container'));
+// 更新：使用document.body作为容器，可自动适应UI
 antSword['tabbar'] = new dhtmlXTabBar(document.body);
 [
   'shellmanager',
@@ -162,28 +111,6 @@ $('#loading').remove();
 document.title = antSword['language']['title'] || 'AntSword';
 
 
-/**
- * 日志组输出
- * - 日志只会输出最多100个字符，如果想查看全部数据，则可以通过antSword.logs[id]进行查看
- * @param  {Object} opt   日志对象[0=日志，1=对象]
- * @param  {String} color 输出颜色
- * @return {[type]}       [description]
- */
-const groupLog = (opt, color) => {
-  if (antSword.logs.length % 10 === 0) {
-    console.group(`LOGS: ${antSword.logs.length}+`);
-  }
-  let lineNum = antSword['logs'].push(opt[1]) - 1;
-  console.log(
-    `%c0x${lineNum < 10 ? '0' + lineNum : lineNum}\t${opt[0].substr(0, 100) + (opt[0].length > 100 ? '..' : '')}`,
-    `color:${color}`
-  );
-  if (antSword.logs.length % 10 === 0) {
-    console.groupEnd();
-  }
-}
-
-// 监听后端消息
 ipcRenderer
   /**
    * 刷新UI（shellmanager侧边栏
@@ -197,28 +124,19 @@ ipcRenderer
     }, 555);
   })
   /**
-   * 重新加载本地插件
-   * @param  {[type]} 'reloadPlug' [description]
-   * @param  {[type]} (            [description]
-   * @return {[type]}              [description]
-   */
-  .on('reloadPlug', antSword.reloadPlug.bind(antSword))
-  /**
    * 后端日志输出
    * + 用于在前端控制台输出后端的日志
    * - 可使用`antSword.logs[id]`来获取详细日志
    */
   .on('logger-debug', (e, opt) => {
-    groupLog(opt, '#607D8B');
+    console.log(`%c${antSword['logs'].push(opt[1]) - 1}\t${opt[0]}`, 'color:#607D8B');
   })
   .on('logger-info', (e, opt) => {
-    groupLog(opt, '#4CAF50');
+    console.log(`%c${antSword['logs'].push(opt[1]) - 1}\t${opt[0]}`, 'color:#009688');
   })
   .on('logger-warn', (e, opt) => {
-    groupLog(opt, '#FF9800');
+    console.log(`%c${antSword['logs'].push(opt[1]) - 1}\t${opt[0]}`, 'color:#FF9800');
   })
   .on('logger-fatal', (e, opt) => {
-    groupLog(opt, '#E91E63');
+    console.log(`%c${antSword['logs'].push(opt[1]) - 1}\t${opt[0]}`, 'color:#E91E63');
   });
-
-antSword.reloadPlug();

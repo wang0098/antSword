@@ -136,15 +136,14 @@ class Terminal {
       if (cmd === 'exit' || cmd === 'quit') { return this.cell.close() };
       term.pause();
       // 是否有缓存
-      // 最后想了想，这个命令执行结果的缓存还是暂时不需要了吧
-      // let cacheTag = 'command-' + new Buffer(this.path + cmd).toString('base64');
-      // let cacheCmd;
-      // if (cacheCmd = this.cache.get(cacheTag)) {
-      //   term.echo(
-      //     antSword.noxss(cacheCmd, false)
-      //   );
-      //   return term.resume();
-      // };
+      let cacheTag = 'command-' + new Buffer(this.path + cmd).toString('base64');
+      let cacheCmd;
+      if (cacheCmd = this.cache.get(cacheTag)) {
+        term.echo(
+          antSword.noxss(cacheCmd)
+        );
+        return term.resume();
+      };
 
       // 开始执行命令
       this.core.request(
@@ -176,7 +175,7 @@ class Terminal {
         });
         if (output.length > 0) {
           term.echo(
-            antSword.noxss(output, false)
+            antSword.noxss(output)
           );
           // 保存最大100kb数据
           if (output.length < (1024 * 1024)) {
@@ -184,8 +183,8 @@ class Terminal {
           };
         };
         term.resume();
-      }).catch((_) => {
-        // term.error('ERR: ' + (_ instanceof Object) ? JSON.stringify(_) : String(_));
+      }).catch((e) => {
+        term.error('ERR: ' + (_ instanceof Object) ? JSON.stringify(_) : String(_));
         term.resume();
       });
     }, {

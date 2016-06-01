@@ -2,7 +2,9 @@
  * 左侧shell数据管理模块
  */
 
-const path = require('path');
+// import Terminal from '../terminal/';
+// import Database from '../database/';
+// import FileManager from '../filemanager/';
 const Terminal = require('../terminal/');
 const Database = require('../database/');
 const FileManager = require('../filemanager/');
@@ -53,21 +55,20 @@ class List {
         ids = [id];
       }
 
-      // 获取选择数据信息
-      let infos = [];
-      if (ids.length >= 1) {
-        infos = antSword['ipcRenderer'].sendSync(
-          'shell-find',
-          { _id: { $in: ids } }
-        )
-      }
-
       // 获取选中的单条数据
-      let info = infos[0];
-      // let info = {};
-      // if (id && ids.length === 1) {
-      //   info = antSword['ipcRenderer'].sendSync('shell-findOne', id);
-      // };
+      let info = {};
+      if (id && ids.length === 1) {
+        info = antSword['ipcRenderer'].sendSync('shell-findOne', id);
+        // info = {
+        //   id: id,
+        //   ip: grid.getRowAttribute(id, 'data')[1],
+        //   url: grid.getRowAttribute(id, 'data')[0],
+        //   pwd: grid.getRowAttribute(id, 'pwd'),
+        //   type: grid.getRowAttribute(id, 'type'),
+        //   encode: grid.getRowAttribute(id, 'encode') || 'utf-8',
+        //   encoder: grid.getRowAttribute(id, 'encoder') || 'default'
+        // }
+      };
 
       bmenu([
         { text: LANG['contextmenu']['terminal'], icon: 'fa fa-terminal', disabled: !id || ids.length !== 1, action: () => {
@@ -80,81 +81,8 @@ class List {
           new Database(info);
         } },
         { divider: true },
-        // 加载插件列表
-        { text: LANG['contextmenu']['plugin'], icon: 'fa fa-folder-o', disabled: !id, subMenu: (() => {
-          // 1. 遍历插件分类信息
-          let plugins = {
-            default: []
-          };
-          for (let _ in antSword['plugins']) {
-            let p = antSword['plugins'][_];
-            plugins[
-              p['info']['category'] || 'default'
-            ] = plugins[
-              p['info']['category'] || 'default'
-            ] || [];
-            plugins[
-              p['info']['category'] || 'default'
-            ].push(p);
-          }
-          // 2. 解析分类数据
-          let pluginItems = [];
-          for (let _ in plugins) {
-            // 0x01 添加分类目录
-            pluginItems.push({
-              text: antSword.noxss(_ === 'default' ? LANG['contextmenu']['pluginDefault'] : _),
-              icon: 'fa fa-folder-open-o',
-              disabled: plugins[_].length === 0,
-              subMenu: ((plugs) => {
-                let plugItems = [];
-                // 0x02 添加目录数据
-                plugs.map((p) => {
-                  plugItems.push({
-                    text: antSword.noxss(p['info']['name']),
-                    icon: `fa fa-${p['info']['icon'] || 'puzzle-piece'}`,
-                    disabled: ids.length > 1 ? (() => {
-                      let ret = false;
-                      // 判断脚本是否支持，不支持则禁止
-                      if (p['info']['scripts'] && p['info']['scripts'].length > 0) {
-                        infos.map((_info) => {
-                          if (p['info']['scripts'].indexOf(_info['type']) === -1) {
-                            // 如果检测到不支持的脚本，则禁止
-                            ret = true;
-                          }
-                        });
-                      }
-                      // 判断是否支持多目标执行
-                      return ret || !p['info']['multiple'];
-                    })() : info && (p['info']['scripts'] || []).indexOf(info['type']) === -1,
-                    action: ((plug) => () => {
-                      // 如果没有加载到内存，则加载
-                      if (!antSword['plugins'][plug['_id']]['module']) {
-                        antSword['plugins'][plug['_id']]['module'] = require(
-                          path.join(plug['path'], plug['info']['main'] || 'index.js')
-                        );
-                      }
-                      // 执行插件
-                      new antSword['plugins'][plug['_id']]['module'](
-                        infos.length === 1 && !plug['info']['multiple'] ? info : infos
-                      );
-                    })(p)
-                  })
-                });
-                return plugItems;
-              })(plugins[_])
-            })
-          }
-          return pluginItems;
-        })() },
-        {
-        //   text: LANG['contextmenu']['pluginManager'],
-        //   icon: 'fa fa-th-large',
-        //   action: antSword['menubar'].run.bind(antSword['menubar'], 'plugin-local')
-        // }, {
-          text: LANG['contextmenu']['pluginStore'],
-          icon: 'fa fa-cart-arrow-down',
-          action: antSword['menubar'].run.bind(antSword['menubar'], 'plugin-store')
-        },
+        { text: LANG['contextmenu']['plugin'], icon: 'fa fa-puzzle-piece', disabled: !id || ids.length !== 1 || true, subMenu: [] },
+        { text: LANG['contextmenu']['pluginCenter'], icon: 'fa fa-cart-arrow-down',  action: antSword['menubar'].run.bind(antSword['menubar'], 'plugin') },
         { divider: true },
         { text: LANG['contextmenu']['add'], icon: 'fa fa-plus-circle', action: manager.addData.bind(manager) },
         { text: LANG['contextmenu']['edit'], icon: 'fa fa-edit', disabled: !id || ids.length !== 1, action: () => {
