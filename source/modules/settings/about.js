@@ -15,7 +15,7 @@ class About {
     const cell = sidebar.cells('about');
     cell.attachHTMLString(`
       <div align="center" class="about">
-        <img src="../static/imgs/logo.png" />
+        <img src="ant-static://imgs/logo.png" />
         <hr/>
         <h2>${LANG['header']}<span> v${antSword['package']['version']}</span></h2>
         <p>
