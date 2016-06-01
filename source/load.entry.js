@@ -1,20 +1,21 @@
 /**
  * 中国蚁剑::前端加载模块
  * 开写: 2016/04/23
- * 更新: 2016/04/28
+ * 更新: 2016/05/10
  * 作者: 蚁逅 <https://github.com/antoor>
  */
 
 'use strict';
 
-// 加载jQuery
-window.$ = window.jQuery = require('../static/libs/jquery/jquery.js');
+// 添加源码目录到全局模块加载变量，以提供后边加载
 const path = require('path');
+const Module = require('module').Module;
+Module.globalPaths.push(path.join(process.env.AS_WORKDIR, 'source'));
 
 // 开始加载时间
 let APP_START_TIME = +new Date;
 
-$(document).ready(() => {
+window.addEventListener('load', () => {
   /**
    * 时间格式化函数
    * @param  {String} format 格式化字符串，如yyyy/mm/dd hh:ii:ss
@@ -72,79 +73,57 @@ $(document).ready(() => {
   }
 
   // 开始加载css
-  loadCSS(
-    '../static/libs/bmenu/bmenu.css'
-  ).then(() => {
-    return loadCSS('../static/libs/toastr/toastr.min.css');
-  }).then(() => {
-    return loadCSS('../static/libs/layer/src/skin/layer.css');
-  }).then(() => {
-    return loadCSS('../static/libs/layer/src/skin/layer.ext.css');
-  }).then(() => {
-    return loadCSS('../static/libs/laydate/need/laydate.css');
-  }).then(() => {
-    return loadCSS('../static/libs/laydate/skins/default/laydate.css');
-  }).then(() => {
-    return loadCSS('../static/libs/terminal/css/jquery.terminal.css');
-  }).then(() => {
-    return loadCSS('../static/libs/font-awesome/css/font-awesome.min.css');
-  }).then(() => {
-    return loadCSS('../static/libs/dhtmlx/codebase/dhtmlx.css');
-  }).then(() => {
-    return loadCSS('../static/libs/dhtmlx/skins/mytheme/dhtmlx.css');
-  }).then(() => {
-    return loadCSS('../static/css/index.css');
-  });
+  loadCSS('ant-static://libs/bmenu/bmenu.css')
+    .then(() => loadCSS('ant-static://libs/toastr/toastr.min.css'))
+    .then(() => loadCSS('ant-static://libs/layer/src/skin/layer.css'))
+    .then(() => loadCSS('ant-static://libs/layer/src/skin/layer.ext.css'))
+    .then(() => loadCSS('ant-static://libs/laydate/need/laydate.css'))
+    .then(() => loadCSS('ant-static://libs/laydate/skins/default/laydate.css'))
+    .then(() => loadCSS('ant-static://libs/terminal/css/jquery.terminal.css'))
+    .then(() => loadCSS('ant-static://libs/font-awesome/css/font-awesome.min.css'))
+    .then(() => loadCSS('ant-static://libs/dhtmlx/codebase/dhtmlx.css'))
+    .then(() => loadCSS('ant-static://libs/dhtmlx/skins/mytheme/dhtmlx.css'))
+    .then(() => loadCSS('ant-static://css/index.css'));
 
   // 加载js资源
-  loadJS(
-    '../static/libs/ace/ace.js'
-  ).then(() => {
-    return loadJS('../static/libs/ace/ext-language_tools.js');
-  }).then(() => {
-    return loadJS('../static/libs/bmenu/bmenu.js');
-  }).then(() => {
-    return loadJS('../static/libs/toastr/toastr.js');
-  }).then(() => {
-    return loadJS('../static/libs/layer/src/layer.js');
-  }).then(() => {
-    return loadJS('../static/libs/laydate/laydate.js');
-  }).then(() => {
-    return loadJS('../static/libs/terminal/js/jquery.terminal-min.js');
-  }).then(() => {
-    return loadJS('../static/libs/dhtmlx/codebase/dhtmlx.js');
-  }).then(() => {
-    /**
-     * 配置layer弹出层
-     * @param  {[type]} {extend: 'extend/layer.ext.js'} [description]
-     * @return {[type]}          [description]
-     */
-    layer.config({extend: 'extend/layer.ext.js'});
-    // 加载babel引擎
-    // require('babel/register')();
-    // 添加require路径
-    require.main.paths.unshift(
-      path.join(process.env.AS_WORKDIR, 'source')
-    );
-    // 加载程序入口
-    require('./app.entry');
-    // LOGO
-    console.log(
-`%c
-        _____     _   _____                 _
-       |  _  |___| |_|   __|_ _ _ ___ ___ _| |
-       |     |   |  _|__   | | | | . |  _| . |
-       |__|__|_|_|_| |_____|_____|___|_| |___|%c
+  loadJS('ant-static://libs/jquery/jquery.js')
+    .then(() => loadJS('ant-static://libs/ace/ace.js'))
+    .then(() => loadJS('ant-static://libs/ace/ext-language_tools.js'))
+    .then(() => loadJS('ant-static://libs/bmenu/bmenu.js'))
+    .then(() => loadJS('ant-static://libs/toastr/toastr.js'))
+    .then(() => loadJS('ant-static://libs/layer/src/layer.js'))
+    .then(() => loadJS('ant-static://libs/laydate/laydate.js'))
+    .then(() => loadJS('ant-static://libs/terminal/js/jquery.terminal-min.js'))
+    .then(() => loadJS('ant-static://libs/dhtmlx/codebase/dhtmlx.js'))
+    .then(() => {
+      /**
+       * 配置layer弹出层
+       * @param  {[type]} {extend: 'extend/layer.ext.js'} [description]
+       * @return {[type]}          [description]
+       */
+      layer.config({extend: 'extend/layer.ext.js'});
+      // 加载程序入口
+      require('app.entry');
+      // LOGO
+      console.group('LOGO');
+      console.log(
+  `%c
+          _____     _   _____                 _
+         |  _  |___| |_|   __|_ _ _ ___ ___ _| |
+         |     |   |  _|__   | | | | . |  _| . |
+         |__|__|_|_|_| |_____|_____|___|_| |___|%c
 
-   ->| Ver: %c${antSword.package.version}%c
- -+=>| Git: %c${antSword.package.repository['url']}%c
-   -*| End: %c${+new Date - APP_START_TIME}%c/ms
+     ->| Ver: %c${antSword.package.version}%c
+   -+=>| Git: %c${antSword.package.repository['url']}%c
+     -*| End: %c${+new Date - APP_START_TIME}%c/ms
 
-`,
-    'color: #F44336;', 'color: #9E9E9E;',
-    'color: #4CAF50;', 'color: #9E9E9E;',
-    'color: #2196F3;', 'color: #9E9E9E;',
-    'color: #FF9800;', 'color: #9E9E9E;'
-    );
-  });
+  `,
+      'color: #F44336;', 'color: #9E9E9E;',
+      'color: #4CAF50;', 'color: #9E9E9E;',
+      'color: #2196F3;', 'color: #9E9E9E;',
+      'color: #FF9800;', 'color: #9E9E9E;'
+      );
+      APP_START_TIME = null;
+      console.groupEnd();
+    });
 });
