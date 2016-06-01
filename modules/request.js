@@ -1,24 +1,22 @@
 /**
  * HTTP后端数据发送处理函数
- * 更新: 2016/04/25
+ * 更新: 2016/05/07
  */
 
 'use strict';
 
 const fs = require('fs'),
   iconv = require('iconv-lite'),
-  // logger = require('log4js').getLogger('Request'),
-  // Logger = require('./logger'),
   through = require('through'),
   superagent = require('superagent'),
   superagentProxy = require('superagent-proxy');
 
 let logger;
 // 请求UA
-const USER_AGENT = 'antSword/v1.3';
+const USER_AGENT = 'antSword/v2.0';
 
 // 请求超时
-const REQ_TIMEOUT = 5000;
+const REQ_TIMEOUT = 10000;
 
 // 代理配置
 const APROXY_CONF = {
@@ -232,7 +230,7 @@ class Request {
       res.data += finalData;
     });
     res.on('end', () => {
-      logger.info('end::size=' + res.data.length, res.data.length < 10 ? res.data : '');
+      logger.info(`end.size=${res.data.length}`, res.data);
       callback(null, new Buffer(res.data, 'binary'));
     });
   }
