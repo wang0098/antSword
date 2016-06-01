@@ -4,6 +4,8 @@
 
 'use strict';
 
+const Update = require('./update');
+
 class Menubar {
 
   constructor(electron, app, mainWindow) {
@@ -48,12 +50,15 @@ class Menubar {
             label: LANG['main']['aproxy'],
             accelerator: 'Shift+CmdOrCtrl+A',
             click: event.sender.send.bind(event.sender, 'menubar', 'settings-aproxy')
-          // }, {
-          //   label: LANG['main']['update'],
-          //   accelerator: 'Shift+CmdOrCtrl+U',
-          //   click: event.sender.send.bind(event.sender, 'menubar', 'settings-update')
           }, {
             type: 'separator'
+          }, {
+            label: LANG['main']['update'],
+            enabled: false,
+            accelerator: 'Shift+CmdOrCtrl+U',
+            click: () => {
+              new Update();
+            }
           }, {
             label: LANG['main']['settings'],
             accelerator: 'Shift+CmdOrCtrl+S',
@@ -61,9 +66,9 @@ class Menubar {
           }, {
             type: 'separator'
           }, {
-            label: LANG['main']['plugin'],
+            label: LANG['main']['pluginStore'],
             accelerator: 'Shift+CmdOrCtrl+P',
-            click: event.sender.send.bind(event.sender, 'menubar', 'plugin')
+            click: event.sender.send.bind(event.sender, 'menubar', 'plugin-store')
           }, {
             type: 'separator'
           }, {
@@ -145,7 +150,13 @@ class Menubar {
           {
             label: LANG['debug']['restart'],
             accelerator: 'Shift+CmdOrCtrl+R',
-            click: this.mainWindow.webContents.reload.bind(this.mainWindow.webContents)
+            click: () => {
+              // 在有多个窗口的时候，不刷新
+              if (this.electron.BrowserWindow.getAllWindows().length > 1) {
+                return;
+              }
+              this.mainWindow.webContents.reload();//.bind(this.mainWindow.webContents)
+            }
           }, {
             label: LANG['debug']['devtools'],
             accelerator: 'Alt+CmdOrCtrl+J',
