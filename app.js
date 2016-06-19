@@ -6,10 +6,9 @@
 
 'use strict';
 
-const electron = require('electron'),
-  app = electron.app,
-  path = require('path'),
-  BrowserWindow = electron.BrowserWindow;
+const path = require('path');
+const electron = require('electron');
+const { app, protocol, BrowserWindow } = require('electron');
 
 app
   .once('ready', () => {
@@ -22,7 +21,7 @@ app
       ['views', '/views/', 12],   //- 通过访问访问ant-views来访问views 文件
       ['src', '/source/', 10]     //- 通过访问访问ant-src来访问source 文件
     ].map((_) => {
-      electron.protocol.registerFileProtocol(`ant-${_[0]}`, (req, cb) => {
+      protocol.registerFileProtocol(`ant-${_[0]}`, (req, cb) => {
         cb({
           path: path.join(__dirname, _[1], req.url.substr(_[2]))
         });
