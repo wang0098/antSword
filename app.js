@@ -62,7 +62,7 @@ app
 
     electron.Logger = require('./modules/logger')(mainWindow);
     // 初始化模块
-    ['menubar', 'request', 'database', 'cache', 'plugStore'].map((_) => {
+    ['menubar', 'request', 'database', 'cache', 'update', 'plugStore'].map((_) => {
       new ( require(`./modules/${_}`) )(electron, app, mainWindow);
     });
   });

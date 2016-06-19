@@ -4,8 +4,6 @@
 
 'use strict';
 
-const Update = require('./update');
-
 class Menubar {
 
   constructor(electron, app, mainWindow) {
@@ -52,13 +50,6 @@ class Menubar {
             click: event.sender.send.bind(event.sender, 'menubar', 'settings-aproxy')
           }, {
             type: 'separator'
-          }, {
-            label: LANG['main']['update'],
-            enabled: false,
-            accelerator: 'Shift+CmdOrCtrl+U',
-            click: () => {
-              new Update();
-            }
           }, {
             label: LANG['main']['settings'],
             accelerator: 'Shift+CmdOrCtrl+S',

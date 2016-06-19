@@ -1,44 +1,25 @@
 /**
  * 中国蚁剑::更新程序
  * 开写: 2016/05/31
+ * 更新: 2016/06/19
+ * 说明: 从2.0.0起，取消在线更新程序的方式，改为程序启动一分钟后，检测github->release最新的版本更新信息，然后提示手动更新
  */
 
 const config = require('./config');
-const electron = require('electron');
-const BrowserWindow = electron.BrowserWindow;
 
 class Update {
-  constructor() {
-    this.listenHandler();
-    this.openWindow();
+  constructor(electron) {
+    this.logger = new electron.Logger('Update');
+    setTimeout(this.checkUpdate.bind(this), 1000 * 60);
   }
 
   /**
-   * 事件监听器
+   * 检查更新
+   * 如果有更新，则以通知的方式提示用户手动更新，用户点击跳转到更新页面
    * @return {[type]} [description]
    */
-  listenHandler() {
-    electron.ipcMain
-      .on('update-getVersion', (event) => {
-        event.returnValue = config.package['version']
-      })
-  }
-
-  /**
-   * 打开更新窗口
-   * @return {[type]} [description]
-   */
-  openWindow() {
-    let win = new BrowserWindow({
-      width: 400,
-      height: 250,
-      // height: 180,
-      // resizable: false,
-      minimizable: false,
-      maximizable: false
-    });
-    win.loadURL('ant-views://update.html');
-    win.webContents.openDevTools();
+  checkUpdate() {
+    this.logger.debug('checkUpdate..');
   }
 }
 
