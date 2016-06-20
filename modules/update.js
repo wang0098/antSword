@@ -29,10 +29,7 @@ class Update {
           let newVersion = lastInfo['tag_name'];
           let curVersion = config['package'].version;
           // 比对版本
-          if (
-            parseInt(newVersion.replace(/\./g, '')) >
-            parseInt(curVersion.replace(/\./g, ''))
-          ) {
+          if (this.CompVersion(curVersion, newVersion)) {
             this.logger.info('Found a new version', newVersion);
             event.sender.send('notification-update', {
               ver: newVersion,
@@ -45,6 +42,30 @@ class Update {
           this.logger.fatal('ERR', e);
         }
       });
+  }
+
+  /**
+   * 版本比对
+   * @param {String} curVer 当前版本
+   * @param {String} newVer 新的版本
+   * @return {Boolean}
+   */
+  CompVersion(curVer, newVer) {
+    // 如果版本相同
+    if (curVer === newVer) { return false }
+    let currVerArr = curVer.split(".");
+    let promoteVerArr = newVer.split(".");
+    let len = Math.max(currVerArr.length, promoteVerArr.length);
+    for (let i = 0; i < len; i++) {
+        let proVal = ~~promoteVerArr[i],
+            curVal = ~~currVerArr[i];
+        if (proVal < curVal) {
+            return false;
+        } else if (proVal > curVal) {
+            return true;
+        }
+    }
+    return false;
   }
 }
 
