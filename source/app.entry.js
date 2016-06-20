@@ -197,6 +197,20 @@ ipcRenderer
     }, 555);
   })
   /**
+   * 通知提示更新
+   * @param  {[type]} 'notification-update' [description]
+   * @param  {[type]} (e,                   opt           [description]
+   * @return {[type]}                       [description]
+   */
+  .on('notification-update', (e, opt) => {
+    let n = new Notification('发现更新', {
+      body: '新版本：' + opt['ver']
+    });
+    n.addEventListener('click', () => {
+      antSword.shell.openExternal(opt['url']);
+    });
+  })
+  /**
    * 重新加载本地插件
    * @param  {[type]} 'reloadPlug' [description]
    * @param  {[type]} (            [description]
@@ -222,3 +236,8 @@ ipcRenderer
   });
 
 antSword.reloadPlug();
+// 检查更新
+setTimeout(
+  antSword.ipcRenderer.send.bind(antSword.ipcRenderer, 'check-update'),
+  1000 * 60
+);
