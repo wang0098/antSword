@@ -508,5 +508,9 @@ module.exports = {
   },
   plugin: {
     error: (err) => antSword.noxss(`Load Plugin Store failed!\n${err}`)
+  },
+  update: {
+    title: 'Found updates',
+    body: (ver) => `New version: ${ver}`
   }
 }

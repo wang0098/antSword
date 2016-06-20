@@ -203,8 +203,8 @@ ipcRenderer
    * @return {[type]}                       [description]
    */
   .on('notification-update', (e, opt) => {
-    let n = new Notification('发现更新', {
-      body: '新版本：' + opt['ver']
+    let n = new Notification(antSword['language']['update']['title'], {
+      body: antSword['language']['update']['body'](opt['ver'])
     });
     n.addEventListener('click', () => {
       antSword.shell.openExternal(opt['url']);

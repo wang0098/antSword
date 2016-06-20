@@ -476,5 +476,9 @@ module.exports = {
   },
   plugin: {
     error: (err) => antSword.noxss(`加载插件中心失败！\n${err}`)
+  },
+  update: {
+    title: '发现更新',
+    body: (ver) => `新的版本：${ver}`
   }
 }
