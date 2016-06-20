@@ -29,14 +29,17 @@ class Update {
           let newVersion = lastInfo['tag_name'];
           let curVersion = config['package'].version;
           // 比对版本
-          if (curVersion !== newVersion) {
+          if (
+            parseInt(newVersion.replace(/\./g, '')) >
+            parseInt(curVersion.replace(/\./g, ''))
+          ) {
             this.logger.info('Found a new version', newVersion);
             event.sender.send('notification-update', {
               ver: newVersion,
               url: lastInfo['html_url']
             });
           } else {
-            this.logger.warn('No new version.');
+            this.logger.warn('No new version.', newVersion, curVersion);
           }
         } catch(e) {
           this.logger.fatal('ERR', e);
