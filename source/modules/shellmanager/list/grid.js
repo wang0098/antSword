@@ -3,6 +3,7 @@
  */
 
 
+const FileManager = require('../../filemanager/');
 const LANG = antSword['language']['shellmanager']['list']['grid'];
 const ContextMenu = require('./contextmenu');
 
@@ -88,7 +89,8 @@ class Grid {
    * @return {[type]}       [description]
    */
   _onRowDblClicked(id, event) {
-
+    const info = antSword['ipcRenderer'].sendSync('shell-findOne', id);
+    new FileManager(info);
   }
 }
 module.exports = Grid;
