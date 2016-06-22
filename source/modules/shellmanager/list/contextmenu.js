@@ -6,7 +6,8 @@ const DATA = require('../data');
 const Terminal = require('../../terminal/');
 const Database = require('../../database/');
 const FileManager = require('../../filemanager/');
-const LANG = antSword['language']['shellmanager']['contextmenu'];
+const LANG = antSword['language']['shellmanager'];
+const LANG_T = antSword['language']['toastr'];
 
 class ContextMenu {
   /**
@@ -43,7 +44,7 @@ class ContextMenu {
       ['edit', 'edit', selectedData, this.editData.bind(this, id)],
       ['delete', 'remove', selectedMultiData, this.delData.bind(this, ids)],
       false,
-      ['move', 'share-square', selectedMultiData],
+      ['move', 'share-square', selectedMultiData, null, this.parseMoveCategoryMenu(ids)],
       ['search', 'search', true],
       false,
       ['clearCache', 'trash-o', selectedMultiData, this.clearCache.bind(this, ids)],
@@ -56,7 +57,7 @@ class ContextMenu {
         })
       }
       let menuObj = {
-        text: LANG[menu[0]],
+        text: LANG['contextmenu'][menu[0]],
         icon: `fa fa-${menu[1]}`,
         disabled: menu[2]
       }
@@ -72,56 +73,6 @@ class ContextMenu {
     });
     // 弹出菜单
     bmenu(menuItems, event);
-    //
-    //   { divider: true },
-    //   { text: LANG['add'], icon: 'fa fa-plus-circle', action: this.addData.bind(this) },
-    //   {
-    //     text: LANG['edit'], icon: 'fa fa-edit', disabled: selectedData,
-    //     action: this.editData.bind(this, id)
-    //   }, {
-    //     text: LANG['delete'], icon: 'fa fa-remove', disabled: selectedMultiData,
-    //     action: this.delData.bind(this, ids)
-    //   }, {
-    //     divider: true
-    //   }, { text: LANG['move'], icon: 'fa fa-share-square', disabled: selectedMultiData }, //subMenu: (() => {
-    //   //   const items = manager.category.sidebar.getAllItems();
-    //   //   const category = manager.category.sidebar.getActiveItem();
-    //   //   let ret = [];
-    //   //   items.map((_) => {
-    //   //     ret.push({
-    //   //       text: _ === 'default' ? LANG['category']['default'] : _,
-    //   //       icon: 'fa fa-folder-o',
-    //   //       disabled: category === _,
-    //   //       action: ((c) => {
-    //   //         return () => {
-    //   //           const ret = antSword['ipcRenderer'].sendSync('shell-move', {
-    //   //             ids: ids,
-    //   //             category: c
-    //   //           });
-    //   //           if (typeof(ret) === 'number') {
-    //   //             toastr.success(LANG['list']['move']['success'](ret), LANG_T['success']);
-    //   //             manager.loadData();
-    //   //             manager.category.sidebar.callEvent('onSelect', [c]);
-    //   //           }else{
-    //   //             toastr.error(LANG['list']['move']['error'](ret), LANG_T['error']);
-    //   //           }
-    //   //         }
-    //   //       })(_)
-    //   //     });
-    //   //   });
-    //   //   return ret;
-    //   // })() },
-    //   {
-    //     text: LANG['search'], icon: 'fa fa-search', action: this.searchData.bind(this), disabled: true
-    //   }, {
-    //     divider: true
-    //   }, {
-    //     text: LANG['clearCache'], icon: 'fa fa-trash-o',
-    //     disabled: selectedMultiData, action: this.clearCache.bind(this, ids)
-    //   }, {
-    //     text: LANG['clearAllCache'], icon: 'fa fa-trash', action: this.clearAllCache.bind(this)
-    //   }
-    // ], event);
   }
 
   /**
@@ -146,7 +97,7 @@ class ContextMenu {
     for (let _ in plugins) {
       // 0x01 添加分类目录
       pluginItems.push({
-        text: antSword.noxss(_ === 'default' ? LANG['pluginDefault'] : _),
+        text: antSword.noxss(_ === 'default' ? LANG['contextmenu']['pluginDefault'] : _),
         icon: 'fa fa-folder-open-o',
         disabled: plugins[_].length === 0,
         subMenu: ((plugs) => {
@@ -189,6 +140,42 @@ class ContextMenu {
       })
     }
     return pluginItems;
+  }
+
+  /**
+   * 移动数据右键菜单
+   * @return {array} [description]
+   */
+  parseMoveCategoryMenu(ids) {
+    // 获取分类列表
+    const items = antSword.modules.shellmanager.category.sidebar.getAllItems();
+    // 当前选中分类
+    const category = antSword.modules.shellmanager.category.sidebar.getActiveItem();
+    // 移动事件
+    const moveHandler = (c) => {
+      const ret = antSword['ipcRenderer'].sendSync('shell-move', {
+        ids: ids,
+        category: c
+      });
+      if (typeof(ret) === 'number') {
+        toastr.success(LANG['list']['move']['success'](ret), LANG_T['success']);
+        antSword.modules.shellmanager.reloadData();
+        antSword.modules.shellmanager.category.sidebar.callEvent('onSelect', [c])
+      }else{
+        toastr.error(LANG['list']['move']['error'](ret), LANG_T['error']);
+      }
+    }
+    // 解析菜单
+    let ret = [];
+    items.map((_) => {
+      ret.push({
+        text: _ === 'default' ? LANG['category']['default'] : _,
+        icon: 'fa fa-folder-o',
+        disabled: category === _,
+        action: moveHandler.bind(null, _)
+      });
+    });
+    return ret;
   }
 
   /**
