@@ -3,6 +3,9 @@
  */
 
 const DATA = require('../data');
+const Terminal = require('../../terminal/');
+const Database = require('../../database/');
+const FileManager = require('../../filemanager/');
 const LANG = antSword['language']['shellmanager']['contextmenu'];
 
 class ContextMenu {
@@ -20,9 +23,15 @@ class ContextMenu {
     let menuItems = [];
     [
       // text, icon, disabled, action, submenu
-      ['terminal', 'terminal', selectedData],
-      ['filemanager', 'folder-o', selectedData],
-      ['database', 'database', selectedData],
+      ['terminal', 'terminal', selectedData, () => {
+        new Terminal(data[0])
+      }],
+      ['filemanager', 'folder-o', selectedData, () => {
+        new FileManager(data[0]);
+      }],
+      ['database', 'database', selectedData, () => {
+        new Database(data[0]);
+      }],
       false,
       ['plugin', 'folder-o', selectedMultiData, null, this.parsePlugContextMenu(data)],
       [
