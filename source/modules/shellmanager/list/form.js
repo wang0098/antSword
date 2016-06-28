@@ -39,13 +39,22 @@ class Form {
         return toastr.warning(LANG['list']['add']['warning'], LANG_T['warning']);
       };
       // 回调数据
-      callback ? callback(
-        this._parseFormData(
+      if (callback) {
+        win.progressOn();
+        callback(this._parseFormData(
           this.baseForm.getValues(),
           this.httpForm.getValues(),
           this.otherForm.getValues()
-        )
-      ) : null;
+        )).then(() => {
+          // 添加/保存完毕后回调
+          win.close();
+          toastr.success(LANG['list']['add']['success'], LANG_T['success']);
+        }).catch((e) => {
+          // 添加/保存错误
+          win.progressOff();
+          toastr.error(LANG['list']['add']['error'](e.toString()), LANG_T['error']);
+        });
+      };
     });
   }
 
@@ -200,6 +209,7 @@ class Form {
     let _baseData = {
       url: base['url'],
       pwd: base['pwd'],
+      type: base['type'],
       encode: base['encode'],
       encoder: base[`encoder_${base['type']}`]
     };

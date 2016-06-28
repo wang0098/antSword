@@ -114,17 +114,19 @@ class Database {
   addShell(event, opts) {
     logger.info('addShell', opts);
 
-    this._url2ip(opts['url'])
+    this._url2ip(opts.base['url'])
       .then((ret) => {
         this.cursor.insert({
-          category: opts['category'] || 'default',
-          url: opts['url'],
-          pwd: opts['pwd'],
-          type: opts['type'],
+          category: opts.base['category'] || 'default',
+          url: opts.base['url'],
+          pwd: opts.base['pwd'],
+          type: opts.base['type'],
           ip: ret['ip'],
           addr: ret['addr'],
-          encode: opts['encode'],
-          encoder: opts['encoder'],
+          encode: opts.base['encode'],
+          encoder: opts.base['encoder'],
+          httpConf: opts.http,
+          otherConf: opts.other,
           ctime: +new Date,
           utime: +new Date
         }, (_err, _ret) => {

@@ -188,7 +188,21 @@ class ContextMenu {
       icon: 'plus-circle',
       text: LANG['list']['add']['toolbar']['add']
     }, {}, (data) => {
-      console.log('addData', data);
+      return new Promise((res, rej) => {
+        // 获取当前分类
+        data['base']['category'] = antSword.modules.shellmanager.category.sidebar.getActiveItem();
+        // 通知后台插入数据
+        const ret = antSword.ipcRenderer.sendSync('shell-add', data);
+        if (ret instanceof Object) {
+          // 重新加载数据
+          antSword.modules.shellmanager.reloadData({
+            category: data['base']['category']
+          });
+          return res();
+        } else {
+          return rej(ret.totring());
+        }
+      });
     })
   }
 
