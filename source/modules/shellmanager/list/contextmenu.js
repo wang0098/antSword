@@ -18,6 +18,7 @@ class ContextMenu {
    * @return {[type]}       [description]
    */
   constructor(data, event, id, ids) {
+    console.log('data=', data);
     let selectedData = !id || ids.length !== 1;
     let selectedMultiData = !id;
 
@@ -42,7 +43,7 @@ class ContextMenu {
       ],
       false,
       ['add', 'plus-circle', false, this.addData.bind(this)],
-      ['edit', 'edit', selectedData, this.editData.bind(this, id)],
+      ['edit', 'edit', selectedData, this.editData.bind(this, data[0])],
       ['delete', 'remove', selectedMultiData, this.delData.bind(this, ids)],
       false,
       ['move', 'share-square', selectedMultiData, null, this.parseMoveCategoryMenu(ids)],
@@ -198,9 +199,9 @@ class ContextMenu {
           antSword.modules.shellmanager.reloadData({
             category: data['base']['category']
           });
-          return res();
+          return res(LANG['list']['add']['success']);
         } else {
-          return rej(ret.totring());
+          return rej(LANG['list']['add']['error'](ret.toString()));
         }
       });
     })
@@ -208,14 +209,31 @@ class ContextMenu {
 
   /**
    * 编辑数据
-   * @param  {number} id [description]
+   * @param  {Object} info 当前选中的数据
    * @return {[type]}    [description]
    */
-  editData(id) {
+  editData(info) {
     new Form({
-      title: LANG['list']['edit']['title'](id),
+      title: LANG['list']['edit']['title'](info.url),
       icon: 'save',
       text: LANG['list']['edit']['toolbar']['save']
+    }, info, (data) => {
+      return new Promise((res, rej) => {
+        // 通知后台更新数据
+        const ret = antSword.ipcRenderer.sendSync('shell-edit', {
+          old: info,
+          new: data
+        });
+        if (ret === 1) {
+          // 重新加载数据
+          antSword.modules.shellmanager.reloadData({
+            category: info['category']
+          });
+          return res(LANG['list']['edit']['success']);
+        } else {
+          return rej(LANG['list']['edit']['error'](ret.toString()));
+        }
+      })
     })
   }
 

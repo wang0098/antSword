@@ -45,14 +45,14 @@ class Form {
           this.baseForm.getValues(),
           this.httpForm.getValues(),
           this.otherForm.getValues()
-        )).then(() => {
+        )).then((msg) => {
           // 添加/保存完毕后回调
           win.close();
-          toastr.success(LANG['list']['add']['success'], LANG_T['success']);
-        }).catch((e) => {
+          toastr.success(msg, LANG_T['success']);
+        }).catch((msg) => {
           // 添加/保存错误
           win.progressOff();
-          toastr.error(LANG['list']['add']['error'](e.toString()), LANG_T['error']);
+          toastr.error(msg, LANG_T['error']);
         });
       };
     });
@@ -137,30 +137,45 @@ class Form {
    * @return {[type]}     [description]
    */
   _createBaseForm(arg) {
+    const opt = Object.assign({}, {
+      url: '',
+      pwd: '',
+      type: 'php',
+      encode: 'utf8',
+      encoder: 'default'
+    }, arg);
     const form = this.accordion.cells('base').attachForm([
       { type: 'settings', position: 'label-left', labelWidth: 80, inputWidth: 400 },
       { type: 'block', inputWidth: 'auto', offsetTop: 12, list: [
-        { type: 'input', label: LANG['list']['add']['form']['url'], name: 'url', required: true },
-        { type: 'input', label: LANG['list']['add']['form']['pwd'], name: 'pwd', required: true },
-        { type: 'combo', label: LANG['list']['add']['form']['encode'], readonly: true,
-          name: 'encode', options: this._parseEncoders() },
-        { type: 'combo', label: LANG['list']['add']['form']['type'], name: 'type',
-          readonly: true, options: this._parseTypes() }
+        {
+          type: 'input', label: LANG['list']['add']['form']['url'],
+          name: 'url', required: true, value: opt.url
+        }, {
+          type: 'input', label: LANG['list']['add']['form']['pwd'],
+          name: 'pwd', required: true, value: opt.pwd
+        }, {
+          type: 'combo', label: LANG['list']['add']['form']['encode'],
+          readonly: true, name: 'encode', options: this._parseEncodes(opt.encode)
+        }, {
+          type: 'combo', label: LANG['list']['add']['form']['type'],
+          name: 'type', readonly: true, options: this._parseTypes(opt.type, opt.encoder)
+        }
       ] }
     ], true);
     return form;
   }
 
   /**
-   * 解析编码器列表
+   * 解析编码列表
+   * @param {String} _default 默认编码器
    * @return {array} [description]
    */
-  _parseEncoders() {
+  _parseEncodes(_default = 'utf8') {
     let ret = [];
     ENCODES.map((_) => {
       ret.push({
         text: _, value: _,
-        selected: _ === 'UTF8'
+        selected: _ === _default.toUpperCase()
       });
     });
     return ret;
@@ -168,15 +183,17 @@ class Form {
 
   /**
    * 解析脚本支持列表
+   * @param {String} _default 默认类型
+   * @param {String} _encoder 默认编码器
    * @return {array} [description]
    */
-  _parseTypes() {
+  _parseTypes(_default = 'php', _encoder = 'default') {
     let ret = [];
     for (let c in antSword['core']) {
       let encoders = antSword['core'][c].prototype.encoders;
       ret.push({
         text: c.toUpperCase(), value: c,
-        selected: c === 'php',
+        selected: c === _default,
         list: ((c) => {
           let _ = [
             { type: 'settings', position: 'label-right', offsetLeft: 60, labelWidth: 100 },
@@ -186,7 +203,7 @@ class Form {
           encoders.map((e) => {
             _.push({
               type: 'radio', name: `encoder_${c}`,
-              value: e, label: e
+              value: e, label: e, checked: e === _encoder
             })
           });
           return _;
@@ -243,14 +260,20 @@ class Form {
    * @return {[type]}     [description]
    */
   _createOtherForm(arg) {
+    const opt = Object.assign({}, {
+      'ignore-https': 0,
+      'terminal-cache': 1
+    }, arg.otherConf);
     const form = this.accordion.cells('other').attachForm([{
         type: 'settings', position: 'label-right', inputWidth: 400
       }, {
         type: 'block', inputWidth: 'auto', offsetTop: 12, list: [
         {
-          type: "checkbox", name: 'ignore-https', label: "忽略HTTPS证书", checked: false
+          type: "checkbox", name: 'ignore-https', label: "忽略HTTPS证书",
+          checked: opt['ignore-https'] === 1
         }, {
-          type: "checkbox", name: 'terminal-cache', label: "虚拟终端不使用缓存", checked: true
+          type: "checkbox", name: 'terminal-cache', label: "虚拟终端不使用缓存",
+          checked: opt['terminal-cache'] === 1
         }
       ]}], true);
     return form;
@@ -262,6 +285,10 @@ class Form {
    * @return {[type]}     [description]
    */
   _createHttpForm(arg) {
+    const opt = Object.assign({}, {
+      headers: {},
+      body: {}
+    }, arg.httpConf);
     const cell = this.accordion.cells('http');
     // 创建toolbar，用于添加数据
     const toolbar = cell.attachToolbar();
@@ -327,8 +354,20 @@ class Form {
           break;
       }
     });
-    _addHeader();
-    _addBody();
+    // 添加存储的配置
+    for (let _ in opt.headers) {
+      _addHeader(_, opt.headers[_]);
+    }
+    for (let _ in opt.body) {
+      _addBody(_, opt.body[_]);
+    }
+    // 如果没有配置，则添加空白的输入框
+    if (_headerCount === 0) {
+      _addHeader();
+    }
+    if (_bodyCount === 0) {
+      _addBody();
+    }
     return form;
   }
 }

@@ -141,25 +141,30 @@ class Database {
   /**
    * 编辑shell数据
    * @param  {Object} event ipcMain对象
-   * @param  {Object} opts  数据（url,_id,pwd,type,encode,encoder
+   * @param  {Object} opts  数据（old,new
    * @return {[type]}       [description]
    */
   editShell(event, opts) {
     logger.warn('editShell', opts);
 
-    this._url2ip(opts['url'])
+    const _new = opts.new;
+    const _old = opts.old;
+
+    this._url2ip(_new.base['url'])
       .then((ret) => {
         this.cursor.update({
-          _id: opts['_id']
+          _id: _old['_id']
         }, {
           $set: {
             ip: ret['ip'],
             addr: ret['addr'],
-            url: opts['url'],
-            pwd: opts['pwd'],
-            type: opts['type'],
-            encode: opts['encode'],
-            encoder: opts['encoder'],
+            url: _new.base['url'],
+            pwd: _new.base['pwd'],
+            type: _new.base['type'],
+            encode: _new.base['encode'],
+            encoder: _new.base['encoder'],
+            httpConf: _new.http,
+            otherConf: _new.other,
             utime: +new Date
           }
         }, (_err, _ret) => {
