@@ -120,13 +120,13 @@ class Form {
     const accordion = win.attachAccordion({
       items: [{
         id: 'base',
-        text: `<i class="fa fa-file-text"></i> 基础配置`
+        text: `<i class="fa fa-file-text"></i> ${LANG['list']['accordion']['base']}`
       }, {
         id: 'http',
-        text: `<i class="fa fa-edge"></i> 请求信息`
+        text: `<i class="fa fa-edge"></i> ${LANG['list']['accordion']['http']}`
       }, {
         id: 'other',
-        text: `<i class="fa fa-cogs"></i> 其他设置`
+        text: `<i class="fa fa-cogs"></i> ${LANG['list']['accordion']['other']}`
       }]});
     return accordion;
   }
@@ -269,10 +269,10 @@ class Form {
       }, {
         type: 'block', inputWidth: 'auto', offsetTop: 12, list: [
         {
-          type: "checkbox", name: 'ignore-https', label: "忽略HTTPS证书",
+          type: "checkbox", name: 'ignore-https', label: LANG['list']['otherConf']['nohttps'],
           checked: opt['ignore-https'] === 1
         }, {
-          type: "checkbox", name: 'terminal-cache', label: "虚拟终端不使用缓存",
+          type: "checkbox", name: 'terminal-cache', label: LANG['list']['otherConf']['notermcache'],
           checked: opt['terminal-cache'] === 1
         }
       ]}], true);

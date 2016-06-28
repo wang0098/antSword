@@ -146,6 +146,15 @@ module.exports = {
         confirm: 'Are you sure to clear all the cache?',
         success: 'Clear all cache success!',
         error: (err) => antSword.noxss(`Clear all cache failed!\n${err}`)
+      },
+      accordion: {
+        base: 'Base',
+        http: 'HTTP',
+        other: 'Other'
+      },
+      otherConf: {
+        nohttps: 'Ignore HTTPS certificate',
+        notermcache: "Don't use the terminal's cache"
       }
     }
   },
