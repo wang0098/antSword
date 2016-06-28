@@ -2,7 +2,8 @@
  * 右键菜单
  */
 
-const DATA = require('../data');
+const Data = require('../data');
+const Form = require('./form');
 const Terminal = require('../../terminal/');
 const Database = require('../../database/');
 const FileManager = require('../../filemanager/');
@@ -182,7 +183,13 @@ class ContextMenu {
    * 添加数据
    */
   addData() {
-
+    new Form({
+      title: LANG['list']['add']['title'],
+      icon: 'plus-circle',
+      text: LANG['list']['add']['toolbar']['add']
+    }, {}, (data) => {
+      console.log('addData', data);
+    })
   }
 
   /**
@@ -191,7 +198,11 @@ class ContextMenu {
    * @return {[type]}    [description]
    */
   editData(id) {
-
+    new Form({
+      title: LANG['list']['edit']['title'](id),
+      icon: 'save',
+      text: LANG['list']['edit']['toolbar']['save']
+    })
   }
 
   /**
