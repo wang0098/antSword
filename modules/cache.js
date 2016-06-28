@@ -9,12 +9,10 @@
 const fs = require('fs'),
   path = require('path'),
   CONF = require('./config'),
-  // Logger = require('./logger'),
-  // logger = null,
-  // logger = require('log4js').getLogger('Cache'),
   Datastore = require('nedb');
 
-let logger
+var logger;
+
 class Cache {
 
   /**

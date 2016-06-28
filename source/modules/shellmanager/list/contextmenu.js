@@ -48,7 +48,7 @@ class ContextMenu {
       ['move', 'share-square', selectedMultiData, null, this.parseMoveCategoryMenu(ids)],
       ['search', 'search', true],
       false,
-      ['clearCache', 'trash-o', selectedMultiData, this.clearCache.bind(this, ids)],
+      ['clearCache', 'trash-o', selectedData, this.clearCache.bind(this, id)],
       ['clearAllCache', 'trash', false, this.clearAllCache.bind(this)]
     ].map((menu) => {
       // 分隔符号
@@ -271,11 +271,29 @@ class ContextMenu {
 
   /**
    * 清空缓存
-   * @param  {array} ids [description]
+   * @param  {number} id ID
    * @return {[type]}     [description]
    */
-  clearCache(ids) {
-
+  clearCache(id) {
+    layer.confirm(
+    LANG['list']['clearCache']['confirm'], {
+      icon: 2, shift: 6,
+      title: `<i class="fa fa-trash"></i> ${LANG['list']['clearCache']['title']}`
+    }, (_) => {
+      layer.close(_);
+      const ret = antSword['ipcRenderer'].sendSync('cache-clear', {
+        id: id
+      });
+      if (ret === true) {
+        toastr.success(LANG['list']['clearCache']['success'], LANG_T['success']);
+      }else{
+        toastr.error(
+          LANG['list']['clearCache']['error'](
+            ret['errno'] === -2 ? 'Not cache file.' : ret['errno']
+          ), LANG_T['error']
+        );
+      }
+    });
   }
 
   /**
