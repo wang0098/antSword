@@ -18,7 +18,6 @@ class ContextMenu {
    * @return {[type]}       [description]
    */
   constructor(data, event, id, ids) {
-    console.log('data=', data);
     let selectedData = !id || ids.length !== 1;
     let selectedMultiData = !id;
 
@@ -243,7 +242,23 @@ class ContextMenu {
    * @return {[type]}     [description]
    */
   delData(ids) {
-
+    layer.confirm(
+    LANG['list']['del']['confirm'](ids.length), {
+      icon: 2, shift: 6,
+      title: `<i class="fa fa-trash"></i> ${LANG['list']['del']['title']}`
+    }, (_) => {
+      layer.close(_);
+      const ret = antSword['ipcRenderer'].sendSync('shell-del', ids);
+      if (typeof(ret) === 'number') {
+        toastr.success(LANG['list']['del']['success'](ret), LANG_T['success']);
+        // 更新UI
+        antSword.modules.shellmanager.reloadData({
+          category: antSword.modules.shellmanager.category.sidebar.getActiveItem()
+        });
+      }else{
+        toastr.error(LANG['list']['del']['error'](ret.toString()), LANG_T['error']);
+      }
+    });
   }
 
   /**
