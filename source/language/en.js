@@ -19,14 +19,6 @@ module.exports = {
       update: 'Check update',
       quit: 'Quit'
     },
-    shell: {
-      title: 'Data',
-      add: 'Add data',
-      search: 'Search data',
-      dump: 'Dump data',
-      import: 'Import data',
-      clear: 'Clear all data'
-    },
     edit: {
       title: 'Edit',
       undo: 'Undo',

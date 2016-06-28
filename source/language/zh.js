@@ -20,14 +20,6 @@ module.exports = {
       update: '检查更新',
       quit: '退出程序'
     },
-    shell: {
-      title: '数据',
-      add: '添加数据',
-      search: '搜索数据',
-      dump: '导出数据',
-      import: '导入数据',
-      clear: '清空数据'
-    },
     edit: {
       title: '编辑',
       undo: '撤销',
