@@ -301,7 +301,19 @@ class ContextMenu {
    * @return {[type]} [description]
    */
   clearAllCache() {
-
+    layer.confirm(
+    LANG['list']['clearAllCache']['confirm'], {
+      icon: 2, shift: 6,
+      title: `<i class="fa fa-trash"></i> ${LANG['list']['clearAllCache']['title']}`
+    }, (_) => {
+      layer.close(_);
+      const ret = antSword['ipcRenderer'].sendSync('cache-clearAll');
+      if (ret === true) {
+        toastr.success(LANG['list']['clearAllCache']['success'], LANG_T['success']);
+      }else{
+        toastr.error(LANG['list']['clearAllCache']['error'](ret), LANG_T['error']);
+      }
+    });
   }
 }
 
