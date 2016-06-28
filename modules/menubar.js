@@ -69,33 +69,6 @@ class Menubar {
           },
         ]
       }, {
-        // 数据管理
-        label: LANG['shell']['title'],
-        submenu: [
-          {
-            label: LANG['shell']['add'],
-            accelerator: 'Shift+A',
-            click: event.sender.send.bind(event.sender, 'menubar', 'shell-add')
-          }, {
-            label: LANG['shell']['search'],
-            accelerator: 'Shift+S',
-            enabled: false
-          }, {
-            type: 'separator'
-          }, {
-            label: LANG['shell']['import'],
-            enabled: false
-          }, {
-            label: LANG['shell']['dump'],
-            enabled: false
-          }, {
-            type: 'separator'
-          }, {
-            label: LANG['shell']['clear'],
-            enabled: false
-          }
-        ]
-      }, {
         // 编辑
         label: LANG['edit']['title'],
         submenu: [

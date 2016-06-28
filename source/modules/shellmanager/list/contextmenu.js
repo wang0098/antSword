@@ -2,7 +2,8 @@
  * 右键菜单
  */
 
-const DATA = require('../data');
+const Data = require('../data');
+const Form = require('./form');
 const Terminal = require('../../terminal/');
 const Database = require('../../database/');
 const FileManager = require('../../filemanager/');
@@ -41,13 +42,13 @@ class ContextMenu {
       ],
       false,
       ['add', 'plus-circle', false, this.addData.bind(this)],
-      ['edit', 'edit', selectedData, this.editData.bind(this, id)],
+      ['edit', 'edit', selectedData, this.editData.bind(this, data[0])],
       ['delete', 'remove', selectedMultiData, this.delData.bind(this, ids)],
       false,
       ['move', 'share-square', selectedMultiData, null, this.parseMoveCategoryMenu(ids)],
       ['search', 'search', true],
       false,
-      ['clearCache', 'trash-o', selectedMultiData, this.clearCache.bind(this, ids)],
+      ['clearCache', 'trash-o', selectedData, this.clearCache.bind(this, id)],
       ['clearAllCache', 'trash', false, this.clearAllCache.bind(this)]
     ].map((menu) => {
       // 分隔符号
@@ -182,16 +183,57 @@ class ContextMenu {
    * 添加数据
    */
   addData() {
-
+    new Form({
+      title: LANG['list']['add']['title'],
+      icon: 'plus-circle',
+      text: LANG['list']['add']['toolbar']['add']
+    }, {}, (data) => {
+      return new Promise((res, rej) => {
+        // 获取当前分类
+        data['base']['category'] = antSword.modules.shellmanager.category.sidebar.getActiveItem();
+        // 通知后台插入数据
+        const ret = antSword.ipcRenderer.sendSync('shell-add', data);
+        if (ret instanceof Object) {
+          // 重新加载数据
+          antSword.modules.shellmanager.reloadData({
+            category: data['base']['category']
+          });
+          return res(LANG['list']['add']['success']);
+        } else {
+          return rej(LANG['list']['add']['error'](ret.toString()));
+        }
+      });
+    })
   }
 
   /**
    * 编辑数据
-   * @param  {number} id [description]
+   * @param  {Object} info 当前选中的数据
    * @return {[type]}    [description]
    */
-  editData(id) {
-
+  editData(info) {
+    new Form({
+      title: LANG['list']['edit']['title'](info.url),
+      icon: 'save',
+      text: LANG['list']['edit']['toolbar']['save']
+    }, info, (data) => {
+      return new Promise((res, rej) => {
+        // 通知后台更新数据
+        const ret = antSword.ipcRenderer.sendSync('shell-edit', {
+          old: info,
+          new: data
+        });
+        if (ret === 1) {
+          // 重新加载数据
+          antSword.modules.shellmanager.reloadData({
+            category: info['category']
+          });
+          return res(LANG['list']['edit']['success']);
+        } else {
+          return rej(LANG['list']['edit']['error'](ret.toString()));
+        }
+      })
+    })
   }
 
   /**
@@ -200,7 +242,23 @@ class ContextMenu {
    * @return {[type]}     [description]
    */
   delData(ids) {
-
+    layer.confirm(
+    LANG['list']['del']['confirm'](ids.length), {
+      icon: 2, shift: 6,
+      title: `<i class="fa fa-trash"></i> ${LANG['list']['del']['title']}`
+    }, (_) => {
+      layer.close(_);
+      const ret = antSword['ipcRenderer'].sendSync('shell-del', ids);
+      if (typeof(ret) === 'number') {
+        toastr.success(LANG['list']['del']['success'](ret), LANG_T['success']);
+        // 更新UI
+        antSword.modules.shellmanager.reloadData({
+          category: antSword.modules.shellmanager.category.sidebar.getActiveItem()
+        });
+      }else{
+        toastr.error(LANG['list']['del']['error'](ret.toString()), LANG_T['error']);
+      }
+    });
   }
 
   /**
@@ -213,11 +271,29 @@ class ContextMenu {
 
   /**
    * 清空缓存
-   * @param  {array} ids [description]
+   * @param  {number} id ID
    * @return {[type]}     [description]
    */
-  clearCache(ids) {
-
+  clearCache(id) {
+    layer.confirm(
+    LANG['list']['clearCache']['confirm'], {
+      icon: 2, shift: 6,
+      title: `<i class="fa fa-trash"></i> ${LANG['list']['clearCache']['title']}`
+    }, (_) => {
+      layer.close(_);
+      const ret = antSword['ipcRenderer'].sendSync('cache-clear', {
+        id: id
+      });
+      if (ret === true) {
+        toastr.success(LANG['list']['clearCache']['success'], LANG_T['success']);
+      }else{
+        toastr.error(
+          LANG['list']['clearCache']['error'](
+            ret['errno'] === -2 ? 'Not cache file.' : ret['errno']
+          ), LANG_T['error']
+        );
+      }
+    });
   }
 
   /**
@@ -225,7 +301,19 @@ class ContextMenu {
    * @return {[type]} [description]
    */
   clearAllCache() {
-
+    layer.confirm(
+    LANG['list']['clearAllCache']['confirm'], {
+      icon: 2, shift: 6,
+      title: `<i class="fa fa-trash"></i> ${LANG['list']['clearAllCache']['title']}`
+    }, (_) => {
+      layer.close(_);
+      const ret = antSword['ipcRenderer'].sendSync('cache-clearAll');
+      if (ret === true) {
+        toastr.success(LANG['list']['clearAllCache']['success'], LANG_T['success']);
+      }else{
+        toastr.error(LANG['list']['clearAllCache']['error'](ret), LANG_T['error']);
+      }
+    });
   }
 }
 

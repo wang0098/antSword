@@ -20,14 +20,6 @@ module.exports = {
       update: '检查更新',
       quit: '退出程序'
     },
-    shell: {
-      title: '数据',
-      add: '添加数据',
-      search: '搜索数据',
-      dump: '导出数据',
-      import: '导入数据',
-      clear: '清空数据'
-    },
     edit: {
       title: '编辑',
       undo: '撤销',
@@ -155,6 +147,15 @@ module.exports = {
         confirm: '确定清空所有缓存数据吗？',
         success: '清空全部缓存完毕！',
         error: (err) => antSword.noxss(`清空全部缓存失败！\n${err}`)
+      },
+      accordion: {
+        base: '基础配置',
+        http: '请求信息',
+        other: '其他设置'
+      },
+      otherConf: {
+        nohttps: '忽略HTTPS证书',
+        notermcache: "虚拟终端不使用缓存"
       }
     }
   },

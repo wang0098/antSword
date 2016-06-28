@@ -19,14 +19,6 @@ module.exports = {
       update: 'Check update',
       quit: 'Quit'
     },
-    shell: {
-      title: 'Data',
-      add: 'Add data',
-      search: 'Search data',
-      dump: 'Dump data',
-      import: 'Import data',
-      clear: 'Clear all data'
-    },
     edit: {
       title: 'Edit',
       undo: 'Undo',
@@ -154,6 +146,15 @@ module.exports = {
         confirm: 'Are you sure to clear all the cache?',
         success: 'Clear all cache success!',
         error: (err) => antSword.noxss(`Clear all cache failed!\n${err}`)
+      },
+      accordion: {
+        base: 'Base',
+        http: 'HTTP',
+        other: 'Other'
+      },
+      otherConf: {
+        nohttps: 'Ignore HTTPS certificate',
+        notermcache: "Don't use the terminal's cache"
       }
     }
   },
