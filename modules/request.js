@@ -106,7 +106,7 @@ class Request {
       .proxy(APROXY_CONF['uri'])
       .type('form')
       // 超时
-      .timeout(REQ_TIMEOUT)
+      .timeout(opts.timeout || REQ_TIMEOUT)
       // 忽略HTTPS
       .ignoreHTTPS(opts['ignoreHTTPS'])
       .send(_postData)
