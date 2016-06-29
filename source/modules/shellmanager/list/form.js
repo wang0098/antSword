@@ -286,7 +286,7 @@ class Form {
         }, {
           type: "label", label: '请求超时'
         }, {
-          type: "combo", label: '/ms', inputWidth: 100, name: "request-timeout", options: [
+          type: "combo", label: '/ms', inputWidth: 100, name: "request-timeout", readonly: true, options: [
 					{
             text: "5000", value: "5000", selected: opt['request-timeout'] === '5000'
           }, {
