@@ -155,7 +155,7 @@ module.exports = {
       },
       otherConf: {
         nohttps: '忽略HTTPS证书',
-        notermcache: "虚拟终端不使用缓存"
+        terminalCache: "虚拟终端使用缓存"
       }
     }
   },
