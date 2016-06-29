@@ -270,7 +270,7 @@ class Form {
   _createOtherForm(arg) {
     const opt = Object.assign({}, {
       'ignore-https': 0,
-      'terminal-cache': 1,
+      'terminal-cache': 0,
       'request-timeout': '10000'
     }, arg.otherConf);
     const form = this.accordion.cells('other').attachForm([{
@@ -281,7 +281,7 @@ class Form {
           type: "checkbox", name: 'ignore-https', label: LANG['list']['otherConf']['nohttps'],
           checked: opt['ignore-https'] === 1
         }, {
-          type: "checkbox", name: 'terminal-cache', label: LANG['list']['otherConf']['notermcache'],
+          type: "checkbox", name: 'terminal-cache', label: LANG['list']['otherConf']['terminalCache'],
           checked: opt['terminal-cache'] === 1
         }, {
           type: "label", label: '请求超时'

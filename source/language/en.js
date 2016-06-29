@@ -154,7 +154,7 @@ module.exports = {
       },
       otherConf: {
         nohttps: 'Ignore HTTPS certificate',
-        notermcache: "Don't use the terminal's cache"
+        terminalCache: "Use the terminal's cache"
       }
     }
   },
