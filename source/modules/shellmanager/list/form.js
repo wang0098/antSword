@@ -41,19 +41,21 @@ class Form {
       // 回调数据
       if (callback) {
         win.progressOn();
-        callback(this._parseFormData(
-          this.baseForm.getValues(),
-          this.httpForm.getValues(),
-          this.otherForm.getValues()
-        )).then((msg) => {
-          // 添加/保存完毕后回调
-          win.close();
-          toastr.success(msg, LANG_T['success']);
-        }).catch((msg) => {
-          // 添加/保存错误
-          win.progressOff();
-          toastr.error(msg, LANG_T['error']);
-        });
+        setTimeout(() => {
+          callback(this._parseFormData(
+            this.baseForm.getValues(),
+            this.httpForm.getValues(),
+            this.otherForm.getValues()
+          )).then((msg) => {
+            // 添加/保存完毕后回调
+            win.close();
+            toastr.success(msg, LANG_T['success']);
+          }).catch((msg) => {
+            // 添加/保存错误
+            win.progressOff();
+            toastr.error(msg, LANG_T['error']);
+          });
+        }, 100);
       };
     });
   }
@@ -280,7 +282,20 @@ class Form {
         }, {
           type: "checkbox", name: 'terminal-cache', label: LANG['list']['otherConf']['notermcache'],
           checked: opt['terminal-cache'] === 1
-        }
+        }, {
+          type: "label", label: '请求超时'
+        }, {
+          type: "combo", label: '/ms', inputWidth: 100, name: "request-timeout", options: [
+					{
+            text: "5000", value: "5000"
+          }, {
+            text: "10000", value: "10000", selected: true
+          }, {
+            text: "30000", value: "30000"
+          }, {
+            text: "60000", value: "60000"
+          }
+				]},
       ]}], true);
     return form;
   }
