@@ -215,7 +215,8 @@ class Base {
           data: opt['data'],
           tag_s: opt['tag_s'],
           tag_e: opt['tag_e'],
-          encode: this.__opts__['encode']
+          encode: this.__opts__['encode'],
+          ignoreHTTPS: (this.__opts__['otherConf'] || {})['ignore-https'] === 1
         });
     })
   }

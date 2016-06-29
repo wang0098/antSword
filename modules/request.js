@@ -91,15 +91,17 @@ class Request {
    * @return {[type]}       [description]
    */
   onRequest(event, opts) {
+    logger.debug('onRequest::opts', opts);
 
-    logger.debug('onRequest::url', opts['url']);
-    logger.debug('onRequest::data', opts['data']);
     superagent
       .post(opts['url'])
       .set('User-Agent', USER_AGENT)
       .proxy(APROXY_CONF['uri'])
       .type('form')
+      // 超时
       .timeout(REQ_TIMEOUT)
+      // 忽略HTTPS
+      .ignoreHTTPS(opts['ignoreHTTPS'])
       .send(opts['data'])
       .parse((res, callback) => {
         this.parse(opts['tag_s'], opts['tag_e'], (chunk) => {
@@ -145,6 +147,8 @@ class Request {
       .type('form')
       // 设置超时会导致文件过大时写入出错
       // .timeout(timeout)
+      // 忽略HTTPS
+      .ignoreHTTPS(opts['ignoreHTTPS'])
       .send(opts['data'])
       .pipe(through(
         (chunk) => {
