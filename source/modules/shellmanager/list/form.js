@@ -202,7 +202,8 @@ class Form {
           ];
           if (c !== 'custom') {
             _.push({
-              type: 'radio', name: `encoder_${c}`, value: 'random', label: 'random'
+              type: 'radio', name: `encoder_${c}`, value: 'random',
+              label: 'random', checked: _encoder === 'random'
             });
           }
           encoders.map((e) => {
@@ -328,8 +329,13 @@ class Form {
         'header',
         {
           type: "fieldset", label: `#${_headerCount}`, inputWidth: 480, list:[
-          	{type: "input", name: `header-${_headerCount}_name`, inputWidth: 350, labelWidth: 50, label: "Name", value: name},
-          	{type: "input", name: `header-${_headerCount}_value`, inputWidth: 350, labelWidth: 50, label: "Value", value: value}
+          	{
+              type: "input", name: `header-${_headerCount}_name`,
+              inputWidth: 350, labelWidth: 50, label: "Name", value: name
+            }, {
+              type: "input", name: `header-${_headerCount}_value`,
+              inputWidth: 350, labelWidth: 50, label: "Value", value: value
+            }
           ]
         }
       )
@@ -342,8 +348,13 @@ class Form {
         'body',
         {
           type: "fieldset", label: `#${_bodyCount}`, inputWidth: 480, list:[
-          	{type: "input", name: `body-${_bodyCount}_name`, inputWidth: 350, labelWidth: 50, label: "Name", value: name},
-          	{type: "input", name: `body-${_bodyCount}_value`, inputWidth: 350, labelWidth: 50, label: "Value", value: value}
+          	{
+              type: "input", name: `body-${_bodyCount}_name`,
+              inputWidth: 350, labelWidth: 50, label: "Name", value: name
+            }, {
+              type: "input", name: `body-${_bodyCount}_value`,
+              inputWidth: 350, labelWidth: 50, label: "Value", value: value
+            }
           ]
         }
       )
