@@ -136,17 +136,16 @@ class Terminal {
       if (cmd === 'exit' || cmd === 'quit') { return this.cell.close() };
       term.pause();
       // 是否有缓存
-      if ((this.opts.otherConf || {})['terminal-cache'] === 1) {
-        let cacheTag = 'command-' + new Buffer(this.path + cmd).toString('base64');
-        let cacheCmd;
-        if (cacheCmd = this.cache.get(cacheTag)) {
-          term.echo(
-            antSword.noxss(cacheCmd, false)
-          );
-          return term.resume();
-        };
-      }
-
+      let cacheTag = 'command-' + new Buffer(this.path + cmd).toString('base64');
+      let cacheCmd = this.cache.get(cacheTag);
+      if (
+        (this.opts.otherConf || {})['terminal-cache'] === 1 && cacheCmd
+      ) {
+        term.echo(
+          antSword.noxss(cacheCmd, false)
+        );
+        return term.resume();
+      };
       // 开始执行命令
       this.core.request(
         this.core.command.exec({
