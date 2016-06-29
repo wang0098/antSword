@@ -239,7 +239,9 @@ class Base {
           tag_s: opt['tag_s'],
           tag_e: opt['tag_e'],
           encode: this.__opts__['encode'],
-          ignoreHTTPS: (this.__opts__['otherConf'] || {})['ignore-https'] === 1
+          ignoreHTTPS: (this.__opts__['otherConf'] || {})['ignore-https'] === 1,
+          headers: (this.__opts__['httpConf'] || {})['headers'] || {},
+          body: (this.__opts__['httpConf'] || {})['body'] || {}
         });
     })
   }
