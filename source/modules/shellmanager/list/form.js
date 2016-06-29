@@ -270,7 +270,8 @@ class Form {
   _createOtherForm(arg) {
     const opt = Object.assign({}, {
       'ignore-https': 0,
-      'terminal-cache': 1
+      'terminal-cache': 1,
+      'request-timeout': '10000'
     }, arg.otherConf);
     const form = this.accordion.cells('other').attachForm([{
         type: 'settings', position: 'label-right', inputWidth: 400
@@ -287,13 +288,13 @@ class Form {
         }, {
           type: "combo", label: '/ms', inputWidth: 100, name: "request-timeout", options: [
 					{
-            text: "5000", value: "5000"
+            text: "5000", value: "5000", selected: opt['request-timeout'] === '5000'
           }, {
-            text: "10000", value: "10000", selected: true
+            text: "10000", value: "10000", selected: opt['request-timeout'] === '10000'
           }, {
-            text: "30000", value: "30000"
+            text: "30000", value: "30000", selected: opt['request-timeout'] === '30000'
           }, {
-            text: "60000", value: "60000"
+            text: "60000", value: "60000", selected: opt['request-timeout'] === '60000'
           }
 				]},
       ]}], true);
