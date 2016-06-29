@@ -93,16 +93,23 @@ class Request {
   onRequest(event, opts) {
     logger.debug('onRequest::opts', opts);
 
-    superagent
-      .post(opts['url'])
-      .set('User-Agent', USER_AGENT)
+    const _request = superagent.post(opts['url']);
+    // 设置headers
+    _request.set('User-Agent', USER_AGENT);
+    // 自定义headers
+    for (let _ in opts.headers) {
+      _request.set(_, opts.headers[_]);
+    }
+    // 自定义body
+    const _postData = Object.assign({}, opts.body, opts.data);
+    _request
       .proxy(APROXY_CONF['uri'])
       .type('form')
       // 超时
       .timeout(REQ_TIMEOUT)
       // 忽略HTTPS
       .ignoreHTTPS(opts['ignoreHTTPS'])
-      .send(opts['data'])
+      .send(_postData)
       .parse((res, callback) => {
         this.parse(opts['tag_s'], opts['tag_e'], (chunk) => {
           event.sender.send('request-chunk-' + opts['hash'], chunk);
@@ -139,17 +146,23 @@ class Request {
     let indexEnd = -1;
     let tempData = [];
 
-    // 开始HTTP请求
-    superagent
-      .post(opts['url'])
-      .set('User-Agent', USER_AGENT)
+    const _request = superagent.post(opts['url']);
+    // 设置headers
+    _request.set('User-Agent', USER_AGENT);
+    // 自定义headers
+    for (let _ in opts.headers) {
+      _request.set(_, opts.headers[_]);
+    }
+    // 自定义body
+    const _postData = Object.assign({}, opts.body, opts.data);
+    _request
       .proxy(APROXY_CONF['uri'])
       .type('form')
       // 设置超时会导致文件过大时写入出错
       // .timeout(timeout)
       // 忽略HTTPS
       .ignoreHTTPS(opts['ignoreHTTPS'])
-      .send(opts['data'])
+      .send(_postData)
       .pipe(through(
         (chunk) => {
           // 判断数据流中是否包含后截断符？长度++
