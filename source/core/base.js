@@ -240,6 +240,7 @@ class Base {
           tag_e: opt['tag_e'],
           encode: this.__opts__['encode'],
           ignoreHTTPS: (this.__opts__['otherConf'] || {})['ignore-https'] === 1,
+          timeout: parseInt((this.__opts__['otherConf'] || {})['request-timeout']),
           headers: (this.__opts__['httpConf'] || {})['headers'] || {},
           body: (this.__opts__['httpConf'] || {})['body'] || {}
         });
