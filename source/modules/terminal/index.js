@@ -136,15 +136,16 @@ class Terminal {
       if (cmd === 'exit' || cmd === 'quit') { return this.cell.close() };
       term.pause();
       // 是否有缓存
-      // 最后想了想，这个命令执行结果的缓存还是暂时不需要了吧
-      // let cacheTag = 'command-' + new Buffer(this.path + cmd).toString('base64');
-      // let cacheCmd;
-      // if (cacheCmd = this.cache.get(cacheTag)) {
-      //   term.echo(
-      //     antSword.noxss(cacheCmd, false)
-      //   );
-      //   return term.resume();
-      // };
+      if ((this.opts.otherConf || {})['terminal-cache'] === 1) {
+        let cacheTag = 'command-' + new Buffer(this.path + cmd).toString('base64');
+        let cacheCmd;
+        if (cacheCmd = this.cache.get(cacheTag)) {
+          term.echo(
+            antSword.noxss(cacheCmd, false)
+          );
+          return term.resume();
+        };
+      }
 
       // 开始执行命令
       this.core.request(
