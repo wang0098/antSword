@@ -482,5 +482,13 @@ module.exports = {
   update: {
     title: '发现更新',
     body: (ver) => `新的版本：${ver}`
+  },
+  viewsite: {
+    toolbar: {
+      save: '保存',
+      view: '浏览'
+    },
+    saveSuccess: '保存Cookie成功！',
+    saveFailed: (err) => `保存Cookie失败！\n${err}`
   }
 }

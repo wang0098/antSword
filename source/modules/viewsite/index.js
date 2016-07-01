@@ -4,6 +4,8 @@
  */
 
 const CookieMgr = require('./cookiemgr');
+const LANG = antSword.language['viewsite'];
+const LANG_T = antSword.language['toastr'];
 
 class ViewSite {
   constructor(opts) {
@@ -49,9 +51,9 @@ class ViewSite {
   _initToolbar() {
     const toolbar = this.cell.attachToolbar();
     toolbar.loadStruct([
-      { id: 'save', type: 'button', icon: 'save', text: '保存' },
+      { id: 'save', type: 'button', icon: 'save', text: LANG['toolbar'].save },
       { type: 'separator' },
-      { id: 'view', type: 'button', icon: 'chrome', text: '浏览' },
+      { id: 'view', type: 'button', icon: 'chrome', text: LANG['toolbar'].view },
     ]);
     toolbar.attachEvent('onClick', (id) => {
       switch(id) {
@@ -133,9 +135,9 @@ class ViewSite {
         conf: httpConf
       });
       if (ret === 1) {
-        toastr.success('保存Cookie成功！', '成功');
+        toastr.success(LANG['saveSuccess'], LANG_T['success']);
       } else {
-        toastr.error('保存Cookie失败！' + ret, '失败');
+        toastr.error(LANG['saveFailed'](ret), LANG_T['error']);
       }
     })
   }

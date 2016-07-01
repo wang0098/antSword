@@ -514,5 +514,13 @@ module.exports = {
   update: {
     title: 'Found updates',
     body: (ver) => `New version: ${ver}`
+  },
+  viewsite: {
+    toolbar: {
+      save: 'Save',
+      view: 'View'
+    },
+    saveSuccess: 'Save cookie configuration is successful!',
+    saveFailed: (err) => `Save cookie configuration failed!\n${err}`
   }
 }
