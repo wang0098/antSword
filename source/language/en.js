@@ -55,7 +55,8 @@ module.exports = {
       pluginDefault: 'Default',
       pluginStore: 'Plugin Store',
       clearCache: 'Clear cache',
-      clearAllCache: 'Clear all cache'
+      clearAllCache: 'Clear all cache',
+      viewsite: 'View Site'
     },
     category: {
       title: 'Category',
@@ -513,5 +514,13 @@ module.exports = {
   update: {
     title: 'Found updates',
     body: (ver) => `New version: ${ver}`
+  },
+  viewsite: {
+    toolbar: {
+      save: 'Save',
+      view: 'View'
+    },
+    saveSuccess: 'Save cookie configuration is successful!',
+    saveFailed: (err) => `Save cookie configuration failed!\n${err}`
   }
 }
