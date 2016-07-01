@@ -51,12 +51,15 @@ class ViewSite {
     toolbar.loadStruct([
       { id: 'save', type: 'button', icon: 'save', text: '保存' },
       { type: 'separator' },
+      { id: 'view', type: 'button', icon: 'chrome', text: '浏览' },
     ]);
     toolbar.attachEvent('onClick', (id) => {
       switch(id) {
         case 'save':
           this._saveCookie();
           break;
+        case 'view':
+          this._loadURL(this.opts.url);
       }
     })
     return toolbar;
