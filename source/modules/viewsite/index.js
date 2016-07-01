@@ -90,12 +90,13 @@ class ViewSite {
     }).then((cookie) => {
       let data = [];
       cookie.map((c, i) => {
+        window.C = c;
         data.push({
           id: i + 1,
           data: [
             c.name, c.value, c.domain,
-            c.path, new Date(c.expirationDate).toUTCString(),
-            c.name.length + c.value.length, c.httpOnly, c.secure
+            c.path, c.session ? 'Session' : new Date(c.expirationDate).toUTCString(),
+            c.name.length + c.value.length, c.httpOnly ? 'httpOnly': '', c.secure ? 'Secure': ''
           ]
         });
       });
