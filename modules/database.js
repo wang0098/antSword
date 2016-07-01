@@ -40,7 +40,8 @@ class Database {
       .on('shell-editDataConf', this.editDataConf.bind(this))
       .on('shell-delDataConf', this.delDataConf.bind(this))
       .on('shell-getDataConf', this.getDataConf.bind(this))
-      .on('shell-renameCategory', this.renameShellCategory.bind(this));
+      .on('shell-renameCategory', this.renameShellCategory.bind(this))
+      .on('shell-updateHttpConf', this.updateHttpConf.bind(this));
   }
 
   /**
@@ -174,6 +175,27 @@ class Database {
       .catch((_err) => {
         event.returnValue = _err;
       });
+  }
+
+  /**
+   * 更新httpConf配置信息（包含body&&headers
+   * @param  {[type]} event [description]
+   * @param  {[type]} opt  = {} [description]
+   * @return {[type]}       [description]
+   */
+  updateHttpConf(event, opt = {}) {
+    logger.warn('updateHttpConf', opt);
+
+    this.cursor.update({
+      _id: opt._id
+    }, {
+      $set: {
+        httpConf: opt.conf,
+        utime: +new Date
+      }
+    }, (_err, _ret) => {
+      event.returnValue = _err || _ret;
+    });
   }
 
   /**
