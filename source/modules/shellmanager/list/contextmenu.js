@@ -4,6 +4,7 @@
 
 const Data = require('../data');
 const Form = require('./form');
+const ViewSite = require('../../viewsite/');
 const Terminal = require('../../terminal/');
 const Database = require('../../database/');
 const FileManager = require('../../filemanager/');
@@ -33,6 +34,9 @@ class ContextMenu {
       }],
       ['database', 'database', selectedData, () => {
         new Database(data[0]);
+      }],
+      ['viewsite', 'chrome', selectedData, () => {
+        new ViewSite(data[0]);
       }],
       false,
       ['plugin', 'folder-o', selectedMultiData, null, this.parsePlugContextMenu(data)],

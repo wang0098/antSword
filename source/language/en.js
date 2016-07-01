@@ -55,7 +55,8 @@ module.exports = {
       pluginDefault: 'Default',
       pluginStore: 'Plugin Store',
       clearCache: 'Clear cache',
-      clearAllCache: 'Clear all cache'
+      clearAllCache: 'Clear all cache',
+      viewsite: 'View Site'
     },
     category: {
       title: 'Category',

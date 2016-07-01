@@ -56,7 +56,8 @@ module.exports = {
       pluginDefault: '默认分类',
       pluginStore: '插件市场',
       clearCache: '清空缓存',
-      clearAllCache: '清空所有缓存'
+      clearAllCache: '清空所有缓存',
+      viewsite: '浏览网站'
     },
     category: {
       title: '分类目录',
