@@ -90,7 +90,6 @@ class ViewSite {
     }).then((cookie) => {
       let data = [];
       cookie.map((c, i) => {
-        window.C = c;
         data.push({
           id: i + 1,
           data: [
@@ -154,7 +153,7 @@ class ViewSite {
       webPreferences: {
         nodeIntegration: false,
       },
-      title: 'AntSword.Store'
+      title: this.opts.url
     });
     win.on('close', () => {
       win = null;
