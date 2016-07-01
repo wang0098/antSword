@@ -150,13 +150,11 @@ class ViewSite {
       minWidth: 888,
       minHeight: 555,
       show: false,
+      autoHideMenuBar: true,
       webPreferences: {
         nodeIntegration: false,
       },
       title: this.opts.url
-    });
-    win.on('close', () => {
-      win = null;
     });
     win.loadURL(url);
     win.show();
