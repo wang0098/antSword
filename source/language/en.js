@@ -155,7 +155,9 @@ module.exports = {
       },
       otherConf: {
         nohttps: 'Ignore HTTPS certificate',
-        terminalCache: "Use the terminal's cache"
+        terminalCache: "Use the terminal's cache",
+        requestTimeout: 'Request timeout',
+        commandPath: 'Custom terminal-execPath'
       }
     }
   },

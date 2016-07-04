@@ -285,7 +285,7 @@ class Form {
           type: "checkbox", name: 'terminal-cache', label: LANG['list']['otherConf']['terminalCache'],
           checked: opt['terminal-cache'] === 1
         }, {
-          type: "label", label: '请求超时'
+          type: "label", label: LANG['list']['otherConf']['requestTimeout']
         }, {
           type: "combo", label: '/ms', inputWidth: 100, name: "request-timeout",
           options: ((items) => {
@@ -306,7 +306,7 @@ class Form {
             '5000', '10000', '30000', '60000'
           ])
         }, {
-          type: 'label', label: '自定义终端执行路径'
+          type: 'label', label: LANG['list']['otherConf']['commandPath']
         }, {
           type: 'combo', name: 'command-path', inputWidth: 200, options: ((items) => {
             let ret = [];
