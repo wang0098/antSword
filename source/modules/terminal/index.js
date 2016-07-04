@@ -134,7 +134,7 @@ class Terminal {
       if (!cmd) { return false };
       // 如果为exit||quit则关闭窗口
       if (cmd === 'exit' || cmd === 'quit') { return this.cell.close() };
-      term.pause();
+      // term.pause();
       // 是否有缓存
       let cacheTag = 'command-' + new Buffer(this.path + cmd).toString('base64');
       let cacheCmd = this.cache.get(cacheTag);
@@ -146,11 +146,15 @@ class Terminal {
         );
         return term.resume();
       };
+      // 获取自定义执行路径
+      let _bin = this.isWin ? 'cmd' : '/bin/sh';
+      let _confBin = (this.opts['otherConf'] || {})['command-path'];
+      _bin = _confBin || _bin;
       // 开始执行命令
       this.core.request(
         this.core.command.exec({
           cmd: this.parseCmd(cmd, this.path),
-          bin: this.isWin ? 'cmd' : '/bin/sh'
+          bin: _bin
         })
       ).then((ret) => {
         let _ = ret['text'];
