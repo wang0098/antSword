@@ -287,17 +287,25 @@ class Form {
         }, {
           type: "label", label: '请求超时'
         }, {
-          type: "combo", label: '/ms', inputWidth: 100, name: "request-timeout", readonly: true, options: [
-					{
-            text: "5000", value: "5000", selected: opt['request-timeout'] === '5000'
-          }, {
-            text: "10000", value: "10000", selected: opt['request-timeout'] === '10000'
-          }, {
-            text: "30000", value: "30000", selected: opt['request-timeout'] === '30000'
-          }, {
-            text: "60000", value: "60000", selected: opt['request-timeout'] === '60000'
-          }
-				]}, {
+          type: "combo", label: '/ms', inputWidth: 100, name: "request-timeout",
+          options: ((items) => {
+            let ret = [];
+            // 如果自定义的路径不在items里，则++
+            if (items.indexOf(opt['request-timeout']) === -1) {
+              items.unshift(opt['request-timeout']);
+            }
+            items.map((_) => {
+              ret.push({
+                text: _,
+                value: _,
+                selected: opt['command-path'] === _
+              })
+            });
+            return ret;
+          })([
+            '5000', '10000', '30000', '60000'
+          ])
+        }, {
           type: 'label', label: '自定义终端执行路径'
         }, {
           type: 'combo', name: 'command-path', inputWidth: 200, options: ((items) => {
@@ -316,7 +324,7 @@ class Form {
             return ret;
           })([
             '/bin/sh',
-            'c:\\windows\\system32\\cmd.exe'
+            'cmd'
           ])
         }
       ]}], true);
