@@ -271,7 +271,8 @@ class Form {
     const opt = Object.assign({}, {
       'ignore-https': 0,
       'terminal-cache': 0,
-      'request-timeout': '10000'
+      'request-timeout': '10000',
+      'command-path': ''
     }, arg.otherConf);
     const form = this.accordion.cells('other').attachForm([{
         type: 'settings', position: 'label-right', inputWidth: 400
@@ -296,7 +297,28 @@ class Form {
           }, {
             text: "60000", value: "60000", selected: opt['request-timeout'] === '60000'
           }
-				]},
+				]}, {
+          type: 'label', label: '自定义终端执行路径'
+        }, {
+          type: 'combo', name: 'command-path', inputWidth: 200, options: ((items) => {
+            let ret = [];
+            // 如果自定义的路径不在items里，则++
+            if (items.indexOf(opt['command-path']) === -1) {
+              items.unshift(opt['command-path']);
+            }
+            items.map((_) => {
+              ret.push({
+                text: _,
+                value: _,
+                selected: opt['command-path'] === _
+              })
+            });
+            return ret;
+          })([
+            '/bin/sh',
+            'c:\\windows\\system32\\cmd.exe'
+          ])
+        }
       ]}], true);
     return form;
   }
