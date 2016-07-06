@@ -271,7 +271,8 @@ class Form {
     const opt = Object.assign({}, {
       'ignore-https': 0,
       'terminal-cache': 0,
-      'request-timeout': '10000'
+      'request-timeout': '10000',
+      'command-path': ''
     }, arg.otherConf);
     const form = this.accordion.cells('other').attachForm([{
         type: 'settings', position: 'label-right', inputWidth: 400
@@ -284,19 +285,48 @@ class Form {
           type: "checkbox", name: 'terminal-cache', label: LANG['list']['otherConf']['terminalCache'],
           checked: opt['terminal-cache'] === 1
         }, {
-          type: "label", label: '请求超时'
+          type: "label", label: LANG['list']['otherConf']['requestTimeout']
         }, {
-          type: "combo", label: '/ms', inputWidth: 100, name: "request-timeout", readonly: true, options: [
-					{
-            text: "5000", value: "5000", selected: opt['request-timeout'] === '5000'
-          }, {
-            text: "10000", value: "10000", selected: opt['request-timeout'] === '10000'
-          }, {
-            text: "30000", value: "30000", selected: opt['request-timeout'] === '30000'
-          }, {
-            text: "60000", value: "60000", selected: opt['request-timeout'] === '60000'
-          }
-				]},
+          type: "combo", label: '/ms', inputWidth: 100, name: "request-timeout",
+          options: ((items) => {
+            let ret = [];
+            // 如果自定义的路径不在items里，则++
+            if (items.indexOf(opt['request-timeout']) === -1) {
+              items.unshift(opt['request-timeout']);
+            }
+            items.map((_) => {
+              ret.push({
+                text: _,
+                value: _,
+                selected: opt['command-path'] === _
+              })
+            });
+            return ret;
+          })([
+            '5000', '10000', '30000', '60000'
+          ])
+        }, {
+          type: 'label', label: LANG['list']['otherConf']['commandPath']
+        }, {
+          type: 'combo', name: 'command-path', inputWidth: 200, options: ((items) => {
+            let ret = [];
+            // 如果自定义的路径不在items里，则++
+            if (items.indexOf(opt['command-path']) === -1) {
+              items.unshift(opt['command-path']);
+            }
+            items.map((_) => {
+              ret.push({
+                text: _,
+                value: _,
+                selected: opt['command-path'] === _
+              })
+            });
+            return ret;
+          })([
+            '/bin/sh',
+            'cmd'
+          ])
+        }
       ]}], true);
     return form;
   }
