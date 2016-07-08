@@ -131,10 +131,12 @@ class Terminal {
 
     // 初始化终端
     this.term = dom.terminal( (cmd, term) => {
-      if (!cmd) { return false };
+      if (!cmd) { return false }
       // 如果为exit||quit则关闭窗口
-      if (cmd === 'exit' || cmd === 'quit') { return this.cell.close() };
-      // term.pause();
+      if (cmd === 'exit' || cmd === 'quit') { return this.cell.close() }
+      // clear清空
+      if (cmd === 'cls' || cmd === 'clear') { return term.clear() }
+      term.pause();
       // 是否有缓存
       let cacheTag = 'command-' + new Buffer(this.path + cmd).toString('base64');
       let cacheCmd = this.cache.get(cacheTag);
@@ -196,7 +198,21 @@ class Terminal {
         greetings: banner,
         name: `terminal_${this.hash}`,
         prompt: this.parsePrompt(infoUser),
-        exit: false
+        exit: false,
+        completion: (term, value, callback) => {
+          callback(
+            this.isWin ? [
+              'dir', 'whoami', 'net', 'ipconfig', 'netstat', 'cls',
+              'wscript', 'nslookup', 'copy', 'del', 'ren', 'md', 'type',
+              'ping'
+            ] : [
+              'cd', 'ls', 'find', 'cp', 'mv', 'rm', 'ps', 'kill',
+              'file', 'tar', 'cat', 'chown', 'chmod', 'pwd', 'history',
+              'whoami', 'ifconfig', 'clear',
+              'ping'
+            ]
+          )
+        }
     });
   }
 
