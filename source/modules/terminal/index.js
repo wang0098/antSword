@@ -136,7 +136,7 @@ class Terminal {
       if (cmd === 'exit' || cmd === 'quit') { return this.cell.close() }
       // clear清空
       if (cmd === 'cls' || cmd === 'clear') { return term.clear() }
-      // term.pause();
+      term.pause();
       // 是否有缓存
       let cacheTag = 'command-' + new Buffer(this.path + cmd).toString('base64');
       let cacheCmd = this.cache.get(cacheTag);
