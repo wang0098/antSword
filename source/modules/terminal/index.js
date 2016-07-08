@@ -196,7 +196,19 @@ class Terminal {
         greetings: banner,
         name: `terminal_${this.hash}`,
         prompt: this.parsePrompt(infoUser),
-        exit: false
+        exit: false,
+        completion: (term, value, callback) => {
+          callback(
+            this.isWin ? [
+              'dir', 'whoami', 'net', 'ipconfig', 'netstat', 'cls',
+              'wscript', 'nslookup', 'copy', 'del', 'ren', 'md', 'type'
+            ] : [
+              'cd', 'ls', 'find', 'cp', 'mv', 'rm', 'ps', 'kill',
+              'file', 'tar', 'cat', 'chown', 'chmod', 'pwd', 'history',
+              'whoami', 'ifconfig', 'clear'
+            ]
+          )
+        }
     });
   }
 
