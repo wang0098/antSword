@@ -203,11 +203,13 @@ class Terminal {
           callback(
             this.isWin ? [
               'dir', 'whoami', 'net', 'ipconfig', 'netstat', 'cls',
-              'wscript', 'nslookup', 'copy', 'del', 'ren', 'md', 'type'
+              'wscript', 'nslookup', 'copy', 'del', 'ren', 'md', 'type',
+              'ping'
             ] : [
               'cd', 'ls', 'find', 'cp', 'mv', 'rm', 'ps', 'kill',
               'file', 'tar', 'cat', 'chown', 'chmod', 'pwd', 'history',
-              'whoami', 'ifconfig', 'clear'
+              'whoami', 'ifconfig', 'clear',
+              'ping'
             ]
           )
         }
