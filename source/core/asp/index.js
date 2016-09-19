@@ -33,7 +33,7 @@ class ASP extends Base {
    * @return {array} 编码器列表
    */
   get encoders() {
-    return [];
+    return ['xxxxdog'];
   }
 
   /**
