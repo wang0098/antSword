@@ -113,7 +113,7 @@ class PlugStore {
           let _path = path.join(dir, _);
           // 如果是目录，则继续循环，否则删除
           if (fs.lstatSync(_path).isDirectory()) {
-            return _rmdir(_path);
+            return this.rmdir(_path);
           }
           fs.unlinkSync(_path);
         });
