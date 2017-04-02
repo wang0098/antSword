@@ -97,6 +97,7 @@ module.exports = {
         url: 'URL',
         ip: 'IP',
         addr: 'ADDR',
+        note: 'NOTE',
         ctime: 'CTIME',
         utime: 'UTIME'
       },
@@ -109,6 +110,7 @@ module.exports = {
         form: {
           url: 'Shell url',
           pwd: 'Shell pwd',
+          note: 'Note',
           encode: 'Encode',
           type: 'Shell type',
           encoder: 'Encoder'
@@ -126,6 +128,7 @@ module.exports = {
         form: {
           url: 'Shell url',
           pwd: 'Shell pwd',
+          note: 'Note',
           encode: 'Encode',
           type: 'Shell type',
           encoder: 'Encoder'
