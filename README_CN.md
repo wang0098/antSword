@@ -31,7 +31,7 @@
 
 #### 下载源码
 ``` sh
-$ git clone https://github.com/antoor/antSword.git
+$ git clone https://github.com/AntSwordProject/AntSword.git
 ```
 
 #### 安装模块
@@ -65,7 +65,7 @@ $ npm start
 [url-changelog]: CHANGELOG.md
 [url-document]: http://doc.uyu.us
 [url-nodejs-download]: https://nodejs.org/en/download/
-[url-release]: https://github.com/antoor/antSword/releases/tag/1.3.0
+[url-release]: https://github.com/AntSwordProject/AntSword/releases/tag/1.3.0
 [url-electron]: http://electron.atom.io/
 [url-es6]: http://es6.ruanyifeng.com/
 [url-webpack]: http://webpack.github.io/
@@ -74,5 +74,5 @@ $ npm start
 [url-babel]: http://babeljs.io/
 [url-weibo]: http://weibo.com/antoor
 [url-homepage]: http://uyu.us
-[url-release]: https://github.com/antoor/antSword/releases
+[url-release]: https://github.com/AntSwordProject/AntSword/releases
 [url-qqgroup]: http://shang.qq.com/wpa/qunwpa?idkey=51997458a52d534454fd15e901648bf1f2ed799fde954822a595d6794eadc521

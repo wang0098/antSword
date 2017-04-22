@@ -11,7 +11,7 @@
 -->
 
 - [ ] 我确定这是蚁剑本身的一个 Bug，我并不是在询问如何使用蚁剑
-- [ ] 我确定已经将蚁剑升级至[软件发布页面](https://github.com/antoor/antSword/releases)中的**最新版**
+- [ ] 我确定已经将蚁剑升级至[软件发布页面](https://github.com/AntSwordProject/AntSword/releases)中的**最新版**
 - [ ] 我已经阅读过蚁剑的开发文档，并且尝试过自己通过Google等方式解决问题
 - [ ] 这是一个新功能的建议
 - [ ] 我查阅了文档没找到解决方案，所以来询问如何使用蚁剑
@@ -41,7 +41,7 @@
 
 ## 新功能建议
 
-- [ ] 我确定我所提的新功能不在[待做事项](https://github.com/antoor/antSword/blob/master/CHANGELOG.md#待做事项)内，也不在issue列表
+- [ ] 我确定我所提的新功能不在[待做事项](https://github.com/AntSwordProject/AntSword/blob/master/CHANGELOG.md#待做事项)内，也不在issue列表
 - [ ] 我确定我所提出的新功能是为了方便在网站管理，而不是用于非法用途
 
 ### 新功能描述

@@ -20,7 +20,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/antoor/antSword"
+    "url": "https://github.com/AntSwordProject/AntSword"
   },
   "update": {
     "md5": "",
@@ -28,7 +28,7 @@
     "sources": {}
   },
   "bugs": {
-    "url": "https://github.com/antoor/antSword/issues"
+    "url": "https://github.com/AntSwordProject/AntSword/issues"
   },
   "homepage": "http://uyu.us"
 }
