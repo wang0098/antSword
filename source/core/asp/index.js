@@ -34,7 +34,7 @@ class ASP extends Base {
    * @return {array} 编码器列表
    */
   get encoders() {
-    return localStorage.getItem('encoders_asp').split(',') || ['xxxxdog'];
+    return (localStorage.getItem('encoders_asp')||'xxxxdog').split(',');
   }
 
   /**
