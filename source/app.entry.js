@@ -127,8 +127,11 @@ antSword['language'] = require('./language/');
 // 加载编码
 antSword['encoders'] = (function(){
   var encoders = {asp:[],aspx:[],php:[],custom:[]};
+  let custom_path = path.join(process.env.AS_WORKDIR,'antData/encoder');
+  // 初始化
+  !fs.existsSync(custom_path) ? fs.mkdirSync(custom_path) : null;
   // custom
-  let es = fs.readdirSync(path.join(process.env.AS_WORKDIR,'antData/encoder'));
+  let es = fs.readdirSync(custom_path);
   if(es){
     es.map((_)=>{
       let farr = _.split("#");
