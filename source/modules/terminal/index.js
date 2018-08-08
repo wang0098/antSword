@@ -161,7 +161,7 @@ class Terminal {
       ).then((ret) => {
         let _ = ret['text'];
         // 解析出命令执行路径
-        const indexS = _.indexOf('[S]');
+        const indexS = _.lastIndexOf('[S]');
         const indexE = _.lastIndexOf('[E]');
         let _path = _.substr(indexS + 3, indexE - indexS - 3);
 
