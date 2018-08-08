@@ -632,8 +632,11 @@ class FileManager {
           // 上传单个
           let buffIndex = 0;
           let buff = [];
-          // 分段上传大小，默认1M
-          let dataSplit = 1024 * 1024;
+          // 分段上传大小，默认0.5M(jsp 超过1M响应会出错)
+          let dataSplit = 512 * 1024;
+          if (this.opts['type'].toLowerCase() === 'php') {
+            dataSplit = 1024 * 1024
+          }
           let task = tasks[filePath];
           // 获取文件名
           let fileName = filePath.substr(filePath.lastIndexOf('/') + 1);
@@ -659,7 +662,7 @@ class FileManager {
                 res(_b);
               }else{
                 // 上传完毕
-                task.success('100%');
+                task.success(LANG['upload']['task']['success']);
                 toastr.success(LANG['upload']['success'](fileName), LANG_T['success']);
                 // 刷新缓存
                 this.files.refreshPath(path === this.path ? '' : path);
@@ -668,7 +671,7 @@ class FileManager {
               }
             }).then((b) => {
               // 更新进度条
-              task.update(`${parseInt((buffLength - _buff.length) / buffLength * 100)}%`);
+              task.update(`${parseInt((buffLength - (b.length * _buff.length)) / buffLength * 100)}%`);
               this.core.request(
                 this.core.filemanager.upload_file({
                   path: path + fileName,

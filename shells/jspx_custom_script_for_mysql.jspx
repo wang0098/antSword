@@ -182,7 +182,7 @@
             String h = "0123456789ABCDEF";
             File f = new File(savefilePath);
             f.createNewFile();
-            FileOutputStream os = new FileOutputStream(f);
+            FileOutputStream os = new FileOutputStream(f,true);
             for (int i = 0; i < fileHexContext.length(); i += 2) {
                 os.write((h.indexOf(fileHexContext.charAt(i)) << 4 | h.indexOf(fileHexContext.charAt(i + 1))));
             }

@@ -232,6 +232,7 @@ module.exports = {
     upload: {
       task: {
         name: 'Upload',
+        success: 'Upload success!',
         failed: (err) => antSword.noxss(`Failed:${err}`),
         error: (err) => antSword.noxss(`Error:${err}`)
       },
