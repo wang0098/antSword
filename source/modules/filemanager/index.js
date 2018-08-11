@@ -141,7 +141,7 @@ class FileManager {
     // if (cache = this.cache[path]) {
     //   return callback(cache);
     // };
-    if (cache = this.cache.get(cache_tag)) {
+    if ((this.opts.otherConf || {})['filemanager-cache'] !== 0 && (cache = this.cache.get(cache_tag))) {
       return callback(JSON.parse(cache));
     };
 

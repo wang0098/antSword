@@ -276,6 +276,7 @@ class Form {
     const opt = Object.assign({}, {
       'ignore-https': 0,
       'terminal-cache': 0,
+      'filemanager-cache': 1,
       'request-timeout': '10000',
       'command-path': ''
     }, arg.otherConf);
@@ -290,6 +291,9 @@ class Form {
           type: "checkbox", name: 'terminal-cache', label: LANG['list']['otherConf']['terminalCache'],
           checked: opt['terminal-cache'] === 1
         }, {
+          type: "checkbox", name: 'filemanager-cache', label: LANG['list']['otherConf']['filemanagerCache'],
+          checked: opt['filemanager-cache'] === 1
+        },{
           type: "label", label: LANG['list']['otherConf']['requestTimeout']
         }, {
           type: "combo", label: '/ms', inputWidth: 100, name: "request-timeout",
