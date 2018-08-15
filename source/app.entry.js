@@ -253,6 +253,7 @@ ipcRenderer
       height:130,
       width:280
     });
+    win.win.setIconCss("update-winicon");
     win.win.button("minmax").hide();
     win.win.denyResize();
     let uplayout = win.win.attachLayout('1C');

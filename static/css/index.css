@@ -42,6 +42,9 @@ html, body, #container, #loading {
   font-size: 100px;
   text-align: center;
 }
+.dhxwins_vp_dhx_skyblue div.dhxwin_hdr div.update-winicon {
+  background-image: url("ant-static://imgs/cloud-download.svg");
+}
 
 /*update-loading*/
 
