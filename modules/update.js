@@ -7,11 +7,17 @@
 
 const config = require('./config');
 const superagent = require('superagent');
+const fs = require("fs");
+const path = require('path');
+const through = require("through");
+const tar = require('tar');
 
 class Update {
   constructor(electron) {
     this.logger = new electron.Logger('Update');
-    electron.ipcMain.on('check-update', this.checkUpdate.bind(this));
+    electron.ipcMain
+    .on('check-update', this.checkUpdate.bind(this))
+    .on('update-download', this.onDownlaod.bind(this));
   }
 
   /**
@@ -66,6 +72,83 @@ class Update {
         }
     }
     return false;
+  }
+
+  /**
+   * 监听下载请求
+   * @param  {Object} event ipcMain事件对象
+   * @param  {Object} opts  下载配置
+   * @return {[type]}       [description]
+   */
+  onDownlaod(event, opt) {
+    const hash = opt['hash'];
+    if (!hash) {
+      return
+    }
+    let that = this;
+
+    let savePath = path.join(config.tmpPath, "antsword.tar.gz");
+
+    let tempData = [];
+    let totalsize = 0;
+    let downsize = 0;
+    let url="https://github.com/AntSwordProject/AntSword/archive/master.tar.gz";
+    superagent.head(url)
+    .set('User-Agent', "antSword/v2.0")
+    .redirects(5)
+    .timeout(30000)
+    .end((err, res)=>{
+      if(err){
+        event.sender.send(`update-error-${hash}`, err);
+      }else{
+        totalsize = parseInt(res.header['content-length']);
+        superagent
+        .get(url)
+        .set('User-Agent', "antSword/v2.0")
+        .redirects(5)
+        // .proxy(APROXY_CONF['uri'])
+        // 设置超时会导致文件过大时写入出错
+        // .timeout(timeout)
+        .pipe(through(
+          (chunk) => {
+            downsize += chunk.length;
+            var progress = parseInt(downsize/totalsize*100);
+            tempData.push(chunk);
+            event.sender.send(`update-dlprogress-${hash}`, progress);
+          },
+          () => {
+            that.logger.debug("Download end.");
+            let tempDataBuffer = Buffer.concat(tempData);
+
+            if (downsize != totalsize) {
+              event.sender.send(`update-error-${hash}`, "Download Error.");
+              return
+            }
+            event.sender.send(`update-dlend-${hash}`, tempDataBuffer.length);
+            // 同步写入文件
+            fs.writeFileSync(savePath, tempDataBuffer);
+            // 删除内存数据
+            tempDataBuffer = tempData = null;
+
+            // TODO: 需不需要备份?
+            // TODO: 删除原来的 node_modules 目录
+            // 解压数据
+            tar.x({
+              file: savePath,
+              strip: 1,
+              C: process.env.AS_WORKDIR,
+            }).then(_=>{
+              that.logger.info("update success.");
+              event.sender.send(`update-success`);
+              fs.unlink(savePath);
+            }, err=>{
+              event.sender.send(`update-error-${hash}`, err);
+              fs.unlink(savePath);
+            });
+          }
+        ));
+      }
+    });
   }
 }
 

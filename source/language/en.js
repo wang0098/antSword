@@ -444,6 +444,7 @@ module.exports = {
           ok: 'Update',
           no: 'Cancel'
         },
+        body: (ver) => `Found new version v${ver}, update now?`,
         title: 'Update to version',
         changelog: 'Change Logs: ',
         sources: 'Download source: ',
@@ -453,6 +454,10 @@ module.exports = {
         }
       },
       message: {
+        prepare: "Connecte to server...",
+        dling: (progress)=> `Downloading...${progress}%`,
+        dlend: "Download completed",
+        extract: "Unpacking, don't close AntSword",
         ing: 'Downloading..',
         fail: (err) => `Update failed! [${err}]`,
         success: 'Update success! Please manually restart the application later!'
@@ -531,7 +536,8 @@ module.exports = {
   },
   update: {
     title: 'Found updates',
-    body: (ver) => `New version: ${ver}`
+    body: (ver) => `New version: ${ver}, view changelog`,
+
   },
   viewsite: {
     toolbar: {

@@ -442,9 +442,10 @@ module.exports = {
       },
       prompt: {
         btns: {
-          ok: '更新',
-          no: '取消'
+          ok: '立即更新',
+          no: '下次再说'
         },
+        body: (ver) => `发现新版本 v${ver}, 是否更新?`,
         title: '版本更新',
         changelog: '更新日志：',
         sources: '更新来源：',
@@ -454,6 +455,10 @@ module.exports = {
         }
       },
       message: {
+        prepare: "连接更新服务器...",
+        dling: (progress)=> `正在下载更新包...${progress}%`,
+        dlend: "下载完毕",
+        extract: "正在解压, 请务关闭程序",
         ing: '努力更新中。。',
         fail: (err) => `更新失败！【${err}】`,
         success: '更新成功！请稍后手动重启应用！'
@@ -532,7 +537,7 @@ module.exports = {
   },
   update: {
     title: '发现更新',
-    body: (ver) => `新的版本：${ver}`
+    body: (ver) => `新的版本：${ver}, 查看更新日志`,
   },
   viewsite: {
     toolbar: {

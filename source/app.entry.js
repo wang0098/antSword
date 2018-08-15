@@ -240,11 +240,81 @@ ipcRenderer
    * @return {[type]}                       [description]
    */
   .on('notification-update', (e, opt) => {
+    const LANG = antSword["language"]["settings"]["update"];
     let n = new Notification(antSword['language']['update']['title'], {
       body: antSword['language']['update']['body'](opt['ver'])
     });
     n.addEventListener('click', () => {
       antSword.shell.openExternal(opt['url']);
+    });
+    const WIN = require('ui/window');
+    let win = new WIN({
+      title: antSword['language']['update']['title'],
+      height:130,
+      width:280
+    });
+    win.win.button("minmax").hide();
+    win.win.denyResize();
+    let uplayout = win.win.attachLayout('1C');
+    uplayout.cells('a').hideHeader();
+
+    let formdata = [
+    {type:"label" , name:"form_msg", label:LANG["prompt"]["body"](opt['ver']), offsetLeft: 5},
+    {type: "block", list:[
+      {type:"button" , name:"updatebtn", value: `<i class="fa fa-cloud-download"></i> ${LANG["prompt"]["btns"]["ok"]}`, className:"background-color: #39c;"},
+      {type:"newcolumn", offset:15},
+      {type:"button" , name:"canclebtn", value: `${LANG["prompt"]["btns"]["no"]}`},
+      ]
+    }];
+    uplayout.cells('a').attachForm(formdata, true);
+    win.win.attachEvent('onParkUp', () => {
+      win.win.setPosition(document.body.clientWidth-300,document.body.clientHeight-150);
+      return true;
+    });
+    win.win.attachEvent('onParkDown', () =>{
+      win.win.centerOnScreen();
+      return true;
+    });
+    const form = uplayout.cells('a').attachForm(formdata, true);
+    form.attachEvent("onButtonClick", (name)=>{
+      switch (name) {
+        case "updatebtn":
+          const hash = (String(+new Date) + String(Math.random())).substr(10, 10).replace('.', '_');
+          //折叠
+          win.win.park();
+          antSword.ipcRenderer.send("update-download", {hash: hash});
+          win.win.progressOn();
+          win.setTitle(LANG["message"]["prepare"]);
+          antSword['ipcRenderer']
+            .on(`update-dlprogress-${hash}`, (event, progress)=>{
+              win.setTitle(LANG["message"]["dling"](progress));
+            })
+            .once(`update-dlend-${hash}`,(event)=>{
+              win.setTitle(LANG["message"]["dlend"]);
+              win.win.progressOff();
+              toastr.success(antSword["language"]["success"], LANG["message"]["extract"]);
+            })
+            .once(`update-error-${hash}`, (event, err)=>{
+              toastr.error(antSword["language"]['error'], LANG["message"]["fail"](err));
+              win.win.progressOff();
+              win.close();
+            });
+          break;
+        case "canclebtn":
+          win.close();
+          break;
+      }
+    });
+  })
+  .on('update-success', (e, opt)=>{
+    const LANG = antSword['language']['settings']['update'];
+    toastr.success(antSword["language"]["success"], LANG["message"]["success"]);
+    layer.confirm(LANG['message']['success'], {
+      icon: 1, shift: 6,
+      title: LANG['prompt']['title']
+    }, (_) => {
+      // location.reload();
+      antSword.remote.app.quit();
     });
   })
   /**
