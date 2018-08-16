@@ -360,6 +360,44 @@ class Files {
       }
     });
 
+    // 键盘按下事件
+    grid.attachEvent('onKeyPress', (code, cFlag, sFlag)=>{
+      switch (true){
+      case (code <= 90 && code >= 65)||(code<=57 && code >= 48):
+        // A-Z 0-9
+        var input = String.fromCharCode(code);
+        input = input.toLowerCase();
+        var sid = 0;
+        var ids = grid.getAllRowIds().split(",");
+        for (var i=0; i<ids.length; i++) {
+          var _id = parseInt(ids[i]);
+          var fname = grid.getRowAttribute(_id, "fname");
+          if(fname.startsWith(input)){
+            sid = _id - 1;
+            grid.selectRow(sid);
+            break;
+          }
+        }
+        break
+      case (code == 38):
+        //up
+        var ids = grid.getAllRowIds().split(",");
+        var sid = grid.getSelectedRowId().toString();
+        var cid = ids.indexOf(sid) <= 0 ? parseInt(ids[0]) - 1 : parseInt(ids[ids.indexOf(sid)-1])-1;
+        grid.selectRow(cid);
+        break;
+      case (code == 40):
+        //down
+        var ids = grid.getAllRowIds().split(",");
+        var sid = grid.getSelectedRowId().toString();
+        var cid = ids.indexOf(sid) >= ids.length-1 ? parseInt(ids[ids.length-1])-1 : parseInt(ids[ids.indexOf(sid) + 1])-1;
+        grid.selectRow(cid);
+        break;
+      default:
+        break;
+      }
+    });
+
     grid.init();
 
     this.grid = grid;
