@@ -13,6 +13,8 @@ const ENCODES = require('../../base/encodes');
 const fs = require('fs');
 const iconv = require('iconv-lite');
 const crypto = require('crypto');
+const mime = require("mime");
+const PATH = require("path");
 const dialog = antSword.remote.dialog;
 
 // 加载语言模板
@@ -468,25 +470,45 @@ class FileManager {
   }
 
   // 预览文件(图片、视频)
-  previewFile(name) {
-    const path = this.path + name;
-    const win = this.createWin({
-      title: 'Preview File: ' + path
+  previewFile(name, size) {
+    let that = this;
+    const remote_path = this.path + name;
+    const win = that.createWin({
+      title: 'Loading File: ' + remote_path,
+      width: 800,
+      height: 600,
     });
+    var filemime = mime.lookup(name);
+    let savepath = PATH.join(process.env.AS_WORKDIR,`antData/.temp/`,new Buffer(name).toString("hex"));
     win.cell.lastChild['style']['overflow'] = 'scroll';
     win.cell.lastChild['style']['textAlign'] = 'center';
-    let data = 'data:image/png;base64,';
-    let buff = '';
 
-    this.core.request(
-      this.core.filemanager.download_file()
-      , (chunk) => {
-        buff += chunk;
-        let imgData = data + new Buffer(buff).toString('base64');
+    let down_size = 0;
+    this.core.download(
+      savepath
+      ,this.core.filemanager.read_file({path: remote_path})
+      , (_size) => {
+        down_size += _size;
+        let down_progress = parseInt(parseFloat(down_size / size).toFixed(2) * 100);
+        if (!(down_progress % 5)) {
+          win.setText(`Preview File: ${remote_path} ${down_progress}%`);
+        };
       }
-    ).then((res) => {
-      let imgData = new Buffer(res['buff']).toString('base64');
-      win.attachHTMLString(`<img src="data:/image/png;base64,${imgData}"/>`);
+    ).then((_size) => {
+      if (_size === size) {
+        win.setText(`Preview File: ${remote_path}`);
+        let buff = fs.readFileSync(savepath);
+        switch (filemime){
+          default:
+            let data = new Buffer(buff).toString('base64');
+            win.attachHTMLString(`<img style="width:100%" src="data:/${filemime};base64,${data}"/>`);
+            break;
+        }
+        fs.unlink(savepath);
+      }else{
+        fs.unlink(savepath);
+        throw Error(`Load Error: downsize ${_size} != ${size}`);
+      }
     }).catch((err) => {
 
     });

@@ -34,6 +34,10 @@ class Conf {
         fs.readFileSync(_oldPath)
       )
     }
+    // 初始化目录
+    this.tmpPath;
+    this.cachePath;
+    this.plugPath;
   }
 
   /**

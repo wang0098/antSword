@@ -283,13 +283,6 @@ class Files {
           id.toLowerCase().endsWith(`.${e}`) ? isEdited = true : 0;
         }
       );
-      // 可预览文件后缀
-      let isPreviewed = false;
-      'jpg,png,gif,bmp,ico,mp4,mp3,wav,avi,rmvb'.split(',').map(
-        (e) => {
-          id.toLowerCase().endsWith(`.${e}`) ? isPreviewed = true : 0;
-        }
-      );
 
       let menu = [
         { text: LANG['grid']['contextmenu']['refresh'], icon: 'fa fa-refresh', action: () => { self.refreshPath(); } },
@@ -313,9 +306,9 @@ class Files {
           } );
         } },
         { text: LANG['grid']['contextmenu']['paste']['title'], icon: 'fa fa-paste', disabled: _Clipboard_num === 0, subMenu: _Clipboard },
-        // { text: LANG['grid']['contextmenu']['preview'], icon: 'fa fa-eye', disabled: !id || ids.length > 1 || !isPreviewed, action: () => {
-        //   manager.previewFile(id);
-        // } },
+        { text: LANG['grid']['contextmenu']['preview'], icon: 'fa fa-eye', disabled: !id || ids.length > 1 || !self.checkPreview(id), action: () => {
+          manager.previewFile(id, this.getRowAttribute(_ids[0], 'fsize'));
+        } },
         { divider: true },
         { text: LANG['grid']['contextmenu']['edit'], icon: 'fa fa-edit', disabled: /*!isEdited || */!id || ids.length > 1 || isFolder, action: () => {
           manager.editFile(id);
@@ -348,13 +341,20 @@ class Files {
     });
 
     // 双击文件
+    // :如果可预览并且小于 1MB，则进行预览
     // :如果size < 100kb，则进行编辑，否则进行下载
     grid.attachEvent('onRowDblClicked', (id, lid, event) => {
       const fname = grid.getRowAttribute(id, 'fname');
       const fsize = grid.getRowAttribute(id, 'fsize');
       if (!fname.endsWith('/')) {
-        // 双击编辑size < 100kb 文件
-        fsize <= 100 * 1024 ? manager.editFile(fname) : manager.downloadFile(fname, fsize);
+        if(self.checkPreview(fname) && fsize <= 1000 * 1024){
+          manager.previewFile(fname, fsize);
+        }else if(fsize <= 100 * 1024){
+          // 双击编辑size < 100kb 文件
+          manager.editFile(fname);
+        }else{
+          manager.downloadFile(fname, fsize);
+        }
       }else{
         self.gotoPath(fname);
       }
@@ -386,6 +386,17 @@ class Files {
       dragenter: (e) => { e.preventDefault() },
       dragover: (e) => { e.preventDefault() }
     });
+  }
+
+  checkPreview(name) {
+    // 可预览文件后缀
+    let isPreviewed = false;
+    'jpg,png,gif,bmp,ico'.split(',').map(
+      (e) => {
+        name.toLowerCase().endsWith(`.${e}`) ? isPreviewed = true : 0;
+      }
+    );
+    return isPreviewed;
   }
 
   // 刷新当前目录
