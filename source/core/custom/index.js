@@ -30,7 +30,7 @@ class CUSTOM extends Base {
    * @return {array} 编码器列表
    */
   get encoders() {
-    return (localStorage.getItem('encoders_custom')||'base64,hex').split(',');
+    return ['base64','hex'];
   }
 
   /**

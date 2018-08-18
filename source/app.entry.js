@@ -41,7 +41,7 @@ const antSword = window.antSword = {
    */
   logs: [],
   /**
-   * 核心模块
+   * 自定义编码器
    * @type {Object}
    */
   encoders: {},
@@ -127,24 +127,44 @@ antSword['language'] = require('./language/');
 // 加载编码
 antSword['encoders'] = (function(){
   var encoders = {asp:[],aspx:[],php:[],custom:[]};
-  let custom_path = path.join(process.env.AS_WORKDIR,'antData/encoder');
+  var encoders_path = {asp:[],aspx:[],php:[],custom:[]};
+  let userencoder_path = path.join(process.env.AS_WORKDIR,'antData/encoders');
   // 初始化
-  !fs.existsSync(custom_path) ? fs.mkdirSync(custom_path) : null;
-  // custom
-  let es = fs.readdirSync(custom_path);
-  if(es){
-    es.map((_)=>{
-      let farr = _.split("#");
-      encoders[farr[0]].push(farr[1].slice(0,-3));
-    });
-  }
-  // default
+  !fs.existsSync(userencoder_path) ? fs.mkdirSync(userencoder_path) : null;
   ['asp','aspx','php','custom'].map((t)=>{
-    antSword["core"][t].prototype.encoders.map((e)=>{
-      encoders[t].push(e);
-    });
-    encoders[t] = encoders[t].unique();
+    !fs.existsSync(path.join(userencoder_path, `${t}`))? fs.mkdirSync(path.join(userencoder_path, `${t}`)):null;
+    let t_path = path.join(userencoder_path, `${t}/encoder/`);
+    !fs.existsSync(t_path) ? fs.mkdirSync(t_path) : null;
+
+    let es = fs.readdirSync(t_path);
+    if(es){
+      es.map((_)=>{
+        if(!_.endsWith(".js")){
+          return
+        }
+        encoders[t].push(_.slice(0,-3));
+        encoders_path[t].push(path.join(t_path, _.slice(0,-3)));
+      });
+    }
+    antSword["core"][t].prototype.user_encoders = encoders_path[t];
   });
+
+  // // custom
+  // let es = fs.readdirSync(userencoder_path);
+  // if(es){
+  //   es.map((_)=>{
+  //     console.log(_);
+  //     let farr = _.split("#");
+  //     encoders[farr[0]].push(farr[1].slice(0,-3));
+  //   });
+  // }
+  // default
+  // ['asp','aspx','php','custom'].map((t)=>{
+  //   antSword["core"][t].prototype.encoders.map((e)=>{
+  //     encoders[t].push(e);
+  //   });
+  //   encoders[t] = encoders[t].unique();
+  // });
   // fs.readdirSync(path.join(process.env.AS_WORKDIR,'encoder'),(err,f) => {
   //   if(err || !f) return ;
   //   console.debug(f);

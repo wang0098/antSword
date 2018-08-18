@@ -51,6 +51,10 @@ class Base {
         ](pwd, data);
       }
     }
+    // 解析自定义编码器
+    this.user_encoders.map((_)=>{
+      this.parseEncoder(`${_}`);
+    });
   }
 
   /**

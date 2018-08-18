@@ -196,7 +196,8 @@ class Form {
   _parseTypes(_default = 'php', _encoder = 'default') {
     let ret = [];
     for (let c in antSword['core']) {
-      let encoders = antSword['core'][c].prototype.encoders;
+      // 加载默认编码器和用户自定义编码器
+      let encoders = antSword['core'][c].prototype.encoders.concat(antSword['encoders'][c]);
       ret.push({
         text: c.toUpperCase(), value: c,
         selected: c === _default,

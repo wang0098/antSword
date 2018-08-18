@@ -35,7 +35,7 @@ class PHP extends Base {
    * @return {array} 编码器列表
    */
   get encoders() {
-    return (localStorage.getItem('encoders_php')||"chr,base64").split(',');
+    return ["base64", "chr", "chr16", "rot13"];
   }
 
   /**
