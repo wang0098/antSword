@@ -465,11 +465,39 @@ module.exports = {
     },
     encoders:{
       title: 'Encoder Manager',
-      form:{
-        shelltype: 'Shell Type',
-        encoderslist: 'Encoder Lists'
+      toolbar: {
+        new: "New",
+        edit: "Edit",
+        delete: "Delete",
+        help: "Help",
+        save: "Save",
       },
-      success: 'Loaded Encoder Successfully'
+      grid: {
+        ename: "Name",
+        etype: "Type"
+      },
+      edit_win_title: "Edit Encoder",
+      delete_title: "Delete Encoder",
+      message: {
+        ename_duplicate: "The encoder name cannot be duplicated",
+        rename_success: "Rename success",
+        etype_error: "Encoder type error",
+        retype_success: "Modify type success",
+        create_success: "Create encoder success",
+        edit_not_select: "Please select the row you want to edit first",
+        edit_only_single: "You can only edit one",
+        edit_null_value: "Encoder content can not be empty",
+        edit_save_success: "Save success",
+        delete_not_select: "Please select the row you want to delete first",
+        delete_success: "Delete success",
+        ename_invalid: "Name can only contain numbers, letters, and underlines",
+      },
+      prompt: {
+        create_encoder: "Create Encoder",
+      },
+      confirm: {
+        delete: (num) => antSword.noxss(`Are you sure to delete ${typeof(num) === 'number' ? num + ' encoders' : num}?`),
+      }
     },
     aproxy: {
       title: 'Proxy setting',

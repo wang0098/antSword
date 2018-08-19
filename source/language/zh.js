@@ -466,11 +466,39 @@ module.exports = {
     },
     encoders:{
       title: '编码管理',
-      form:{
-        shelltype: '脚本类型',
-        encoderslist: '编码器列表'
+      toolbar: {
+        new: "新建",
+        edit: "编辑",
+        delete: "删除",
+        help: "帮助",
+        save: "保存",
       },
-      success: '编码器加载成功'
+      grid: {
+        ename: "名称",
+        etype: "类型"
+      },
+      edit_win_title: "编辑编码器",
+      delete_title: "删除编码器",
+      message: {
+        ename_duplicate: "编码器名称不能重复",
+        rename_success: "重命名成功",
+        etype_error: "编码器类型错误",
+        retype_success: "类型修改成功",
+        create_success: "新增编码器成功",
+        edit_not_select: "请先选中要编辑的行",
+        edit_only_single: "只能编辑一个",
+        edit_null_value: "编码器内容不能为空",
+        edit_save_success: "保存成功",
+        delete_not_select: "请先选中要删除的行",
+        delete_success: "删除成功",
+        ename_invalid: "名称只能包含数字、字母、下划线",
+      },
+      prompt: {
+        create_encoder: "创建编码器",
+      },
+      confirm: {
+        delete: (num) => antSword.noxss(`你确定要删除 ${typeof(num) === 'number' ? num + ' 个编码器' : num+" "}吗？`),
+      }
     },
     aproxy: {
       title: '代理设置',
