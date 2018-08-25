@@ -49,7 +49,7 @@
 
  现在可以在「系统设置 - 编码管理」下增加用户自定义的编码器了，不需要拘泥自带的 `base64` 与 `chr`。`rot13`、`base32`、`rc4`、`aes`......尽情发挥吧
  
-  ![编码管理]()
+  ![编码管理](http://7xtigg.com1.z0.glb.clouddn.com/doc/settings/encoder_edit_1.png)
 
 * **新增「显示设置」模块**
 
@@ -112,6 +112,7 @@
 * **新增「预览文件」功能**
 
  双击文件自动预览 1.5MB 以内图片，大于该体积的图片可在菜单中选择「预览文件」。
+ ![](http://7xtigg.com1.z0.glb.clouddn.com/doc/file_manager/previewfile.png)
 
 * **优化文件管理，文件列表快速跳行**
 
@@ -131,7 +132,7 @@
 
  指定密码或者随机产生连接密码，然后随机生成一个 Shell 脚本。
  
- ![生成Shell]()
+ ![生成Shell](http://7xtigg.com1.z0.glb.clouddn.com/plugins/genshell/genshell.png)
 
 * **新增「复制Shell配置」插件**
 
