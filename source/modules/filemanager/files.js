@@ -429,7 +429,7 @@ class Files {
   checkPreview(name) {
     // 可预览文件后缀
     let isPreviewed = false;
-    'jpg,png,gif,bmp,ico'.split(',').map(
+    'jpeg,jpg,png,gif,bmp,ico'.split(',').map(
       (e) => {
         name.toLowerCase().endsWith(`.${e}`) ? isPreviewed = true : 0;
       }
