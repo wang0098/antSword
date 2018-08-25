@@ -50,3 +50,4 @@ See document: [Make contributions to AntSword][url-contribute]
 [url-release]: https://github.com/AntSwordProject/AntSword/releases
 [url-quickstart]: https://doc.u0u.us/en/getting_started/index.html
 [url-contribute]: https://doc.u0u.us/en/contribute_docs.html
+[url-mainui]: http://7xtigg.com1.z0.glb.clouddn.com/doc/getting_started/get_antsword_2.jpg
