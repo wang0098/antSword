@@ -455,6 +455,7 @@ module.exports = {
         }
       },
       message: {
+        githint: (workdir)=>`当前源码为Git管理，请关闭程序并前往 ${workdir} 手动更新`,
         prepare: "连接更新服务器...",
         dling: (progress)=> `正在下载更新包...${progress}%`,
         dlingnp: (size)=> `正在下载更新包...${size}`,

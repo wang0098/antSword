@@ -454,6 +454,7 @@ module.exports = {
         }
       },
       message: {
+        githint: (workdir)=>`The current source is Git management, please close the program and go to ${workdir} to manually update`,
         prepare: "Connecte to server...",
         dling: (progress)=> `Downloading...${progress}%`,
         dlingnp: (size)=> `Downloading...${size}`,

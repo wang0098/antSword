@@ -308,6 +308,12 @@ ipcRenderer
     form.attachEvent("onButtonClick", (name)=>{
       switch (name) {
         case "updatebtn":
+          var workdir = antSword.remote.process.env.AS_WORKDIR;
+          if(fs.existsSync(path.join(workdir, ".git/"))){
+            win.close();
+            layer.alert(LANG["message"]["githint"](workdir));
+            return
+          }
           const hash = (String(+new Date) + String(Math.random())).substr(10, 10).replace('.', '_');
           //折叠
           win.win.park();
