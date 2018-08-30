@@ -264,6 +264,14 @@ ipcRenderer
     let n = new Notification(antSword['language']['update']['title'], {
       body: antSword['language']['update']['body'](opt['ver'])
     });
+    // 文件大小计算
+    const getFileSize = (t) => {
+      let i = false;
+      let b = ["b","Kb","Mb","Gb","Tb","Pb","Eb"];
+      for (let q=0; q<b.length; q++) if (t > 1024) t = t / 1024; else if (i === false) i = q;
+      if (i === false) i = b.length-1;
+      return Math.round(t*100)/100+" "+b[i];
+    }
     n.addEventListener('click', () => {
       antSword.shell.openExternal(opt['url']);
     });
@@ -307,8 +315,12 @@ ipcRenderer
           win.win.progressOn();
           win.setTitle(LANG["message"]["prepare"]);
           antSword['ipcRenderer']
-            .on(`update-dlprogress-${hash}`, (event, progress)=>{
-              win.setTitle(LANG["message"]["dling"](progress));
+            .on(`update-dlprogress-${hash}`, (event, progress, isprogress)=>{
+              if(isprogress==true){
+                win.setTitle(LANG["message"]["dling"](progress));
+              }else{
+                win.setTitle(LANG["message"]["dlingnp"](getFileSize(progress)));
+              }
             })
             .once(`update-dlend-${hash}`,(event)=>{
               win.setTitle(LANG["message"]["dlend"]);

@@ -112,15 +112,19 @@ class Update {
         .pipe(through(
           (chunk) => {
             downsize += chunk.length;
-            var progress = parseInt(downsize/totalsize*100);
             tempData.push(chunk);
-            event.sender.send(`update-dlprogress-${hash}`, progress);
+            if(totalsize>0){
+              var progress = parseInt(downsize/totalsize*100);
+              event.sender.send(`update-dlprogress-${hash}`, progress, true);
+            }else{
+              event.sender.send(`update-dlprogress-${hash}`, downsize, false);
+            }
           },
           () => {
             that.logger.debug("Download end.");
             let tempDataBuffer = Buffer.concat(tempData);
 
-            if (downsize != totalsize) {
+            if (totalsize > 0 && downsize != totalsize) {
               event.sender.send(`update-error-${hash}`, "Download Error.");
               return
             }

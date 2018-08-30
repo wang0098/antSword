@@ -457,6 +457,7 @@ module.exports = {
       message: {
         prepare: "连接更新服务器...",
         dling: (progress)=> `正在下载更新包...${progress}%`,
+        dlingnp: (size)=> `正在下载更新包...${size}`,
         dlend: "下载完毕",
         extract: "正在解压, 请务关闭程序",
         ing: '努力更新中。。',

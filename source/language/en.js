@@ -456,6 +456,7 @@ module.exports = {
       message: {
         prepare: "Connecte to server...",
         dling: (progress)=> `Downloading...${progress}%`,
+        dlingnp: (size)=> `Downloading...${size}`,
         dlend: "Download completed",
         extract: "Unpacking, don't close AntSword",
         ing: 'Downloading..',
