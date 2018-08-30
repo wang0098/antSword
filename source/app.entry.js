@@ -376,6 +376,9 @@ ipcRenderer
   });
 
 antSword.reloadPlug();
+antSword['menubar'].reg('check-update', ()=>{
+  antSword.ipcRenderer.send('check-update');
+});
 // 检查更新
 setTimeout(
   antSword.ipcRenderer.send.bind(antSword.ipcRenderer, 'check-update'),

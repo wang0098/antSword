@@ -80,6 +80,12 @@ class Menubar {
           }, {
             type: 'separator'
           }, {
+            label: LANG['main']['update'],
+            accelerator: 'Shift+CmdOrCtrl+U',
+            click: event.sender.send.bind(event.sender, 'menubar', 'check-update')
+          },{
+            type: 'separator'
+          }, {
             label: LANG['main']['quit'],
             accelerator: 'Command+Q',
             click: this.app.quit.bind(this.app)
