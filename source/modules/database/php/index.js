@@ -808,8 +808,9 @@ class PHP {
     case "mysqli":
     case "mysql":
       let sql = `CREATE TABLE IF NOT EXISTS \`table_name\` (
-  \`id\` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  \`id\` INT UNSIGNED AUTO_INCREMENT,
   \`title\` VARCHAR(100) NOT NULL,
+  PRIMARY KEY ( \`id\` )
 );`;
       this.manager.query.editor.session.setValue(sql);
       break;
