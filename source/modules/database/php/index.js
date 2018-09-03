@@ -157,6 +157,16 @@ class PHP {
             }
           ], event);
           break;
+        case 'column':
+          this.tree.callEvent('onClick', [id]);
+          bmenu([
+            {
+              text: "删除列",
+              icon: 'fa fa-remove',
+              action: this.delColumn.bind(this)
+            },
+          ], event);
+          break;
       }
       // if (id.startsWith('conn::')) {
       //   this.tree.callEvent('onClick', [id]);
@@ -898,6 +908,52 @@ class PHP {
     });
   }
   
+  addColumn() {
+    // 获取配置
+    const treeselect = this.tree.getSelected();
+    const id = treeselect.split('::')[1].split(":")[0];
+    let dbname = new Buffer(treeselect.split('::')[1].split(":")[1],"base64").toString();
+    let tablename = new Buffer(treeselect.split('::')[1].split(":")[2],"base64").toString();
+    let columnname = new Buffer(treeselect.split('::')[1].split(":")[3],"base64").toString();
+    
+  }
+
+  delColumn() {
+    // 获取配置
+    const treeselect = this.tree.getSelected();
+    const id = treeselect.split('::')[1].split(":")[0];
+    let dbname = new Buffer(treeselect.split('::')[1].split(":")[1],"base64").toString();
+    let tablename = new Buffer(treeselect.split('::')[1].split(":")[2],"base64").toString();
+    let columnname = new Buffer(treeselect.split('::')[1].split(":")[3],"base64").toString();
+    layer.confirm(`确定要删除列 ${columnname} 吗?`, {
+      icon: 2, shift: 6,
+      title: "警告"
+    }, (_) => {
+      layer.close(_);
+      switch(this.dbconf['type']){
+      case "mysqli":
+      case "mysql":
+        let sql = `ALTER TABLE \`${dbname}\`.\`${tablename}\` DROP ${columnname};`;
+        this.execSQLAsync(sql, (res, err) => {
+          if(err){
+            toastr.error(LANG['result']['error']['query'](err['status'] || JSON.stringify(err)), LANG_T['error']);
+            return;
+          }
+          let result = this.parseResult(res['text']);
+          if(result.datas[0][0]=='True'){
+            toastr.success("删除列成功",LANG_T['success']);
+            this.getColumns(id,dbname, tablename);
+          }else{
+            toastr.error("删除列失败",LANG_T['error']);
+          }
+        });
+        break;
+      default:
+        toastr.warning("该功能暂不支持该类型数据库", LANG_T['warning']);
+        break;
+      }
+    });
+  }
   // 获取数据库列表
   getDatabases(id) {
     this.manager.list.layout.progressOn();
