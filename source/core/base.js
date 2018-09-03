@@ -183,7 +183,7 @@ class Base {
   parseEncoder(enc) {
     // 加载编码器
     // QAQ！我也不知道为什么，如果直接require变量名，babel编译就会warning，so我只好加个`咯～
-    this['__encoder__'][enc.split(`encoder${path.sep}`)[1]] = require(`${enc}`);
+    this['__encoder__'][enc.split(`encoder/`||`encoder\\`)[1]] = require(`${enc}`);
   }
 
   /**

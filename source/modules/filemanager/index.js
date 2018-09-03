@@ -637,7 +637,7 @@ class FileManager {
     }).then((filePaths) => {
       // 初始化任务
       filePaths.map((f) => {
-        const fileName = f.substr(f.lastIndexOf('/') + 1);
+        const fileName = f.substr(f.lastIndexOf(PATH.sep) + 1);
         tasks[f] = this.tasks.new(LANG['upload']['task']['name'], `${fileName} => ${path}`, 'Waiting for uploading..');
       });
       return filePaths;
@@ -661,7 +661,7 @@ class FileManager {
           }
           let task = tasks[filePath];
           // 获取文件名
-          let fileName = filePath.substr(filePath.lastIndexOf('/') + 1);
+          let fileName = filePath.substr(filePath.lastIndexOf(PATH.sep) + 1);
           // 读取文件buff
           let fileBuff;
           try {
