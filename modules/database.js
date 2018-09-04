@@ -1,245 +1,388 @@
-// 
-// shell数据管理模块
-// 
+/**
+ * Shell数据库管理模块
+ * 更新：2016/06/28
+ */
 
 'use strict';
 
-const fs = require('fs');
-const dns = require('dns');
-const path = require('path');
-const log4js = require('log4js');
-const Datastore = require('nedb');
-const qqwry = require("lib-qqwry").info();
+const fs = require('fs'),
+  dns = require('dns'),
+  path = require('path'),
+  CONF = require('./config'),
+  Datastore = require('nedb'),
+  qqwry = require("geoips").info();
 
-const logger = log4js.getLogger('Database');
+var logger;
 
 class Database {
 
+  /**
+   * 初始化数据库
+   * @param  {electron} electron electron对象
+   * @return {[type]}          [description]
+   */
   constructor(electron) {
-    this.cursor = this.createDB();
-    // 监听数据请求
-    const ipcMain = electron.ipcMain;
-    this.listenHandle(ipcMain);
+    logger = new electron.Logger('Database');
+    this.cursor = new Datastore({
+      filename: CONF.dataPath,
+      autoload: true
+    });
+    // 监听事件
+    electron.ipcMain
+      .on('shell-add', this.addShell.bind(this))
+      .on('shell-del', this.delShell.bind(this))
+      .on('shell-edit', this.editShell.bind(this))
+      .on('shell-move', this.moveShell.bind(this))
+      .on('shell-find', this.findShell.bind(this))
+      .on('shell-clear', this.clearShell.bind(this))
+      .on('shell-findOne', this.findOneShell.bind(this))
+      .on('shell-addDataConf', this.addDataConf.bind(this))
+      .on('shell-editDataConf', this.editDataConf.bind(this))
+      .on('shell-delDataConf', this.delDataConf.bind(this))
+      .on('shell-getDataConf', this.getDataConf.bind(this))
+      .on('shell-renameCategory', this.renameShellCategory.bind(this))
+      .on('shell-updateHttpConf', this.updateHttpConf.bind(this));
   }
 
-  createDB() {
-    // 创建数据库
-    // 获取用户保存目录（mac&&*unix=/home/path/,win=c:/path/appdata
-    let dbPath = '';
-    if (process.env.HOME) {
-      dbPath = path.join(process.env.HOME, '.antSword');
-    }else if (process.env.LOCALAPPPATH) {
-      dbPath = path.join(process.env.LOCALAPPPATH, '.antSword');
-    }else{
-      dbPath = 'database';
-    };
-    // 创建目录
-    if (!fs.existsSync(dbPath)) {
-      fs.mkdirSync(dbPath);
-    };
-    // 创建数据库
-    return new Datastore({
-      filename: path.join(dbPath, 'shell.db'),
-      autoload: true
+  /**
+   * 查询shell数据
+   * @param  {Object} event ipcMain对象
+   * @param  {Object} opts  查询配置
+   * @return {[type]}       [description]
+   */
+  findShell(event, opts = {}) {
+    logger.debug('findShell', opts);
+    this.cursor
+      .find(opts)
+      .sort({
+        utime: -1
+      })
+      .exec((err, ret) => {
+        event.returnValue = ret || [];
+      });
+  }
+
+  /**
+   * 查询单一shell数据
+   * @param  {Object} event ipcMain对象
+   * @param  {String} opts  shell id
+   * @return {[type]}       [description]
+   */
+  findOneShell(event, opts) {
+    logger.debug('findOneShell', opts);
+    this.cursor.findOne({
+      _id: opts
+    }, (err, ret) => {
+      event.returnValue = err || ret;
     });
   }
 
-  listenHandle(ipcMain) {
-    ipcMain
-      // 查询数据数据,arg=find条件,比如arg={category:'test'}
-      .on('shell-find', (event, arg) => {
-        logger.debug('shell-find', arg);
-        this.cursor
-          .find(arg || {})
-          .sort({
-            utime: -1
-          })
-          .exec((err, ret) => {
-            event.returnValue = ret || [];
-          });
-      })
-      // 查询单数据
-      .on('shell-findOne', (event, id) => {
-        logger.debug('shell-findOne', id);
-        this.cursor.findOne({
-          _id: id
-        }, (err, ret) => {
-          event.returnValue = err || ret;
+
+  /**
+   * 根据URL解析出IP&&地理位置
+   * @param  {String} url URL地址
+   * @return {Promise}     ip, addr
+   */
+  _url2ip(url) {
+    return new Promise((res, rej) => {
+      // 解析domain
+      const urlArr = url.match(/(\w+):\/\/([\w\.\-]+)[:]?([\d]*)([\s\S]*)/i);
+      // 无效url
+      if (!urlArr || urlArr.length < 3) {
+        return rej('Unable to resolve domain name from URL');
+      }
+      // 获取IP
+      const domain = urlArr[2];
+      dns.lookup(domain, (err, ip) => {
+        if (err) {
+          return rej(err.toString());
+        }
+        // 获取地理位置
+        const _addr = qqwry.searchIP(ip);
+        return res({
+          ip: ip,
+          addr: `${_addr.Country} ${_addr.Area}`
         });
       })
-      // 插入数据
-      // arg={category,url,pwd,ip,addr,type,encode,encoder,ctime,utime}
-      .on('shell-add', (event, arg) => {
-        logger.info('shell-add\n', arg);
-        // 获取目标IP以及地理位置
-        // 1. 获取域名
-        const parse = arg['url'].match(/(\w+):\/\/([\w\.\-]+)[:]?([\d]*)([\s\S]*)/i);
-        if (!parse || parse.length < 3) { return event.returnValue = 'Unable to resolve domain name from URL' };
-        // 2. 获取域名IP
-        dns.lookup(parse[2], (err, ip) => {
-          if (err) { return event.returnValue = err.toString() };
-          // 3. 查询IP对应物理位置
-          const addr = qqwry.searchIP(ip);
-          // 插入数据库
-          this.cursor.insert({
-            category: arg['category'] || 'default',
-            url: arg['url'],
-            pwd: arg['pwd'],
-            type: arg['type'],
-            ip: ip,
-            addr: `${addr.Country} ${addr.Area}`,
-            encode: arg['encode'],
-            encoder: arg['encoder'],
-            ctime: +new Date,
-            utime: +new Date
-          }, (err, ret) => {
-            event.returnValue = err || ret;
-          });
+    })
+  }
+
+  /**
+   * 添加shell数据
+   * @param {Object} event ipcMain对象
+   * @param {Object} opts  数据（url,category,pwd,type,encode,encoder
+   */
+  addShell(event, opts) {
+    logger.info('addShell', opts);
+
+    this._url2ip(opts.base['url'])
+      .then((ret) => {
+        this.cursor.insert({
+          category: opts.base['category'] || 'default',
+          url: opts.base['url'],
+          pwd: opts.base['pwd'],
+          note: opts.base['note'],
+          type: opts.base['type'],
+          ip: ret['ip'],
+          addr: ret['addr'],
+          encode: opts.base['encode'],
+          encoder: opts.base['encoder'],
+          httpConf: opts.http,
+          otherConf: opts.other,
+          ctime: +new Date,
+          utime: +new Date
+        }, (_err, _ret) => {
+          event.returnValue = _err || _ret;
         });
       })
-      /*
-      // 编辑数据
-      // {url,pwd,encode,type,encoder,utime}
-      */
-      .on('shell-edit', (event, arg) => {
-        logger.warn('shell-edit\n', arg);
-        // 获取目标IP以及地理位置
-        // 1. 获取域名
-        const parse = arg['url'].match(/(\w+):\/\/([\w\.\-]+)[:]?([\d]*)([\s\S]*)/i);
-        if (!parse || parse.length < 3) { return event.returnValue = 'Unable to resolve domain name from URL' };
-        // 2. 获取域名IP
-        dns.lookup(parse[2], (err, ip) => {
-          if (err) { return event.returnValue = err.toString() };
-          // 3. 查询IP对应物理位置
-          const addr = qqwry.searchIP(ip);
-          // 更新数据库
-          this.cursor.update({
-            _id: arg['_id']
-          }, {
-            $set: {
-              ip: ip,
-              addr: `${addr.Country} ${addr.Area}`,
-              url: arg['url'],
-              pwd: arg['pwd'],
-              type: arg['type'],
-              encode: arg['encode'],
-              encoder: arg['encoder'],
-              utime: +new Date
-            }
-          }, (err, num) => {
-            event.returnValue = err || num;
-          })
-        });
-      })
-      // 删除数据
-      .on('shell-del', (event, ids) => {
-        logger.warn('shell-del', ids);
-        this.cursor.remove({
-          _id: {
-            $in: ids
-          }
-        }, {
-          multi: true
-        }, (err, num) => {
-          event.returnValue = err || num;
-        })
-      })
-      // 清空分类数据
-      .on('shell-clear', (event, category) => {
-        logger.fatal('shell-clear', category);
-        this.cursor.remove({
-          category: category
-        }, {
-          multi: true
-        }, (err, num) => {
-          event.returnValue = err || num;
-        })
-      })
-      // 移动数据
-      .on('shell-move', (event, arg) => {
-        logger.info('shell-move', arg);
-        this.cursor.update({
-          _id: {
-            $in: arg['ids'] || []
-          }
-        }, {
-          $set: {
-            category: arg['category'] || 'default',
-            utime: +new Date
-          }
-        }, {
-          multi: true
-        }, (err, num) => {
-          event.returnValue = err || num;
-        })
-      })
-      // 
-      // 添加数据库配置
-      // 
-      .on('shell-addDataConf', (event, arg) => {
-        logger.info('shell-addDataConf', arg);
-        // 1. 获取原配置列表
-        this.cursor.findOne({
-          _id: arg['_id']
-        }, (err, ret) => {
-          let confs = ret['database'] || {};
-          // 随机Id（顺序增长
-          const random_id = parseInt(+new Date + Math.random() * 1000).toString(16);
-          // 添加到配置
-          confs[random_id] = arg['data'];
-          // 更新数据库
-          this.cursor.update({
-            _id: arg['_id']
-          }, {
-            $set: {
-              database: confs,
-              utime: +new Date
-            }
-          }, (_err, _ret) => {
-            event.returnValue = random_id;
-          });
-        });
-      })
-      // 
-      // 删除数据库配置
-      // arg={_id: 'shell-ID',id: 'data-id'}
-      // 
-      .on('shell-delDataConf', (event, arg) => {
-        logger.info('shell-delDataConf', arg);
-        // 1. 获取原配置
-        this.cursor.findOne({
-          _id: arg['_id']
-        }, (err, ret) => {
-          let confs = ret['database'] || {};
-          // 2. 删除配置
-          delete confs[arg['id']];
-          // 3. 更新数据库
-          this.cursor.update({
-            _id: arg['_id']
-          }, {
-            $set: {
-              database: confs,
-              utime: +new Date
-            }
-          }, (_err, _ret) => {
-            event.returnValue = _err || _ret;
-          });
-        })
-      })
-      // 
-      // 获取数据库单个配置信息
-      // 
-      .on('shell-getDataConf', (event, arg) => {
-        logger.info('shell-getDataConf', arg);
-        this.cursor.findOne({
-          _id: arg['_id']
-        }, (err, ret) => {
-          const confs = ret['database'] || {};
-          event.returnValue = err || confs[arg['id']];
-        });
+      .catch((_err) => {
+        event.returnValue = _err;
       })
   }
 
+  /**
+   * 编辑shell数据
+   * @param  {Object} event ipcMain对象
+   * @param  {Object} opts  数据（old,new
+   * @return {[type]}       [description]
+   */
+  editShell(event, opts) {
+    logger.warn('editShell', opts);
+
+    const _new = opts.new;
+    const _old = opts.old;
+
+    this._url2ip(_new.base['url'])
+      .then((ret) => {
+        this.cursor.update({
+          _id: _old['_id']
+        }, {
+          $set: {
+            ip: ret['ip'],
+            addr: ret['addr'],
+            url: _new.base['url'],
+            pwd: _new.base['pwd'],
+            note: _new.base['note'],
+            type: _new.base['type'],
+            encode: _new.base['encode'],
+            encoder: _new.base['encoder'],
+            httpConf: _new.http,
+            otherConf: _new.other,
+            utime: +new Date
+          }
+        }, (_err, _ret) => {
+          event.returnValue = _err || _ret;
+        })
+      })
+      .catch((_err) => {
+        event.returnValue = _err;
+      });
+  }
+
+  /**
+   * 更新httpConf配置信息（包含body&&headers
+   * @param  {[type]} event [description]
+   * @param  {[type]} opt  = {} [description]
+   * @return {[type]}       [description]
+   */
+  updateHttpConf(event, opt = {}) {
+    logger.warn('updateHttpConf', opt);
+
+    this.cursor.update({
+      _id: opt._id
+    }, {
+      $set: {
+        httpConf: opt.conf,
+        utime: +new Date
+      }
+    }, (_err, _ret) => {
+      event.returnValue = _err || _ret;
+    });
+  }
+
+  /**
+   * 删除shell数据
+   * @param  {Object} event ipcMain对象
+   * @param  {Array}  opts  要删除的shell-id列表
+   * @return {[type]}       [description]
+   */
+  delShell(event, opts) {
+    logger.warn('delShell', opts);
+    this.cursor.remove({
+      _id: {
+        $in: opts
+      }
+    }, {
+      multi: true
+    }, (err, num) => {
+      event.returnValue = err || num;
+    })
+  }
+
+  /**
+   * 删除分类shell数据
+   * @param  {Object} event ipcMain对象
+   * @param  {String} opts  shell分类名
+   * @return {[type]}       [description]
+   */
+  clearShell(event, opts) {
+    logger.fatal('clearShell', opts);
+    this.cursor.remove({
+      category: opts
+    }, {
+      multi: true
+    }, (err, num) => {
+      event.returnValue = err || num;
+    })
+  }
+
+  /**
+   * 重命名shell分类
+   * @param  {Object} event ipcMain对象
+   * @param  {Object} opts  配置（oldName,newName
+   * @return {[type]}       [description]
+   */
+  renameShellCategory(event, opts) {
+    logger.warn('renameShellCategory', opts);
+    this.cursor.update({
+      category: opts['oldName']
+    }, {
+      $set: {
+        category: opts['newName']
+      }
+    }, {
+      multi: true
+    }, (err, num) => {
+      event.returnValue = err || num;
+    })
+  }
+
+  /**
+   * 移动shell数据分类
+   * @param  {Object} event ipcMain对象
+   * @param  {Object} opts  配置（ids,category
+   * @return {[type]}       [description]
+   */
+  moveShell(event, opts) {
+    logger.info('moveShell', opts);
+    this.cursor.update({
+      _id: {
+        $in: opts['ids'] || []
+      }
+    }, {
+      $set: {
+        category: opts['category'] || 'default',
+        utime: +new Date
+      }
+    }, {
+      multi: true
+    }, (err, num) => {
+      event.returnValue = err || num;
+    })
+  }
+
+  /**
+   * 添加数据库配置
+   * @param {Object} event ipcMain对象
+   * @param {Object} opts  配置（_id,data
+   */
+  addDataConf(event, opts) {
+    logger.info('addDataConf', opts);
+    // 1. 获取原配置列表
+    this.cursor.findOne({
+      _id: opts['_id']
+    }, (err, ret) => {
+      let confs = ret['database'] || {};
+      // 随机Id（顺序增长
+      const random_id = parseInt(+new Date + Math.random() * 1000).toString(16);
+      // 添加到配置
+      confs[random_id] = opts['data'];
+      // 更新数据库
+      this.cursor.update({
+        _id: opts['_id']
+      }, {
+        $set: {
+          database: confs,
+          utime: +new Date
+        }
+      }, (_err, _ret) => {
+        event.returnValue = random_id;
+      });
+    });
+  }
+
+  /**
+   * 修改数据库配置
+   * @param {Object} event ipcMain对象
+   * @param {Object} opts  配置（_id,id,data
+   */
+  editDataConf(event, opts) {
+    logger.info('editDataConf', opts);
+    // 1. 获取原配置列表
+    this.cursor.findOne({
+      _id: opts['_id']
+    }, (err, ret) => {
+      let confs = ret['database'] || {};
+      // 添加到配置
+      confs[opts['id']] = opts['data'];
+      // 更新数据库
+      this.cursor.update({
+        _id: opts['_id']
+      }, {
+        $set: {
+          database: confs,
+          utime: +new Date
+        }
+      }, (_err, _ret) => {
+        event.returnValue = opts['id'];
+      });
+    });
+  }
+
+  /**
+   * 删除数据库配置
+   * @param  {Object} event ipcMain对象
+   * @param  {Object} opts  配置（_id,id
+   * @return {[type]}       [description]
+   */
+  delDataConf(event, opts) {
+    logger.info('delDataConf', opts);
+    // 1. 获取原配置
+    this.cursor.findOne({
+      _id: opts['_id']
+    }, (err, ret) => {
+      let confs = ret['database'] || {};
+      // 2. 删除配置
+      delete confs[opts['id']];
+      // 3. 更新数据库
+      this.cursor.update({
+        _id: opts['_id']
+      }, {
+        $set: {
+          database: confs,
+          utime: +new Date
+        }
+      }, (_err, _ret) => {
+        event.returnValue = _err || _ret;
+      });
+    })
+  }
+
+  /**
+   * 获取单个数据库配置
+   * @param  {Object} event ipcMain对象
+   * @param  {Object} opts  配置（_id,id
+   * @return {[type]}       [description]
+   */
+  getDataConf(event, opts) {
+    logger.info('getDatConf', opts);
+    this.cursor.findOne({
+      _id: opts['_id']
+    }, (err, ret) => {
+      const confs = ret['database'] || {};
+      event.returnValue = err || confs[opts['id']];
+    });
+  }
 }
 
 module.exports = Database;
