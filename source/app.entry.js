@@ -128,7 +128,7 @@ antSword['language'] = require('./language/');
 antSword['encoders'] = (function(){
   var encoders = {asp:[],aspx:[],php:[],custom:[]};
   var encoders_path = {asp:[],aspx:[],php:[],custom:[]};
-  let userencoder_path = path.join(process.env.AS_WORKDIR,'antData/encoders');
+  let userencoder_path = path.join(remote.process.env.AS_WORKDIR,'antData/encoders');
   // 初始化
   !fs.existsSync(userencoder_path) ? fs.mkdirSync(userencoder_path) : null;
   ['asp','aspx','php','custom'].map((t)=>{
