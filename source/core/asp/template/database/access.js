@@ -6,9 +6,9 @@ module.exports = (arg1, arg2, arg3, arg4, arg5, arg6) => ({
   // 显示所有数据库
   show_databases: {
     _:
-      `Set Conn=Server.CreateObject("Adodb.connection"):Dim SI:Conn.Open bd(Request("${arg1}")):If Err Then:SI="ERROR:// "&Err.Description:Err.Clear:Else:SI=Request("${arg2}")&chr(9):Conn.Close:End If:Set Conn=Nothing:Response.Write(SI)`,
+      `Set Conn=Server.CreateObject("Adodb.connection"):Dim SI:Conn.Open bd(Request("${arg1}")):If Err Then:SI="ERROR:// "&Err.Description:Err.Clear:Else:SI="[ADO DATABASE]"&chr(9):Conn.Close:End If:Set Conn=Nothing:Response.Write(SI)`,
     [arg1]: '#{hex::conn}',
-    [arg2]: '#{dbname}'
+    // [arg2]: '#{dbname}'
   },
   // 显示数据库所有表
   show_tables: {

@@ -446,11 +446,15 @@ class FileManager {
       content: `<input type="text" class="layui-layer-input" onClick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'});" value="${oldtime}">`
     }, (value, i, e) => {
       this.files.cell.progressOn();
-
+      let path = this.path;
+      if (this.isWin) {
+          path = path.replace(/\//g, '\\')
+      }
       // http request
       this.core.request(
         this.core.filemanager.retime({
-          path: this.path + name,
+          // path: this.path + name,
+          path: path + name,
           time: value
         })
       ).then((res) => {
