@@ -161,6 +161,10 @@ class PHP {
           this.tree.callEvent('onClick', [id]);
           bmenu([
             {
+              text: "编辑列",
+              icon: 'fa fa-edit',
+              action: this.editColumn.bind(this)
+            }, {
               text: "删除列",
               icon: 'fa fa-remove',
               action: this.delColumn.bind(this)
@@ -817,12 +821,176 @@ class PHP {
     switch(this.dbconf['type']){
     case "mysqli":
     case "mysql":
-      let sql = `CREATE TABLE IF NOT EXISTS \`table_name\` (
-  \`id\` INT UNSIGNED AUTO_INCREMENT,
-  \`title\` VARCHAR(100) NOT NULL,
-  PRIMARY KEY ( \`id\` )
-);`;
-      this.manager.query.editor.session.setValue(sql);
+//       let sql = `CREATE TABLE IF NOT EXISTS \`table_name\` (
+//   \`id\` INT UNSIGNED AUTO_INCREMENT,
+//   \`title\` VARCHAR(100) NOT NULL,
+//   PRIMARY KEY ( \`id\` )
+// );`;
+//       this.manager.query.editor.session.setValue(sql);
+      const win = this.manager.win.createWindow(hash, 0, 0, 600, 400);
+      win.setText("新建表");
+      win.centerOnScreen();
+      win.button('minmax').hide();
+      win.setModal(true);
+      win.denyResize();
+      const toolbar = win.attachToolbar();
+      toolbar.loadStruct([{
+        id: 'add',
+        type: 'button',
+        icon: 'plus-circle',
+        text: '新增字段'
+      }, {
+        type: 'separator'
+      }, {
+        id: 'delete',
+        type: 'button',
+        icon: 'remove',
+        text: "删除字段"
+      },{
+        id: 'save',
+        type: 'button',
+        icon: 'save',
+        text: "保存"
+      }]);
+      dhtmlxValidation.hasOwnProperty("isValidPositiveInteger") ? "" : dhtmlxValidation.isValidPositiveInteger = (a) => { return !!a.toString().match(/(^\d+$)/);}
+
+      const grid=win.attachGrid();
+      grid.clearAll();
+      grid.setHeader("Name,Type,Length,Not Null,Key,Auto Increment");
+      grid.setInitWidths('*,100,80,80,50,130');
+      grid.setColTypes("ed,coro,edn,acheck,acheck,acheck");
+      grid.setColValidators(["ValidAplhaNumeric","NotEmpty","ValidPositiveInteger","ValidBoolean","ValidBoolean","ValidBoolean"]);
+      grid.setEditable(true);
+
+      const combobox = grid.getCombo(1);
+      combobox.put("tinyint","tinyint");
+      combobox.put("int","int");
+      combobox.put("integer","integer");
+      combobox.put("varchar","varchar");
+      combobox.put("double","double");
+      combobox.put("float","float");
+
+      grid.enableEditEvents(false,true,true);
+      grid.enableEditTabOnly(true);
+      grid.init();
+      grid.clearAll();
+      
+      grid.attachEvent("onCheck", (rId,cInd,state) => {
+        if(state == true){
+          switch(cInd){
+            case 4:
+              let c3 = grid.cells(rId, 3);
+              c3.setChecked(true);
+            break;
+          }
+        }
+      });
+
+      // grid.attachEvent("onValidationError", (rid,index,value,rule)=>{
+      //   // toolbar.disableItem('save');
+      //   let idx = grid.getRowIndex(rid);
+      //   // grid.editStop();
+      //   grid.selectCell(idx, index);
+      //   grid.editCell();
+      //   return true;
+      // });
+
+      toolbar.attachEvent('onClick',(tbid)=>{
+        switch(tbid){
+          case "add":
+            let ncid = (+new Date * Math.random()).toString(16).substr(2, 8);
+            grid.addRow(ncid, ",,0,0,0,0");
+            let idx = grid.getRowIndex(ncid);
+            grid.selectCell(idx, 0);
+            grid.editCell();
+          break;
+          case "delete":
+            var ncids = grid.getSelectedId();
+            if(!ncids){
+              toastr.warning("请先选中要删除的行", LANG_T['warning']);
+              return
+            }
+            let _ncids = ncids.split(",");
+            _ncids.map(_=>{
+              grid.deleteRow(_);
+            });
+          break;
+          case "save":
+            let rids = grid.getAllRowIds();
+            if(!rids){
+              toastr.warning("行数为空", LANG_T['warning']);
+              return
+            }
+
+            let _rids = rids.split(",");
+            let bdstr = "";
+            let pkstr = "";
+            for(var i=0; i< _rids.length;i++){
+              let cvalarr = [];
+              for(var j=0; j<6;j++){
+                if(grid.validateCell(_rids[i], j) == false){
+                  toastr.error(`数据格式校验失败(${i+1}行,${j+1}列)`,LANG_T['error']);
+                  grid.selectCell(_rids[i], j);
+                  grid.editCell();
+                  return
+                }
+                var c = grid.cells(_rids[i], j);
+                cvalarr[j] = c.getValue();
+              }
+              let lenstr = "";
+              let auto_inc_str = "";
+              switch(cvalarr[1]){
+                case "varchar":
+                case "varbinary":
+                  if(cvalarr[2] == "0"){
+                    lenstr = `(255)`;
+                  }else{
+                    lenstr = `(${cvalarr[2]})`;
+                  }
+                  break;
+                case "int":
+                case "integer":
+                  if(cvalarr[5] == "1"){
+                    auto_inc_str = "AUTO_INCREMENT";
+                  }
+                  break;
+                default:
+                  break;
+              }
+              let notnull = cvalarr[4] == "1" ? `NOT NULL` : (cvalarr[3] == "0" ? "": `NOT NULL`);
+              pkstr += cvalarr[4] == "0"? "": `\`${cvalarr[0]}\`,`;
+              bdstr += `\t\`${cvalarr[0]}\` ${cvalarr[1]}${lenstr} ${notnull} ${auto_inc_str},\n`;
+            }
+            layer.prompt({
+              value: "",
+              title: `<i class="fa fa-file-code-o"></i> 输入新表名`
+            },(value, i, e) => {
+              if(!value.match(/^[a-zA-Z0-9_]+$/)){
+                toastr.error("表名不能带有特殊符号", LANG_T['error']);
+                return
+              }
+              layer.close(i);
+              let pkres = pkstr.length > 0 ? `\tPRIMARY KEY ( ${pkstr.substr(0, pkstr.length-1)} )` : "";
+              let rsql = `CREATE TABLE IF NOT EXISTS \`${value}\` (\n${bdstr}\n${pkres}\n);`;
+              this.manager.query.editor.session.setValue(rsql);
+              this.execSQLAsync(rsql, (res, err) => {
+                if(err){
+                  toastr.error(LANG['result']['error']['query'](err['status'] || JSON.stringify(err)), LANG_T['error']);
+                  return;
+                }
+                let result = this.parseResult(res['text']);
+                if(result.datas[0][0]=='True'){
+                  toastr.success("新建表成功",LANG_T['success']);
+                  this.getTables(id,dbname);
+                  win.close();
+                }else{
+                  toastr.error("新建表失败", LANG_T['error']);
+                }
+              });
+            });
+          break;
+        }
+      });
       break;
     default:
       toastr.warning("该功能暂不支持该类型数据库", LANG_T['warning']);
@@ -830,6 +998,7 @@ class PHP {
     }
   }
 
+  // 修改表名
   editTable() {
     // 获取配置
     const treeselect = this.tree.getSelected();
@@ -907,8 +1076,19 @@ class PHP {
       }
     });
   }
-  
+  // TODO: 新增列
   addColumn() {
+    // 获取配置
+    const treeselect = this.tree.getSelected();
+    const id = treeselect.split('::')[1].split(":")[0];
+    let dbname = new Buffer(treeselect.split('::')[1].split(":")[1],"base64").toString();
+    let tablename = new Buffer(treeselect.split('::')[1].split(":")[2],"base64").toString();
+    let columnname = new Buffer(treeselect.split('::')[1].split(":")[3],"base64").toString();
+    
+  }
+
+  // TODO: 编辑列
+  editColumn() {
     // 获取配置
     const treeselect = this.tree.getSelected();
     const id = treeselect.split('::')[1].split(":")[0];
