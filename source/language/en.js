@@ -362,7 +362,16 @@ module.exports = {
       menu: {
         add: 'Add conf',
         del: 'Del conf',
-        edit: 'Edit conf'
+        edit: 'Edit conf',
+        adddb: 'New Database',
+        editdb: 'Edit Database',
+        deldb: 'Del Database',
+        addtable: 'New Table',
+        edittable: 'Edit TableName',
+        deltable: 'Del Table',
+        addcolumn: 'New Column',
+        editcolumn: 'Edit Column',
+        delcolumn: 'Del Column',
       }
     },
     query: {
@@ -382,6 +391,7 @@ module.exports = {
         noresult: 'No query results!'
       }
     },
+    notsupport: 'Not support the current database type',
     form: {
       title: 'Add conf',
       toolbar: {
@@ -402,6 +412,70 @@ module.exports = {
         confirm: 'Determine delete this configuration?',
         success: 'Delete configuration success!',
         error: (err) => antSword.noxss(`Delete configuration failed!\n${err}`)
+      },
+      adddb: {
+        title: 'New Database',
+        dbname: 'Name',
+        characterset: 'Character Set',
+        charactercollation: 'Collation',
+        createbtn: 'OK',
+        cancelbtn: 'Cancel',
+        success: 'Create database successfully',
+        error: 'Failed to create database',
+      },
+      editdb: {
+        title: 'Database Properties',
+        dbname: 'Name(readonly)',
+        characterset: 'Character Set',
+        charactercollation: 'Collation',
+        updatebtn: 'OK',
+        cancelbtn: 'Cancel',
+        success: 'Edit database successfully',
+        error: 'Failed to edit database',
+      },
+      deldb: {
+        title: 'Delete Database',
+        confirm: (name) => antSword.noxss(`Are you sure you want to delete database ${name} ?`),
+        success: 'Delete database successfully',
+        error: 'Failed to delete database',
+      },
+      addtable: {
+        title: 'New Table',
+        add: 'New Column',
+        delete: 'Delete Column',
+        save: 'Save',
+        gridheader: "Name,Type,Length,Not Null,Key,Auto Increment",
+        delete_not_select: "Please select the row you want to delete first",
+        save_row_is_null: "The number of rows is empty",
+        cell_valid_error: (i,j)=>`Data format validation failed(row ${i+1}, col ${j+1})`,
+        confirmtitle: "New table name",
+        invalid_tablename: "Table names should not contain special symbols",
+        success: 'Create table successfully',
+        error: 'Failed to create table',
+      },
+      edittable: {
+        title: "New table name",
+        invalid_tablename: "Table names should not contain special symbols",
+        success: 'Update table name successfully',
+        error: 'Failed to update table',
+      },
+      deltable: {
+        title:'Delete Table',
+        confirm: (name) => antSword.noxss(`Are you sure you want to delete table ${name}?`),
+        success: 'Delete table successfully',
+        error: 'Failed to delete table',
+      },
+      addcolumn: {
+
+      },
+      editcolumn: {
+
+      },
+      delcolumn: {
+        title:'Delete Column',
+        confirm: (name) => antSword.noxss(`Are you sure you want to delete column ${name}?`),
+        success: 'Delete column successfully',
+        error: 'Failed to delete column',
       }
     }
   },

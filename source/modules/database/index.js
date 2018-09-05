@@ -1,7 +1,7 @@
 //
 // 数据库管理模块
 //
-
+// TODO: 数据管理模块目前的代码存在大量冗余，后期会考虑将 数据库驱动 与 core 分成两个块来做
 // import React from 'react';
 // import ReactDOM from 'react-dom';
 // import AceEditor from 'react-ace';
