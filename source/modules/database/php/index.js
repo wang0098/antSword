@@ -85,7 +85,7 @@ class PHP {
           this.tree.callEvent('onClick', [id]);
           bmenu([
             {
-              text: "新建数据库",
+              text: LANG['list']['menu']['adddb'],
               icon: 'fa fa-plus-circle',
               action: this.addDatabase.bind(this)
             },
@@ -112,24 +112,24 @@ class PHP {
           this.tree.callEvent('onClick', [id]);
           bmenu([
             {
-              text: "新建表",
+              text: LANG['list']['menu']['addtable'],
               icon: 'fa fa-plus-circle',
               action: this.addTable.bind(this)
             },
             {
-              text: "新建数据库",
+              text: LANG['list']['menu']['adddb'],
               icon: 'fa fa-plus-circle',
               action: this.addDatabase.bind(this)
             }, {
               divider: true
             }, {
-              text: "编辑数据库",
+              text: LANG['list']['menu']['editdb'],
               icon: 'fa fa-edit',
               action: this.editDatabase.bind(this)
             }, {
               divider: true
             }, {
-              text: "删除数据库",
+              text: LANG['list']['menu']['deldb'],
               icon: 'fa fa-remove',
               action: this.delDatabase.bind(this)
             }
@@ -139,19 +139,19 @@ class PHP {
           this.tree.callEvent('onClick', [id]);
           bmenu([
             {
-              text: "新建表",
+              text: LANG['list']['menu']['addtable'],
               icon: 'fa fa-plus-circle',
               action: this.addTable.bind(this)
             }, {
               divider: true
             }, {
-              text: "编辑表名",
+              text: LANG['list']['menu']['edittable'],
               icon: 'fa fa-edit',
               action: this.editTable.bind(this)
             }, {
               divider: true
             }, {
-              text: "删除表",
+              text: LANG['list']['menu']['deltable'],
               icon: 'fa fa-remove',
               action: this.delTable.bind(this)
             }
@@ -161,11 +161,11 @@ class PHP {
           this.tree.callEvent('onClick', [id]);
           bmenu([
             {
-              text: "编辑列",
+              text: LANG['list']['menu']['editcolumn'],
               icon: 'fa fa-edit',
               action: this.editColumn.bind(this)
             }, {
-              text: "删除列",
+              text: LANG['list']['menu']['delcolumn'],
               icon: 'fa fa-remove',
               action: this.delColumn.bind(this)
             },
@@ -556,7 +556,7 @@ class PHP {
     case "mysql":
       // 创建窗口
       const win = this.manager.win.createWindow(hash, 0, 0, 450, 200);
-      win.setText("新建数据库");
+      win.setText(LANG['form']['adddb']['title']);
       win.centerOnScreen();
       win.button('minmax').hide();
       win.setModal(true);
@@ -565,8 +565,8 @@ class PHP {
       const form = win.attachForm([
         { type: 'settings', position: 'label-left', labelWidth: 90, inputWidth: 250 },
         { type: 'block', inputWidth: 'auto', offsetTop: 12, list: [
-          { type: 'input', label: "名称", name: 'dbname', value: "", required: true, validate:"ValidAplhaNumeric",},
-          { type: 'combo', label: '字符集', readonly:true, name: 'characterset', options: (() => {
+          { type: 'input', label: LANG['form']['adddb']['dbname'], name: 'dbname', value: "", required: true, validate:"ValidAplhaNumeric",},
+          { type: 'combo', label: LANG['form']['adddb']['characterset'], readonly:true, name: 'characterset', options: (() => {
             let ret = [];
             Object.keys(this.mysqlcsMapping).map((_) => {
               ret.push({
@@ -576,7 +576,7 @@ class PHP {
             })
             return ret;
           })() },
-          { type: 'combo', label: '字符集排序', readonly:true, name: 'charactercollation', options: ((c)=>{
+          { type: 'combo', label: LANG['form']['adddb']['charactercollation'], readonly:true, name: 'charactercollation', options: ((c)=>{
             let ret = [];
             this.mysqlcsMapping[c].map((_)=>{
               ret.push({
@@ -587,9 +587,9 @@ class PHP {
             return ret;
           })("default")},
           { type: "block", name:"btnblock", className:"display: flex;flex-direction: row;align-items: right;",offsetLeft:150, list:[
-            { type:"button" , name:"createbtn", value: `<i class="fa fa-plus"></i> 创建`},
+            { type:"button" , name:"createbtn", value: `<i class="fa fa-plus"></i> ${LANG['form']['adddb']['createbtn']}`},
             {type: 'newcolumn', offset:20},
-            { type:"button" , name:"canclebtn", value: `<i class="fa fa-ban"></i> 取消`},
+            { type:"button" , name:"cancelbtn", value: `<i class="fa fa-ban"></i> ${LANG['form']['adddb']['cancelbtn']}`},
           ]}
         ]}
       ], true);
@@ -631,25 +631,25 @@ class PHP {
             };
             if(arr[1].indexOf("VHJ1ZQ==")!= -1){
               // 操作成功
-              toastr.success("创建数据库成功" ,LANG_T['success']);
+              toastr.success(LANG['form']['adddb']['success'] ,LANG_T['success']);
               win.close();
               // refresh
               this.getDatabases(id);
               return
             }
-            toastr.error("创建数据库失败", LANG_T['error']);
+            toastr.error(LANG['form']['adddb']['error'], LANG_T['error']);
             return
           });
           // 创建
           break
-        case "canclebtn":
+        case "cancelbtn":
           win.close();
           break;
         }
       });
       break;
     default:
-      toastr.warning("该功能暂不支持该类型数据库", LANG_T['warning']);
+      toastr.warning(LANG['notsupport'], LANG_T['warning']);
       break;
     }
   }
@@ -674,7 +674,7 @@ class PHP {
         let collation = result.datas[0][2] || "default"
         // 创建窗口
         const win = this.manager.win.createWindow(hash, 0, 0, 450, 200);
-        win.setText("修改数据库");
+        win.setText(LANG['form']['editdb']['title']);
         win.centerOnScreen();
         win.button('minmax').hide();
         win.setModal(true);
@@ -683,8 +683,8 @@ class PHP {
         const form = win.attachForm([
           { type: 'settings', position: 'label-left', labelWidth: 90, inputWidth: 250 },
           { type: 'block', inputWidth: 'auto', offsetTop: 12, list: [
-            { type: 'input', label: "名称", name: 'dbname', readonly: true, value: dbname, required: true, validate:"ValidAplhaNumeric",},
-            { type: 'combo', label: '字符集', readonly:true, name: 'characterset', options: (() => {
+            { type: 'input', label: LANG['form']['editdb']['dbname'], name: 'dbname', readonly: true, value: dbname, required: true, validate:"ValidAplhaNumeric",},
+            { type: 'combo', label: LANG['form']['editdb']['characterset'], readonly:true, name: 'characterset', options: (() => {
               let ret = [];
               Object.keys(this.mysqlcsMapping).map((_) => {
                 ret.push({
@@ -694,7 +694,7 @@ class PHP {
               })
               return ret;
             })() },
-            { type: 'combo', label: '字符集排序', readonly:true, name: 'charactercollation', options: ((c)=>{
+            { type: 'combo', label: LANG['form']['editdb']['charactercollation'], readonly:true, name: 'charactercollation', options: ((c)=>{
               let ret = [];
               this.mysqlcsMapping[c].map((_)=>{
                 ret.push({
@@ -705,9 +705,9 @@ class PHP {
               return ret;
             })("default")},
             { type: "block", name:"btnblock", className:"display: flex;flex-direction: row;align-items: right;",offsetLeft:150, list:[
-              { type:"button" , name:"updatebtn", value: `<i class="fa fa-pen"></i> 修改`},
+              { type:"button" , name:"updatebtn", value: `<i class="fa fa-pen"></i> ${LANG['form']['editdb']['updatebtn']}`},
               {type: 'newcolumn', offset:20},
-              { type:"button" , name:"canclebtn", value: `<i class="fa fa-ban"></i> 取消`},
+              { type:"button" , name:"cancelbtn", value: `<i class="fa fa-ban"></i> ${LANG['form']['editdb']['cancelbtn']}`},
             ]}
           ]}
         ], true);
@@ -754,18 +754,18 @@ class PHP {
               };
               if(arr[1].indexOf("VHJ1ZQ==")!= -1){
                 // 操作成功
-                toastr.success("修改数据库成功" ,LANG_T['success']);
+                toastr.success(LANG['form']['editdb']['success'] ,LANG_T['success']);
                 win.close();
                 // refresh
                 this.getDatabases(id);
                 return
               }
-              toastr.error("修改数据库失败", LANG_T['error']);
+              toastr.error(LANG['form']['editdb']['error'], LANG_T['error']);
               return
             });
             // 修改
             break
-          case "canclebtn":
+          case "cancelbtn":
             win.close();
             break;
           }
@@ -773,7 +773,7 @@ class PHP {
       });
       break;
     default:
-      toastr.warning("该功能暂不支持该类型数据库", LANG_T['warning']);
+      toastr.warning(LANG['notsupport'], LANG_T['warning']);
       break;
     }
   }
@@ -782,9 +782,9 @@ class PHP {
     // 获取配置
     const id = this.tree.getSelected().split('::')[1].split(":")[0];
     let dbname = new Buffer(this.tree.getSelected().split('::')[1].split(":")[1],"base64").toString();
-    layer.confirm(`确定要删除数据库 ${dbname} 吗?`, {
+    layer.confirm(LANG['form']['deldb']['confirm'](dbname), {
       icon: 2, shift: 6,
-      title: "警告"
+      title: LANG['form']['deldb']['title']
     }, (_) => {
       layer.close(_);
       switch(this.dbconf['type']){
@@ -798,15 +798,15 @@ class PHP {
           }
           let result = this.parseResult(res['text']);
           if(result.datas[0][0]=='True'){
-            toastr.success("删除数据库成功",LANG_T['success']);
+            toastr.success(LANG['form']['deldb']['success'], LANG_T['success']);
             this.getDatabases(id);
           }else{
-            toastr.error("删除数据库失败",LANG_T['error']);
+            toastr.error(LANG['form']['deldb']['error'], LANG_T['error']);
           }
         });
         break;
       default:
-        toastr.warning("该功能暂不支持该类型数据库", LANG_T['warning']);
+        toastr.warning(LANG['notsupport'], LANG_T['warning']);
         break;
       }
     });
@@ -828,7 +828,7 @@ class PHP {
 // );`;
 //       this.manager.query.editor.session.setValue(sql);
       const win = this.manager.win.createWindow(hash, 0, 0, 600, 400);
-      win.setText("新建表");
+      win.setText(LANG['form']['addtable']['title']);
       win.centerOnScreen();
       win.button('minmax').hide();
       win.setModal(true);
@@ -838,25 +838,26 @@ class PHP {
         id: 'add',
         type: 'button',
         icon: 'plus-circle',
-        text: '新增字段'
+        text: LANG['form']['addtable']['add'],
       }, {
         type: 'separator'
       }, {
         id: 'delete',
         type: 'button',
         icon: 'remove',
-        text: "删除字段"
+        text: LANG['form']['addtable']['delete']
       },{
         id: 'save',
         type: 'button',
         icon: 'save',
-        text: "保存"
+        text: LANG['form']['addtable']['save']
       }]);
       dhtmlxValidation.hasOwnProperty("isValidPositiveInteger") ? "" : dhtmlxValidation.isValidPositiveInteger = (a) => { return !!a.toString().match(/(^\d+$)/);}
 
       const grid=win.attachGrid();
       grid.clearAll();
-      grid.setHeader("Name,Type,Length,Not Null,Key,Auto Increment");
+      // Name,Type,Length,Not Null,Key,Auto Increment
+      grid.setHeader(LANG['form']['addtable']['gridheader']);
       grid.setInitWidths('*,100,80,80,50,130');
       grid.setColTypes("ed,coro,edn,acheck,acheck,acheck");
       grid.setColValidators(["ValidAplhaNumeric","NotEmpty","ValidPositiveInteger","ValidBoolean","ValidBoolean","ValidBoolean"]);
@@ -907,7 +908,7 @@ class PHP {
           case "delete":
             var ncids = grid.getSelectedId();
             if(!ncids){
-              toastr.warning("请先选中要删除的行", LANG_T['warning']);
+              toastr.warning(LANG['form']['addtable']['delete_not_select'], LANG_T['warning']);
               return
             }
             let _ncids = ncids.split(",");
@@ -918,7 +919,7 @@ class PHP {
           case "save":
             let rids = grid.getAllRowIds();
             if(!rids){
-              toastr.warning("行数为空", LANG_T['warning']);
+              toastr.warning(LANG['form']['addtable']['save_row_is_null'], LANG_T['warning']);
               return
             }
 
@@ -929,7 +930,7 @@ class PHP {
               let cvalarr = [];
               for(var j=0; j<6;j++){
                 if(grid.validateCell(_rids[i], j) == false){
-                  toastr.error(`数据格式校验失败(${i+1}行,${j+1}列)`,LANG_T['error']);
+                  toastr.error(LANG['form']['addtable']['cell_valid_error'](i,j), LANG_T['error']);
                   grid.selectCell(_rids[i], j);
                   grid.editCell();
                   return
@@ -963,14 +964,18 @@ class PHP {
             }
             layer.prompt({
               value: "",
-              title: `<i class="fa fa-file-code-o"></i> 输入新表名`
+              title: `<i class="fa fa-file-code-o"></i> ${LANG['form']['addtable']['confirmtitle']}`
             },(value, i, e) => {
               if(!value.match(/^[a-zA-Z0-9_]+$/)){
-                toastr.error("表名不能带有特殊符号", LANG_T['error']);
+                toastr.error(LANG['form']['addtable']['invalid_tablename'], LANG_T['error']);
                 return
               }
               layer.close(i);
               let pkres = pkstr.length > 0 ? `\tPRIMARY KEY ( ${pkstr.substr(0, pkstr.length-1)} )` : "";
+
+              if(pkres.length == 0) {
+                bdstr = bdstr.slice(0, bdstr.lastIndexOf(","));
+              }
               let rsql = `CREATE TABLE IF NOT EXISTS \`${value}\` (\n${bdstr}\n${pkres}\n);`;
               this.manager.query.editor.session.setValue(rsql);
               this.execSQLAsync(rsql, (res, err) => {
@@ -980,11 +985,11 @@ class PHP {
                 }
                 let result = this.parseResult(res['text']);
                 if(result.datas[0][0]=='True'){
-                  toastr.success("新建表成功",LANG_T['success']);
+                  toastr.success(LANG['form']['addtable']['success'],LANG_T['success']);
                   this.getTables(id,dbname);
                   win.close();
                 }else{
-                  toastr.error("新建表失败", LANG_T['error']);
+                  toastr.error(LANG['form']['addtable']['error'], LANG_T['error']);
                 }
               });
             });
@@ -993,7 +998,7 @@ class PHP {
       });
       break;
     default:
-      toastr.warning("该功能暂不支持该类型数据库", LANG_T['warning']);
+      toastr.warning(LANG['notsupport'], LANG_T['warning']);
       break;
     }
   }
@@ -1008,10 +1013,10 @@ class PHP {
     // const hash = (+new Date * Math.random()).toString(16).substr(2, 8);
     layer.prompt({
       value: tablename,
-      title: `<i class="fa fa-file-code-o"></i> 输入新表名`
+      title: `<i class="fa fa-file-code-o"></i> ${LANG['form']['edittable']['title']}`
     },(value, i, e) => {
       if(!value.match(/^[a-zA-Z0-9_]+$/)){
-        toastr.error("表名不能带有特殊符号", LANG_T['error']);
+        toastr.error(LANG['form']['edittable']['invalid_tablename'], LANG_T['error']);
         return
       }
       layer.close(i);
@@ -1026,15 +1031,15 @@ class PHP {
             }
             let result = this.parseResult(res['text']);
             if(result.datas[0][0]=='True'){
-              toastr.success("修改表名成功",LANG_T['success']);
+              toastr.success(LANG['form']['edittable']['success'],LANG_T['success']);
               this.getTables(id,dbname);
             }else{
-              toastr.error("修改表名失败",LANG_T['error']);
+              toastr.error(LANG['form']['edittable']['error'],LANG_T['error']);
             }
           });
           break;
         default:
-          toastr.warning("该功能暂不支持该类型数据库", LANG_T['warning']);
+          toastr.warning(LANG['notsupport'], LANG_T['warning']);
           break;
       }
     });
@@ -1047,9 +1052,9 @@ class PHP {
     const id = treeselect.split('::')[1].split(":")[0];
     let dbname = new Buffer(treeselect.split('::')[1].split(":")[1],"base64").toString();
     let tablename = new Buffer(treeselect.split('::')[1].split(":")[2],"base64").toString();
-    layer.confirm(`确定要删除表 ${tablename} 吗?`, {
+    layer.confirm(LANG['form']['deltable']['confirm'](tablename), {
       icon: 2, shift: 6,
-      title: "警告"
+      title: LANG['form']['deltable']['title']
     }, (_) => {
       layer.close(_);
       switch(this.dbconf['type']){
@@ -1063,15 +1068,15 @@ class PHP {
           }
           let result = this.parseResult(res['text']);
           if(result.datas[0][0]=='True'){
-            toastr.success("删除表成功",LANG_T['success']);
+            toastr.success(LANG['form']['deltable']['success'],LANG_T['success']);
             this.getTables(id,dbname);
           }else{
-            toastr.error("删除表失败",LANG_T['error']);
+            toastr.error(LANG['form']['deltable']['error'],LANG_T['error']);
           }
         });
         break;
       default:
-        toastr.warning("该功能暂不支持该类型数据库", LANG_T['warning']);
+        toastr.warning(LANG['notsupport'], LANG_T['warning']);
         break;
       }
     });
@@ -1105,9 +1110,9 @@ class PHP {
     let dbname = new Buffer(treeselect.split('::')[1].split(":")[1],"base64").toString();
     let tablename = new Buffer(treeselect.split('::')[1].split(":")[2],"base64").toString();
     let columnname = new Buffer(treeselect.split('::')[1].split(":")[3],"base64").toString();
-    layer.confirm(`确定要删除列 ${columnname} 吗?`, {
+    layer.confirm(LANG['form']['delcolumn']['confirm'](columnname), {
       icon: 2, shift: 6,
-      title: "警告"
+      title: LANG['form']['delcolumn']['title']
     }, (_) => {
       layer.close(_);
       switch(this.dbconf['type']){
@@ -1121,15 +1126,15 @@ class PHP {
           }
           let result = this.parseResult(res['text']);
           if(result.datas[0][0]=='True'){
-            toastr.success("删除列成功",LANG_T['success']);
+            toastr.success(LANG['form']['delcolumn']['success'],LANG_T['success']);
             this.getColumns(id,dbname, tablename);
           }else{
-            toastr.error("删除列失败",LANG_T['error']);
+            toastr.error(LANG['form']['delcolumn']['error'],LANG_T['error']);
           }
         });
         break;
       default:
-        toastr.warning("该功能暂不支持该类型数据库", LANG_T['warning']);
+        toastr.warning(LANG['notsupport'], LANG_T['warning']);
         break;
       }
     });

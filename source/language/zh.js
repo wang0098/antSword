@@ -363,7 +363,16 @@ module.exports = {
       menu: {
         add: '添加配置',
         del: '删除配置',
-        edit: '编辑配置'
+        edit: '编辑配置',
+        adddb: '新建数据库',
+        editdb: '编辑数据库',
+        deldb: '删除数据库',
+        addtable: '新建表',
+        edittable: '编辑表名',
+        deltable: '删除表',
+        addcolumn: '添加列',
+        editcolumn: '编辑列',
+        delcolumn: '删除列',
       }
     },
     query: {
@@ -383,6 +392,7 @@ module.exports = {
         noresult: '没有查询结果！'
       }
     },
+    notsupport: '该功能暂不支持当前类型数据库',
     form: {
       title: '添加配置',
       toolbar: {
@@ -403,6 +413,70 @@ module.exports = {
         confirm: '确定删除此配置吗？',
         success: '删除配置成功！',
         error: (err) => antSword.noxss(`删除配置失败！\n${err}`)
+      },
+      adddb: {
+        title: '新建数据库',
+        dbname: '名称',
+        characterset: '字符集',
+        charactercollation: '字符集排序',
+        createbtn: '创建',
+        cancelbtn: '取消',
+        success: '创建数据库成功',
+        error: '创建数据库失败',
+      },
+      editdb: {
+        title: '修改数据库',
+        dbname: '名称(只读)',
+        characterset: '字符集',
+        charactercollation: '字符集排序',
+        updatebtn: '修改',
+        cancelbtn: '取消',
+        success: '修改数据库成功',
+        error: '修改数据库失败',
+      },
+      deldb: {
+        title: '删除数据库',
+        confirm: (name) => antSword.noxss(`确定要删除数据库 ${name} 吗?`),
+        success: '删除数据库成功',
+        error: '删除数据库失败',
+      },
+      addtable: {
+        title: '新建表',
+        add: '新增字段',
+        delete: '删除字段',
+        save: '保存',
+        gridheader: "名称,类型,长度,不为空,主键,自增长",
+        delete_not_select: "请先选中要删除的行",
+        save_row_is_null: "行数为空",
+        cell_valid_error: (i,j)=>`数据格式校验失败(${i+1}行,${j+1}列)`,
+        confirmtitle: "输入新表名",
+        invalid_tablename: "表名不能带有特殊符号",
+        success: '新建表成功',
+        error: '新建表失败',
+      },
+      edittable: {
+        title: "输入新表名",
+        invalid_tablename: "表名不能带有特殊符号",
+        success: '修改表名成功',
+        error: '修改表名失败',
+      },
+      deltable: {
+        title:'删除表',
+        confirm: (name) => antSword.noxss(`确定要删除表 ${name} 吗?`),
+        success: '删除表成功',
+        error: '删除表失败',
+      },
+      addcolumn: {
+
+      },
+      editcolumn: {
+
+      },
+      delcolumn: {
+        title:'删除列',
+        confirm: (name) => antSword.noxss(`确定要删除列 ${name} 吗?`),
+        success: '删除列成功',
+        error: '删除列失败',
       }
     }
   },
