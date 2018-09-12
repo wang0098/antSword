@@ -2,6 +2,36 @@
 > 有空会补补BUG、添添新功能。    
 > 同时也欢迎大家的参与！感谢各位朋友的支持！ .TAT.
 
+## 2018/09/12 `(v2.0.1)`
+
+### 插件
+
+* 新增 [「LiveScan」](https://github.com/virink/LiveScan) 插件 (Author: @virink)
+
+ > Webshell存活弹出插件
+
+ 1. 通过请求 Webshell 并判断返回数据是否一致判断 Webshell 是否存活
+ 2. 仅对 PHP,ASP,ASPX 有效
+ 3. 一键将失联的 Webshell 移动到 `[.Trash]` 分类
+ 4. 一键清空 `[.Trash]` 分类
+
+### Bug Fix
+
+* 修正下载更新时 chunk 导致进度条显示问题
+* 修正 Windows 客户端用户自定义编码器加载问题
+* 修正 C 盘无权限目录显示的 Bug(#51)
+* 修正 Windows 客户端下上传文件路径截取问题(#97 thx @jjf012)
+* 修正 Linux 客户端载入源码路径错误的问题 (cbb67dd0)
+* 修正 Windows 服务器修改文件时间失败问题(#98 thx @jjf012)
+* 修正 ASP Access 数据库显示数据库失败问题
+
+### Other
+
+* PHP虚拟终端执行命令函数增加了 `shell_exec`, `passthru`, `exec`, `popen`
+* ASP wget 功能模版 `Microsoft.XMLHTTP` 替换为 `MSXML2.ServerXmlHttp` 支持 https (#98 thx @jjf012)
+* 添加「检查更新」菜单
+* 提示通过 git 控制源码用户通过 git 命令增量更新(http下载的源码暂时不支持增量更新)
+
 ## 2018/08/25 `(v2.0.0)`
 
 ### 模块增强
