@@ -323,6 +323,9 @@ class Files {
           // manager.retimeFile(id, this.rowsAr[id]['cells'][2].innerText);
           manager.retimeFile(id, this.getRowAttribute(_ids[0], 'data')[2]);
         } },
+        { text: LANG['grid']['contextmenu']['chmod'], icon: 'fa fa-users', disabled: !id || ids.length > 1, action: () => {
+          manager.chmodFile(id, this.getRowAttribute(_ids[0], 'data')[4]);
+        } },
         { divider: true },
         { text: LANG['grid']['contextmenu']['create']['title'], icon: 'fa fa-plus-circle', subMenu: [
           { text: LANG['grid']['contextmenu']['create']['folder'], icon: 'fa fa-folder-o', action: manager.createFolder.bind(manager) },

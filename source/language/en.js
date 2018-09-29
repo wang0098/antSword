@@ -219,6 +219,12 @@ module.exports = {
       success: (path) => antSword.noxss(`Retime file success!\n${path}`),
       error: (path, err) => antSword.noxss(`Retime file [${path}] failed!${err ? '\n' + err : ''}`)
     },
+    chmod: {
+      title: 'Chmod File',
+      check: 'Input should be octal numbers, eg: 0644',
+      success: (path) => antSword.noxss(`Chmod file success!\n${path}`),
+      error: (path, err) => antSword.noxss(`Chmod file [${path}] failed!${err ? '\n' + err : ''}`)
+    },
     wget: {
       title: 'Wget File',
       check: 'URL is not correct!',
@@ -303,6 +309,7 @@ module.exports = {
           upload: 'Upload',
           download: 'Download',
           modify: 'Modify the file time',
+          chmod: 'Chmod',
           copy: {
             title: 'Copy',
             warning: (id) => antSword.noxss(`Already add to clipboard!\n${id}`),

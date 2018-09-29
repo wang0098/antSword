@@ -473,6 +473,43 @@ class FileManager {
     })
   }
 
+  // 设置文件和目录权限
+  chmodFile(name, oldmod) {
+    layer.prompt({
+      value: oldmod,
+      title: `<i class="fa fa-users"></i> ${LANG['chmod']['title']} (${antSword.noxss(name)})`,
+    }, (value, i, e) => {
+      if(!value.match(/^[0-7]{4}$/)){
+        toastr.error(LANG['chmod']['check'], LANG_T['error']);
+        return
+      }
+      this.files.cell.progressOn();
+      let path = this.path;
+      if (this.isWin) {
+        path = path.replace(/\//g, '\\')
+      }
+      // http request
+      this.core.request(
+        this.core.filemanager.chmod({
+          path: path + name,
+          mode: value
+        })
+      ).then((res) => {
+        let ret = res['text'];
+        this.files.cell.progressOff();
+        if (ret === '1') {
+          this.files.refreshPath();
+          toastr.success(LANG['chmod']['success'](name), LANG_T['success']);
+        }else{
+          toastr.error(LANG['chmod']['error'](name, ret === '0' ? false : ret), LANG_T['error']);
+        }
+      }).catch((err) => {
+        toastr.error(LANG['chmod']['error'](name, err), LANG_T['error']);
+      });
+      layer.close(i);
+    });
+  }
+
   // 预览文件(图片、视频)
   previewFile(name, size) {
     let that = this;
@@ -490,7 +527,7 @@ class FileManager {
     let down_size = 0;
     this.core.download(
       savepath
-      ,this.core.filemanager.read_file({path: remote_path})
+      ,this.core.filemanager.download_file({path: remote_path})
       , (_size) => {
         down_size += _size;
         let down_progress = parseInt(parseFloat(down_size / size).toFixed(2) * 100);

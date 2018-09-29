@@ -220,6 +220,12 @@ module.exports = {
       success: (path) => antSword.noxss(`更改文件时间成功！\n${path}`),
       error: (path, err) => antSword.noxss(`更改文件时间 [${path}] 失败！${err ? '\n' + err : ''}`)
     },
+    chmod: {
+      title: '更改权限',
+      check: "输入应为八进制数表示的权限, eg: 0644",
+      success: (path) => antSword.noxss(`更改文件权限成功！\n${path}`),
+      error: (path, err) => antSword.noxss(`更改文件权限 [${path}] 失败！${err ? '\n' + err : ''}`)
+    },
     wget: {
       title: 'Wget下载文件',
       check: 'URL地址不正确！',
@@ -304,6 +310,7 @@ module.exports = {
           upload: '上传文件',
           download: '下载文件',
           modify: '更改文件时间',
+          chmod: '更改权限',
           copy: {
             title: '复制文件',
             warning: (id) => antSword.noxss(`已经添加到剪贴板！\n${id}`),
