@@ -8,6 +8,7 @@
 const fs = require('fs'),
   iconv = require('iconv-lite'),
   through = require('through'),
+  CONF = require('./config'),
   superagent = require('superagent'),
   superagentProxy = require('superagent-proxy');
 
@@ -66,6 +67,9 @@ class Request {
    */
   onAproxyTest(event, opts) {
     logger.debug('aProxy::Test Proxy -', opts['aproxyuri'], '- Connect to ', opts['url']);
+    if(opts['url'].match(CONF.urlblacklist)) {
+      return event.sender.send('request-error-' + opts['hash'], "Blacklist URL");
+    }
     superagentProxy(superagent);
     superagent
       .get(opts['url'])
@@ -92,7 +96,9 @@ class Request {
    */
   onRequest(event, opts) {
     logger.debug('onRequest::opts', opts);
-
+    if(opts['url'].match(CONF.urlblacklist)) {
+      return event.sender.send('request-error-' + opts['hash'], "Blacklist URL");
+    }
     const _request = superagent.post(opts['url']);
     // 设置headers
     _request.set('User-Agent', USER_AGENT);
@@ -138,7 +144,9 @@ class Request {
    */
   onDownlaod(event, opts) {
     logger.debug('onDownlaod', opts);
-
+    if(opts['url'].match(CONF.urlblacklist)) {
+      return event.sender.send('request-error-' + opts['hash'], "Blacklist URL");
+    }
     // 创建文件流
     const rs = fs.createWriteStream(opts['path']);
 
