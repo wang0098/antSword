@@ -29,7 +29,7 @@ class Terminal {
     cell.attachHTMLString(`
       <div
         id="div_terminal_${hash}"
-        style="height:100%;margin:0;padding:0 5px 1px 5px;overflow:scroll"
+        style="height:100%;margin:0;padding:0 5px 1px 5px;overflow:scroll;--size:1;"
       ></div>
     `);
 
@@ -214,6 +214,35 @@ class Terminal {
               'ping'
             ]
           )
+        },
+        keypress: (event, terminal) => {
+          if(event.ctrlKey == true) {
+            // ctrl 键按下
+            switch(event.keyCode) {
+              case 61: // 放大 ctrl +
+                var s = parseFloat(terminal[0].style.getPropertyValue("--size"));
+                if(isNaN(s)){
+                  s = 1;
+                }
+                if(s<5){
+                  s += 0.05;
+                }
+                terminal[0].style.setProperty("--size", s);
+                return false;
+              case 31: // 缩小 ctrl -
+                var s = parseFloat(terminal[0].style.getPropertyValue("--size"));
+                if(isNaN(s)){
+                  s = 1;
+                }
+                if(s>0.5){
+                  s -= 0.05;
+                }
+                terminal[0].style.setProperty("--size", s);
+                return false;
+              default:
+              break;
+            }
+          }
         }
     });
   }
