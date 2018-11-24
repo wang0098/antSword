@@ -525,8 +525,10 @@ class ASP {
     const grid = this.manager.result.layout.attachGrid();
     grid.clearAll();
     grid.setHeader(header_arr.join(',').replace(/,$/, ''));
+    grid.setColTypes("txt,".repeat(header_arr.length).replace(/,$/,''));
     grid.setColSorting(('str,'.repeat(header_arr.length)).replace(/,$/, ''));
-    grid.setInitWidths('*');
+    grid.setColumnMinWidth(100, header_arr.length-1);
+    grid.setInitWidths(("100,".repeat(header_arr.length-1)) + "*");
     grid.setEditable(true);
     grid.init();
     // 添加数据
