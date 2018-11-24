@@ -195,7 +195,16 @@ class PHP {
       //   ], event);
       // };
     });
-
+    // mysql column type 
+    // TODO: 
+    // 1. column default value
+    // 2. character set
+    // 3. unsigned
+    this.mysqlcolumntypes = [
+      "tinyint", "smallint", "mediumint", "int", "integer", "bigint", "float", "double",
+      "date", "time", "year", "datetime", "timestamp",
+      "char", "varchar", "tinytext", "blob", "text", "mediumblob", "mediumtext", "longblob", "longtext"
+    ];
     // mysql character set mapping
     this.mysqlcsMapping = {
       'default': ['default'],
@@ -859,18 +868,13 @@ class PHP {
       // Name,Type,Length,Not Null,Key,Auto Increment
       grid.setHeader(LANG['form']['addtable']['gridheader']);
       grid.setInitWidths('*,100,80,80,50,130');
-      grid.setColTypes("ed,coro,edn,acheck,acheck,acheck");
+      grid.setColTypes("ed,co,edn,acheck,acheck,acheck");
       grid.setColValidators(["ValidAplhaNumeric","NotEmpty","ValidPositiveInteger","ValidBoolean","ValidBoolean","ValidBoolean"]);
       grid.setEditable(true);
-
       const combobox = grid.getCombo(1);
-      combobox.put("tinyint","tinyint");
-      combobox.put("int","int");
-      combobox.put("integer","integer");
-      combobox.put("varchar","varchar");
-      combobox.put("double","double");
-      combobox.put("float","float");
-
+      this.mysqlcolumntypes.forEach(v => {
+        combobox.put(v, v);
+      });
       grid.enableEditEvents(false,true,true);
       grid.enableEditTabOnly(true);
       grid.init();
