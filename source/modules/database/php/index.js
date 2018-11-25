@@ -1149,7 +1149,50 @@ class PHP {
     let dbname = new Buffer(treeselect.split('::')[1].split(":")[1],"base64").toString();
     let tablename = new Buffer(treeselect.split('::')[1].split(":")[2],"base64").toString();
     let columnname = new Buffer(treeselect.split('::')[1].split(":")[3],"base64").toString();
-    
+    let columntyperaw = this.tree.getSelectedItemText();
+    let columntype = null;
+    var ctypereg = new RegExp(columnname+'\\s\\((.+?\\))\\)');
+    var res = columntyperaw.match(ctypereg);
+    if (res.length == 2) {
+      columntype = res[1];
+    }
+    if (columntype == null) {
+      toastr.error(LANG['form']['editcolumn']['get_column_type_error'], LANG_T['error']);
+      return
+    }
+    layer.prompt({
+      value: columnname,
+      title: `<i class="fa fa-file-code-o"></i> ${LANG['form']['editcolumn']['title']}`
+    },(value, i, e) => {
+      if(!value.match(/^[a-zA-Z0-9_]+$/)){
+        toastr.error(LANG['form']['editcolumn']['invalid_tablename'], LANG_T['error']);
+        return
+      }
+      layer.close(i);
+      switch(this.dbconf['type']){
+        case "mysqli":
+        case "mysql":
+          let sql = `ALTER TABLE \`${dbname}\`.\`${tablename}\` CHANGE COLUMN \`${columnname}\` \`${value}\` ${columntype};`;
+          this.manager.query.editor.session.setValue(sql);
+          this.execSQLAsync(sql, (res, err) => {
+            if(err){
+              toastr.error(LANG['result']['error']['query'](err['status'] || JSON.stringify(err)), LANG_T['error']);
+              return;
+            }
+            let result = this.parseResult(res['text']);
+            if(result.datas[0][0]=='True'){
+              toastr.success(LANG['form']['editcolumn']['success'],LANG_T['success']);
+              this.getColumns(id,dbname,tablename);
+            }else{
+              toastr.error(LANG['form']['editcolumn']['error'],LANG_T['error']);
+            }
+          });
+          break;
+        default:
+          toastr.warning(LANG['notsupport'], LANG_T['warning']);
+          break;
+      }
+    });
   }
 
   delColumn() {

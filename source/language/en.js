@@ -379,7 +379,7 @@ module.exports = {
         showcreatetable: 'Create Table SQL',
         deltable: 'Del Table',
         addcolumn: 'New Column',
-        editcolumn: 'Edit Column',
+        editcolumn: 'Edit ColumnName',
         delcolumn: 'Del Column',
       }
     },
@@ -478,7 +478,11 @@ module.exports = {
 
       },
       editcolumn: {
-
+        title: "New column name",
+        invalid_tablename: "Column names should not contain special symbols",
+        get_column_type_error: "Get column type error",
+        success: 'Update column name successfully',
+        error: 'Failed to update column',
       },
       delcolumn: {
         title:'Delete Column',

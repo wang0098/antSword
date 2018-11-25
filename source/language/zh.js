@@ -380,7 +380,7 @@ module.exports = {
         showcreatetable: '建表语句',
         desctable: '查看表结构',
         addcolumn: '添加列',
-        editcolumn: '编辑列',
+        editcolumn: '编辑列名',
         delcolumn: '删除列',
       }
     },
@@ -479,7 +479,11 @@ module.exports = {
 
       },
       editcolumn: {
-
+        title: "输入新列名",
+        invalid_tablename: "列名不能带有特殊符号",
+        get_column_type_error: "获取列属性失败",
+        success: '修改列名成功',
+        error: '修改列名失败'
       },
       delcolumn: {
         title:'删除列',
