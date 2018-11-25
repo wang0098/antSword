@@ -145,6 +145,14 @@ class PHP {
             }, {
               divider: true
             }, {
+              text: LANG['list']['menu']['desctable'],
+              icon: 'fa fa-table',
+              action: this.descTable.bind(this)
+            }, {
+              text: LANG['list']['menu']['showcreatetable'],
+              icon: 'fa fa-info',
+              action: this.showcreateTable.bind(this)
+            }, {
               text: LANG['list']['menu']['edittable'],
               icon: 'fa fa-edit',
               action: this.editTable.bind(this)
@@ -1085,6 +1093,43 @@ class PHP {
       }
     });
   }
+  // 显示表结构
+  descTable() {
+    const treeselect = this.tree.getSelected();
+    const id = treeselect.split('::')[1].split(":")[0];
+    let dbname = new Buffer(treeselect.split('::')[1].split(":")[1],"base64").toString();
+    let tablename = new Buffer(treeselect.split('::')[1].split(":")[2],"base64").toString();
+    switch(this.dbconf['type']){
+      case "mysqli":
+      case "mysql":
+        let sql = `DESC \`${dbname}\`.\`${tablename}\`;`;
+        this.manager.query.editor.session.setValue(sql);
+        this.execSQL(sql);
+        break;
+      default:
+        toastr.warning(LANG['notsupport'], LANG_T['warning']);
+        break;
+      }
+  }
+
+  showcreateTable() {
+    const treeselect = this.tree.getSelected();
+    const id = treeselect.split('::')[1].split(":")[0];
+    let dbname = new Buffer(treeselect.split('::')[1].split(":")[1],"base64").toString();
+    let tablename = new Buffer(treeselect.split('::')[1].split(":")[2],"base64").toString();
+    switch(this.dbconf['type']){
+      case "mysqli":
+      case "mysql":
+        let sql = `SHOW CREATE TABLE \`${dbname}\`.\`${tablename}\`;`;
+        this.manager.query.editor.session.setValue(sql);
+        this.execSQL(sql);
+        break;
+      default:
+        toastr.warning(LANG['notsupport'], LANG_T['warning']);
+        break;
+      }
+  }
+
   // TODO: 新增列
   addColumn() {
     // 获取配置
@@ -1370,7 +1415,7 @@ class PHP {
     arr.map((_) => {
       let _data = _.split('\t|\t');
       for (let i = 0; i < _data.length; i ++) {
-      	_data[i] = antSword.noxss(new Buffer(_data[i], "base64").toString());
+      	_data[i] = antSword.noxss(new Buffer(_data[i], "base64").toString(), false);
       }
       data_arr.push(_data);
     });

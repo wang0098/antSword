@@ -375,6 +375,8 @@ module.exports = {
         deldb: 'Del Database',
         addtable: 'New Table',
         edittable: 'Edit TableName',
+        desctable: 'Desc Table',
+        showcreatetable: 'Create Table SQL',
         deltable: 'Del Table',
         addcolumn: 'New Column',
         editcolumn: 'Edit Column',

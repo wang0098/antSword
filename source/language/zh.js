@@ -377,6 +377,8 @@ module.exports = {
         addtable: '新建表',
         edittable: '编辑表名',
         deltable: '删除表',
+        showcreatetable: '建表语句',
+        desctable: '查看表结构',
         addcolumn: '添加列',
         editcolumn: '编辑列',
         delcolumn: '删除列',
