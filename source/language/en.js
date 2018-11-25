@@ -398,6 +398,10 @@ module.exports = {
         query: (err) => antSword.noxss(`Failure to execute SQL!\n${err}`),
         parse: 'Return data format is incorrect!',
         noresult: 'No query results!'
+      },
+      dump: {
+        title: "Export Data",
+        success: "Export success",
       }
     },
     notsupport: 'Not support the current database type',

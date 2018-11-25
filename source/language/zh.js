@@ -399,6 +399,10 @@ module.exports = {
         query: (err) => antSword.noxss(`执行SQL失败！\n${err}`),
         parse: '返回数据格式不正确！',
         noresult: '没有查询结果！'
+      },
+      dump: {
+        title: "导出查询结果",
+        success: "导出成功",
       }
     },
     notsupport: '该功能暂不支持当前类型数据库',
