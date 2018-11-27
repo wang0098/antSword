@@ -377,8 +377,10 @@ module.exports = {
         addtable: '新建表',
         edittable: '编辑表名',
         deltable: '删除表',
+        showcreatetable: '建表语句',
+        desctable: '查看表结构',
         addcolumn: '添加列',
-        editcolumn: '编辑列',
+        editcolumn: '编辑列名',
         delcolumn: '删除列',
       }
     },
@@ -397,6 +399,10 @@ module.exports = {
         query: (err) => antSword.noxss(`执行SQL失败！\n${err}`),
         parse: '返回数据格式不正确！',
         noresult: '没有查询结果！'
+      },
+      dump: {
+        title: "导出查询结果",
+        success: "导出成功",
       }
     },
     notsupport: '该功能暂不支持当前类型数据库',
@@ -477,7 +483,11 @@ module.exports = {
 
       },
       editcolumn: {
-
+        title: "输入新列名",
+        invalid_tablename: "列名不能带有特殊符号",
+        get_column_type_error: "获取列属性失败",
+        success: '修改列名成功',
+        error: '修改列名失败'
       },
       delcolumn: {
         title:'删除列',

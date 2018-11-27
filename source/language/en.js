@@ -375,9 +375,11 @@ module.exports = {
         deldb: 'Del Database',
         addtable: 'New Table',
         edittable: 'Edit TableName',
+        desctable: 'Desc Table',
+        showcreatetable: 'Create Table SQL',
         deltable: 'Del Table',
         addcolumn: 'New Column',
-        editcolumn: 'Edit Column',
+        editcolumn: 'Edit ColumnName',
         delcolumn: 'Del Column',
       }
     },
@@ -396,6 +398,10 @@ module.exports = {
         query: (err) => antSword.noxss(`Failure to execute SQL!\n${err}`),
         parse: 'Return data format is incorrect!',
         noresult: 'No query results!'
+      },
+      dump: {
+        title: "Export Data",
+        success: "Export success",
       }
     },
     notsupport: 'Not support the current database type',
@@ -476,7 +482,11 @@ module.exports = {
 
       },
       editcolumn: {
-
+        title: "New column name",
+        invalid_tablename: "Column names should not contain special symbols",
+        get_column_type_error: "Get column type error",
+        success: 'Update column name successfully',
+        error: 'Failed to update column',
       },
       delcolumn: {
         title:'Delete Column',

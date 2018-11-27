@@ -5,6 +5,8 @@
 
 const LANG = antSword['language']['database'];
 const LANG_T = antSword['language']['toastr'];
+const dialog = antSword.remote.dialog;
+const fs = require('fs');
 
 class PHP {
 
@@ -145,6 +147,14 @@ class PHP {
             }, {
               divider: true
             }, {
+              text: LANG['list']['menu']['desctable'],
+              icon: 'fa fa-table',
+              action: this.descTable.bind(this)
+            }, {
+              text: LANG['list']['menu']['showcreatetable'],
+              icon: 'fa fa-info',
+              action: this.showcreateTable.bind(this)
+            }, {
               text: LANG['list']['menu']['edittable'],
               icon: 'fa fa-edit',
               action: this.editTable.bind(this)
@@ -195,7 +205,16 @@ class PHP {
       //   ], event);
       // };
     });
-
+    // mysql column type 
+    // TODO: 
+    // 1. column default value
+    // 2. character set
+    // 3. unsigned
+    this.mysqlcolumntypes = [
+      "tinyint", "smallint", "mediumint", "int", "integer", "bigint", "float", "double",
+      "date", "time", "year", "datetime", "timestamp",
+      "char", "varchar", "tinytext", "blob", "text", "mediumblob", "mediumtext", "longblob", "longtext"
+    ];
     // mysql character set mapping
     this.mysqlcsMapping = {
       'default': ['default'],
@@ -859,18 +878,13 @@ class PHP {
       // Name,Type,Length,Not Null,Key,Auto Increment
       grid.setHeader(LANG['form']['addtable']['gridheader']);
       grid.setInitWidths('*,100,80,80,50,130');
-      grid.setColTypes("ed,coro,edn,acheck,acheck,acheck");
+      grid.setColTypes("ed,co,edn,acheck,acheck,acheck");
       grid.setColValidators(["ValidAplhaNumeric","NotEmpty","ValidPositiveInteger","ValidBoolean","ValidBoolean","ValidBoolean"]);
       grid.setEditable(true);
-
       const combobox = grid.getCombo(1);
-      combobox.put("tinyint","tinyint");
-      combobox.put("int","int");
-      combobox.put("integer","integer");
-      combobox.put("varchar","varchar");
-      combobox.put("double","double");
-      combobox.put("float","float");
-
+      this.mysqlcolumntypes.forEach(v => {
+        combobox.put(v, v);
+      });
       grid.enableEditEvents(false,true,true);
       grid.enableEditTabOnly(true);
       grid.init();
@@ -1081,6 +1095,43 @@ class PHP {
       }
     });
   }
+  // 显示表结构
+  descTable() {
+    const treeselect = this.tree.getSelected();
+    const id = treeselect.split('::')[1].split(":")[0];
+    let dbname = new Buffer(treeselect.split('::')[1].split(":")[1],"base64").toString();
+    let tablename = new Buffer(treeselect.split('::')[1].split(":")[2],"base64").toString();
+    switch(this.dbconf['type']){
+      case "mysqli":
+      case "mysql":
+        let sql = `DESC \`${dbname}\`.\`${tablename}\`;`;
+        this.manager.query.editor.session.setValue(sql);
+        this.execSQL(sql);
+        break;
+      default:
+        toastr.warning(LANG['notsupport'], LANG_T['warning']);
+        break;
+      }
+  }
+
+  showcreateTable() {
+    const treeselect = this.tree.getSelected();
+    const id = treeselect.split('::')[1].split(":")[0];
+    let dbname = new Buffer(treeselect.split('::')[1].split(":")[1],"base64").toString();
+    let tablename = new Buffer(treeselect.split('::')[1].split(":")[2],"base64").toString();
+    switch(this.dbconf['type']){
+      case "mysqli":
+      case "mysql":
+        let sql = `SHOW CREATE TABLE \`${dbname}\`.\`${tablename}\`;`;
+        this.manager.query.editor.session.setValue(sql);
+        this.execSQL(sql);
+        break;
+      default:
+        toastr.warning(LANG['notsupport'], LANG_T['warning']);
+        break;
+      }
+  }
+
   // TODO: 新增列
   addColumn() {
     // 获取配置
@@ -1100,7 +1151,50 @@ class PHP {
     let dbname = new Buffer(treeselect.split('::')[1].split(":")[1],"base64").toString();
     let tablename = new Buffer(treeselect.split('::')[1].split(":")[2],"base64").toString();
     let columnname = new Buffer(treeselect.split('::')[1].split(":")[3],"base64").toString();
-    
+    let columntyperaw = this.tree.getSelectedItemText();
+    let columntype = null;
+    var ctypereg = new RegExp(columnname+'\\s\\((.+?\\))\\)');
+    var res = columntyperaw.match(ctypereg);
+    if (res.length == 2) {
+      columntype = res[1];
+    }
+    if (columntype == null) {
+      toastr.error(LANG['form']['editcolumn']['get_column_type_error'], LANG_T['error']);
+      return
+    }
+    layer.prompt({
+      value: columnname,
+      title: `<i class="fa fa-file-code-o"></i> ${LANG['form']['editcolumn']['title']}`
+    },(value, i, e) => {
+      if(!value.match(/^[a-zA-Z0-9_]+$/)){
+        toastr.error(LANG['form']['editcolumn']['invalid_tablename'], LANG_T['error']);
+        return
+      }
+      layer.close(i);
+      switch(this.dbconf['type']){
+        case "mysqli":
+        case "mysql":
+          let sql = `ALTER TABLE \`${dbname}\`.\`${tablename}\` CHANGE COLUMN \`${columnname}\` \`${value}\` ${columntype};`;
+          this.manager.query.editor.session.setValue(sql);
+          this.execSQLAsync(sql, (res, err) => {
+            if(err){
+              toastr.error(LANG['result']['error']['query'](err['status'] || JSON.stringify(err)), LANG_T['error']);
+              return;
+            }
+            let result = this.parseResult(res['text']);
+            if(result.datas[0][0]=='True'){
+              toastr.success(LANG['form']['editcolumn']['success'],LANG_T['success']);
+              this.getColumns(id,dbname,tablename);
+            }else{
+              toastr.error(LANG['form']['editcolumn']['error'],LANG_T['error']);
+            }
+          });
+          break;
+        default:
+          toastr.warning(LANG['notsupport'], LANG_T['warning']);
+          break;
+      }
+    });
   }
 
   delColumn() {
@@ -1366,7 +1460,7 @@ class PHP {
     arr.map((_) => {
       let _data = _.split('\t|\t');
       for (let i = 0; i < _data.length; i ++) {
-      	_data[i] = antSword.noxss(new Buffer(_data[i], "base64").toString());
+      	_data[i] = antSword.noxss(new Buffer(_data[i], "base64").toString(), false);
       }
       data_arr.push(_data);
     });
@@ -1375,8 +1469,10 @@ class PHP {
     const grid = this.manager.result.layout.attachGrid();
     grid.clearAll();
     grid.setHeader(header_arr.join(',').replace(/,$/, ''));
+    grid.setColTypes("txt,".repeat(header_arr.length).replace(/,$/,''));
     grid.setColSorting(('str,'.repeat(header_arr.length)).replace(/,$/, ''));
-    grid.setInitWidths('*');
+    grid.setColumnMinWidth(100, header_arr.length-1);
+    grid.setInitWidths(("100,".repeat(header_arr.length-1)) + "*");
     grid.setEditable(true);
     grid.init();
     // 添加数据
@@ -1391,13 +1487,31 @@ class PHP {
       'rows': grid_data
     }, 'json');
     // 启用导出按钮
-    // this.manager.result.toolbar[grid_data.length > 0 ? 'enableItem' : 'disableItem']('dump');
+    this.manager.result.toolbar[grid_data.length > 0 ? 'enableItem' : 'disableItem']('dump');
   }
-
+  
+  // 导出查询数据
+  dumpResult() {
+    const grid = this.manager.result.layout.getAttachedObject();
+    let filename = `${this.core.__opts__.ip}_${new Date().format("yyyyMMddhhmmss")}.csv`;
+    antSword['test'] = this;
+    dialog.showSaveDialog({
+      title: LANG['result']['dump']['title'],
+      defaultPath: filename
+    },(filePath) => {
+      if (!filePath) { return; };
+      let headerStr = grid.hdrLabels.join(',');
+      let dataStr = grid.serializeToCSV();
+      let tempDataBuffer = new Buffer(headerStr+'\n'+dataStr);
+      fs.writeFileSync(filePath, tempDataBuffer);
+      toastr.success(LANG['result']['dump']['success'], LANG_T['success']);
+    });
+  }
   // 禁用toolbar按钮
   disableToolbar() {
     this.manager.list.toolbar.disableItem('del');
     this.manager.list.toolbar.disableItem('edit');
+    this.manager.result.toolbar.disableItem('dump');
   }
 
   // 启用toolbar按钮

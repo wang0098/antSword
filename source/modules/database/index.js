@@ -158,14 +158,21 @@ class Database {
     layout.setText(`<i class="fa fa-inbox"></i> ${LANG['result']['title']}`);
     // layout.hideHeader();
 
-    // const toolbar = layout.attachToolbar();
-    // toolbar.loadStruct([
-    //   { id: 'dump', text: '导出', icon: 'upload', type: 'button', disabled: true },
-    //   { type: 'separator' }
-    // ]);
+    const toolbar = layout.attachToolbar();
+    toolbar.loadStruct([
+      { id: 'dump', text: '导出', icon: 'upload', type: 'button', disabled: true },
+      { type: 'separator' }
+    ]);
+    toolbar.attachEvent('onClick', (id) => {
+      switch(id) {
+        case 'dump':
+          this.drive.dumpResult();
+          break;
+      }
+    });
     return {
       layout: layout,
-      // toolbar: toolbar
+      toolbar: toolbar
     };
   }
 
