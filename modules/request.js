@@ -122,12 +122,12 @@ class Request {
         }, res, callback);
       })
       .end((err, ret) => {
-        if (err) {
-          return event.sender.send('request-error-' + opts['hash'], err);
-        };
         let buff = ret.body;
         // 解码
         let text = iconv.decode(buff, opts['encode']);
+        if (err && text == "") {
+          return event.sender.send('request-error-' + opts['hash'], err);
+        };
         // 回调数据
         event.sender.send('request-' + opts['hash'], {
           text: text,
