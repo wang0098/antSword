@@ -215,11 +215,11 @@ class Terminal {
             ]
           )
         },
-        keypress: (event, terminal) => {
+        keydown: (event, terminal) => {
           if(event.ctrlKey == true) {
             // ctrl 键按下
             switch(event.keyCode) {
-              case 61: // 放大 ctrl +
+              case 187: // 放大 ctrl +
                 var s = parseFloat(terminal[0].style.getPropertyValue("--size"));
                 if(isNaN(s)){
                   s = 1;
@@ -229,7 +229,7 @@ class Terminal {
                 }
                 terminal[0].style.setProperty("--size", s);
                 return false;
-              case 31: // 缩小 ctrl -
+              case 189: // 缩小 ctrl -
                 var s = parseFloat(terminal[0].style.getPropertyValue("--size"));
                 if(isNaN(s)){
                   s = 1;
