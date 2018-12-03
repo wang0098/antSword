@@ -308,7 +308,7 @@ class Form {
               ret.push({
                 text: _,
                 value: _,
-                selected: opt['command-path'] === _
+                selected: opt['request-timeout'] === _
               })
             });
             return ret;
