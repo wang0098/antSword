@@ -14,7 +14,7 @@ module.exports = (pwd, data) => {
       ret.push(php[i].charCodeAt());
       i ++;
     }
-    return `eVAl(cHr(${ret.join(').ChR(')}));`;
+    return `@eVAl(cHr(${ret.join(').ChR(')}));`;
   }
 
   // 编码并去除多余数据
