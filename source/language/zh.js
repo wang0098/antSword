@@ -171,6 +171,7 @@ module.exports = {
         nohttps: '忽略HTTPS证书',
         terminalCache: '虚拟终端使用缓存',
         filemanagerCache: '文件管理使用缓存',
+        uploadFragment: '上传文件分片大小',
         requestTimeout: '请求超时',
         commandPath: '自定义终端执行路径'
       }
@@ -241,6 +242,9 @@ module.exports = {
       task: {
         name: '上传',
         success: '上传成功',
+        httperr_413: '请将上传文件分片大小设置调低',
+        httperr_etime: '请求超时,请将超时时间调大',
+        httperr_econnrefused: '连接被拒绝,检查目标或代理是否开启',
         failed: (err) => antSword.noxss(`失败:${err}`),
         error: (err) => antSword.noxss(`出错:${err}`)
       },

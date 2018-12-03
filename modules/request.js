@@ -122,7 +122,11 @@ class Request {
         }, res, callback);
       })
       .end((err, ret) => {
-        let buff = ret.body;
+        if (!ret) {
+          // 请求失败 TIMEOUT
+          return event.sender.send('request-error-' + opts['hash'], err);
+        }
+        let buff = ret.hasOwnProperty('body') ? ret.body : new Buffer();
         // 解码
         let text = iconv.decode(buff, opts['encode']);
         if (err && text == "") {

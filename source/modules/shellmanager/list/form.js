@@ -278,6 +278,7 @@ class Form {
       'ignore-https': 0,
       'terminal-cache': 0,
       'filemanager-cache': 1,
+      'upload-fragment': '500',
       'request-timeout': '10000',
       'command-path': ''
     }, arg.otherConf);
@@ -294,7 +295,28 @@ class Form {
         }, {
           type: "checkbox", name: 'filemanager-cache', label: LANG['list']['otherConf']['filemanagerCache'],
           checked: opt['filemanager-cache'] === 1
-        },{
+        }, {
+          type: "label", label: LANG['list']['otherConf']['uploadFragment']
+        }, {
+          type: "combo", label: '/kb', inputWidth: 100, name: "upload-fragment",
+          options: ((items) => {
+            let ret = [];
+            // 如果自定义的路径不在items里，则++
+            if (items.indexOf(opt['upload-fragment']) === -1) {
+              items.unshift(opt['upload-fragment']);
+            }
+            items.map((_) => {
+              ret.push({
+                text: _,
+                value: _,
+                selected: opt['upload-fragment'] === _
+              })
+            });
+            return ret;
+          })([
+            '500', '400', '200', '100', '50', '10'
+          ])
+        }, {
           type: "label", label: LANG['list']['otherConf']['requestTimeout']
         }, {
           type: "combo", label: '/ms', inputWidth: 100, name: "request-timeout",

@@ -696,9 +696,9 @@ class FileManager {
           let buffIndex = 0;
           let buff = [];
           // 分段上传大小，默认0.5M(jsp 超过1M响应会出错)
-          let dataSplit = 512 * 1024;
-          if (this.opts['type'].toLowerCase() === 'php') {
-            dataSplit = 1024 * 1024
+          let dataSplit = 500 * 1024;
+          if ( parseInt((this.opts.otherConf || {})['upload-fragment']) > 0 ) {
+            dataSplit = parseInt((this.opts.otherConf || {})['upload-fragment']) * 1024;
           }
           let task = tasks[filePath];
           // 获取文件名
@@ -751,8 +751,32 @@ class FileManager {
                   ret === '0' ? '' : `<br/>${ret}`
                 ), LANG_T['error']);
               }).catch((err) => {
-                task.failed(LANG['upload']['task']['error'](err));
-                toastr.error(LANG['upload']['error'](fileName, err), LANG_T['error']);
+                // 出错后友好提示
+                let errmsg = err;
+                if (err.hasOwnProperty('status') && err.hasOwnProperty('response')) {
+                  errmsg = `${err.status} ${err.response.res.statusMessage}`;
+                  switch(err.status) {
+                    case 413:
+                      errmsg += `${LANG['upload']['task']['httperr_413']}`;
+                      break;
+                    default:
+                      break;
+                  }
+                }else if(err.hasOwnProperty('errno')) {
+                  switch(err.errno) {
+                    case 'ETIME':
+                      errmsg = `${LANG['upload']['task']['httperr_etime']}`;
+                      break;
+                    case 'ECONNREFUSED':
+                      errmsg = `${LANG['upload']['task']['httperr_econnrefused']}`;
+                      break;
+                    default:
+                      errmsg = `${err.errno} ${err.code}`;
+                      break;
+                  }
+                }
+                task.failed(LANG['upload']['task']['error'](errmsg));
+                toastr.error(LANG['upload']['error'](fileName, errmsg), LANG_T['error']);
               });
             })
           }

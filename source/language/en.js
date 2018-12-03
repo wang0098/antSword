@@ -170,6 +170,7 @@ module.exports = {
         nohttps: 'Ignore HTTPS certificate',
         terminalCache: "Use the terminal's cache",
         filemanagerCache: "Use the filemanager's cache",
+        uploadFragment: "Upload File Fragmentation Size",
         requestTimeout: 'Request timeout',
         commandPath: 'Custom terminal-execPath'
       }
@@ -240,6 +241,9 @@ module.exports = {
       task: {
         name: 'Upload',
         success: 'Upload success!',
+        httperr_413: 'Please lower the upload file shard size setting.',
+        httperr_etime: 'Request timeout, please increase the timeout period.',
+        httperr_econnrefused: 'Connection refused, check target or proxy is enabled.',
         failed: (err) => antSword.noxss(`Failed:${err}`),
         error: (err) => antSword.noxss(`Error:${err}`)
       },
