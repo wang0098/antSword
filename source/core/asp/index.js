@@ -44,8 +44,8 @@ class ASP extends Base {
    */
   complete(data) {
     // 分隔符号
-    let tag_s = '->|';
-    let tag_e = '|<-';
+    let tag_s = Math.random().toString(16).substr(2, 5); // '->|';
+    let tag_e = Math.random().toString(16).substr(2, 5); // '|<-';
 
     // let formatter = new this.format(this.__opts__['encode']);
     let formatter = Base.prototype.format(this.__opts__['encode']);

@@ -62,6 +62,13 @@ module.exports = (arg1, arg2, arg3) => ({
     [arg2]: "#{base64::time}"
   },
 
+  chmod: {
+    _:
+    `$m=get_magic_quotes_gpc();$FN=base64_decode(m?stripslashes($_POST["${arg1}"]):$_POST["${arg1}"]);$mode=base64_decode(m?stripslashes($_POST["${arg2}"]):$_POST["${arg2}"]);echo(chmod($FN,octdec($mode))?"1":"0");`,
+    [arg1]: "#{base64::path}",
+    [arg2]: "#{base64::mode}"
+  },
+
   mkdir: {
     _:
       `$m=get_magic_quotes_gpc();$f=base64_decode($m?stripslashes($_POST["${arg1}"]):$_POST["${arg1}"]);echo(mkdir($f)?"1":"0");`,

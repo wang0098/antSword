@@ -1,7 +1,7 @@
 //
 // 数据库管理模块
 //
-
+// TODO: 数据管理模块目前的代码存在大量冗余，后期会考虑将 数据库驱动 与 core 分成两个块来做
 // import React from 'react';
 // import ReactDOM from 'react-dom';
 // import AceEditor from 'react-ace';
@@ -158,14 +158,21 @@ class Database {
     layout.setText(`<i class="fa fa-inbox"></i> ${LANG['result']['title']}`);
     // layout.hideHeader();
 
-    // const toolbar = layout.attachToolbar();
-    // toolbar.loadStruct([
-    //   { id: 'dump', text: '导出', icon: 'upload', type: 'button', disabled: true },
-    //   { type: 'separator' }
-    // ]);
+    const toolbar = layout.attachToolbar();
+    toolbar.loadStruct([
+      { id: 'dump', text: '导出', icon: 'upload', type: 'button', disabled: true },
+      { type: 'separator' }
+    ]);
+    toolbar.attachEvent('onClick', (id) => {
+      switch(id) {
+        case 'dump':
+          this.drive.dumpResult();
+          break;
+      }
+    });
     return {
       layout: layout,
-      // toolbar: toolbar
+      toolbar: toolbar
     };
   }
 

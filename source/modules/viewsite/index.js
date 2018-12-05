@@ -41,7 +41,7 @@ class ViewSite {
     }, 1000);
 
     // 打开浏览窗口
-    this._loadURL(opts.url);
+    // this._loadURL(opts.url);
   }
 
   /**
@@ -51,9 +51,10 @@ class ViewSite {
   _initToolbar() {
     const toolbar = this.cell.attachToolbar();
     toolbar.loadStruct([
-      { id: 'save', type: 'button', icon: 'save', text: LANG['toolbar'].save },
-      { type: 'separator' },
+      { id: 'url', width: 400, type: 'buttonInput', value: this.opts.url || 'loading..' },
       { id: 'view', type: 'button', icon: 'chrome', text: LANG['toolbar'].view },
+      { type: 'separator' },
+      { id: 'save', type: 'button', icon: 'save', text: LANG['toolbar'].save },
     ]);
     toolbar.attachEvent('onClick', (id) => {
       switch(id) {
@@ -61,9 +62,18 @@ class ViewSite {
           this._saveCookie();
           break;
         case 'view':
-          this._loadURL(this.opts.url);
+          let url = toolbar.getInput('url').value;
+          this._loadURL(url);
       }
-    })
+    });
+    toolbar.attachEvent('onEnter', (id, value) => {
+      switch(id) {
+        case 'url':
+          let url = toolbar.getInput('url').value;
+          this._loadURL(url);
+          break;
+      }
+    });
     return toolbar;
   }
 
@@ -159,7 +169,7 @@ class ViewSite {
       webPreferences: {
         nodeIntegration: false,
       },
-      title: this.opts.url
+      title: url
     });
     win.loadURL(url);
     win.show();

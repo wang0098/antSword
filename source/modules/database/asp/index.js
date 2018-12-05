@@ -525,8 +525,10 @@ class ASP {
     const grid = this.manager.result.layout.attachGrid();
     grid.clearAll();
     grid.setHeader(header_arr.join(',').replace(/,$/, ''));
+    grid.setColTypes("txt,".repeat(header_arr.length).replace(/,$/,''));
     grid.setColSorting(('str,'.repeat(header_arr.length)).replace(/,$/, ''));
-    grid.setInitWidths('*');
+    grid.setColumnMinWidth(100, header_arr.length-1);
+    grid.setInitWidths(("100,".repeat(header_arr.length-1)) + "*");
     grid.setEditable(true);
     grid.init();
     // 添加数据
@@ -541,13 +543,32 @@ class ASP {
       'rows': grid_data
     }, 'json');
     // 启用导出按钮
-    // this.manager.result.toolbar[grid_data.length > 0 ? 'enableItem' : 'disableItem']('dump');
+    this.manager.result.toolbar[grid_data.length > 0 ? 'enableItem' : 'disableItem']('dump');
+  }
+
+  // 导出查询数据
+  dumpResult() {
+    const grid = this.manager.result.layout.getAttachedObject();
+    let filename = `${this.core.__opts__.ip}_${new Date().format("yyyyMMddhhmmss")}.csv`;
+    antSword['test'] = this;
+    dialog.showSaveDialog({
+      title: LANG['result']['dump']['title'],
+      defaultPath: filename
+    },(filePath) => {
+      if (!filePath) { return; };
+      let headerStr = grid.hdrLabels.join(',');
+      let dataStr = grid.serializeToCSV();
+      let tempDataBuffer = new Buffer(headerStr+'\n'+dataStr);
+      fs.writeFileSync(filePath, tempDataBuffer);
+      toastr.success(LANG['result']['dump']['success'], LANG_T['success']);
+    });
   }
 
   // 禁用toolbar按钮
   disableToolbar() {
     this.manager.list.toolbar.disableItem('del');
     this.manager.list.toolbar.disableItem('edit');
+    this.manager.result.toolbar.disableItem('dump');
   }
 
   // 启用toolbar按钮

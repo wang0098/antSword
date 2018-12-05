@@ -170,6 +170,7 @@ module.exports = {
         nohttps: 'Ignore HTTPS certificate',
         terminalCache: "Use the terminal's cache",
         filemanagerCache: "Use the filemanager's cache",
+        uploadFragment: "Upload File Fragmentation Size",
         requestTimeout: 'Request timeout',
         commandPath: 'Custom terminal-execPath'
       }
@@ -219,6 +220,12 @@ module.exports = {
       success: (path) => antSword.noxss(`Retime file success!\n${path}`),
       error: (path, err) => antSword.noxss(`Retime file [${path}] failed!${err ? '\n' + err : ''}`)
     },
+    chmod: {
+      title: 'Chmod File',
+      check: 'Input should be octal numbers, eg: 0644',
+      success: (path) => antSword.noxss(`Chmod file success!\n${path}`),
+      error: (path, err) => antSword.noxss(`Chmod file [${path}] failed!${err ? '\n' + err : ''}`)
+    },
     wget: {
       title: 'Wget File',
       check: 'URL is not correct!',
@@ -234,6 +241,9 @@ module.exports = {
       task: {
         name: 'Upload',
         success: 'Upload success!',
+        httperr_413: 'Please lower the upload file shard size setting.',
+        httperr_etime: 'Request timeout, please increase the timeout period.',
+        httperr_econnrefused: 'Connection refused, check target or proxy is enabled.',
         failed: (err) => antSword.noxss(`Failed:${err}`),
         error: (err) => antSword.noxss(`Error:${err}`)
       },
@@ -303,6 +313,7 @@ module.exports = {
           upload: 'Upload',
           download: 'Download',
           modify: 'Modify the file time',
+          chmod: 'Chmod',
           copy: {
             title: 'Copy',
             warning: (id) => antSword.noxss(`Already add to clipboard!\n${id}`),
@@ -362,7 +373,18 @@ module.exports = {
       menu: {
         add: 'Add conf',
         del: 'Del conf',
-        edit: 'Edit conf'
+        edit: 'Edit conf',
+        adddb: 'New Database',
+        editdb: 'Edit Database',
+        deldb: 'Del Database',
+        addtable: 'New Table',
+        edittable: 'Edit TableName',
+        desctable: 'Desc Table',
+        showcreatetable: 'Create Table SQL',
+        deltable: 'Del Table',
+        addcolumn: 'New Column',
+        editcolumn: 'Edit ColumnName',
+        delcolumn: 'Del Column',
       }
     },
     query: {
@@ -380,8 +402,13 @@ module.exports = {
         query: (err) => antSword.noxss(`Failure to execute SQL!\n${err}`),
         parse: 'Return data format is incorrect!',
         noresult: 'No query results!'
+      },
+      dump: {
+        title: "Export Data",
+        success: "Export success",
       }
     },
+    notsupport: 'Not support the current database type',
     form: {
       title: 'Add conf',
       toolbar: {
@@ -402,6 +429,74 @@ module.exports = {
         confirm: 'Determine delete this configuration?',
         success: 'Delete configuration success!',
         error: (err) => antSword.noxss(`Delete configuration failed!\n${err}`)
+      },
+      adddb: {
+        title: 'New Database',
+        dbname: 'Name',
+        characterset: 'Character Set',
+        charactercollation: 'Collation',
+        createbtn: 'OK',
+        cancelbtn: 'Cancel',
+        success: 'Create database successfully',
+        error: 'Failed to create database',
+      },
+      editdb: {
+        title: 'Database Properties',
+        dbname: 'Name(readonly)',
+        characterset: 'Character Set',
+        charactercollation: 'Collation',
+        updatebtn: 'OK',
+        cancelbtn: 'Cancel',
+        success: 'Edit database successfully',
+        error: 'Failed to edit database',
+      },
+      deldb: {
+        title: 'Delete Database',
+        confirm: (name) => antSword.noxss(`Are you sure you want to delete database ${name} ?`),
+        success: 'Delete database successfully',
+        error: 'Failed to delete database',
+      },
+      addtable: {
+        title: 'New Table',
+        add: 'New Column',
+        delete: 'Delete Column',
+        save: 'Save',
+        gridheader: "Name,Type,Length,Not Null,Key,Auto Increment",
+        delete_not_select: "Please select the row you want to delete first",
+        save_row_is_null: "The number of rows is empty",
+        cell_valid_error: (i,j)=>`Data format validation failed(row ${i+1}, col ${j+1})`,
+        confirmtitle: "New table name",
+        invalid_tablename: "Table names should not contain special symbols",
+        success: 'Create table successfully',
+        error: 'Failed to create table',
+      },
+      edittable: {
+        title: "New table name",
+        invalid_tablename: "Table names should not contain special symbols",
+        success: 'Update table name successfully',
+        error: 'Failed to update table',
+      },
+      deltable: {
+        title:'Delete Table',
+        confirm: (name) => antSword.noxss(`Are you sure you want to delete table ${name}?`),
+        success: 'Delete table successfully',
+        error: 'Failed to delete table',
+      },
+      addcolumn: {
+
+      },
+      editcolumn: {
+        title: "New column name",
+        invalid_tablename: "Column names should not contain special symbols",
+        get_column_type_error: "Get column type error",
+        success: 'Update column name successfully',
+        error: 'Failed to update column',
+      },
+      delcolumn: {
+        title:'Delete Column',
+        confirm: (name) => antSword.noxss(`Are you sure you want to delete column ${name}?`),
+        success: 'Delete column successfully',
+        error: 'Failed to delete column',
       }
     }
   },
@@ -411,7 +506,8 @@ module.exports = {
       header: 'AntSword',
       homepage: 'Home',
       document: 'Document',
-      qqgroup: 'QQ Group'
+      qqgroup: 'QQ Group',
+      discord: 'Discord'
     },
     language: {
       title: 'Language setting',

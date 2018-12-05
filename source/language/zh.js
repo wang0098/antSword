@@ -171,6 +171,7 @@ module.exports = {
         nohttps: '忽略HTTPS证书',
         terminalCache: '虚拟终端使用缓存',
         filemanagerCache: '文件管理使用缓存',
+        uploadFragment: '上传文件分片大小',
         requestTimeout: '请求超时',
         commandPath: '自定义终端执行路径'
       }
@@ -220,6 +221,12 @@ module.exports = {
       success: (path) => antSword.noxss(`更改文件时间成功！\n${path}`),
       error: (path, err) => antSword.noxss(`更改文件时间 [${path}] 失败！${err ? '\n' + err : ''}`)
     },
+    chmod: {
+      title: '更改权限',
+      check: "输入应为八进制数表示的权限, eg: 0644",
+      success: (path) => antSword.noxss(`更改文件权限成功！\n${path}`),
+      error: (path, err) => antSword.noxss(`更改文件权限 [${path}] 失败！${err ? '\n' + err : ''}`)
+    },
     wget: {
       title: 'Wget下载文件',
       check: 'URL地址不正确！',
@@ -235,6 +242,9 @@ module.exports = {
       task: {
         name: '上传',
         success: '上传成功',
+        httperr_413: '请将上传文件分片大小设置调低',
+        httperr_etime: '请求超时,请将超时时间调大',
+        httperr_econnrefused: '连接被拒绝,检查目标或代理是否开启',
         failed: (err) => antSword.noxss(`失败:${err}`),
         error: (err) => antSword.noxss(`出错:${err}`)
       },
@@ -304,6 +314,7 @@ module.exports = {
           upload: '上传文件',
           download: '下载文件',
           modify: '更改文件时间',
+          chmod: '更改权限',
           copy: {
             title: '复制文件',
             warning: (id) => antSword.noxss(`已经添加到剪贴板！\n${id}`),
@@ -363,7 +374,18 @@ module.exports = {
       menu: {
         add: '添加配置',
         del: '删除配置',
-        edit: '编辑配置'
+        edit: '编辑配置',
+        adddb: '新建数据库',
+        editdb: '编辑数据库',
+        deldb: '删除数据库',
+        addtable: '新建表',
+        edittable: '编辑表名',
+        deltable: '删除表',
+        showcreatetable: '建表语句',
+        desctable: '查看表结构',
+        addcolumn: '添加列',
+        editcolumn: '编辑列名',
+        delcolumn: '删除列',
       }
     },
     query: {
@@ -381,8 +403,13 @@ module.exports = {
         query: (err) => antSword.noxss(`执行SQL失败！\n${err}`),
         parse: '返回数据格式不正确！',
         noresult: '没有查询结果！'
+      },
+      dump: {
+        title: "导出查询结果",
+        success: "导出成功",
       }
     },
+    notsupport: '该功能暂不支持当前类型数据库',
     form: {
       title: '添加配置',
       toolbar: {
@@ -403,6 +430,74 @@ module.exports = {
         confirm: '确定删除此配置吗？',
         success: '删除配置成功！',
         error: (err) => antSword.noxss(`删除配置失败！\n${err}`)
+      },
+      adddb: {
+        title: '新建数据库',
+        dbname: '名称',
+        characterset: '字符集',
+        charactercollation: '字符集排序',
+        createbtn: '创建',
+        cancelbtn: '取消',
+        success: '创建数据库成功',
+        error: '创建数据库失败',
+      },
+      editdb: {
+        title: '修改数据库',
+        dbname: '名称(只读)',
+        characterset: '字符集',
+        charactercollation: '字符集排序',
+        updatebtn: '修改',
+        cancelbtn: '取消',
+        success: '修改数据库成功',
+        error: '修改数据库失败',
+      },
+      deldb: {
+        title: '删除数据库',
+        confirm: (name) => antSword.noxss(`确定要删除数据库 ${name} 吗?`),
+        success: '删除数据库成功',
+        error: '删除数据库失败',
+      },
+      addtable: {
+        title: '新建表',
+        add: '新增字段',
+        delete: '删除字段',
+        save: '保存',
+        gridheader: "名称,类型,长度,不为空,主键,自增长",
+        delete_not_select: "请先选中要删除的行",
+        save_row_is_null: "行数为空",
+        cell_valid_error: (i,j)=>`数据格式校验失败(${i+1}行,${j+1}列)`,
+        confirmtitle: "输入新表名",
+        invalid_tablename: "表名不能带有特殊符号",
+        success: '新建表成功',
+        error: '新建表失败',
+      },
+      edittable: {
+        title: "输入新表名",
+        invalid_tablename: "表名不能带有特殊符号",
+        success: '修改表名成功',
+        error: '修改表名失败',
+      },
+      deltable: {
+        title:'删除表',
+        confirm: (name) => antSword.noxss(`确定要删除表 ${name} 吗?`),
+        success: '删除表成功',
+        error: '删除表失败',
+      },
+      addcolumn: {
+
+      },
+      editcolumn: {
+        title: "输入新列名",
+        invalid_tablename: "列名不能带有特殊符号",
+        get_column_type_error: "获取列属性失败",
+        success: '修改列名成功',
+        error: '修改列名失败'
+      },
+      delcolumn: {
+        title:'删除列',
+        confirm: (name) => antSword.noxss(`确定要删除列 ${name} 吗?`),
+        success: '删除列成功',
+        error: '删除列失败',
       }
     }
   },
@@ -412,7 +507,8 @@ module.exports = {
       header: '中国蚁剑',
       homepage: '主页',
       document: '文档',
-      qqgroup: 'Q群'
+      qqgroup: 'Q群',
+      discord: '在线交流'
     },
     language: {
       title: '语言设置',

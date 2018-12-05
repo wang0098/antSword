@@ -38,7 +38,7 @@ module.exports = () => ({
   upload_file: {
     _: 'U',
     'z1': '#{path}',
-    'z2': '#{hex::content}'
+    'z2': '#{buffer::content}'
   },
 
   rename: {
