@@ -44,6 +44,7 @@
   ```
 
  * JSP Shell 基础信息调整, 现在默认的目录为 shell 编译后的 class 文件所在目录
+ * 关于页面新增 [Discord 在线交流地址](https://discord.gg/Uzh5nUf)
 
 ## 2018/09/12 `(v2.0.1)`
 

@@ -507,7 +507,8 @@ module.exports = {
       header: '中国蚁剑',
       homepage: '主页',
       document: '文档',
-      qqgroup: 'Q群'
+      qqgroup: 'Q群',
+      discord: '在线交流'
     },
     language: {
       title: '语言设置',

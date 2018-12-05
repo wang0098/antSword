@@ -506,7 +506,8 @@ module.exports = {
       header: 'AntSword',
       homepage: 'Home',
       document: 'Document',
-      qqgroup: 'QQ Group'
+      qqgroup: 'QQ Group',
+      discord: 'Discord'
     },
     language: {
       title: 'Language setting',

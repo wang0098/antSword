@@ -20,7 +20,8 @@ class About {
         <h2>${LANG['header']}<span> v${antSword['package']['version']}</span></h2>
         <p>
           <a href="https://github.com/AntSwordProject/AntSword"><i class="fa fa-github-alt"></i> GitHub</a> /
-          <a href="http://doc.u0u.us"><i class="fa fa-book"></i> ${LANG['document']}</a>
+          <a href="http://doc.u0u.us"><i class="fa fa-book"></i> ${LANG['document']}</a> /
+          <a href="https://discord.gg/Uzh5nUf"><i class="fa fa-comments"></i> ${LANG['discord']}</a>
         </p>
       </div>
     `);
