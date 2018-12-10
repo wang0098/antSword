@@ -2,6 +2,18 @@
 > 有空会补补BUG、添添新功能。    
 > 同时也欢迎大家的参与！感谢各位朋友的支持！ .TAT.
 
+## `v(2.0.3-dev)`
+
+### Core
+
+#### 后端模块
+
+ * 数据存储新增插件配置存储管理功能 (`shell-addPluginDataConf`, `shell-editPluginDataConf`, `shell-delPluginDataConf`, `shell-getPluginDataConf`)
+
+### Other
+
+ * 自动检查更新每24小时触发一次(GitHub 访问频率限制)
+
 ## 2018/12/05 `(v2.0.2)`
 
 ### 模块增强
