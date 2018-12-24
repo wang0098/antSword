@@ -169,6 +169,7 @@ module.exports = {
       },
       otherConf: {
         nohttps: '忽略HTTPS证书',
+        usemultipart: '使用 Multipart 发包',
         terminalCache: '虚拟终端使用缓存',
         filemanagerCache: '文件管理使用缓存',
         uploadFragment: '上传文件分片大小',

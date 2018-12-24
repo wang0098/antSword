@@ -317,6 +317,7 @@ class Form {
   _createOtherForm(arg) {
     const opt = Object.assign({}, {
       'ignore-https': 0,
+      'use-multipart': 0,
       'terminal-cache': 0,
       'filemanager-cache': 1,
       'upload-fragment': '500',
@@ -330,6 +331,9 @@ class Form {
         {
           type: "checkbox", name: 'ignore-https', label: LANG['list']['otherConf']['nohttps'],
           checked: opt['ignore-https'] === 1
+        }, {
+          type: "checkbox", name: 'use-multipart', label: LANG['list']['otherConf']['usemultipart'],
+          checked: opt['use-multipart'] === 1
         }, {
           type: "checkbox", name: 'terminal-cache', label: LANG['list']['otherConf']['terminalCache'],
           checked: opt['terminal-cache'] === 1

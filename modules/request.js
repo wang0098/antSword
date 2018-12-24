@@ -99,7 +99,7 @@ class Request {
     if(opts['url'].match(CONF.urlblacklist)) {
       return event.sender.send('request-error-' + opts['hash'], "Blacklist URL");
     }
-    const _request = superagent.post(opts['url']);
+    let _request = superagent.post(opts['url']);
     // 设置headers
     _request.set('User-Agent', USER_AGENT);
     // 自定义headers
@@ -108,6 +108,13 @@ class Request {
     }
     // 自定义body
     const _postData = Object.assign({}, opts.body, opts.data);
+    // 通过替换函数方式来实现发包方式切换, 后续可改成别的
+    const old_send = _request.send;
+    if(opts['useMultipart'] == 1) {
+      _request.send = _request.field;
+    }else{
+      _request.send = old_send;
+    }
     _request
       .proxy(APROXY_CONF['uri'])
       .type('form')
@@ -158,7 +165,7 @@ class Request {
     let indexEnd = -1;
     let tempData = [];
 
-    const _request = superagent.post(opts['url']);
+    let _request = superagent.post(opts['url']);
     // 设置headers
     _request.set('User-Agent', USER_AGENT);
     // 自定义headers
@@ -167,6 +174,13 @@ class Request {
     }
     // 自定义body
     const _postData = Object.assign({}, opts.body, opts.data);
+    // 通过替换函数方式来实现发包方式切换, 后续可改成别的
+    const old_send = _request.send;
+    if(opts['useMultipart'] == 1) {
+      _request.send = _request.field;
+    }else{
+      _request.send = old_send;
+    }
     _request
       .proxy(APROXY_CONF['uri'])
       .type('form')
