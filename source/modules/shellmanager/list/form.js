@@ -140,7 +140,7 @@ class Form {
    */
   _createBaseForm(arg) {
     const opt = Object.assign({}, {
-      url: '',
+      url: 'http://',
       pwd: '',
       note: '',
       type: 'php',
