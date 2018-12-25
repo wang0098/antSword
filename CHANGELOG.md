@@ -2,6 +2,32 @@
 > 有空会补补BUG、添添新功能。    
 > 同时也欢迎大家的参与！感谢各位朋友的支持！ .TAT.
 
+## 2018/12/25 `(v2.0.3)`
+
+### 模块增强
+
+#### Shell 管理
+
+ * 添加 Shell 时 URL 默认前缀 `http://`
+ * 添加 Shell 时根据文件后缀选择 Shell 类型并赋予默认编码(asp 默认 GBK, 其它默认 UTF8) #109
+ * 其它配置新增 `Multipart 发包` 功能
+
+#### 后端模块
+
+ * 数据存储新增插件配置存储管理功能 (`shell-addPluginDataConf`, `shell-editPluginDataConf`, `shell-delPluginDataConf`, `shell-getPluginDataConf`)
+ * 后台发包方式支持 `Multipart`, 可在「编辑Shell配置」-「其它配置」里选择是否开启此功能，默认关闭。(thx @phith0n)
+
+### Bug Fix
+
+ * 修复数据库编码无法保存的 Bug (#110 thx @Twi1ight)
+ * 修复 PHP Mysql(i) 数据管理模版代码中编码设置部分的错误 (#110 thx @Twi1ight)
+
+### Other
+
+ * 自动检查更新每24小时触发一次(GitHub 访问频率限制)
+ * 插件市场默认窗口大小调整
+ * Loading 界面增加了圣诞节彩蛋, 偶尔跟风过个节 🎄 Merry Christmas 🎄
+
 ## 2018/12/05 `(v2.0.2)`
 
 ### 模块增强

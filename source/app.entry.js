@@ -385,8 +385,12 @@ antSword.reloadPlug();
 antSword['menubar'].reg('check-update', ()=>{
   antSword.ipcRenderer.send('check-update');
 });
-// 检查更新
-setTimeout(
-  antSword.ipcRenderer.send.bind(antSword.ipcRenderer, 'check-update'),
-  1000 * 60
-);
+
+if(new Date() - new Date(antSword['storage']('lastautocheck', false, "0")) >= 86400000) {
+  // 检查更新
+  antSword['storage']('lastautocheck', new Date().getTime());
+  setTimeout(
+    antSword.ipcRenderer.send.bind(antSword.ipcRenderer, 'check-update'),
+    1000 * 60
+  );
+}

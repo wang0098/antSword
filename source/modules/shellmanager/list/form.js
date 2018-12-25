@@ -140,7 +140,7 @@ class Form {
    */
   _createBaseForm(arg) {
     const opt = Object.assign({}, {
-      url: '',
+      url: 'http://',
       pwd: '',
       note: '',
       type: 'php',
@@ -168,6 +168,47 @@ class Form {
         }
       ] }
     ], true);
+
+    form.attachEvent('onChange', (_, id) => {
+      // 根据后缀自动修改 shell 类型
+      if(_ == "url") {
+        let file_match = {
+          "php": /.+\.ph(p[345]?|s|t|tml)/,
+          "aspx": /.+\.as(px|mx)/,
+          "asp": /.+\.(as(p|a|hx)|c(dx|er))/,
+          "custom": /.+\.((jsp[x]?)|cgi)/,
+        }
+        let typecombo = form.getCombo('type');
+        if(file_match.php.test(id) == true) {
+          typecombo.selectOption(typecombo.getOption('php').index);
+        }else if(file_match.aspx.test(id) == true){
+          typecombo.selectOption(typecombo.getOption('aspx').index);
+        }else if(file_match.asp.test(id) == true){
+          typecombo.selectOption(typecombo.getOption('asp').index);
+        }else if(file_match.custom.test(id) == true){
+          typecombo.selectOption(typecombo.getOption('custom').index);
+        }
+      }
+
+      // 默认编码设置
+      if(_ == "type") {
+        let encodecombo = form.getCombo('encode');
+        switch(id) {
+          case 'php':
+            encodecombo.selectOption(encodecombo.getOption('UTF8').index);
+            break;
+          case 'asp':
+            encodecombo.selectOption(encodecombo.getOption('GBK').index);
+            break;
+          case 'aspx':
+            encodecombo.selectOption(encodecombo.getOption('UTF8').index);
+            break;
+          case 'custom':
+            encodecombo.selectOption(encodecombo.getOption('UTF8').index);
+            break;
+        }
+      }
+    });
     return form;
   }
 
@@ -276,6 +317,7 @@ class Form {
   _createOtherForm(arg) {
     const opt = Object.assign({}, {
       'ignore-https': 0,
+      'use-multipart': 0,
       'terminal-cache': 0,
       'filemanager-cache': 1,
       'upload-fragment': '500',
@@ -289,6 +331,9 @@ class Form {
         {
           type: "checkbox", name: 'ignore-https', label: LANG['list']['otherConf']['nohttps'],
           checked: opt['ignore-https'] === 1
+        }, {
+          type: "checkbox", name: 'use-multipart', label: LANG['list']['otherConf']['usemultipart'],
+          checked: opt['use-multipart'] === 1
         }, {
           type: "checkbox", name: 'terminal-cache', label: LANG['list']['otherConf']['terminalCache'],
           checked: opt['terminal-cache'] === 1

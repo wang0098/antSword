@@ -168,6 +168,7 @@ module.exports = {
       },
       otherConf: {
         nohttps: 'Ignore HTTPS certificate',
+        usemultipart: 'Use Multipart send payload',
         terminalCache: "Use the terminal's cache",
         filemanagerCache: "Use the filemanager's cache",
         uploadFragment: "Upload File Fragmentation Size",

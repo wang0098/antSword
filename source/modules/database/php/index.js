@@ -485,26 +485,35 @@ class PHP {
     ], true);
 
     form.attachEvent('onChange', (_, id) => {
-      if (_ !== 'type') { return };
-      switch(id) {
-        case 'mysql':
-        case 'mysqli':
-          form.setFormData({
-            user: conf['user'],
-            passwd: conf['passwd']
-          });
-          break;
-        case 'mssql':
-          form.setFormData({
-            user: conf['user'],
-            passwd: conf['passwd']
-          });
-          break;
-        default:
-          form.setFormData({
-            user: conf['user'],
-            passwd: conf['passwd']
-          });
+      if (_ == 'type') {
+        switch(id) {
+          case 'mysql':
+          case 'mysqli':
+            form.setFormData({
+              encode: conf['encode'],
+              user: conf['user'],
+              passwd: conf['passwd']
+            });
+            break;
+          case 'mssql':
+            form.setFormData({
+              encode: conf['encode'],
+              user: conf['user'],
+              passwd: conf['passwd']
+            });
+            break;
+          default:
+            form.setFormData({
+              encode: conf['encode'],
+              user: conf['user'],
+              passwd: conf['passwd']
+            });
+        }
+      };
+      if(_ == 'encode') {
+        form.setFormData({
+          encode: id,
+        });
       }
     });
 

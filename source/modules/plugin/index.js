@@ -29,9 +29,9 @@ class Plugin {
       return this.win.focus();
     }
     let win = new antSword['remote'].BrowserWindow({
-      width: 930,
+      width: 950,
       height: 666,
-      minWidth: 888,
+      minWidth: 650,
       minHeight: 555,
       show: false,
       title: 'AntSword.Store'
