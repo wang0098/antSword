@@ -12,12 +12,15 @@
  * 添加 Shell 时根据文件后缀选择 Shell 类型并赋予默认编码(asp 默认 GBK, 其它默认 UTF8) #109
  * 其它配置新增 `Multipart 发包` 功能
 
-### Core
-
 #### 后端模块
 
  * 数据存储新增插件配置存储管理功能 (`shell-addPluginDataConf`, `shell-editPluginDataConf`, `shell-delPluginDataConf`, `shell-getPluginDataConf`)
- * 后台发包方式支持 `Multipart`, 可在Shell其它配置里选择是否开启此功能
+ * 后台发包方式支持 `Multipart`, 可在「编辑Shell配置」-「其它配置」里选择是否开启此功能，默认关闭。(thx @phith0n)
+
+### Bug Fix
+
+ * 修复数据库编码无法保存的 Bug (#110 thx @Twi1ight)
+ * 修复 PHP Mysql(i) 数据管理模版代码中编码设置部分的错误 (#110 thx @Twi1ight)
 
 ### Other
 
