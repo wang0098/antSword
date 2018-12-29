@@ -895,6 +895,12 @@ class FileManager {
     ).then((res) => {
       let ret = res['text'];
       codes = ret;
+      let encoding = res['encoding'] || this.opts['encode'];
+      if(encoding.toUpperCase() == "UTF-8") {
+        encoding = "UTF8";
+      }
+      toolbar.setListOptionSelected('encode', `encode_${encoding}`);
+
       win.progressOff();
 
       // 初始化编辑器
