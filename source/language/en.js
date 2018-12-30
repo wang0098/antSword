@@ -317,6 +317,10 @@ module.exports = {
           chmod: 'Chmod',
           copy: {
             title: 'Copy',
+            copyname: 'Copy FileName',
+            copypath: 'Copy FilePath',
+            copysuccess: 'Copy to clipboard successfully!',
+            copyfail: 'Copy to clipboard failed!',
             warning: (id) => antSword.noxss(`Already add to clipboard!\n${id}`),
             info: (id) => antSword.noxss(`Add file to the clipboard.\n${id}`)
           },

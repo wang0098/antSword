@@ -318,6 +318,10 @@ module.exports = {
           chmod: '更改权限',
           copy: {
             title: '复制文件',
+            copyname: '复制文件名',
+            copypath: '复制文件路径',
+            copysuccess: '复制到剪贴板成功!',
+            copyfail: '复制到剪贴板失败!',
             warning: (id) => antSword.noxss(`已经添加到剪贴板！\n${id}`),
             info: (id) => antSword.noxss(`添加文件到剪贴板\n${id}`)
           },
