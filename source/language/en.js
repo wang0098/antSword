@@ -333,7 +333,7 @@ module.exports = {
       toolbar: {
         save: 'Save',
         mode: 'Mode',
-        encode: 'Encode'
+        encode: 'Open with Encoding'
       },
       loadErr: (err) => antSword.noxss(`Load file error!\n${err}`),
       success: (path) => antSword.noxss(`Save the file success!\n${path}`),

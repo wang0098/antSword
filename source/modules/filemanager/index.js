@@ -881,7 +881,7 @@ class FileManager {
         editor.session.setMode(`ace/mode/${mode}`);
       }else if (id.startsWith('encode_')) {
         let encode = id.split('_')[1];
-        editor.session.setValue(iconv.encode(codes, encode).toString());
+        editor.session.setValue(iconv.decode(new Buffer(codes), encode).toString());
       }else{
         console.info('toolbar.onClick', id);
       }
@@ -894,7 +894,7 @@ class FileManager {
       })
     ).then((res) => {
       let ret = res['text'];
-      codes = ret;
+      codes = res['buff'];
       let encoding = res['encoding'] || this.opts['encode'];
       if(encoding.toUpperCase() == "UTF-8") {
         encoding = "UTF8";

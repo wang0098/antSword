@@ -334,7 +334,7 @@ module.exports = {
       toolbar: {
         save: '保存',
         mode: '高亮',
-        encode: '编码'
+        encode: '用此编码打开'
       },
       loadErr: (err) => antSword.noxss(`加载文件出错！\n${err}`),
       success: (path) => antSword.noxss(`保存文件成功！\n${path}`),
