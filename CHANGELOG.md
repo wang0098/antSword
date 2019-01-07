@@ -17,6 +17,10 @@
 
  * 新增 Python2 Custom CGI shell 示例
 
+### BugFix
+
+ * 修复Linux中编码设置中找到不到路径的问题 (#117) thx @H1d3r
+
 ## 2018/12/25 `(v2.0.3)`
 
 ### 模块增强
