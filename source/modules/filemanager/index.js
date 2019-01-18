@@ -136,7 +136,7 @@ class FileManager {
 
     let self = this;
     if(self.isWin) { // 处理输入为 f:\ 这种情况
-      p = p.replace(/\\/g, '/').replace(/\.$/, '');
+      p = p.replace(/\\/g, '/');
       p = p.substr(1,2) == ":/" ? `${p.substr(0,1).toUpperCase()}${p.substr(1)}` : p;
     }
     let path = this.changePath(p);
