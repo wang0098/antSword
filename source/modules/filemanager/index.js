@@ -798,17 +798,28 @@ class FileManager {
   }
 
   // 编辑文件
-  editFile(name) {
+  editFile(name, openfileintab=false) {
     let self = this;
     let path = this.path + name;
     let editor = null;
     let codes = '';
-    // 创建窗口
-    let win = this.createWin({
-      title: LANG['editor']['title'](path),
-      width: 800
-    });
-    win.maximize();
+    let win;
+    if (openfileintab == false){
+      win = this.createWin({
+        title: LANG['editor']['title'](path),
+        width: 800
+      });
+      win.maximize();  
+    }else{
+      let _id = String(Math.random()).substr(5, 10);
+      antSword['tabbar'].addTab(
+        `tab_file_${_id}`,
+        `<i class="fa fa-file-o"></i> ${name}`,
+        null, null, true, true
+      );
+      win = antSword['tabbar'].cells(`tab_file_${_id}`);
+    }
+
     win.progressOn();
 
     // 检测文件后缀

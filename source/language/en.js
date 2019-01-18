@@ -306,7 +306,11 @@ module.exports = {
             }
           },
           preview: 'Preview',
-          edit: 'Edit',
+          edit: {
+            title: 'Edit',
+            openwindow: 'Open in Window',
+            opentab: 'Open in Tab',
+          },
           delete: 'Delete',
           rename: 'Rename',
           refresh: 'Refresh',

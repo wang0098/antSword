@@ -334,9 +334,14 @@ class Files {
           manager.previewFile(id, this.getRowAttribute(_ids[0], 'fsize'));
         } },
         { divider: true },
-        { text: LANG['grid']['contextmenu']['edit'], icon: 'fa fa-edit', disabled: /*!isEdited || */!id || ids.length > 1 || isFolder, action: () => {
-          manager.editFile(id);
-        } },
+        { text: LANG['grid']['contextmenu']['edit']['title'], icon: 'fa fa-edit', disabled: /*!isEdited || */!id || ids.length > 1 || isFolder, subMenu: [
+          { text: LANG['grid']['contextmenu']['edit']['opentab'], icon: 'fa fa-external-link', action: () => {
+            manager.editFile(id, true);
+          } },
+          { text: LANG['grid']['contextmenu']['edit']['openwindow'], icon: 'fa fa-arrows-alt', action: () => {
+            manager.editFile(id, false);
+          } },
+        ] },
         { text: LANG['grid']['contextmenu']['delete'], icon: 'fa fa-trash-o', disabled: !id, action: () => {
           manager.deleteFile(ids);
         } },

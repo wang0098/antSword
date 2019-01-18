@@ -307,7 +307,11 @@ module.exports = {
             }
           },
           preview: '预览文件',
-          edit: '编辑文件',
+          edit: {
+            title: '编辑文件',
+            openwindow: '窗口打开',
+            opentab: '标签打开',
+          },
           delete: '删除文件',
           rename: '重命名文件',
           refresh: '刷新目录',
