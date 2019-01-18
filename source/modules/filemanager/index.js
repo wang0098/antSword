@@ -89,10 +89,13 @@ class FileManager {
     };
     let info_path = info[0].replace(/\\/g, '/').replace(/\.$/, '');
     let info_drive = info[1];
-
     // 判断是否为linux
     if (info_path.substr(0, 1) === '/') {
       this.isWin = false;
+    }else{
+      // windows 盘符统一大写
+      info_path = `${info_path.substr(0,1).toUpperCase()}${info_path.substr(1)}`;
+      info_drive = info_drive.toUpperCase();
     };
     this.path = info_path;
     this.home = info_path;
@@ -132,7 +135,14 @@ class FileManager {
   getFiles(p, callback) {
 
     let self = this;
+    if(self.isWin) { // 处理输入为 f:\ 这种情况
+      p = p.replace(/\\/g, '/').replace(/\.$/, '');
+      p = p.substr(1,2) == ":/" ? `${p.substr(0,1).toUpperCase()}${p.substr(1)}` : p;
+    }
     let path = this.changePath(p);
+    if (self.isWin){ // 处理输入为 f: 这种情况
+      path = path.substr(1,2) == ":/" ? `${path.substr(0,1).toUpperCase()}${path.substr(1)}` : path;
+    }
     let cache;
 
     if (!path.endsWith('/')) { path += '/' };
