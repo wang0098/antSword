@@ -10,7 +10,7 @@ class ADefault {
   constructor(sidebar) {
     sidebar.addItem({
       id: 'adefault',
-      text: `<i class="fa fa-television"></i> ${LANG['title']}`
+      text: `<i class="fa fa-sliders"></i> ${LANG['title']}`
     });
     const cell = sidebar.cells('adefault');
     const default_config = {
