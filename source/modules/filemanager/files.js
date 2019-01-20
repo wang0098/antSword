@@ -383,7 +383,7 @@ class Files {
           manager.previewFile(fname, fsize);
         }else if(fsize <= 100 * 1024){
           // 双击编辑size < 100kb 文件
-          manager.editFile(fname);
+          manager.editFile(fname, self.manager.config.openfileintab);
         }else{
           manager.downloadFile(fname, fsize);
         }

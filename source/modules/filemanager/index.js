@@ -39,6 +39,11 @@ class FileManager {
     antSword['modules']['filemanager'] = antSword['modules']['filemanager'] || {};
     antSword['modules']['filemanager'][hash] = this;
 
+    let config = {
+      openfileintab: false,
+    };
+    
+    this.config = JSON.parse(antSword['storage']("adefault_filemanager", false, JSON.stringify(config)));
     this.isWin = true;
     this.path = '/';
     this.home = '/';

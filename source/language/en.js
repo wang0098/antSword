@@ -664,6 +664,26 @@ module.exports = {
           }
         }
       }
+    },
+    adefault: {
+      title: 'Default Setting',
+      success: 'Save default settings successfully!',
+      error: 'Failed to save the default settings!',
+      confirm: {
+        content: 'Restart the application to take effect, whether to restart?',
+        title: 'Change default settings'
+      },
+      toolbar: {
+        save: 'Save',
+      },
+      filemanager: {
+        title: 'FileManager',
+        openfileintab: {
+          title: 'Open File in',
+          window: 'Window',
+          tab: 'Tab',
+        },
+      }
     }
   },
   plugin: {

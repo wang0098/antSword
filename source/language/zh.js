@@ -665,6 +665,26 @@ module.exports = {
           }
         }
       }
+    },
+    adefault: {
+      title: '默认设置',
+      success: '保存成功',
+      error: '保存失败！',
+      confirm: {
+        content: '重启应用生效，是否重启？',
+        title: '更改默认设置'
+      },
+      toolbar: {
+        save: '保存',
+      },
+      filemanager: {
+        title: '文件管理',
+        openfileintab: {
+          title: '文件打开方式',
+          window: '窗口打开',
+          tab: '标签打开',
+        },
+      }
     }
   },
   plugin: {

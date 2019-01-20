@@ -73,7 +73,7 @@ const antSword = window.antSword = {
     if (!value) {
       return localStorage.getItem(key) || def;
     };
-    if (typeof(x) === "object")
+    if (typeof(value) === "object")
       value = JSON.stringify(value);
     // 设置
     localStorage.setItem(key, value);
