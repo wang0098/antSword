@@ -185,7 +185,11 @@ module.exports = {
       system: 'System  Info',
       user: 'Current User',
       path: 'Current Path'
-    }
+    },
+    ascmd: {
+      ashelp: `Usage:\nascmd file\t\tExecute the command with file, eg: ascmd /bin/bash\n`,
+      ascmd: (cmd) => antSword.noxss(`Will execute the command with ${cmd}.`),
+    },
   },
   filemanager: {
     title: 'FileManager',

@@ -186,7 +186,11 @@ module.exports = {
       system: '系统信息',
       user: '当前用户',
       path: '当前路径'
-    }
+    },
+    ascmd: {
+      ashelp: `使用帮助:\nascmd file\t\t指定file来执行命令,eg: ascmd /bin/bash\n`,
+      ascmd: (cmd) => antSword.noxss(`将使用 ${cmd} 执行命令.`),
+    },
   },
   filemanager: {
     title: '文件管理',

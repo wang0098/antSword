@@ -39,6 +39,7 @@ class Terminal {
     this.term = null;
     this.cell = cell;
     this.isWin = true;
+    this.sessbin = null;
     this.core = new antSword['core'][opts['type']](opts);
     this.cache = new antSword['CacheManager'](this.opts['_id']);
 
@@ -95,6 +96,7 @@ class Terminal {
    * @return {None}     [description]
    */
   initTerminal(ret, dom) {
+    let self = this;
     let info = ret.split('\t');
     let infoUser, infoPath, infoDrive, infoSystem;
     let banner = `[[b;cyan;](*) ${LANG['banner']['title']}]`;
@@ -136,6 +138,21 @@ class Terminal {
       if (cmd === 'exit' || cmd === 'quit') { return this.cell.close() }
       // clear清空
       if (cmd === 'cls' || cmd === 'clear') { return term.clear() }
+      
+      if (cmd === 'ashelp'){
+        term.echo(LANG['ascmd']['ashelp']);
+        return;
+      }
+      if ( cmd.substr(0,5) === 'ascmd') {
+        var sessbin = cmd.substr(5).trim();
+        if(sessbin.length>0){
+          self.sessbin = sessbin;
+          term.echo(LANG['ascmd']['ascmd'](self.sessbin));
+        }else{
+          term.echo(LANG['ascmd']['ashelp']);
+        }
+        return;
+      }
       term.pause();
       // 是否有缓存
       let cacheTag = 'command-' + new Buffer(this.path + cmd).toString('base64');
@@ -152,6 +169,9 @@ class Terminal {
       let _bin = this.isWin ? 'cmd' : '/bin/sh';
       let _confBin = (this.opts['otherConf'] || {})['command-path'];
       _bin = _confBin || _bin;
+      if(self.sessbin !== null) {
+        _bin = self.sessbin;
+      }
       // 开始执行命令
       this.core.request(
         this.core.command.exec({
@@ -202,7 +222,9 @@ class Terminal {
         exit: false,
         // < 1.0.0 时使用3个参数 completion: (term, value, callback) => {}
         completion: (value, callback) => {
-          callback(
+          callback([
+            'ashelp', 'ascmd', 'quit', 'exit'
+          ].concat(
             this.isWin ? [
               'dir', 'whoami', 'net', 'ipconfig', 'netstat', 'cls',
               'wscript', 'nslookup', 'copy', 'del', 'ren', 'md', 'type',
@@ -213,7 +235,7 @@ class Terminal {
               'whoami', 'ifconfig', 'clear',
               'ping'
             ]
-          )
+          ))
         },
         keydown: (event, terminal) => {
           if(event.ctrlKey == true) {
