@@ -223,6 +223,7 @@ class Base {
         // 请求完毕返回数据{text,buff}
         .once(`request-${hash}`, (event, ret) => {
           return res({
+            'encoding': ret['encoding']||"",
             'text': ret['text'],
             'buff': ret['buff']
           });

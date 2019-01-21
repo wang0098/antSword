@@ -186,7 +186,11 @@ module.exports = {
       system: '系统信息',
       user: '当前用户',
       path: '当前路径'
-    }
+    },
+    ascmd: {
+      ashelp: `使用帮助:\nascmd file\t\t指定file来执行命令,eg: ascmd /bin/bash\n`,
+      ascmd: (cmd) => antSword.noxss(`将使用 ${cmd} 执行命令.`),
+    },
   },
   filemanager: {
     title: '文件管理',
@@ -307,7 +311,11 @@ module.exports = {
             }
           },
           preview: '预览文件',
-          edit: '编辑文件',
+          edit: {
+            title: '编辑文件',
+            openwindow: '窗口打开',
+            opentab: '标签打开',
+          },
           delete: '删除文件',
           rename: '重命名文件',
           refresh: '刷新目录',
@@ -318,6 +326,10 @@ module.exports = {
           chmod: '更改权限',
           copy: {
             title: '复制文件',
+            copyname: '复制文件名',
+            copypath: '复制文件路径',
+            copysuccess: '复制到剪贴板成功!',
+            copyfail: '复制到剪贴板失败!',
             warning: (id) => antSword.noxss(`已经添加到剪贴板！\n${id}`),
             info: (id) => antSword.noxss(`添加文件到剪贴板\n${id}`)
           },
@@ -334,7 +346,7 @@ module.exports = {
       toolbar: {
         save: '保存',
         mode: '高亮',
-        encode: '编码'
+        encode: '用此编码打开'
       },
       loadErr: (err) => antSword.noxss(`加载文件出错！\n${err}`),
       success: (path) => antSword.noxss(`保存文件成功！\n${path}`),
@@ -656,6 +668,26 @@ module.exports = {
             utime: '更新时间'
           }
         }
+      }
+    },
+    adefault: {
+      title: '默认设置',
+      success: '保存成功',
+      error: '保存失败！',
+      confirm: {
+        content: '重启应用生效，是否重启？',
+        title: '更改默认设置'
+      },
+      toolbar: {
+        save: '保存',
+      },
+      filemanager: {
+        title: '文件管理',
+        openfileintab: {
+          title: '文件打开方式',
+          window: '窗口打开',
+          tab: '标签打开',
+        },
       }
     }
   },

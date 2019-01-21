@@ -39,6 +39,11 @@ class FileManager {
     antSword['modules']['filemanager'] = antSword['modules']['filemanager'] || {};
     antSword['modules']['filemanager'][hash] = this;
 
+    let config = {
+      openfileintab: false,
+    };
+    
+    this.config = JSON.parse(antSword['storage']("adefault_filemanager", false, JSON.stringify(config)));
     this.isWin = true;
     this.path = '/';
     this.home = '/';
@@ -798,17 +803,28 @@ class FileManager {
   }
 
   // 编辑文件
-  editFile(name) {
+  editFile(name, openfileintab=false) {
     let self = this;
     let path = this.path + name;
     let editor = null;
     let codes = '';
-    // 创建窗口
-    let win = this.createWin({
-      title: LANG['editor']['title'](path),
-      width: 800
-    });
-    win.maximize();
+    let win;
+    if (openfileintab == false){
+      win = this.createWin({
+        title: LANG['editor']['title'](path),
+        width: 800
+      });
+      win.maximize();  
+    }else{
+      let _id = String(Math.random()).substr(5, 10);
+      antSword['tabbar'].addTab(
+        `tab_file_${_id}`,
+        `<i class="fa fa-file-o"></i> ${name}`,
+        null, null, true, true
+      );
+      win = antSword['tabbar'].cells(`tab_file_${_id}`);
+    }
+
     win.progressOn();
 
     // 检测文件后缀
@@ -891,7 +907,7 @@ class FileManager {
         editor.session.setMode(`ace/mode/${mode}`);
       }else if (id.startsWith('encode_')) {
         let encode = id.split('_')[1];
-        editor.session.setValue(iconv.encode(codes, encode).toString());
+        editor.session.setValue(iconv.decode(new Buffer(codes), encode).toString());
       }else{
         console.info('toolbar.onClick', id);
       }
@@ -904,7 +920,13 @@ class FileManager {
       })
     ).then((res) => {
       let ret = res['text'];
-      codes = ret;
+      codes = res['buff'];
+      let encoding = res['encoding'] || this.opts['encode'];
+      if(encoding.toUpperCase() == "UTF-8") {
+        encoding = "UTF8";
+      }
+      toolbar.setListOptionSelected('encode', `encode_${encoding}`);
+
       win.progressOff();
 
       // 初始化编辑器

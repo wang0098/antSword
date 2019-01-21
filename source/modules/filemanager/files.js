@@ -4,6 +4,7 @@
 
 const LANG_T = antSword['language']['toastr'];
 const LANG = antSword['language']['filemanager']['files'];
+const clipboard = require('electron').clipboard;
 
 class Files {
 
@@ -293,26 +294,54 @@ class Files {
           manager.downloadFile(id, this.getRowAttribute(_ids[0], 'fsize'));
         } },
         { divider: true },
-        { text: LANG['grid']['contextmenu']['copy']['title'], icon: 'fa fa-copy', disabled: !id, action: () => {
-          // 如果只有一个id，则显示id名称，否则显示ids数量
-          ids.map( (id) => {
-            let path = manager.path + id;
-            // 判断是否已经复制
-            if (id in self.Clipboard) {
-              return toastr.warning(LANG['grid']['contextmenu']['copy']['warning'](id), LANG_T['warning']);
-            };
-            self.Clipboard[id] = path;
-            toastr.info(LANG['grid']['contextmenu']['copy']['info'](id), LANG_T['info']);
-          } );
-        } },
+        { text: LANG['grid']['contextmenu']['copy']['title'], icon: 'fa fa-copy', subMenu: [
+          { text: LANG['grid']['contextmenu']['copy']['title'], icon: 'fa fa-copy', disabled: !id, action: () => {
+            // 如果只有一个id，则显示id名称，否则显示ids数量
+            ids.map( (id) => {
+              let path = manager.path + id;
+              // 判断是否已经复制
+              if (id in self.Clipboard) {
+                return toastr.warning(LANG['grid']['contextmenu']['copy']['warning'](id), LANG_T['warning']);
+              };
+              self.Clipboard[id] = path;
+              toastr.info(LANG['grid']['contextmenu']['copy']['info'](id), LANG_T['info']);
+            } );
+          } },
+          { text: LANG['grid']['contextmenu']['copy']['copyname'], icon: 'fa fa-file-word-o', disabled: !id || ids.length > 1, action: ()=>{
+            clipboard.writeText(id);
+            // 检测是否复制成功
+            let txt = clipboard.readText();
+            if(txt == id){
+              toastr.success(LANG['grid']['contextmenu']['copy']['copysuccess'], LANG_T['success']);
+            }else{
+              toastr.error(LANG['grid']['contextmenu']['copy']['copyfail'], LANG_T['error']);
+            }
+          }},
+          { text: LANG['grid']['contextmenu']['copy']['copypath'], icon: 'fa fa-file-powerpoint-o', disabled: !id || ids.length > 1, action:()=>{
+            let txt = `${self.manager.path}${id}`;
+            clipboard.writeText(txt);
+            // 检测是否复制成功
+            let cptxt = clipboard.readText();
+            if(cptxt == txt){
+              toastr.success(LANG['grid']['contextmenu']['copy']['copysuccess'], LANG_T['success']);
+            }else{
+              toastr.error(LANG['grid']['contextmenu']['copy']['copyfail'], LANG_T['error']);
+            }
+          }}
+        ]},
         { text: LANG['grid']['contextmenu']['paste']['title'], icon: 'fa fa-paste', disabled: _Clipboard_num === 0, subMenu: _Clipboard },
         { text: LANG['grid']['contextmenu']['preview'], icon: 'fa fa-eye', disabled: !id || ids.length > 1 || !self.checkPreview(id), action: () => {
           manager.previewFile(id, this.getRowAttribute(_ids[0], 'fsize'));
         } },
         { divider: true },
-        { text: LANG['grid']['contextmenu']['edit'], icon: 'fa fa-edit', disabled: /*!isEdited || */!id || ids.length > 1 || isFolder, action: () => {
-          manager.editFile(id);
-        } },
+        { text: LANG['grid']['contextmenu']['edit']['title'], icon: 'fa fa-edit', disabled: /*!isEdited || */!id || ids.length > 1 || isFolder, subMenu: [
+          { text: LANG['grid']['contextmenu']['edit']['opentab'], icon: 'fa fa-external-link', action: () => {
+            manager.editFile(id, true);
+          } },
+          { text: LANG['grid']['contextmenu']['edit']['openwindow'], icon: 'fa fa-arrows-alt', action: () => {
+            manager.editFile(id, false);
+          } },
+        ] },
         { text: LANG['grid']['contextmenu']['delete'], icon: 'fa fa-trash-o', disabled: !id, action: () => {
           manager.deleteFile(ids);
         } },
@@ -354,7 +383,7 @@ class Files {
           manager.previewFile(fname, fsize);
         }else if(fsize <= 100 * 1024){
           // 双击编辑size < 100kb 文件
-          manager.editFile(fname);
+          manager.editFile(fname, self.manager.config.openfileintab);
         }else{
           manager.downloadFile(fname, fsize);
         }

@@ -7,6 +7,7 @@
 
 const fs = require('fs'),
   iconv = require('iconv-lite'),
+  jschardet = require('jschardet'),
   through = require('through'),
   CONF = require('./config'),
   superagent = require('superagent'),
@@ -135,14 +136,20 @@ class Request {
         }
         let buff = ret.hasOwnProperty('body') ? ret.body : new Buffer();
         // 解码
-        let text = iconv.decode(buff, opts['encode']);
+        let text = "";
+        // 自动猜测编码
+        let encoding = detectEncoding(buff, {defaultEncoding:"unknown"});
+        logger.debug("detect encoding:", encoding);
+        encoding = encoding != "unknown" ? encoding : opts['encode'];
+        text = iconv.decode(buff, encoding);
         if (err && text == "") {
           return event.sender.send('request-error-' + opts['hash'], err);
         };
         // 回调数据
         event.sender.send('request-' + opts['hash'], {
           text: text,
-          buff: buff
+          buff: buff,
+          encoding: encoding
         });
       });
   }
@@ -279,5 +286,44 @@ class Request {
   }
 
 }
+
+/**
+ * 判断指定buffer对象的字符编码
+ * ref: https://github.com/LeoYuan/leoyuan.github.io/issues/25
+ * @param buffer
+ * @param options
+ *  - defaultEncoding 指定默认编码集
+ *  - minConfidence   指定可接受的最小confidence，如果判断结果小于此值，则用defaultEncoding
+ *  - verbose         返回更加详细的字符编码数据
+ * @returns {*}
+ */
+function detectEncoding(buffer, options) {
+
+  options = options || {};
+  buffer = buffer || Buffer('');
+
+  var DEFAULT_ENCODING = 'GBK', MIN_CONFIDENCE = 0.96;
+  var verbose = options.verbose;
+  var defaultEncoding = options.defaultEncoding || DEFAULT_ENCODING;
+  var minConfidence = options.minConfidence || MIN_CONFIDENCE;
+  var ret = jschardet.detect(buffer), encoding = ret.encoding === 'ascii' ? 'utf-8' : ret.encoding,
+      confidence = ret.confidence;
+  // var VALID_ENCODINGS = ['gb2312', 'gbk', 'utf-8', 'big5', 'euc-kr','euc-jp'];
+
+  if (encoding === null || !iconv.encodingExists(encoding) || confidence < minConfidence) {
+      return verbose ? {
+          encoding: defaultEncoding,
+          oriEncoding: encoding,
+          confidence: confidence
+      } : defaultEncoding;
+  } else {
+      encoding = encoding.toUpperCase();
+      return verbose ? {
+          encoding: encoding,
+          oriEncoding: encoding,
+          confidence: confidence
+      } : encoding;
+  }
+};
 
 module.exports = Request;

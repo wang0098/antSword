@@ -185,7 +185,11 @@ module.exports = {
       system: 'System  Info',
       user: 'Current User',
       path: 'Current Path'
-    }
+    },
+    ascmd: {
+      ashelp: `Usage:\nascmd file\t\tExecute the command with file, eg: ascmd /bin/bash\n`,
+      ascmd: (cmd) => antSword.noxss(`Will execute the command with ${cmd}.`),
+    },
   },
   filemanager: {
     title: 'FileManager',
@@ -306,7 +310,11 @@ module.exports = {
             }
           },
           preview: 'Preview',
-          edit: 'Edit',
+          edit: {
+            title: 'Edit',
+            openwindow: 'Open in Window',
+            opentab: 'Open in Tab',
+          },
           delete: 'Delete',
           rename: 'Rename',
           refresh: 'Refresh',
@@ -317,6 +325,10 @@ module.exports = {
           chmod: 'Chmod',
           copy: {
             title: 'Copy',
+            copyname: 'Copy FileName',
+            copypath: 'Copy FilePath',
+            copysuccess: 'Copy to clipboard successfully!',
+            copyfail: 'Copy to clipboard failed!',
             warning: (id) => antSword.noxss(`Already add to clipboard!\n${id}`),
             info: (id) => antSword.noxss(`Add file to the clipboard.\n${id}`)
           },
@@ -333,7 +345,7 @@ module.exports = {
       toolbar: {
         save: 'Save',
         mode: 'Mode',
-        encode: 'Encode'
+        encode: 'Open with Encoding'
       },
       loadErr: (err) => antSword.noxss(`Load file error!\n${err}`),
       success: (path) => antSword.noxss(`Save the file success!\n${path}`),
@@ -655,6 +667,26 @@ module.exports = {
             utime: 'UTIME'
           }
         }
+      }
+    },
+    adefault: {
+      title: 'Default Setting',
+      success: 'Save default settings successfully!',
+      error: 'Failed to save the default settings!',
+      confirm: {
+        content: 'Restart the application to take effect, whether to restart?',
+        title: 'Change default settings'
+      },
+      toolbar: {
+        save: 'Save',
+      },
+      filemanager: {
+        title: 'FileManager',
+        openfileintab: {
+          title: 'Open File in',
+          window: 'Window',
+          tab: 'Tab',
+        },
       }
     }
   },
