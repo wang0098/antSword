@@ -1503,7 +1503,6 @@ class PHP {
   dumpResult() {
     const grid = this.manager.result.layout.getAttachedObject();
     let filename = `${this.core.__opts__.ip}_${new Date().format("yyyyMMddhhmmss")}.csv`;
-    antSword['test'] = this;
     dialog.showSaveDialog({
       title: LANG['result']['dump']['title'],
       defaultPath: filename
