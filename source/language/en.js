@@ -169,6 +169,13 @@ module.exports = {
       otherConf: {
         nohttps: 'Ignore HTTPS certificate',
         usemultipart: 'Use Multipart send payload',
+        chunk: {
+          title: 'Chunked Transfer (Experimentally)',
+          usechunk: 'Use Chunked send payload.',
+          min: 'Min Block',
+          max: 'Max Block',
+          exphint: 'This feature is currently experimental and cannot be used with Multipart. Some types of servers may not support Chunked transfers. In addition, it is recommended to set the timeout period to 30s or more to avoid data transmission when the network speed is not good.',
+        },
         terminalCache: "Use the terminal's cache",
         filemanagerCache: "Use the filemanager's cache",
         uploadFragment: "Upload File Fragmentation Size",

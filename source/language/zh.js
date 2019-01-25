@@ -170,6 +170,13 @@ module.exports = {
       otherConf: {
         nohttps: '忽略HTTPS证书',
         usemultipart: '使用 Multipart 发包',
+        chunk: {
+          title: '分块传输(实验性功能)',
+          usechunk: '开启分块传输发包',
+          min: '最小分块',
+          max: '最大分块',
+          exphint: '该功能目前为实验性功能, 无法与 Multipart 同时使用,部分类型的服务端可能不支持Chunked传输。此外,建议超时时长设置30s以上,避免网速不好的情况下影响数据传输。',
+        },
         terminalCache: '虚拟终端使用缓存',
         filemanagerCache: '文件管理使用缓存',
         uploadFragment: '上传文件分片大小',
