@@ -1,4 +1,4 @@
-# 中国蚁剑 [![release](https://img.shields.io/badge/release-v2.0.4-blue.svg?style=flat-square)][url-release]
+# 中国蚁剑 [![release](https://img.shields.io/badge/release-v2.0.4.1-blue.svg?style=flat-square)][url-release]
 
 > 一剑在手，纵横无忧！
 
@@ -41,7 +41,7 @@
 [url-docen]: README.md
 [url-changelog]: CHANGELOG.md
 [url-document]: http://doc.u0u.us/zh-hans/
-[url-release]: https://github.com/AntSwordProject/AntSword/releases/tag/2.0.0
+[url-release]: https://github.com/AntSwordProject/AntSword/releases/
 [url-electron]: http://electron.atom.io/
 [url-es6]: http://es6.ruanyifeng.com/
 [url-dhtmlx]: http://dhtmlx.com/
@@ -50,4 +50,4 @@
 [url-release]: https://github.com/AntSwordProject/AntSword/releases
 [url-quickstart]: https://doc.u0u.us/zh-hans/getting_started/index.html
 [url-contribute]: https://doc.u0u.us/zh-hans/contribute_docs.html
-[url-mainui]: http://7xtigg.com1.z0.glb.clouddn.com/doc/getting_started/get_antsword_2.jpg
+[url-mainui]: http://as.xuanbo.cc/doc/getting_started/get_antsword_2.jpg

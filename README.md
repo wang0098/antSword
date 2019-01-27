@@ -1,4 +1,4 @@
-# AntSword [![release](https://img.shields.io/badge/release-v2.0.4-blue.svg?style=flat-square)][url-release]
+# AntSword [![release](https://img.shields.io/badge/release-v2.0.4.1-blue.svg?style=flat-square)][url-release]
 
 > AntSword in your hands, no worries in your mind！
 
@@ -41,7 +41,7 @@ See document: [Make contributions to AntSword][url-contribute]
 [url-doczh]: README_CN.md
 [url-changelog]: CHANGELOG.md
 [url-document]: http://doc.u0u.us/en/
-[url-release]: https://github.com/AntSwordProject/AntSword/releases/tag/2.0.0
+[url-release]: https://github.com/AntSwordProject/AntSword/releases/
 [url-electron]: http://electron.atom.io/
 [url-es6]: http://es6.ruanyifeng.com/
 [url-dhtmlx]: http://dhtmlx.com/
@@ -50,4 +50,4 @@ See document: [Make contributions to AntSword][url-contribute]
 [url-release]: https://github.com/AntSwordProject/AntSword/releases
 [url-quickstart]: https://doc.u0u.us/en/getting_started/index.html
 [url-contribute]: https://doc.u0u.us/en/contribute_docs.html
-[url-mainui]: http://7xtigg.com1.z0.glb.clouddn.com/doc/getting_started/get_antsword_2.jpg
+[url-mainui]: http://as.xuanbo.cc/doc/getting_started/get_antsword_2.jpg
