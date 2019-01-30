@@ -189,7 +189,7 @@ antSword['aproxyauth'] = (
   !aproxy['username'] || !aproxy['password']
 ) ? '' : `${aproxy['username']}:${aproxy['password']}`;
 
-antSword['aproxyuri'] = `${aproxy['protocol']}:\/\/${antSword['aproxyauth']}@${aproxy['server']}:${aproxy['port']}`;
+antSword['aproxyuri'] = `${aproxy['protocol']}:\/\/${antSword['aproxyauth']}${antSword['aproxyauth']===""?"":"@"}${aproxy['server']}:${aproxy['port']}`;
 
 // 通知后端设置代理
 ipcRenderer.send('aproxy', {
