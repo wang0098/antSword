@@ -107,6 +107,7 @@ module.exports = {
       add: {
         title: '添加数据',
         toolbar: {
+          test: '测试连接',
           add: '添加',
           clear: '清空'
         },
@@ -118,6 +119,8 @@ module.exports = {
           type: '连接类型',
           encoder: '编码器'
         },
+        test_success: '连接成功!',
+        test_warning: '返回数据为空',
         warning: '请输入完整！',
         success: '添加数据成功！',
         error: (err) => antSword.noxss(`添加数据失败！\n${err}`)

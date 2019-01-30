@@ -27,36 +27,82 @@ class Form {
 
     // toolbar点击事件
     this.toolbar.attachEvent('onClick', (id) => {
-      if (id === 'clear') {
-        return this.baseForm.clear();
-      }
-      // 检测表单数据
-      if (
-        !this.baseForm.validate() ||
-        !this.httpForm.validate() ||
-        !this.otherForm.validate()
-      ) {
-        return toastr.warning(LANG['list']['add']['warning'], LANG_T['warning']);
-      };
-      // 回调数据
-      if (callback) {
-        win.progressOn();
-        setTimeout(() => {
-          callback(this._parseFormData(
+      switch(id){
+        case 'clear':
+          this.baseForm.clear();
+          break;
+        case 'test':
+          if (
+            !this.baseForm.validate() ||
+            !this.httpForm.validate() ||
+            !this.otherForm.validate()
+          ) {
+            return toastr.warning(LANG['list']['add']['warning'], LANG_T['warning']);
+          };
+          let opts = this._parseFormData(
             this.baseForm.getValues(),
             this.httpForm.getValues(),
             this.otherForm.getValues()
-          )).then((msg) => {
-            // 添加/保存完毕后回调
-            win.close();
-            toastr.success(msg, LANG_T['success']);
-          }).catch((msg) => {
-            // 添加/保存错误
+          );
+          let opt = {
+            "url": opts.base['url'],
+            "pwd": opts.base['pwd'],
+            "type": opts.base['type'],
+            "encode": opts.base['encode'],
+            "encoder": opts.base['encoder'],
+            "httpConf": opts.http,
+            "otherConf": opts.other,
+          }
+          win.progressOn();
+          let core = new antSword["core"][opt['type']](opt);
+          core.request(
+            core.base.info()
+          )
+          .then((ret) => {
+            if(ret['text'].length > 0){
+              toastr.success(LANG['list']['add']['test_success'], LANG_T['success']);
+            }else{
+              toastr.warning(LANG['list']['add']['test_warning'], LANG_T['warning']);
+            }
             win.progressOff();
-            toastr.error(msg, LANG_T['error']);
+          })
+          .catch((err)=>{
+            toastr.error(JSON.stringify(err), LANG_T['error']);
+            win.progressOff();
           });
-        }, 100);
-      };
+          break;
+        case 'act':
+          // 检测表单数据
+          if (
+            !this.baseForm.validate() ||
+            !this.httpForm.validate() ||
+            !this.otherForm.validate()
+          ) {
+            return toastr.warning(LANG['list']['add']['warning'], LANG_T['warning']);
+          };
+          // 回调数据
+          if (callback) {
+            win.progressOn();
+            setTimeout(() => {
+              callback(this._parseFormData(
+                this.baseForm.getValues(),
+                this.httpForm.getValues(),
+                this.otherForm.getValues()
+              )).then((msg) => {
+                // 添加/保存完毕后回调
+                win.close();
+                toastr.success(msg, LANG_T['success']);
+              }).catch((msg) => {
+                // 添加/保存错误
+                win.progressOff();
+                toastr.error(msg, LANG_T['error']);
+              });
+            }, 100);
+          };
+          break;
+        default:
+        break;
+      }
     });
   }
 
@@ -109,7 +155,10 @@ class Form {
       type: 'button',
       icon: 'remove',
       text: LANG['list']['add']['toolbar']['clear']
-    }]);
+    },
+    { type: 'separator' },
+    { id: 'test', type: 'button', 'icon': 'spinner', text: LANG['list']['add']['toolbar']['test'] },
+    ]);
     return toolbar;
   }
 

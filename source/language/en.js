@@ -106,6 +106,7 @@ module.exports = {
       add: {
         title: 'Add shell',
         toolbar: {
+          test: 'Test Connection',
           add: 'Add',
           clear: 'Clear'
         },
@@ -117,6 +118,8 @@ module.exports = {
           type: 'Shell type',
           encoder: 'Encoder'
         },
+        test_success: 'Connection Successful!',
+        test_warning: 'Response is null!',
         warning: 'Please enter the full!',
         success: 'Add shell success!',
         error: (err) => antSword.noxss(`Add shell failed!\n${err}`)
