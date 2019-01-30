@@ -707,6 +707,7 @@ module.exports = {
   },
   viewsite: {
     toolbar: {
+      useproxy: (s) => `Proxy: ${s?'ON':'OFF'}`,
       save: 'Save',
       view: 'View'
     },

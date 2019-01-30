@@ -707,6 +707,7 @@ module.exports = {
   },
   viewsite: {
     toolbar: {
+      useproxy: (s) => `代理: ${s?'开':'关'}`,
       save: '保存',
       view: '浏览'
     },
