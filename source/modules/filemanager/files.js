@@ -474,7 +474,7 @@ class Files {
   refreshPath(p) {
     let path = p || this.manager.path;
     // delete this.manager.cache[path];
-    this.manager.cache.del('filemanager-files-' + new Buffer(path).toString('base64'));
+    this.manager.cache.del('filemanager-files-' + Buffer.from(path).toString('base64'));
     // 删除文件夹缓存
     for (let _ in this.manager.folder.cache) {
       if (_.indexOf(path) === 0 && _ != path) {

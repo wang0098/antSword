@@ -291,7 +291,7 @@ module.exports = (pwd, data) => {
   let randomID = \`_0x\${Math.random().toString(16).substr(2)}\`;
   // 原有的 payload 在 data['_']中
   // 取出来之后，转为 base64 编码并放入 randomID key 下
-  data[randomID] = new Buffer(data['_']).toString('base64');
+  data[randomID] = Buffer.from(data['_']).toString('base64');
 
   // shell 在接收到 payload 后，先处理 pwd 参数下的内容，
   data[pwd] = \`eval(base64_decode($_POST[\${randomID}]));\`;

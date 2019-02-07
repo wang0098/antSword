@@ -58,7 +58,7 @@ class Tabbar {
    * @return {Object}           this
    */
   safeHTML(html = "") {
-    let _html = new Buffer(html).toString('base64');
+    let _html = Buffer.from(html).toString('base64');
     let _iframe = `
       <iframe
         src="data:text/html;base64,${_html}"

@@ -3,7 +3,6 @@
  * 更新：2016/04/13
  * 作者：蚁逅 <https://github.com/antoor>
  */
-
 const LANG = antSword['language']['terminal'];
 const LANG_T = antSword['language']['toastr'];
 
@@ -155,7 +154,7 @@ class Terminal {
       }
       term.pause();
       // 是否有缓存
-      let cacheTag = 'command-' + new Buffer(this.path + cmd).toString('base64');
+      let cacheTag = 'command-' + Buffer.from(this.path + cmd).toString('base64');
       let cacheCmd = this.cache.get(cacheTag);
       if (
         (this.opts.otherConf || {})['terminal-cache'] === 1 && cacheCmd

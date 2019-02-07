@@ -85,8 +85,8 @@ class Base {
        * @return {String}     编码后的字符串
        */
       base64(str) {
-        return new Buffer(
-          iconv.encode(new Buffer(str), encode)
+        return Buffer.from(
+          iconv.encode(Buffer.from(str), encode)
         ).toString('base64');
       },
       /**
@@ -95,7 +95,7 @@ class Base {
        * @return {Buffer}     转换完成的buffer
        */
       buffer(str) {
-        return new Buffer(str).toString('hex').toUpperCase();
+        return Buffer.from(str).toString('hex').toUpperCase();
       },
       /**
        * 字符串转16进制（进行编码转换
@@ -103,8 +103,8 @@ class Base {
        * @return {Buffer}     转换完成的buffer
        */
       hex(str) {
-        return new Buffer(
-          iconv.encode(new Buffer(str), encode)
+        return Buffer.from(
+          iconv.encode(Buffer.from(str), encode)
         ).toString('hex').toUpperCase();
       }
     }

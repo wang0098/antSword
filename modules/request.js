@@ -130,7 +130,7 @@ class Request {
           this.parse(opts['tag_s'], opts['tag_e'], (chunk) => {
             event.sender.send('request-chunk-' + opts['hash'], chunk);
           }, res, (err, ret)=>{
-            let buff = ret ? ret : new Buffer();
+            let buff = ret ? ret : Buffer.from();
             // 自动猜测编码
             let encoding = detectEncoding(buff, {defaultEncoding: "unknown"});
             logger.debug("detect encoding:", encoding);
@@ -180,7 +180,7 @@ class Request {
             // 请求失败 TIMEOUT
             return event.sender.send('request-error-' + opts['hash'], err);
           }
-          let buff = ret.hasOwnProperty('body') ? ret.body : new Buffer();
+          let buff = ret.hasOwnProperty('body') ? ret.body : Buffer.from();
           // 解码
           let text = "";
           // 自动猜测编码
@@ -257,7 +257,7 @@ class Request {
 
             indexStart = tempDataBuffer.indexOf(opts['tag_s']) || 0;
             // 截取最后的数据
-            let finalData = new Buffer(tempDataBuffer.slice(
+            let finalData = Buffer.from(tempDataBuffer.slice(
               indexStart + opts['tag_s'].length,
               indexEnd
             ), 'binary');
@@ -301,7 +301,7 @@ class Request {
 
             indexStart = tempDataBuffer.indexOf(opts['tag_s']) || 0;
             // 截取最后的数据
-            let finalData = new Buffer(tempDataBuffer.slice(
+            let finalData = Buffer.from(tempDataBuffer.slice(
               indexStart + opts['tag_s'].length,
               indexEnd
             ), 'binary');
@@ -330,8 +330,8 @@ class Request {
     res.setEncoding('binary');
     res.data = '';
     // 2. 把分隔符转换为16进制
-    const tagHexS = new Buffer(tag_s).toString('hex');
-    const tagHexE = new Buffer(tag_e).toString('hex');
+    const tagHexS = Buffer.from(tag_s).toString('hex');
+    const tagHexE = Buffer.from(tag_e).toString('hex');
 
     let foundTagS = false;
     let foundTagE = false;
@@ -339,7 +339,7 @@ class Request {
 
       // 这样吧，我们尝试一种新的数据截取算法：
       // 1. 把数据流转换为16进制
-      let chunkHex = new Buffer(chunk).toString('hex');
+      let chunkHex = Buffer.from(chunk).toString('hex');
       // 3. 根据分隔符进行判断截断数据流
       let temp = '';
       // 如果包含前后截断，则截取中间
@@ -364,7 +364,7 @@ class Request {
         temp = chunkHex;
       }
       // 4. 十六进制还原为二进制
-      let finalData = new Buffer(temp, 'hex');
+      let finalData = Buffer.from(temp, 'hex');
       // 5. 返回还原好的数据
       chunkCallBack(finalData);
 
@@ -372,7 +372,7 @@ class Request {
     });
     res.on('end', () => {
       logger.info(`end.size=${res.data.length}`, res.data);
-      callback(null, new Buffer(res.data, 'binary'));
+      callback(null, Buffer.from(res.data, 'binary'));
     });
   }
 
@@ -440,7 +440,7 @@ class AntRead extends Readable {
     if('string' === typeof data) {
       chunk = data;
     }else if('object' === typeof data && Buffer.isBuffer(data)) { // buffer
-      chunk = new Buffer(data).toString();
+      chunk = Buffer.from(data).toString();
     }else{
       throw Error("data must be string, buffer.");
     }
