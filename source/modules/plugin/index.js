@@ -14,7 +14,7 @@ class Plugin {
     // 注册菜单事件
     antSword['menubar'].reg(
       'plugin-store',
-      this.initWin.bind(this, 'ant-views://plugin.html')
+      this.initWin.bind(this, 'ant-views://front/plugin.html')
     );
     this.win = null;
   }

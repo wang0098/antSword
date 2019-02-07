@@ -10,6 +10,9 @@ const path = require('path');
 const electron = require('electron');
 const { app, protocol, BrowserWindow } = require('electron');
 
+// 注册为标准 scheme, 默认情况下web storage apis (localStorage, sessionStorage, webSQL, indexedDB, cookies) 被禁止访问非标准schemes
+protocol.registerStandardSchemes(['ant-views','ant-static','ant-src']);
+
 app
   .once('ready', () => {
     /**
@@ -22,8 +25,11 @@ app
       ['src', '/source/', 10]     //- 通过访问访问ant-src来访问source 文件
     ].map((_) => {
       protocol.registerFileProtocol(`ant-${_[0]}`, (req, cb) => {
+        if(req.url.endsWith('/')){
+          req.url = req.url.substr(0,req.url.length-1);
+        }
         cb({
-          path: path.join(__dirname, _[1], req.url.substr(_[2]))
+          path: path.normalize(path.join(__dirname, _[1], req.url.substr(_[2])))
         });
       });
     });
@@ -32,12 +38,20 @@ app
     let mainWindow = new BrowserWindow({
       width: 1040, height: 699,
       minWidth: 888, minHeight: 555,
-      webgl: false, title: 'AntSword'
+      title: 'AntSword',
+      webPreferences: {
+        webgl: false,
+        javascript: true,
+        nodeIntegration: true, // 开启 nodejs 支持
+        // contextIsolation: false, // 关闭上下文隔离
+        // webSecurity: false,
+        // allowRunningInsecureContent: true,
+        // sandbox: false,
+      },
     });
 
     // 加载views
-    mainWindow.loadURL('ant-views://index.html');
-
+    mainWindow.loadURL('ant-views://front/index.html');
     // 调整部分UI
     const reloadUI = mainWindow.webContents.send.bind(
       mainWindow.webContents,
