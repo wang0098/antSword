@@ -106,6 +106,7 @@ module.exports = {
       add: {
         title: 'Add shell',
         toolbar: {
+          test: 'Test Connection',
           add: 'Add',
           clear: 'Clear'
         },
@@ -117,6 +118,8 @@ module.exports = {
           type: 'Shell type',
           encoder: 'Encoder'
         },
+        test_success: 'Connection Successful!',
+        test_warning: 'Response is null!',
         warning: 'Please enter the full!',
         success: 'Add shell success!',
         error: (err) => antSword.noxss(`Add shell failed!\n${err}`)
@@ -169,6 +172,13 @@ module.exports = {
       otherConf: {
         nohttps: 'Ignore HTTPS certificate',
         usemultipart: 'Use Multipart send payload',
+        chunk: {
+          title: 'Chunked Transfer (Experimentally)',
+          usechunk: 'Use Chunked send payload.',
+          min: 'Min Block',
+          max: 'Max Block',
+          exphint: 'This feature is currently experimental and cannot be used with Multipart. Some types of servers may not support Chunked transfers. In addition, it is recommended to set the timeout period to 30s or more to avoid data transmission when the network speed is not good.',
+        },
         terminalCache: "Use the terminal's cache",
         filemanagerCache: "Use the filemanager's cache",
         uploadFragment: "Upload File Fragmentation Size",
@@ -700,6 +710,7 @@ module.exports = {
   },
   viewsite: {
     toolbar: {
+      useproxy: (s) => `Proxy: ${s?'ON':'OFF'}`,
       save: 'Save',
       view: 'View'
     },

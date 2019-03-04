@@ -39,10 +39,17 @@ class Plugin {
     win.on('close', () => {
       this.win = win = null;
     });
-    win.loadURL(url);
-    win.show();
-    // win.openDevTools();
-    this.win = win;
+    let ses = win.webContents.session;
+    let proxyuri = "";
+    if(antSword.aproxymode != "noproxy") {
+      proxyuri = antSword.aproxyuri;
+    }
+    ses.setProxy({proxyRules: proxyuri}, ()=>{
+      win.loadURL(url);
+      win.show();
+      // win.openDevTools();
+      this.win = win;
+    });
   }
 
 

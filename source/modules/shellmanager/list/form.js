@@ -27,36 +27,82 @@ class Form {
 
     // toolbar点击事件
     this.toolbar.attachEvent('onClick', (id) => {
-      if (id === 'clear') {
-        return this.baseForm.clear();
-      }
-      // 检测表单数据
-      if (
-        !this.baseForm.validate() ||
-        !this.httpForm.validate() ||
-        !this.otherForm.validate()
-      ) {
-        return toastr.warning(LANG['list']['add']['warning'], LANG_T['warning']);
-      };
-      // 回调数据
-      if (callback) {
-        win.progressOn();
-        setTimeout(() => {
-          callback(this._parseFormData(
+      switch(id){
+        case 'clear':
+          this.baseForm.clear();
+          break;
+        case 'test':
+          if (
+            !this.baseForm.validate() ||
+            !this.httpForm.validate() ||
+            !this.otherForm.validate()
+          ) {
+            return toastr.warning(LANG['list']['add']['warning'], LANG_T['warning']);
+          };
+          let opts = this._parseFormData(
             this.baseForm.getValues(),
             this.httpForm.getValues(),
             this.otherForm.getValues()
-          )).then((msg) => {
-            // 添加/保存完毕后回调
-            win.close();
-            toastr.success(msg, LANG_T['success']);
-          }).catch((msg) => {
-            // 添加/保存错误
+          );
+          let opt = {
+            "url": opts.base['url'],
+            "pwd": opts.base['pwd'],
+            "type": opts.base['type'],
+            "encode": opts.base['encode'],
+            "encoder": opts.base['encoder'],
+            "httpConf": opts.http,
+            "otherConf": opts.other,
+          }
+          win.progressOn();
+          let core = new antSword["core"][opt['type']](opt);
+          core.request(
+            core.base.info()
+          )
+          .then((ret) => {
+            if(ret['text'].length > 0){
+              toastr.success(LANG['list']['add']['test_success'], LANG_T['success']);
+            }else{
+              toastr.warning(LANG['list']['add']['test_warning'], LANG_T['warning']);
+            }
             win.progressOff();
-            toastr.error(msg, LANG_T['error']);
+          })
+          .catch((err)=>{
+            toastr.error(JSON.stringify(err), LANG_T['error']);
+            win.progressOff();
           });
-        }, 100);
-      };
+          break;
+        case 'act':
+          // 检测表单数据
+          if (
+            !this.baseForm.validate() ||
+            !this.httpForm.validate() ||
+            !this.otherForm.validate()
+          ) {
+            return toastr.warning(LANG['list']['add']['warning'], LANG_T['warning']);
+          };
+          // 回调数据
+          if (callback) {
+            win.progressOn();
+            setTimeout(() => {
+              callback(this._parseFormData(
+                this.baseForm.getValues(),
+                this.httpForm.getValues(),
+                this.otherForm.getValues()
+              )).then((msg) => {
+                // 添加/保存完毕后回调
+                win.close();
+                toastr.success(msg, LANG_T['success']);
+              }).catch((msg) => {
+                // 添加/保存错误
+                win.progressOff();
+                toastr.error(msg, LANG_T['error']);
+              });
+            }, 100);
+          };
+          break;
+        default:
+        break;
+      }
     });
   }
 
@@ -109,7 +155,10 @@ class Form {
       type: 'button',
       icon: 'remove',
       text: LANG['list']['add']['toolbar']['clear']
-    }]);
+    },
+    { type: 'separator' },
+    { id: 'test', type: 'button', 'icon': 'spinner', text: LANG['list']['add']['toolbar']['test'] },
+    ]);
     return toolbar;
   }
 
@@ -318,6 +367,9 @@ class Form {
     const opt = Object.assign({}, {
       'ignore-https': 0,
       'use-multipart': 0,
+      'use-chunk': 0,
+      'chunk-step-byte-min': 2,
+      'chunk-step-byte-max': 3,
       'terminal-cache': 0,
       'filemanager-cache': 1,
       'upload-fragment': '500',
@@ -334,7 +386,60 @@ class Form {
         }, {
           type: "checkbox", name: 'use-multipart', label: LANG['list']['otherConf']['usemultipart'],
           checked: opt['use-multipart'] === 1
-        }, {
+        }, { type: 'fieldset', offsetLeft: 0, label: LANG['list']['otherConf']['chunk']['title'], list: [
+          { type: 'block', offsetLeft: 0, list: [
+            {
+              type: "checkbox", name: 'use-chunk', label: LANG['list']['otherConf']['chunk']['usechunk'], checked: opt['use-chunk'] === 1
+            },
+          ]},
+          { type: 'block', offsetLeft: 0, list: [
+            { type:'label', label: LANG['list']['otherConf']['chunk']['min']},
+            { type:'newcolumn' },
+            {
+              type: 'combo', label: '/byte', validate: 'ValidNumeric', inputWidth: 50, name: "chunk-step-byte-min",
+              options: ((items) => {
+                let ret = [];
+                // 如果自定义的路径不在items里，则++
+                if (items.indexOf(opt['chunk-step-byte-min']) === -1) {
+                  items.unshift(opt['chunk-step-byte-min']);
+                }
+                items.map((_) => {
+                  ret.push({
+                    text: _,
+                    value: _,
+                    selected: opt['chunk-step-byte-min'] === _
+                  })
+                });
+                return ret;
+              })([
+                '2', '4', '10', '50', '100', '500'
+              ])
+            },
+            { type:'newcolumn',},
+            { type:'label', label: LANG['list']['otherConf']['chunk']['max'], offsetLeft: 30,},
+            { type:'newcolumn' },
+            {
+              type: 'combo', label: '/byte', validate: 'ValidNumeric', inputWidth: 50, name: "chunk-step-byte-max",
+              options: ((items) => {
+                let ret = [];
+                // 如果自定义的路径不在items里，则++
+                if (items.indexOf(opt['chunk-step-byte-max']) === -1) {
+                  items.unshift(opt['chunk-step-byte-max']);
+                }
+                items.map((_) => {
+                  ret.push({
+                    text: _,
+                    value: _,
+                    selected: opt['chunk-step-byte-max'] === _
+                  })
+                });
+                return ret;
+              })([
+                '2', '4', '10', '50', '100', '500'
+              ])
+            },
+          ]},
+        ]}, {
           type: "checkbox", name: 'terminal-cache', label: LANG['list']['otherConf']['terminalCache'],
           checked: opt['terminal-cache'] === 1
         }, {
@@ -405,6 +510,28 @@ class Form {
           ])
         }
       ]}], true);
+    form.attachEvent('onChange', (name, value, state)=>{
+      switch(name){
+        case 'use-multipart':
+          if(state == true && form.isItemChecked('use-chunk')) {
+            form.uncheckItem('use-chunk');
+          }
+        break;
+        case 'use-chunk':
+          if(state == true && form.isItemChecked('use-multipart')) {
+            form.uncheckItem('use-multipart');
+          }
+          if(state == true) {
+            layer.open({
+              title: LANG_T['info']
+              ,content: LANG['list']['otherConf']['chunk']['exphint']
+            });            
+          }
+        break;
+        default:
+        break;
+      }
+    });
     return form;
   }
 
