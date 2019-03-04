@@ -809,6 +809,7 @@ class FileManager {
     let editor = null;
     let codes = '';
     let win;
+    let hinttext = '';
     if (openfileintab == false){
       win = this.createWin({
         title: LANG['editor']['title'](path),
@@ -823,6 +824,7 @@ class FileManager {
         null, null, true, true
       );
       win = antSword['tabbar'].cells(`tab_file_${_id}`);
+      hinttext = `IP:${this.opts['ip']} File:${path}`;
     }
 
     win.progressOn();
@@ -854,9 +856,11 @@ class FileManager {
       _options.push(_opt);
     }
     toolbar.loadStruct([
-      { id: 'save', type: 'button', icon: 'save', text: LANG['editor']['toolbar']['save'] },
+      { id: 'hinttext', type: 'text', text: hinttext},
       { type: 'separator' },
       { type: 'spacer' },
+      { id: 'save', type: 'button', icon: 'save', text: LANG['editor']['toolbar']['save'] },
+      { type: 'separator' },
       {
         id: 'encode', type: 'buttonSelect', icon: 'language', openAll: true,
         text: LANG['editor']['toolbar']['encode'],
