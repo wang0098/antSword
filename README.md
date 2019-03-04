@@ -1,4 +1,4 @@
-# AntSword [![release](https://img.shields.io/badge/release-v2.0.4.1-blue.svg?style=flat-square)][url-release]
+# AntSword [![release](https://img.shields.io/badge/release-v2.0.5-blue.svg?style=flat-square)][url-release]
 
 > AntSword in your hands, no worries in your mind！
 
@@ -21,6 +21,17 @@ This software, of which the development thought is modularization, is intended t
 ## Screenshots
 
 ![][url-mainui]
+
+<details>
+
+<summary>More Screenshots</summary>
+
+![][url-filemanager]
+![][url-terminal]
+![][url-database]
+![][url-pluginstore]
+
+</details>
 
 ## Quick Start
 
@@ -51,3 +62,7 @@ See document: [Make contributions to AntSword][url-contribute]
 [url-quickstart]: https://doc.u0u.us/en/getting_started/index.html
 [url-contribute]: https://doc.u0u.us/en/contribute_docs.html
 [url-mainui]: http://as.xuanbo.cc/doc/getting_started/get_antsword_2.jpg
+[url-filemanager]: http://as.xuanbo.cc/doc/file_manager/main_page_1.png
+[url-terminal]: http://as.xuanbo.cc/doc/terminal/main_page_1.png
+[url-database]: http://as.xuanbo.cc/doc/database/main_page_1.png
+[url-pluginstore]: http://as.xuanbo.cc/doc/plugin_store/main_page_2.jpg
