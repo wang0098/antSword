@@ -18,6 +18,7 @@ class PHP extends Base {
       'database/mysql',
       'database/mysqli',
       'database/mssql',
+      'database/sqlsrv',
       'database/oracle',
       'database/informix'
     ].map((_) => {

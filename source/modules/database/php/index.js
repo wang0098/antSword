@@ -72,7 +72,16 @@ class PHP {
           const table = new Buffer(_co[2], 'base64').toString();
           const column = new Buffer(_co[3], 'base64').toString();
 
-          const sql = `SELECT \`${column}\` FROM \`${table}\` ORDER BY 1 DESC LIMIT 0,20;`;
+          let sql = "";
+          switch(this.dbconf['type']){
+            case 'mssql':
+            case 'sqlsrv':
+              sql = `SELECT TOP 20 [${column}] FROM [${table}] ORDER BY 1 DESC;`;
+              break;
+            default:
+              sql = `SELECT \`${column}\` FROM \`${table}\` ORDER BY 1 DESC LIMIT 0,20;`;
+              break;
+          }
           this.manager.query.editor.session.setValue(sql);
           break;
       }
@@ -338,6 +347,21 @@ class PHP {
 
           ] },
           { text: 'MSSQL', value: 'mssql' },
+          { text: 'SQLSRV', value: 'sqlsrv', selected: conf['type'] === 'sqlsrv', list: [
+            { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
+            { type: 'label', label: LANG['form']['encode'] },
+            { type: 'combo', label: '', name: 'encode', options: (() => {
+              let ret = [];
+              ['utf-8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'].map((_) => {
+                ret.push({
+                  text: _,
+                  value: _,
+                  selected: conf['encode'] === _
+                });
+              })
+              return ret;
+            })() }
+          ]},
           { text: 'ORACLE', value: 'oracle' },
           { text: 'INFORMIX', value: 'informix' }
         ] },
@@ -475,6 +499,21 @@ class PHP {
 
           ] },
           { text: 'MSSQL', value: 'mssql', selected: conf['type'] === 'mssql' },
+          { text: 'SQLSRV', value: 'sqlsrv', selected: conf['type'] === 'sqlsrv', list: [
+            { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
+            { type: 'label', label: LANG['form']['encode'] },
+            { type: 'combo', label: '', name: 'encode', options: (() => {
+              let ret = [];
+              ['utf-8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'].map((_) => {
+                ret.push({
+                  text: _,
+                  value: _,
+                  selected: conf['encode'] === _
+                });
+              })
+              return ret;
+            })() }
+          ]},
           { text: 'ORACLE', value: 'oracle', selected: conf['type'] === 'oracle' },
           { text: 'INFORMIX', value: 'informix', selected: conf['type'] === 'informix' }
         ] },
@@ -1365,7 +1404,17 @@ class PHP {
         );
       });
       // 更新编辑器SQL语句
-      this.manager.query.editor.session.setValue(`SELECT * FROM \`${table}\` ORDER BY 1 DESC LIMIT 0,20;`);
+      let presql = "";
+      switch(this.dbconf['type']){
+        case 'mssql':
+        case 'sqlsrv':
+          presql = `SELECT TOP 20 * from [${table}] ORDER BY 1 DESC;`;
+          break;
+        default:
+          presql = `SELECT * FROM \`${table}\` ORDER BY 1 DESC LIMIT 0,20;`;
+          break;
+      }
+      this.manager.query.editor.session.setValue(presql);
       this.manager.list.layout.progressOff();
     }).catch((err) => {
       toastr.error(LANG['result']['error']['column'](err['status'] || JSON.stringify(err)), LANG_T['error']);

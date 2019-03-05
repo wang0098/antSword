@@ -144,7 +144,7 @@ class Database {
       }
     });
 
-    editor.session.setValue('SELECT "Hello antSword :)" AS welcome;');
+    editor.session.setValue("SELECT 'Hello antSword :)' AS welcome;");
 
     return {
       editor: editor,

@@ -8,6 +8,15 @@
 
 * 分块传输自动根据黑名单字符(eg: eval, assert, execute, response 等)进行随机切割(thx @phith0n)
 
+### 数据管理
+
+* 新增 php sqlsrv 连接方式, php5.3之后 mssql 默认不存在,可使用该类型连接 sqlserver >= 2008
+
+> 如果直连shell本地sqlserver, host 部分填 localhost 或者 (local)
+> 如果连接外部,使用 ip,port
+
+* 优化SQLServer类型数据库默认查询语句
+
 ### BugFix
 
 * 修复 asp(x) sqlserver 获取列名,执行自定义SQL语句的异常
