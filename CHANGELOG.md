@@ -8,6 +8,10 @@
 
 * 分块传输自动根据黑名单字符(eg: eval, assert, execute, response 等)进行随机切割(thx @phith0n)
 
+### BugFix
+
+* 修复 asp(x) sqlserver 获取列名,执行自定义SQL语句的异常
+
 ## 2019/03/04 `v(2.0.5)`
 
 ### 后端模块

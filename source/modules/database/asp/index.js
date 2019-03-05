@@ -438,7 +438,7 @@ class ASP {
       this.core[`database_${conf['type']}`].show_columns(
       {
         conn: conf['conn'],
-        table: conf['type'] === 'oracle' ? `SELECT * FROM (SELECT A.*,ROWNUM N FROM ${table} A) WHERE N=1` : `SELECT TOP 1 * FROM ${table}`
+        table: conf['type'] === 'oracle' ? `SELECT * FROM (SELECT A.*,ROWNUM N FROM ${table} A) WHERE N=1` : `USE [${this.dbconf['database']}];SELECT TOP 0 * FROM ${table}`
       })
     ).then((res) => {
       let ret = res['text'];
@@ -479,7 +479,8 @@ class ASP {
     this.core.request(
       this.core[`database_${this.dbconf['type']}`].query({
         conn: this.dbconf['conn'],
-        sql: sql
+        sql: sql,
+        dbname: this.dbconf['database'],
       })
     ).then((res) => {
       let ret = res['text'];
