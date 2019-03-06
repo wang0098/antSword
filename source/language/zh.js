@@ -439,7 +439,8 @@ module.exports = {
       toolbar: {
         add: '添加',
         clear: '清空',
-        edit: '编辑'
+        edit: '编辑',
+        test: '测试连接'
       },
       conn: '连接字符串',
       type: '数据库类型',
@@ -449,6 +450,8 @@ module.exports = {
       passwd: '连接密码',
       warning: '请填写完整！',
       success: '成功添加配置！',
+      test_success: '连接成功!',
+      test_warning: '返回数据为空',
       del: {
         title: '删除配置',
         confirm: '确定删除此配置吗？',

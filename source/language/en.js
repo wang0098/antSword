@@ -438,7 +438,8 @@ module.exports = {
       toolbar: {
         add: 'Add',
         clear: 'Clear',
-        edit: 'Edit'
+        edit: 'Edit',
+        test: 'Test connect'
       },
       conn: 'Connection String',
       type: 'Database type',
@@ -448,6 +449,8 @@ module.exports = {
       passwd: 'Password',
       warning: 'Please fill in the complete!',
       success: 'Successful add configuration!',
+      test_success: 'Connection Successful!',
+      test_warning: 'Response is null!',
       del: {
         title: 'Delete configuration',
         confirm: 'Determine delete this configuration?',

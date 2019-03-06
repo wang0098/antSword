@@ -308,6 +308,13 @@ class PHP {
       type: 'button',
       icon: 'remove',
       text: LANG['form']['toolbar']['clear']
+    }, {
+      type: 'separator'
+    }, {
+      id: 'test',
+      type: 'button',
+      icon: 'spinner',
+      text: LANG['form']['toolbar']['test']
     }]);
 
     // form
@@ -436,6 +443,31 @@ class PHP {
             this.manager.list.imgs[0]
           );
           break;
+        case 'test':
+          if (!form.validate()) {
+            return toastr.warning(LANG['form']['warning'], LANG_T['warning']);
+          };
+          // 解析数据
+          let _data = form.getValues();
+          win.progressOn();
+          this.core.request(
+            this.core[`database_${_data['type']}`].show_databases({
+              host: _data['host'],
+              user: _data['user'],
+              passwd: _data['passwd']
+            })
+          ).then((res) => {
+            if(res['text'].length > 0){
+              toastr.success(LANG['form']['test_success'], LANG_T['success']);
+            }else{
+              toastr.warning(LANG['form']['test_warning'], LANG_T['warning']);
+            }
+            win.progressOff();
+          }).catch((err)=>{
+            toastr.error(JSON.stringify(err), LANG_T['error']);
+            win.progressOff();
+          });
+        break;
       }
     });
   }
@@ -470,6 +502,13 @@ class PHP {
       type: 'button',
       icon: 'remove',
       text: LANG['form']['toolbar']['clear']
+    }, {
+      type: 'separator'
+    }, {
+      id: 'test',
+      type: 'button',
+      icon: 'spinner',
+      text: LANG['form']['toolbar']['test']
     }]);
 
     // form
@@ -604,6 +643,31 @@ class PHP {
           toastr.success(LANG['form']['success'], LANG_T['success']);
           // 刷新 UI
           this.parse();
+          break;
+        case 'test':
+          if (!form.validate()) {
+            return toastr.warning(LANG['form']['warning'], LANG_T['warning']);
+          };
+          // 解析数据
+          let _data = form.getValues();
+          win.progressOn();
+          this.core.request(
+            this.core[`database_${_data['type']}`].show_databases({
+              host: _data['host'],
+              user: _data['user'],
+              passwd: _data['passwd']
+            })
+          ).then((res) => {
+            if(res['text'].length > 0){
+              toastr.success(LANG['form']['test_success'], LANG_T['success']);
+            }else{
+              toastr.warning(LANG['form']['test_warning'], LANG_T['warning']);
+            }
+            win.progressOff();
+          }).catch((err)=>{
+            toastr.error(JSON.stringify(err), LANG_T['error']);
+            win.progressOff();
+          });
           break;
       }
     });
