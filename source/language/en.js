@@ -522,6 +522,11 @@ module.exports = {
         success: 'Delete column successfully',
         error: 'Failed to delete column',
       }
+    },
+    probedb: {
+      title: 'Detect database function support',
+      coltype: 'ConnType',
+      issupport: 'Support',
     }
   },
   settings: {

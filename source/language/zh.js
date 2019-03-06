@@ -523,6 +523,11 @@ module.exports = {
         success: '删除列成功',
         error: '删除列失败',
       }
+    },
+    probedb: {
+      title: '检测数据库函数支持',
+      coltype: '连接类型',
+      issupport: '状态',
     }
   },
   settings: {

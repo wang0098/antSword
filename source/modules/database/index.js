@@ -83,7 +83,8 @@ class Database {
         case 'edit':
           this.drive.editConf();
           break;
-        case 'check':
+        case 'check': // 探针检测支持的函数
+          this.checkprobe();
           break;
       }
     });
@@ -201,6 +202,64 @@ class Database {
     return _win;
   }
 
+  // 检测数据库函数支持
+  checkprobe() {
+    let that = this;
+    let win = that.createWin({
+      title: LANG['probedb']['title'],
+      width: 350,
+      height: 400,
+    });
+    const func_mapping = {
+      // PHP
+      'mysql_close': 'MYSQL',
+      'mysqli_close': 'MYSQLI',
+      'mssql_close': 'MSSQL',
+      'sqlsrv_close': 'SQLSRV',
+      'ora_close': 'ORACLE',
+      'ifx_close': 'INFORMIX',
+      'sqlite_close': 'SQLite',
+      'pg_close': 'PostgreSQL',
+      'dba_close': 'DBA',
+      'dbmclose': 'DBM',
+      'filepro_fieldcount': 'FilePro',
+      'sybase_close': 'SyBase',
+    }
+    let grid = win.attachGrid();
+    grid.clearAll();
+    grid.setHeader(`${LANG['probedb']['coltype']},${LANG['probedb']['issupport']}`);
+    grid.setColTypes("ro,ro");
+    grid.setColSorting('str,str');
+    grid.setColumnMinWidth(100, 50);
+    grid.setInitWidths("*");
+    grid.setEditable(false);
+    grid.init();
+    win.progressOn();
+    that.drive.core.request(
+      that.drive.core.base.probedb()
+    ).then((ret) => {
+      let _data = ret['text'].split('\n');
+      let data_arr = [];
+      for (let i = 0; i < _data.length; i ++) {
+        let item = _data[i].split('\t');
+        if(item.length<2){continue;}
+        data_arr.push({
+          id: i+1,
+          data: [
+            func_mapping.hasOwnProperty(item[0]) ? func_mapping[item[0]] : item[0],
+            parseInt(item[1]) === 1 ? "√" : "×",
+          ],
+          style: parseInt(item[1]) === 1 ? "background-color:#ADF1B9": "",
+        });
+      }
+      grid.parse({
+        'rows': data_arr
+      }, 'json');
+      win.progressOff();
+    }).catch((err)=>{
+      win.progressOff();
+    });
+  }
 }
 
 // export default Database;
