@@ -409,6 +409,13 @@ class PHP {
             passwd: ''
           });
           break;
+        case 'sqlsrv':
+          form.setFormData({
+            host: 'localhost',
+            user: 'sa',
+            passwd: ''
+          });
+          break;
         default:
           form.setFormData({
             user: 'dbuser',

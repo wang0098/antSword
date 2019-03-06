@@ -77,8 +77,7 @@ module.exports = (arg1, arg2, arg3, arg4, arg5, arg6) => ({
       $pwd=$m?stripslashes($_POST["${arg3}"]):$_POST["${arg3}"];
       $dbn=$m?stripslashes($_POST["${arg4}"]):$_POST["${arg4}"];
       $sql=base64_decode($_POST["${arg5}"]);
-      $chs=$m?stripslashes($_POST["${arg6}"]):$_POST["${arg6}"];
-      $chs=$chs?$chs:'utf-8';
+      $chs='utf-8';
       $T=@sqlsrv_connect($hst,array("UID"=> $usr,"PWD"=>$pwd,"Database"=>$dbn,"CharacterSet"=>$chs));
       $q=@sqlsrv_query($T,$sql,null);
       if($q!==false){
@@ -111,6 +110,6 @@ module.exports = (arg1, arg2, arg3, arg4, arg5, arg6) => ({
     [arg3]: '#{passwd}',
     [arg4]: '#{db}',
     [arg5]: '#{base64::sql}',
-    [arg6]: '#{encode}'
+    // [arg6]: '#{encode}'
   }
 })
