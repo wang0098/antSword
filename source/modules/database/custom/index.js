@@ -241,6 +241,9 @@ class CUSTOM {
             })
           ).then((res) => {
             if(res['text'].length > 0){
+              if(res['text'].indexOf("ERROR://") > -1) {
+                throw res["text"];
+              }
               toastr.success(LANG['form']['test_success'], LANG_T['success']);
             }else{
               toastr.warning(LANG['form']['test_warning'], LANG_T['warning']);
@@ -357,6 +360,9 @@ class CUSTOM {
             })
           ).then((res) => {
             if(res['text'].length > 0){
+              if(res['text'].indexOf("ERROR://") > -1) {
+                throw res["text"];
+              }
               toastr.success(LANG['form']['test_success'], LANG_T['success']);
             }else{
               toastr.warning(LANG['form']['test_warning'], LANG_T['warning']);

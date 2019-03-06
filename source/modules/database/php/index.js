@@ -359,7 +359,7 @@ class PHP {
             { type: 'label', label: LANG['form']['encode'] },
             { type: 'combo', label: '', name: 'encode', options: (() => {
               let ret = [];
-              ['gbk', 'gb2312', 'utf-8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr'].map((_) => {
+              ['utf8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'].map((_) => {
                 ret.push({
                   text: _,
                   value: _,
@@ -373,7 +373,7 @@ class PHP {
             { type: 'label', label: LANG['form']['encode'] },
             { type: 'combo', label: '', name: 'encode', options: (() => {
               let ret = [];
-              ['gbk', 'gb2312', 'utf-8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr'].map((_) => {
+              ['utf8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'].map((_) => {
                 ret.push({
                   text: _,
                   value: _,
@@ -458,6 +458,9 @@ class PHP {
             })
           ).then((res) => {
             if(res['text'].length > 0){
+              if(res['text'].indexOf("ERROR://") > -1) {
+                throw res["text"];
+              }
               toastr.success(LANG['form']['test_success'], LANG_T['success']);
             }else{
               toastr.warning(LANG['form']['test_warning'], LANG_T['warning']);
@@ -555,7 +558,7 @@ class PHP {
             { type: 'label', label: LANG['form']['encode'] },
             { type: 'combo', label: '', name: 'encode', options: (() => {
               let ret = [];
-              ['gbk', 'gb2312', 'utf-8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr'].map((_) => {
+              ['utf8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'].map((_) => {
                 ret.push({
                   text: _,
                   value: _,
@@ -569,7 +572,7 @@ class PHP {
             { type: 'label', label: LANG['form']['encode'] },
             { type: 'combo', label: '', name: 'encode', options: (() => {
               let ret = [];
-              ['gbk', 'gb2312', 'utf-8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr'].map((_) => {
+              ['utf8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'].map((_) => {
                 ret.push({
                   text: _,
                   value: _,
@@ -659,6 +662,9 @@ class PHP {
             })
           ).then((res) => {
             if(res['text'].length > 0){
+              if(res['text'].indexOf("ERROR://") > -1) {
+                throw res["text"];
+              }
               toastr.success(LANG['form']['test_success'], LANG_T['success']);
             }else{
               toastr.warning(LANG['form']['test_warning'], LANG_T['warning']);

@@ -528,6 +528,7 @@ module.exports = {
     },
     probedb: {
       title: 'Detect database function support',
+      success: 'Check completed',
       coltype: 'ConnType',
       issupport: 'Support',
     }

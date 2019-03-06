@@ -7,6 +7,7 @@
 // import AceEditor from 'react-ace';
 
 const LANG = antSword['language']['database'];
+const LANG_T = antSword['language']['toastr'];
 
 class Database {
 
@@ -238,6 +239,9 @@ class Database {
     that.drive.core.request(
       that.drive.core.base.probedb()
     ).then((ret) => {
+      if(ret['text'].indexOf("ERROR://") > -1){
+        throw res["text"];
+      }
       let _data = ret['text'].split('\n');
       let data_arr = [];
       for (let i = 0; i < _data.length; i ++) {
@@ -255,8 +259,10 @@ class Database {
       grid.parse({
         'rows': data_arr
       }, 'json');
+      toastr.success(LANG['probedb']['success'], LANG_T['success']);
       win.progressOff();
     }).catch((err)=>{
+      toastr.error(JSON.stringify(err), LANG_T['error']);
       win.progressOff();
     });
   }

@@ -529,6 +529,7 @@ module.exports = {
     },
     probedb: {
       title: '检测数据库函数支持',
+      success: '检测完毕',
       coltype: '连接类型',
       issupport: '状态',
     }
