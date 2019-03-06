@@ -397,12 +397,14 @@ class PHP {
         case 'mysql':
         case 'mysqli':
           form.setFormData({
+            host: 'localhost:3306',
             user: 'root',
             passwd: ''
           });
           break;
         case 'mssql':
           form.setFormData({
+            host: 'localhost,1433',
             user: 'sa',
             passwd: ''
           });
@@ -467,8 +469,8 @@ class PHP {
             }
             win.progressOff();
           }).catch((err)=>{
-            toastr.error(JSON.stringify(err), LANG_T['error']);
             win.progressOff();
+            toastr.error(JSON.stringify(err), LANG_T['error']);
           });
         break;
       }
@@ -671,8 +673,8 @@ class PHP {
             }
             win.progressOff();
           }).catch((err)=>{
-            toastr.error(JSON.stringify(err), LANG_T['error']);
             win.progressOff();
+            toastr.error(JSON.stringify(err), LANG_T['error']);
           });
           break;
       }

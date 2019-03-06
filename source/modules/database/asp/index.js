@@ -254,8 +254,8 @@ class ASP {
             }
             win.progressOff();
           }).catch((err)=>{
-            toastr.error(JSON.stringify(err), LANG_T['error']);
             win.progressOff();
+            toastr.error(JSON.stringify(err), LANG_T['error']);
           });
           break;
       }
@@ -372,8 +372,8 @@ class ASP {
             }
             win.progressOff();
           }).catch((err)=>{
-            toastr.error(JSON.stringify(err), LANG_T['error']);
             win.progressOff();
+            toastr.error(JSON.stringify(err), LANG_T['error']);
           });
           break;
       }

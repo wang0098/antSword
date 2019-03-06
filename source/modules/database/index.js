@@ -262,8 +262,8 @@ class Database {
       toastr.success(LANG['probedb']['success'], LANG_T['success']);
       win.progressOff();
     }).catch((err)=>{
-      toastr.error(JSON.stringify(err), LANG_T['error']);
       win.progressOff();
+      toastr.error(JSON.stringify(err), LANG_T['error']);
     });
   }
 }

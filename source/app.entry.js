@@ -336,9 +336,9 @@ ipcRenderer
               toastr.success(antSword["language"]["success"], LANG["message"]["extract"]);
             })
             .once(`update-error-${hash}`, (event, err)=>{
-              toastr.error(antSword["language"]['error'], LANG["message"]["fail"](err));
               win.win.progressOff();
               win.close();
+              toastr.error(antSword["language"]['error'], LANG["message"]["fail"](err));
             });
           break;
         case "canclebtn":
