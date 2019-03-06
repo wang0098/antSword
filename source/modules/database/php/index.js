@@ -7,6 +7,7 @@ const LANG = antSword['language']['database'];
 const LANG_T = antSword['language']['toastr'];
 const dialog = antSword.remote.dialog;
 const fs = require('fs');
+const Decodes = antSword.Decodes;
 
 class PHP {
 
@@ -346,13 +347,26 @@ class PHP {
             })() }
 
           ] },
-          { text: 'MSSQL', value: 'mssql' },
+          { text: 'MSSQL', value: 'mssql', list: [
+            { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
+            { type: 'label', label: LANG['form']['encode'] },
+            { type: 'combo', label: '', name: 'encode', options: (() => {
+              let ret = [];
+              ['gbk', 'gb2312', 'utf-8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr'].map((_) => {
+                ret.push({
+                  text: _,
+                  value: _,
+                });
+              })
+              return ret;
+            })() }
+          ] },
           { text: 'SQLSRV', value: 'sqlsrv', list: [
             { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
             { type: 'label', label: LANG['form']['encode'] },
             { type: 'combo', label: '', name: 'encode', options: (() => {
               let ret = [];
-              ['utf-8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'].map((_) => {
+              ['gbk', 'gb2312', 'utf-8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr'].map((_) => {
                 ret.push({
                   text: _,
                   value: _,
@@ -497,13 +511,26 @@ class PHP {
             })() }
 
           ] },
-          { text: 'MSSQL', value: 'mssql', selected: conf['type'] === 'mssql' },
+          { text: 'MSSQL', value: 'mssql', selected: conf['type'] === 'mssql', list: [
+            { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
+            { type: 'label', label: LANG['form']['encode'] },
+            { type: 'combo', label: '', name: 'encode', options: (() => {
+              let ret = [];
+              ['gbk', 'gb2312', 'utf-8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr'].map((_) => {
+                ret.push({
+                  text: _,
+                  value: _,
+                });
+              })
+              return ret;
+            })() }
+          ] },
           { text: 'SQLSRV', value: 'sqlsrv', selected: conf['type'] === 'sqlsrv', list: [
             { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
             { type: 'label', label: LANG['form']['encode'] },
             { type: 'combo', label: '', name: 'encode', options: (() => {
               let ret = [];
-              ['utf-8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'].map((_) => {
+              ['gbk', 'gb2312', 'utf-8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr'].map((_) => {
                 ret.push({
                   text: _,
                   value: _,
@@ -1484,7 +1511,12 @@ class PHP {
     arr.map((_) => {
       let _data = _.split('\t|\t');
       for (let i = 0; i < _data.length; i ++) {
-      	_data[i] = antSword.noxss(new Buffer(_data[i], "base64").toString());
+        let buff = new Buffer(_data[i], "base64");
+        let encoding = Decodes.detectEncoding(buff, {defaultEncoding: "unknown"});
+        encoding = encoding != "unknown" ? encoding : this.dbconf['encode'];
+        encoding = encoding != "" ? encoding : this.opt['encode'];
+        let text = Decodes.decode(buff, encoding);
+      	_data[i] = antSword.noxss(text);
       }
       data_arr.push(_data);
     });
@@ -1517,7 +1549,13 @@ class PHP {
     arr.map((_) => {
       let _data = _.split('\t|\t');
       for (let i = 0; i < _data.length; i ++) {
-      	_data[i] = antSword.noxss(new Buffer(_data[i], "base64").toString(), false);
+        // _data[i] = antSword.noxss(new Buffer(_data[i], "base64").toString(), false);
+        let buff = new Buffer(_data[i], "base64");
+        let encoding = Decodes.detectEncoding(buff, {defaultEncoding: "unknown"});
+        encoding = encoding != "unknown" ? encoding : this.dbconf['encode'];
+        encoding = encoding != "" ? encoding : this.opt['encode'];
+        let text = Decodes.decode(buff, encoding);
+      	_data[i] = antSword.noxss(text, false);
       }
       data_arr.push(_data);
     });

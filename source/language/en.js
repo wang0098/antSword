@@ -393,6 +393,7 @@ module.exports = {
       add: 'Add',
       del: 'Del',
       edit: 'Edit',
+      check: 'Check',
       menu: {
         add: 'Add conf',
         del: 'Del conf',

@@ -394,6 +394,7 @@ module.exports = {
       add: '添加',
       del: '删除',
       edit: '编辑',
+      check: '检测',
       menu: {
         add: '添加配置',
         del: '删除配置',

@@ -47,7 +47,7 @@ class Database {
   // 初始化左侧列表
   initList(layout) {
     layout.setText(`<i class="fa fa-server"></i> ${LANG['list']['title']}`);
-    layout.setWidth('250');
+    layout.setWidth('270');
 
     // tree图标
     const imgs = [
@@ -68,7 +68,9 @@ class Database {
       { type: 'separator' },
       { id: 'edit', text: LANG['list']['edit'], icon: 'edit', type: 'button', disabled: true },
       { type: 'separator' },
-      { id: 'del', text: LANG['list']['del'], icon: 'trash-o', type: 'button', disabled: true }
+      { id: 'del', text: LANG['list']['del'], icon: 'trash-o', type: 'button', disabled: true },
+      { type: 'separator' },
+      { id: 'check', text: LANG['list']['check'], icon: 'spinner', type: 'button' }
     ]);
     toolbar.attachEvent('onClick', (id) => {
       switch(id) {
@@ -80,6 +82,8 @@ class Database {
           break;
         case 'edit':
           this.drive.editConf();
+          break;
+        case 'check':
           break;
       }
     });

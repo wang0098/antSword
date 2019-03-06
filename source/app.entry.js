@@ -16,6 +16,7 @@ const fs = require('fs'),
 
 const Menubar = require('./base/menubar');
 const CacheManager = require('./base/cachemanager');
+const Decodes = require('./base/decodes');
 
 const antSword = window.antSword = {
   /**
@@ -201,6 +202,7 @@ antSword['shell'] = shell;
 antSword['remote'] = remote;
 antSword['ipcRenderer'] = ipcRenderer;
 antSword['CacheManager'] = CacheManager;
+antSword['Decodes'] = new Decodes();
 antSword['menubar'] = new Menubar();
 antSword['package'] = require('../package');
 
