@@ -11,7 +11,7 @@
 ### 数据管理
 
 * 新增「测试连接」功能
-* 新增「检测」功能, 检测支持的数据库函数(目前仅 PHP 有效)
+* 新增「检测」功能, 检测支持的数据库函数(目前仅 PHP,ASP,ASPX 有效, ASP(X)仅检测使用到的组件是否存在)
 * 新增 php sqlsrv 连接方式, php5.3之后 mssql 默认不存在,可使用该类型连接 sqlserver >= 2008
 
 > 如果直连shell本地sqlserver, host 部分填 localhost 或者 (local)
