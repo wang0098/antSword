@@ -347,7 +347,7 @@ class PHP {
 
           ] },
           { text: 'MSSQL', value: 'mssql' },
-          { text: 'SQLSRV', value: 'sqlsrv', selected: conf['type'] === 'sqlsrv', list: [
+          { text: 'SQLSRV', value: 'sqlsrv', list: [
             { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
             { type: 'label', label: LANG['form']['encode'] },
             { type: 'combo', label: '', name: 'encode', options: (() => {
@@ -356,7 +356,6 @@ class PHP {
                 ret.push({
                   text: _,
                   value: _,
-                  selected: conf['encode'] === _
                 });
               })
               return ret;
