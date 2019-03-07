@@ -394,6 +394,7 @@ module.exports = {
       add: '添加',
       del: '删除',
       edit: '编辑',
+      check: '检测',
       menu: {
         add: '添加配置',
         del: '删除配置',
@@ -438,7 +439,8 @@ module.exports = {
       toolbar: {
         add: '添加',
         clear: '清空',
-        edit: '编辑'
+        edit: '编辑',
+        test: '测试连接'
       },
       conn: '连接字符串',
       type: '数据库类型',
@@ -448,6 +450,8 @@ module.exports = {
       passwd: '连接密码',
       warning: '请填写完整！',
       success: '成功添加配置！',
+      test_success: '连接成功!',
+      test_warning: '返回数据为空',
       del: {
         title: '删除配置',
         confirm: '确定删除此配置吗？',
@@ -522,6 +526,12 @@ module.exports = {
         success: '删除列成功',
         error: '删除列失败',
       }
+    },
+    probedb: {
+      title: '检测数据库函数支持',
+      success: '检测完毕',
+      coltype: '连接类型',
+      issupport: '状态',
     }
   },
   settings: {

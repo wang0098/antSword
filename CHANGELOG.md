@@ -2,6 +2,33 @@
 > 有空会补补BUG、添添新功能。    
 > 同时也欢迎大家的参与！感谢各位朋友的支持！ .TAT.
 
+## `v(2.0.6-dev)`
+
+### 后端模块
+
+* 分块传输自动根据黑名单字符(eg: eval, assert, execute, response 等)进行随机切割(thx @phith0n)
+
+### 数据管理
+
+* 新增「测试连接」功能
+* 新增「检测」功能, 检测支持的数据库函数(目前仅 PHP,ASP,ASPX 有效, ASP(X)仅检测使用到的组件是否存在)
+* 新增 php sqlsrv 连接方式, php5.3之后 mssql 默认不存在,可使用该类型连接 sqlserver >= 2008
+
+> 如果直连shell本地sqlserver, host 部分填 localhost 或者 (local)
+> 如果连接外部,使用 ip,port
+
+* 优化SQLServer类型数据库默认查询语句
+* php数据管理解析数据时自动猜解编码
+
+### 其它
+
+* 新增 Decodes 自动猜解编码,在中文少量的情况下,成功率会降低
+
+### BugFix
+
+* 修复 asp(x) sqlserver 获取列名,执行自定义SQL语句的异常
+* 修复 php mssql 获取列名,执行自定义SQL语句异常
+
 ## 2019/03/04 `v(2.0.5)`
 
 ### 后端模块

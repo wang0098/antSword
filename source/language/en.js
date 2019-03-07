@@ -393,6 +393,7 @@ module.exports = {
       add: 'Add',
       del: 'Del',
       edit: 'Edit',
+      check: 'Check',
       menu: {
         add: 'Add conf',
         del: 'Del conf',
@@ -437,7 +438,8 @@ module.exports = {
       toolbar: {
         add: 'Add',
         clear: 'Clear',
-        edit: 'Edit'
+        edit: 'Edit',
+        test: 'Test connect'
       },
       conn: 'Connection String',
       type: 'Database type',
@@ -447,6 +449,8 @@ module.exports = {
       passwd: 'Password',
       warning: 'Please fill in the complete!',
       success: 'Successful add configuration!',
+      test_success: 'Connection Successful!',
+      test_warning: 'Response is null!',
       del: {
         title: 'Delete configuration',
         confirm: 'Determine delete this configuration?',
@@ -521,6 +525,12 @@ module.exports = {
         success: 'Delete column successfully',
         error: 'Failed to delete column',
       }
+    },
+    probedb: {
+      title: 'Detect database function support',
+      success: 'Check completed',
+      coltype: 'ConnType',
+      issupport: 'Support',
     }
   },
   settings: {

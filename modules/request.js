@@ -450,11 +450,19 @@ class AntRead extends Readable {
 
   // 重写自定义的可读流的 _read 方法
   _read() {
+      let blakwords = /eval|assert|base64_decode|preg_replace|call_user_func|create_function|str_replace|array_map|system|popen|exec|function_exists|passthru|shell_exec|frombase64string|unsafe|response|execute/i;
       let step = this.randomNum(this.o.step, this.o.stepmax);
       if (this.index >= this.chunk.length) {
           this.push(null);
       }else{
-          this.push(this.chunk.substring(this.index, this.index + step) + "");
+          let _subcode = this.chunk.substring(this.index, this.index + step) + "";
+          let m = _subcode.match(blakwords);
+          if(m) {
+            let sub_step = this.randomNum(1, m[0].length - 1);
+            _subcode = _subcode.substring(0, m.index + sub_step);
+            step = m.index + sub_step;
+          }
+          this.push(_subcode);
       }
       this.index += step;
   }

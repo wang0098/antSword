@@ -7,6 +7,7 @@ const LANG = antSword['language']['database'];
 const LANG_T = antSword['language']['toastr'];
 const dialog = antSword.remote.dialog;
 const fs = require('fs');
+const Decodes = antSword.Decodes;
 
 class PHP {
 
@@ -72,7 +73,16 @@ class PHP {
           const table = Buffer.from(_co[2], 'base64').toString();
           const column = Buffer.from(_co[3], 'base64').toString();
 
-          const sql = `SELECT \`${column}\` FROM \`${table}\` ORDER BY 1 DESC LIMIT 0,20;`;
+          let sql = "";
+          switch(this.dbconf['type']){
+            case 'mssql':
+            case 'sqlsrv':
+              sql = `SELECT TOP 20 [${column}] FROM [${table}] ORDER BY 1 DESC;`;
+              break;
+            default:
+              sql = `SELECT \`${column}\` FROM \`${table}\` ORDER BY 1 DESC LIMIT 0,20;`;
+              break;
+          }
           this.manager.query.editor.session.setValue(sql);
           break;
       }
@@ -298,6 +308,13 @@ class PHP {
       type: 'button',
       icon: 'remove',
       text: LANG['form']['toolbar']['clear']
+    }, {
+      type: 'separator'
+    }, {
+      id: 'test',
+      type: 'button',
+      icon: 'spinner',
+      text: LANG['form']['toolbar']['test']
     }]);
 
     // form
@@ -337,7 +354,34 @@ class PHP {
             })() }
 
           ] },
-          { text: 'MSSQL', value: 'mssql' },
+          { text: 'MSSQL', value: 'mssql', list: [
+            { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
+            { type: 'label', label: LANG['form']['encode'] },
+            { type: 'combo', label: '', name: 'encode', options: (() => {
+              let ret = [];
+              ['utf8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'].map((_) => {
+                ret.push({
+                  text: _,
+                  value: _,
+                });
+              })
+              return ret;
+            })() }
+          ] },
+          { text: 'SQLSRV', value: 'sqlsrv', list: [
+            { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
+            { type: 'label', label: LANG['form']['encode'] },
+            { type: 'combo', label: '', name: 'encode', options: (() => {
+              let ret = [];
+              ['utf8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'].map((_) => {
+                ret.push({
+                  text: _,
+                  value: _,
+                });
+              })
+              return ret;
+            })() }
+          ]},
           { text: 'ORACLE', value: 'oracle' },
           { text: 'INFORMIX', value: 'informix' }
         ] },
@@ -353,12 +397,21 @@ class PHP {
         case 'mysql':
         case 'mysqli':
           form.setFormData({
+            host: 'localhost:3306',
             user: 'root',
             passwd: ''
           });
           break;
         case 'mssql':
           form.setFormData({
+            host: 'localhost,1433',
+            user: 'sa',
+            passwd: ''
+          });
+          break;
+        case 'sqlsrv':
+          form.setFormData({
+            host: 'localhost',
             user: 'sa',
             passwd: ''
           });
@@ -399,6 +452,34 @@ class PHP {
             this.manager.list.imgs[0]
           );
           break;
+        case 'test':
+          if (!form.validate()) {
+            return toastr.warning(LANG['form']['warning'], LANG_T['warning']);
+          };
+          // 解析数据
+          let _data = form.getValues();
+          win.progressOn();
+          this.core.request(
+            this.core[`database_${_data['type']}`].show_databases({
+              host: _data['host'],
+              user: _data['user'],
+              passwd: _data['passwd']
+            })
+          ).then((res) => {
+            if(res['text'].length > 0){
+              if(res['text'].indexOf("ERROR://") > -1) {
+                throw res["text"];
+              }
+              toastr.success(LANG['form']['test_success'], LANG_T['success']);
+            }else{
+              toastr.warning(LANG['form']['test_warning'], LANG_T['warning']);
+            }
+            win.progressOff();
+          }).catch((err)=>{
+            win.progressOff();
+            toastr.error(JSON.stringify(err), LANG_T['error']);
+          });
+        break;
       }
     });
   }
@@ -433,6 +514,13 @@ class PHP {
       type: 'button',
       icon: 'remove',
       text: LANG['form']['toolbar']['clear']
+    }, {
+      type: 'separator'
+    }, {
+      id: 'test',
+      type: 'button',
+      icon: 'spinner',
+      text: LANG['form']['toolbar']['test']
     }]);
 
     // form
@@ -474,7 +562,35 @@ class PHP {
             })() }
 
           ] },
-          { text: 'MSSQL', value: 'mssql', selected: conf['type'] === 'mssql' },
+          { text: 'MSSQL', value: 'mssql', selected: conf['type'] === 'mssql', list: [
+            { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
+            { type: 'label', label: LANG['form']['encode'] },
+            { type: 'combo', label: '', name: 'encode', options: (() => {
+              let ret = [];
+              ['utf8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'].map((_) => {
+                ret.push({
+                  text: _,
+                  value: _,
+                });
+              })
+              return ret;
+            })() }
+          ] },
+          { text: 'SQLSRV', value: 'sqlsrv', selected: conf['type'] === 'sqlsrv', list: [
+            { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
+            { type: 'label', label: LANG['form']['encode'] },
+            { type: 'combo', label: '', name: 'encode', options: (() => {
+              let ret = [];
+              ['utf8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'].map((_) => {
+                ret.push({
+                  text: _,
+                  value: _,
+                  selected: conf['encode'] === _
+                });
+              })
+              return ret;
+            })() }
+          ]},
           { text: 'ORACLE', value: 'oracle', selected: conf['type'] === 'oracle' },
           { text: 'INFORMIX', value: 'informix', selected: conf['type'] === 'informix' }
         ] },
@@ -539,6 +655,34 @@ class PHP {
           toastr.success(LANG['form']['success'], LANG_T['success']);
           // 刷新 UI
           this.parse();
+          break;
+        case 'test':
+          if (!form.validate()) {
+            return toastr.warning(LANG['form']['warning'], LANG_T['warning']);
+          };
+          // 解析数据
+          let _data = form.getValues();
+          win.progressOn();
+          this.core.request(
+            this.core[`database_${_data['type']}`].show_databases({
+              host: _data['host'],
+              user: _data['user'],
+              passwd: _data['passwd']
+            })
+          ).then((res) => {
+            if(res['text'].length > 0){
+              if(res['text'].indexOf("ERROR://") > -1) {
+                throw res["text"];
+              }
+              toastr.success(LANG['form']['test_success'], LANG_T['success']);
+            }else{
+              toastr.warning(LANG['form']['test_warning'], LANG_T['warning']);
+            }
+            win.progressOff();
+          }).catch((err)=>{
+            win.progressOff();
+            toastr.error(JSON.stringify(err), LANG_T['error']);
+          });
           break;
       }
     });
@@ -1365,7 +1509,17 @@ class PHP {
         );
       });
       // 更新编辑器SQL语句
-      this.manager.query.editor.session.setValue(`SELECT * FROM \`${table}\` ORDER BY 1 DESC LIMIT 0,20;`);
+      let presql = "";
+      switch(this.dbconf['type']){
+        case 'mssql':
+        case 'sqlsrv':
+          presql = `SELECT TOP 20 * from [${table}] ORDER BY 1 DESC;`;
+          break;
+        default:
+          presql = `SELECT * FROM \`${table}\` ORDER BY 1 DESC LIMIT 0,20;`;
+          break;
+      }
+      this.manager.query.editor.session.setValue(presql);
       this.manager.list.layout.progressOff();
     }).catch((err) => {
       toastr.error(LANG['result']['error']['column'](err['status'] || JSON.stringify(err)), LANG_T['error']);
@@ -1436,7 +1590,12 @@ class PHP {
     arr.map((_) => {
       let _data = _.split('\t|\t');
       for (let i = 0; i < _data.length; i ++) {
-      	_data[i] = antSword.noxss(Buffer.from(_data[i], "base64").toString());
+        let buff = Buffer.from(_data[i], "base64");
+        let encoding = Decodes.detectEncoding(buff, {defaultEncoding: "unknown"});
+        encoding = encoding != "unknown" ? encoding : this.dbconf['encode'];
+        encoding = encoding != "" ? encoding : this.opt['encode'];
+        let text = Decodes.decode(buff, encoding);
+      	_data[i] = antSword.noxss(text);
       }
       data_arr.push(_data);
     });
@@ -1469,7 +1628,13 @@ class PHP {
     arr.map((_) => {
       let _data = _.split('\t|\t');
       for (let i = 0; i < _data.length; i ++) {
-      	_data[i] = antSword.noxss(Buffer.from(_data[i], "base64").toString(), false);
+        // _data[i] = antSword.noxss(new Buffer(_data[i], "base64").toString(), false);
+        let buff = new Buffer.from(_data[i], "base64");
+        let encoding = Decodes.detectEncoding(buff, {defaultEncoding: "unknown"});
+        encoding = encoding != "unknown" ? encoding : this.dbconf['encode'];
+        encoding = encoding != "" ? encoding : this.opt['encode'];
+        let text = Decodes.decode(buff, encoding);
+      	_data[i] = antSword.noxss(text, false);
       }
       data_arr.push(_data);
     });
