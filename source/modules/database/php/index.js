@@ -383,6 +383,7 @@ class PHP {
             })() }
           ]},
           { text: 'ORACLE', value: 'oracle' },
+          { text: 'ORACLE_OCI8', value: 'oracle_oci8' },
           { text: 'INFORMIX', value: 'informix' }
         ] },
         { type: 'input', label: LANG['form']['host'], name: 'host', required: true, value: 'localhost' },
@@ -592,6 +593,7 @@ class PHP {
             })() }
           ]},
           { text: 'ORACLE', value: 'oracle', selected: conf['type'] === 'oracle' },
+          { text: 'ORACLE_OCI8', value: 'oracle_oci8', selected: conf['type'] === 'oracle_oci8' },
           { text: 'INFORMIX', value: 'informix', selected: conf['type'] === 'informix' }
         ] },
         { type: 'input', label: LANG['form']['host'], name: 'host', required: true, value: conf['host'] },

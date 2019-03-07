@@ -17,6 +17,11 @@
 > 如果直连shell本地sqlserver, host 部分填 localhost 或者 (local)
 > 如果连接外部,使用 ip,port
 
+* 新增 php oracle_oci8 连接方式, 用于连接 oracle 8i,9i,10g,11g,12c
+
+> host 部分填写: localhost/orcl 或者 localhost:1521/orcl
+> 参考: http://php.net/manual/zh/function.oci-connect.php  connection_string 部分
+
 * 优化SQLServer类型数据库默认查询语句
 * php数据管理解析数据时自动猜解编码
 
