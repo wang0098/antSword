@@ -102,7 +102,14 @@ module.exports = (arg1, arg2, arg3, arg4, arg5, arg6) => ({
         }
         @sqlsrv_free_stmt($q);
       }else{
-        echo("Status\t|\t\r\n".base64_encode(sqlsrv_errors()[0]['message'])."\t|\t\r\n");
+        echo("Status\t|\t\r\n");
+        if(($e = sqlsrv_errors()) != null){
+          foreach($e as $v){
+            echo(base64_encode($e['message'])."\t|\t\r\n");
+          }
+        }else{
+          echo("RmFsc2U=");
+        }
       }
       @sqlsrv_close($T);`.replace(/\n\s+/g, ''),
     [arg1]: '#{host}',
