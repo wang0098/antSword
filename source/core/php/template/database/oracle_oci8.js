@@ -26,8 +26,13 @@ module.exports = (arg1, arg2, arg3, arg4, arg5, arg6) => ({
             echo(trim(@oci_result($q,1)).chr(9));
           }
         }else{
+          echo("Status\t|\t\r\n");
           $e=@oci_error($q);
-          echo("ERROR://{$e['message']} in [{$e['sqltext']}] col:{$e['offset']}");
+          if($e){
+            echo(base64_encode("ERROR://{$e['message']} in [{$e['sqltext']}] col:{$e['offset']}")."\t|\t\r\n");
+          }else{
+            echo("RmFsc2U="."\t|\t\r\n");
+          }
         }
         @oci_close($H);
       };`.replace(/\n\s+/g, ''),
@@ -52,12 +57,23 @@ module.exports = (arg1, arg2, arg3, arg4, arg5, arg6) => ({
       }else{
         $q=@oci_parse($H,$sql);
         if(@oci_execute($q)){
-          while(@oci_fetch($q)){
-            echo(trim(@oci_result($q,1)).chr(9));
+          $n=@oci_fetch_all($q,$res,0,-1,OCI_FETCHSTATEMENT_BY_ROW+OCI_NUM);
+          if($n==0){
+            echo("ERROR://Database has no tables or no privilege");
+          }else{
+            for($i=0;$i<$n;$i++){
+              $row=$res[$i];
+              echo(trim($row[0]).chr(9));
+            }
           }
         }else{
+          echo("Status\t|\t\r\n");
           $e=@oci_error($q);
-          echo("ERROR://{$e['message']} in [{$e['sqltext']}] col:{$e['offset']}");
+          if($e){
+            echo(base64_encode("ERROR://{$e['message']} in [{$e['sqltext']}] col:{$e['offset']}")."\t|\t\r\n");
+          }else{
+            echo("RmFsc2U="."\t|\t\r\n");
+          }
         }
         @oci_close($H);
       };`.replace(/\n\s+/g, ''),
@@ -84,12 +100,23 @@ module.exports = (arg1, arg2, arg3, arg4, arg5, arg6) => ({
       }else{
         $q=@oci_parse($H,$sql);
         if(@oci_execute($q)){
-          while(@oci_fetch($q)){
-            echo(trim(@oci_result($q,1))." (".@oci_result($q,2)."(".@oci_result($q,3)."))".chr(9));
+          $n=@oci_fetch_all($q,$res,0,-1,OCI_FETCHSTATEMENT_BY_ROW+OCI_NUM);
+          if($n==0){
+            echo("ERROR://Table has no columns or no privilege");
+          }else{
+            for($i=0;$i<$n;$i++){
+              $row=$res[$i];
+              echo(trim($row[0])." (".$row[1]."(".$row[2]."))".chr(9));
+            }
           }
         }else{
+          echo("Status\t|\t\r\n");
           $e=@oci_error($q);
-          echo("ERROR://{$e['message']} in [{$e['sqltext']}] col:{$e['offset']}");
+          if($e){
+            echo(base64_encode("ERROR://{$e['message']} in [{$e['sqltext']}] col:{$e['offset']}")."\t|\t\r\n");
+          }else{
+            echo("RmFsc2U="."\t|\t\r\n");
+          }
         }
         @oci_close($H);
       };`.replace(/\n\s+/g, ''),
@@ -134,8 +161,13 @@ module.exports = (arg1, arg2, arg3, arg4, arg5, arg6) => ({
             @oci_free_statement($q);
           }
         }else{
+          echo("Status\t|\t\r\n");
           $e=@oci_error($q);
-          echo("ERROR://{$e['message']} in [{$e['sqltext']}] col:{$e['offset']}");
+          if($e){
+            echo(base64_encode("ERROR://{$e['message']} in [{$e['sqltext']}] col:{$e['offset']}")."\t|\t\r\n");
+          }else{
+            echo("RmFsc2U="."\t|\t\r\n");
+          }
         }
         @oci_close($H);
       }`.replace(/\n\s+/g, ''),

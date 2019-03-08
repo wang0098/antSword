@@ -70,6 +70,7 @@ class PHP {
         // 生成查询SQL语句
         case 'column':
           let _co = arr[1].split(':');
+          const db = new Buffer(_co[1], 'base64').toString();
           const table = new Buffer(_co[2], 'base64').toString();
           const column = new Buffer(_co[3], 'base64').toString();
 
@@ -78,6 +79,10 @@ class PHP {
             case 'mssql':
             case 'sqlsrv':
               sql = `SELECT TOP 20 [${column}] FROM [${table}] ORDER BY 1 DESC;`;
+              break;
+            case 'oracle':
+            case 'oracle_oci8':
+              sql = `SELECT ${column} FROM ${db}.${table} WHERE ROWNUM < 20 ORDER BY 1`;
               break;
             default:
               sql = `SELECT \`${column}\` FROM \`${table}\` ORDER BY 1 DESC LIMIT 0,20;`;
@@ -383,7 +388,20 @@ class PHP {
             })() }
           ]},
           { text: 'ORACLE', value: 'oracle' },
-          { text: 'ORACLE_OCI8', value: 'oracle_oci8' },
+          { text: 'ORACLE_OCI8', value: 'oracle_oci8', list: [
+            { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
+            { type: 'label', label: LANG['form']['encode'] },
+            { type: 'combo', label: '', name: 'encode', options: (() => {
+              let ret = [];
+              ['UTF8','ZHS16GBK','ZHT16BIG5','ZHS16GBKFIXED','ZHT16BIG5FIXED'].map((_) => {
+                ret.push({
+                  text: _,
+                  value: _,
+                });
+              })
+              return ret;
+            })() }
+          ]},
           { text: 'INFORMIX', value: 'informix' }
         ] },
         { type: 'input', label: LANG['form']['host'], name: 'host', required: true, value: 'localhost' },
@@ -416,6 +434,13 @@ class PHP {
             user: 'sa',
             passwd: ''
           });
+          break;
+        case 'oracle_oci8':
+          form.setFormData({
+            host: 'localhost/orcl',
+            user: '',
+            passwd: '',
+          })
           break;
         default:
           form.setFormData({
@@ -593,7 +618,21 @@ class PHP {
             })() }
           ]},
           { text: 'ORACLE', value: 'oracle', selected: conf['type'] === 'oracle' },
-          { text: 'ORACLE_OCI8', value: 'oracle_oci8', selected: conf['type'] === 'oracle_oci8' },
+          { text: 'ORACLE_OCI8', value: 'oracle_oci8', selected: conf['type'] === 'oracle_oci8', list: [
+            { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
+            { type: 'label', label: LANG['form']['encode'] },
+            { type: 'combo', label: '', name: 'encode', options: (() => {
+              let ret = [];
+              ['UTF8','ZHS16GBK','ZHT16BIG5','ZHS16GBKFIXED','ZHT16BIG5FIXED'].map((_) => {
+                ret.push({
+                  text: _,
+                  value: _,
+                  selected: conf['encode'] === _
+                });
+              })
+              return ret;
+            })() }
+          ]},
           { text: 'INFORMIX', value: 'informix', selected: conf['type'] === 'informix' }
         ] },
         { type: 'input', label: LANG['form']['host'], name: 'host', required: true, value: conf['host'] },
@@ -602,7 +641,7 @@ class PHP {
       ]}
     ], true);
 
-    form.attachEvent('onChange', (_, id) => {
+    form.attachEvent('onChange', (_, id, state) => {
       if (_ == 'type') {
         switch(id) {
           case 'mysql':
@@ -628,11 +667,13 @@ class PHP {
             });
         }
       };
-      if(_ == 'encode') {
-        form.setFormData({
-          encode: id,
-        });
-      }
+      // if(_ == 'encode') {
+      //   if(state){
+      //     form.setFormData({
+      //       encode: id,
+      //     });
+      //   }
+      // }
     });
 
     // 工具栏点击事件
@@ -1404,6 +1445,9 @@ class PHP {
       })
     ).then((res) => {
       let ret = res['text'];
+      if(ret.indexOf("ERROR://") > -1) {
+        throw ret;
+      }
       const arr = ret.split('\t');
       if (arr.length === 1 && ret === '') {
         toastr.warning(LANG['result']['warning'], LANG_T['warning']);
@@ -1448,6 +1492,9 @@ class PHP {
       })
     ).then((res) => {
       let ret = res['text'];
+      if(ret.indexOf("ERROR://") > -1) {
+        throw ret;
+      }
       const arr = ret.split('\t');
       const _db = new Buffer(db).toString('base64');
       // 删除子节点
@@ -1492,6 +1539,9 @@ class PHP {
       })
     ).then((res) => {
       let ret = res['text'];
+      if(ret.indexOf("ERROR://") > -1) {
+        throw ret;
+      }
       const arr = ret.split('\t');
       const _db = new Buffer(db).toString('base64');
       const _table = new Buffer(table).toString('base64');
@@ -1516,6 +1566,10 @@ class PHP {
         case 'mssql':
         case 'sqlsrv':
           presql = `SELECT TOP 20 * from [${table}] ORDER BY 1 DESC;`;
+          break;
+        case 'oracle':
+        case 'oracle_oci8':
+          presql = `SELECT * FROM ${db}.${table} WHERE ROWNUM < 20 ORDER BY 1`;
           break;
         default:
           presql = `SELECT * FROM \`${table}\` ORDER BY 1 DESC LIMIT 0,20;`;
@@ -1594,7 +1648,23 @@ class PHP {
       for (let i = 0; i < _data.length; i ++) {
         let buff = new Buffer(_data[i], "base64");
         let encoding = Decodes.detectEncoding(buff, {defaultEncoding: "unknown"});
-        encoding = encoding != "unknown" ? encoding : this.dbconf['encode'];
+        if(encoding == "unknown") {
+          switch(this.dbconf['type']){
+            case 'oracle_oci8':
+              var oci8_characterset_mapping = {
+                'UTF8': 'utf8',
+                'ZHS16GBK':'gbk',
+                'ZHT16BIG5': 'big5',
+                'ZHS16GBKFIXED': 'gbk',
+                'ZHT16BIG5FIXED': 'big5', 
+              }
+              encoding = oci8_characterset_mapping[this.dbconf['encode']] || '';
+              break;
+            default:
+              encoding = this.dbconf['encode'] || '';
+              break;
+          }
+        }
         encoding = encoding != "" ? encoding : this.opt['encode'];
         let text = Decodes.decode(buff, encoding);
       	_data[i] = antSword.noxss(text);
@@ -1633,7 +1703,23 @@ class PHP {
         // _data[i] = antSword.noxss(new Buffer(_data[i], "base64").toString(), false);
         let buff = new Buffer(_data[i], "base64");
         let encoding = Decodes.detectEncoding(buff, {defaultEncoding: "unknown"});
-        encoding = encoding != "unknown" ? encoding : this.dbconf['encode'];
+        if(encoding == "unknown") {
+          switch(this.dbconf['type']){
+            case 'oracle_oci8':
+              var oci8_characterset_mapping = {
+                'UTF8': 'utf8',
+                'ZHS16GBK':'gbk',
+                'ZHT16BIG5': 'big5',
+                'ZHS16GBKFIXED': 'gbk',
+                'ZHT16BIG5FIXED': 'big5', 
+              }
+              encoding = oci8_characterset_mapping[this.dbconf['encode']] || '';
+              break;
+            default:
+              encoding = this.dbconf['encode'] || '';
+              break;
+          }
+        }
         encoding = encoding != "" ? encoding : this.opt['encode'];
         let text = Decodes.decode(buff, encoding);
       	_data[i] = antSword.noxss(text, false);
