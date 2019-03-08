@@ -378,9 +378,9 @@ class PHP {
             { type: 'label', label: LANG['form']['encode'] },
             { type: 'combo', label: '', name: 'encode', options: (() => {
               let ret = [];
-              ['utf8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'].map((_) => {
+              ['utf-8','char'].map((_) => {
                 ret.push({
-                  text: _,
+                  text: _.toUpperCase(),
                   value: _,
                 });
               })
@@ -607,9 +607,9 @@ class PHP {
             { type: 'label', label: LANG['form']['encode'] },
             { type: 'combo', label: '', name: 'encode', options: (() => {
               let ret = [];
-              ['utf8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'].map((_) => {
+              ['utf-8', 'char'].map((_) => {
                 ret.push({
-                  text: _,
+                  text: _.toUpperCase(),
                   value: _,
                   selected: conf['encode'] === _
                 });
@@ -1650,6 +1650,13 @@ class PHP {
         let encoding = Decodes.detectEncoding(buff, {defaultEncoding: "unknown"});
         if(encoding == "unknown") {
           switch(this.dbconf['type']){
+            case 'sqlsrv':
+              var sqlsrv_conncs_mapping = {
+                'UTF-8': 'utf8',
+                'CHAR': '',
+              }
+              encoding = sqlsrv_conncs_mapping[this.dbconf['encode']] || '';
+              break;
             case 'oracle_oci8':
               var oci8_characterset_mapping = {
                 'UTF8': 'utf8',
@@ -1705,6 +1712,13 @@ class PHP {
         let encoding = Decodes.detectEncoding(buff, {defaultEncoding: "unknown"});
         if(encoding == "unknown") {
           switch(this.dbconf['type']){
+            case 'sqlsrv':
+              var sqlsrv_conncs_mapping = {
+                'utf-8': 'utf8',
+                'char': '',
+              }
+              encoding = sqlsrv_conncs_mapping[this.dbconf['encode']] || '';
+              break;
             case 'oracle_oci8':
               var oci8_characterset_mapping = {
                 'UTF8': 'utf8',
