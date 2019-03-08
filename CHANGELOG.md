@@ -22,6 +22,7 @@
 > host 部分填写: localhost/orcl 或者 localhost:1521/orcl
 > 参考: http://php.net/manual/zh/function.oci-connect.php  connection_string 部分
 
+* 优化 asp(x) Oracle 类型数据库操作
 * 优化SQLServer类型数据库默认查询语句
 * php数据管理解析数据时自动猜解编码
 
