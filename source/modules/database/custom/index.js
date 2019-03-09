@@ -18,7 +18,7 @@ class CUSTOM {
     this.conns = {
       'mysql': 'com.mysql.jdbc.Driver\r\njdbc:mysql://localhost/test?user=root&password=123456',
       'sqlserver': 'com.microsoft.sqlserver.jdbc.SQLServerDriver\r\njdbc:sqlserver://127.0.0.1:1433;databaseName=test;user=sa;password=123456',
-      'oracle': 'oracle.jdbc.driver.OracleDriver\r\njdbc:oracle:thin:user/password@127.0.0.1:1521/test',
+      'oracle': 'oracle.jdbc.driver.OracleDriver\r\njdbc:oracle:thin:@127.0.0.1:1521/test\r\nuser\r\npassword',
     };
     // 1. 初始化TREE UI
     this.tree = this.manager.list.layout.attachTree();

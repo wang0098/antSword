@@ -26,6 +26,7 @@
 * 优化 asp(x) SQLServer 类型数据库操作
 * 优化SQLServer类型数据库默认查询语句
 * php数据管理解析数据时自动猜解编码
+* 新增 「JSP Custom Shell For Oracle」
 
 ### 其它
 
