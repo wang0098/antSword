@@ -522,8 +522,16 @@ class ASP {
         // sql = `SELECT * FROM ${db}.${table} WHERE ROWNUM=0`;
         sql = `SELECT COLUMN_NAME,DATA_TYPE,DATA_LENGTH FROM ALL_TAB_COLUMNS WHERE OWNER='${db}' AND TABLE_NAME='${table}' ORDER BY COLUMN_ID`;
         break;
-      default:
+      case 'sqlserver':
+      case 'sqloledb_1':
+      case 'sqloledb_1_sspi':
         sql =  `USE [${this.dbconf['database']}];SELECT TOP 0 * FROM ${table}`;
+        break;
+      case 'mysql':
+        sql = `SELECT * FROM ${table} LIMIT 0,0;`;
+        break;
+      default:
+        sql =  `SELECT TOP 1 * FROM ${table} ORDER BY 1 DESC`;
         break;
     }
     this.core.request(
