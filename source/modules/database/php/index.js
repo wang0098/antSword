@@ -84,6 +84,9 @@ class PHP {
             case 'oracle_oci8':
               sql = `SELECT ${column} FROM ${db}.${table} WHERE ROWNUM < 20 ORDER BY 1`;
               break;
+            case 'postgresql':
+              sql = `SELECT ${column} FROM ${table} ORDER BY 1 DESC LIMIT 20 OFFSET 0;`;
+              break;
             default:
               sql = `SELECT \`${column}\` FROM \`${table}\` ORDER BY 1 DESC LIMIT 0,20;`;
               break;
@@ -402,6 +405,7 @@ class PHP {
               return ret;
             })() }
           ]},
+          { text: 'PostgreSQL', value: 'postgresql' },
           { text: 'INFORMIX', value: 'informix' }
         ] },
         { type: 'input', label: LANG['form']['host'], name: 'host', required: true, value: 'localhost' },
@@ -441,6 +445,13 @@ class PHP {
             user: '',
             passwd: '',
           })
+          break;
+        case 'postgresql':
+          form.setFormData({
+            host: 'localhost:5432',
+            user: 'postgres',
+            passwd: '',
+          });
           break;
         default:
           form.setFormData({
@@ -633,6 +644,7 @@ class PHP {
               return ret;
             })() }
           ]},
+          { text: 'PostgreSQL', value: 'postgresql', selected: conf['type'] === 'postgresql' },
           { text: 'INFORMIX', value: 'informix', selected: conf['type'] === 'informix' }
         ] },
         { type: 'input', label: LANG['form']['host'], name: 'host', required: true, value: conf['host'] },
@@ -1570,6 +1582,9 @@ class PHP {
         case 'oracle':
         case 'oracle_oci8':
           presql = `SELECT * FROM ${db}.${table} WHERE ROWNUM < 20 ORDER BY 1`;
+          break;
+        case 'postgresql':
+          presql = `SELECT * FROM ${table} ORDER BY 1 DESC LIMIT 20 OFFSET 0;`;
           break;
         default:
           presql = `SELECT * FROM \`${table}\` ORDER BY 1 DESC LIMIT 0,20;`;

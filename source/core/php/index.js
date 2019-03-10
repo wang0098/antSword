@@ -21,6 +21,7 @@ class PHP extends Base {
       'database/sqlsrv',
       'database/oracle',
       'database/oracle_oci8',
+      'database/postgresql',
       'database/informix'
     ].map((_) => {
       this.parseTemplate(`./php/template/${_}`);

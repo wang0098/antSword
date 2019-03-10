@@ -22,14 +22,15 @@
 > host 部分填写: localhost/orcl 或者 localhost:1521/orcl
 > 参考: http://php.net/manual/zh/function.oci-connect.php  connection_string 部分
 
+* 新增 PHP PostgreSQL 类型数据库操作
 * 优化 asp(x) Oracle 类型数据库操作
 * 优化 asp(x) SQLServer 类型数据库操作
 * 优化SQLServer类型数据库默认查询语句
 * php数据管理解析数据时自动猜解编码
-* 新增 「JSP Custom Shell For Oracle」
 
 ### 其它
 
+* 新增 「JSP Custom Shell For Oracle」
 * 新增 Decodes 自动猜解编码,在中文少量的情况下,成功率会降低
 
 ### BugFix
