@@ -1667,8 +1667,8 @@ class PHP {
           switch(this.dbconf['type']){
             case 'sqlsrv':
               var sqlsrv_conncs_mapping = {
-                'UTF-8': 'utf8',
-                'CHAR': '',
+                'utf-8': 'utf8',
+                'char': '',
               }
               encoding = sqlsrv_conncs_mapping[this.dbconf['encode']] || '';
               break;
