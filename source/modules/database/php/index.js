@@ -261,6 +261,16 @@ class PHP {
         "utf16_general_ci","utf16_bin","utf16_unicode_ci","utf16_icelandic_ci","utf16_latvian_ci","utf16_romanian_ci","utf16_slovenian_ci","utf16_polish_ci","utf16_estonian_ci","utf16_spanish_ci","utf16_swedish_ci","utf16_turkish_ci","utf16_czech_ci","utf16_danish_ci","utf16_lithuanian_ci","utf16_slovak_ci","utf16_spanish2_ci","utf16_roman_ci","utf16_persian_ci","utf16_esperanto_ci","utf16_hungarian_ci","utf16_sinhala_ci",
       ],
     };
+    this.encode_mapping = {
+      'mysql': ['utf8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'],
+      'mysqli': ['utf8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'],
+      'mssql': ['utf8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'],
+      'sqlsrv': ['utf-8', 'char'],
+      'oracle': ['UTF8','ZHS16GBK','ZHT16BIG5','ZHS16GBKFIXED','ZHT16BIG5FIXED'],
+      'oracle_oci8': ['UTF8','ZHS16GBK','ZHT16BIG5','ZHS16GBKFIXED','ZHT16BIG5FIXED'],
+      'postgresql': ['utf8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'],
+      'informix': ['utf8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'],
+    }
   }
 
   // 加载配置列表
@@ -330,84 +340,25 @@ class PHP {
       { type: 'settings', position: 'label-left', labelWidth: 90, inputWidth: 250 },
       { type: 'block', inputWidth: 'auto', offsetTop: 12, list: [
         { type: 'combo', label: LANG['form']['type'], readonly: true, name: 'type', options: [
-          { text: 'MYSQL', value: 'mysql', list: [
-
-            { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
-            { type: 'label', label: LANG['form']['encode'] },
-            { type: 'combo', label: '', name: 'encode', options: (() => {
-              let ret = [];
-              ['utf8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'].map((_) => {
-                ret.push({
-                  text: _,
-                  value: _
-                });
-              })
-              return ret;
-            })() }
-
-          ] },
-          { text: 'MYSQLI', value: 'mysqli', list: [
-
-            { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
-            { type: 'label', label: LANG['form']['encode'] },
-            { type: 'combo', label: '', name: 'encode', options: (() => {
-              let ret = [];
-              ['utf8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'].map((_) => {
-                ret.push({
-                  text: _,
-                  value: _
-                });
-              })
-              return ret;
-            })() }
-
-          ] },
-          { text: 'MSSQL', value: 'mssql', list: [
-            { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
-            { type: 'label', label: LANG['form']['encode'] },
-            { type: 'combo', label: '', name: 'encode', options: (() => {
-              let ret = [];
-              ['utf8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'].map((_) => {
-                ret.push({
-                  text: _,
-                  value: _,
-                });
-              })
-              return ret;
-            })() }
-          ] },
-          { text: 'SQLSRV', value: 'sqlsrv', list: [
-            { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
-            { type: 'label', label: LANG['form']['encode'] },
-            { type: 'combo', label: '', name: 'encode', options: (() => {
-              let ret = [];
-              ['utf-8','char'].map((_) => {
-                ret.push({
-                  text: _.toUpperCase(),
-                  value: _,
-                });
-              })
-              return ret;
-            })() }
-          ]},
+          { text: 'MYSQL', value: 'mysql' },
+          { text: 'MYSQLI', value: 'mysqli' },
+          { text: 'MSSQL', value: 'mssql' },
+          { text: 'SQLSRV', value: 'sqlsrv' },
           { text: 'ORACLE', value: 'oracle' },
-          { text: 'ORACLE_OCI8', value: 'oracle_oci8', list: [
-            { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
-            { type: 'label', label: LANG['form']['encode'] },
-            { type: 'combo', label: '', name: 'encode', options: (() => {
-              let ret = [];
-              ['UTF8','ZHS16GBK','ZHT16BIG5','ZHS16GBKFIXED','ZHT16BIG5FIXED'].map((_) => {
-                ret.push({
-                  text: _,
-                  value: _,
-                });
-              })
-              return ret;
-            })() }
-          ]},
+          { text: 'ORACLE_OCI8', value: 'oracle_oci8' },
           { text: 'PostgreSQL', value: 'postgresql' },
           { text: 'INFORMIX', value: 'informix' }
         ] },
+        { type: 'combo', label: LANG['form']['encode'], name: 'encode', options: ((c) => {
+          let ret = [];
+          this.encode_mapping[c].map((_)=>{
+            ret.push({
+              text: _,
+              value: _
+            });
+          });
+          return ret;
+        })("mysql")},
         { type: 'input', label: LANG['form']['host'], name: 'host', required: true, value: 'localhost' },
         { type: 'input', label: LANG['form']['user'], name: 'user', required: true, value: 'root' },
         { type: 'input', label: LANG['form']['passwd'], name: 'passwd', value: '' }
@@ -416,6 +367,18 @@ class PHP {
 
     form.attachEvent('onChange', (_, id) => {
       if (_ !== 'type') { return };
+      var encodecmb = form.getCombo("encode");
+      encodecmb.clearAll();
+      encodecmb.setComboValue(null);
+      var ret = [];
+      this.encode_mapping[id].map((_)=>{
+        ret.push({
+          text: _,
+          value: _
+        });
+      });
+      encodecmb.addOption(ret);
+      encodecmb.selectOption(0);
       switch(id) {
         case 'mysql':
         case 'mysqli':
@@ -565,88 +528,26 @@ class PHP {
       { type: 'settings', position: 'label-left', labelWidth: 90, inputWidth: 250 },
       { type: 'block', inputWidth: 'auto', offsetTop: 12, list: [
         { type: 'combo', label: LANG['form']['type'], readonly: true, name: 'type', options: [
-          { text: 'MYSQL', value: 'mysql', selected: conf['type'] === 'mysql', list: [
-
-            { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
-            { type: 'label', label: LANG['form']['encode'] },
-            { type: 'combo', label: '', name: 'encode', options: (() => {
-              let ret = [];
-              ['utf8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'].map((_) => {
-                ret.push({
-                  text: _,
-                  value: _,
-                  selected: conf['encode'] === _
-                });
-              })
-              return ret;
-            })() }
-
-          ] },
-          { text: 'MYSQLI', value: 'mysqli', selected: conf['type'] === 'mysqli', list: [
-
-            { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
-            { type: 'label', label: LANG['form']['encode'] },
-            { type: 'combo', label: '', name: 'encode', options: (() => {
-              let ret = [];
-              ['utf8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'].map((_) => {
-                ret.push({
-                  text: _,
-                  value: _,
-                  selected: conf['encode'] === _
-                });
-              })
-              return ret;
-            })() }
-
-          ] },
-          { text: 'MSSQL', value: 'mssql', selected: conf['type'] === 'mssql', list: [
-            { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
-            { type: 'label', label: LANG['form']['encode'] },
-            { type: 'combo', label: '', name: 'encode', options: (() => {
-              let ret = [];
-              ['utf8', 'big5', 'dec8', 'cp850', 'hp8', 'koi8r', 'latin1', 'latin2', 'ascii', 'euckr', 'gb2312', 'gbk'].map((_) => {
-                ret.push({
-                  text: _,
-                  value: _,
-                });
-              })
-              return ret;
-            })() }
-          ] },
-          { text: 'SQLSRV', value: 'sqlsrv', selected: conf['type'] === 'sqlsrv', list: [
-            { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
-            { type: 'label', label: LANG['form']['encode'] },
-            { type: 'combo', label: '', name: 'encode', options: (() => {
-              let ret = [];
-              ['utf-8', 'char'].map((_) => {
-                ret.push({
-                  text: _.toUpperCase(),
-                  value: _,
-                  selected: conf['encode'] === _
-                });
-              })
-              return ret;
-            })() }
-          ]},
+          { text: 'MYSQL', value: 'mysql', selected: conf['type'] === 'mysql' },
+          { text: 'MYSQLI', value: 'mysqli', selected: conf['type'] === 'mysqli' },
+          { text: 'MSSQL', value: 'mssql', selected: conf['type'] === 'mssql' },
+          { text: 'SQLSRV', value: 'sqlsrv', selected: conf['type'] === 'sqlsrv' },
           { text: 'ORACLE', value: 'oracle', selected: conf['type'] === 'oracle' },
-          { text: 'ORACLE_OCI8', value: 'oracle_oci8', selected: conf['type'] === 'oracle_oci8', list: [
-            { type: 'settings', position: 'label-left', offsetLeft: 70, labelWidth: 90, inputWidth: 150 },
-            { type: 'label', label: LANG['form']['encode'] },
-            { type: 'combo', label: '', name: 'encode', options: (() => {
-              let ret = [];
-              ['UTF8','ZHS16GBK','ZHT16BIG5','ZHS16GBKFIXED','ZHT16BIG5FIXED'].map((_) => {
-                ret.push({
-                  text: _,
-                  value: _,
-                  selected: conf['encode'] === _
-                });
-              })
-              return ret;
-            })() }
-          ]},
+          { text: 'ORACLE_OCI8', value: 'oracle_oci8', selected: conf['type'] === 'oracle_oci8' },
           { text: 'PostgreSQL', value: 'postgresql', selected: conf['type'] === 'postgresql' },
           { text: 'INFORMIX', value: 'informix', selected: conf['type'] === 'informix' }
         ] },
+        { type: 'combo', label: LANG['form']['encode'], name: 'encode', options: ((c) => {
+          let ret = [];
+          this.encode_mapping[c].map((_)=>{
+            ret.push({
+              text: _,
+              value: _,
+              selected: conf['encode'] === _
+            });
+          });
+          return ret;
+        })(conf["type"])},
         { type: 'input', label: LANG['form']['host'], name: 'host', required: true, value: conf['host'] },
         { type: 'input', label: LANG['form']['user'], name: 'user', required: true, value: conf['user'] },
         { type: 'input', label: LANG['form']['passwd'], name: 'passwd', value: conf['passwd'] }
@@ -655,37 +556,43 @@ class PHP {
 
     form.attachEvent('onChange', (_, id, state) => {
       if (_ == 'type') {
+        var encodecmb = form.getCombo("encode");
+        encodecmb.clearAll();
+        encodecmb.setComboValue(null);
+        var ret = [];
+        this.encode_mapping[id].map((_)=>{
+          ret.push({
+            text: _,
+            value: _,
+            selected: conf['encode'] === _
+          });
+        });
+        encodecmb.addOption(ret);
+        encodecmb.selectOption(this.encode_mapping[id].indexOf(conf['encode']) == -1 ? 0 : this.encode_mapping[id].indexOf(conf['encode']));
         switch(id) {
           case 'mysql':
           case 'mysqli':
             form.setFormData({
-              encode: conf['encode'],
+              // encode: conf['encode'],
               user: conf['user'],
               passwd: conf['passwd']
             });
             break;
           case 'mssql':
             form.setFormData({
-              encode: conf['encode'],
+              // encode: conf['encode'],
               user: conf['user'],
               passwd: conf['passwd']
             });
             break;
           default:
             form.setFormData({
-              encode: conf['encode'],
+              // encode: conf['encode'],
               user: conf['user'],
               passwd: conf['passwd']
             });
         }
       };
-      // if(_ == 'encode') {
-      //   if(state){
-      //     form.setFormData({
-      //       encode: id,
-      //     });
-      //   }
-      // }
     });
 
     // 工具栏点击事件
