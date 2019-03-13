@@ -25,11 +25,11 @@ module.exports = (arg1, arg2, arg3, arg4, arg5, arg6) => ({
         $cs .= "$k=$v ";
      }
       $T=@pg_connect($cs);
-      if(!T){
+      if(!$T){
         echo("ERROR://".@pg_last_error());
       }else{
         $q=@pg_query($T,"SELECT datname FROM pg_database where datistemplate='f';");
-        if(!q){
+        if(!$q){
           echo("ERROR://".@pg_last_error());
         }else{
           while($rs=@pg_fetch_row($q)){
@@ -66,7 +66,7 @@ module.exports = (arg1, arg2, arg3, arg4, arg5, arg6) => ({
         $cs .= "$k=$v ";
      }
       $T=@pg_connect($cs);
-      if(!T){
+      if(!$T){
         echo("ERROR://".@pg_last_error());
       }else{
         $q=@pg_query($T,"SELECT table_name FROM information_schema.tables WHERE table_type='BASE TABLE' AND table_schema NOT IN ('pg_catalog', 'information_schema');");
@@ -109,11 +109,11 @@ module.exports = (arg1, arg2, arg3, arg4, arg5, arg6) => ({
         $cs .= "$k=$v ";
      }
       $T=@pg_connect($cs);
-      if(!T){
+      if(!$T){
         echo("ERROR://".@pg_last_error());
       }else{
         $q=@pg_query($T,"SELECT column_name,udt_name,character_maximum_length FROM information_schema. COLUMNS WHERE TABLE_NAME = '{$tab}';");
-        if(!q){
+        if(!$q){
           echo("ERROR://".@pg_last_error());
         }else{
           while($rs=@pg_fetch_row($q)){
@@ -155,11 +155,11 @@ module.exports = (arg1, arg2, arg3, arg4, arg5, arg6) => ({
         $cs .= "$k=$v ";
       }
       $T=@pg_connect($cs);
-      if(!T){
+      if(!$T){
         echo("ERROR://".@pg_last_error());
       }else{
         $q=@pg_query($T, $sql);
-        if(!q){
+        if(!$q){
           echo("ERROR://".@pg_last_error());
         }else{
           $n=@pg_num_fields($q);
