@@ -27,6 +27,19 @@ class Files {
         text: LANG['bookmark']['add'],
         enabled: !bookmark[manager.path]
       }];
+      let global_bookmarks = manager.config.bookmarks || {};
+      if(Object.keys(global_bookmarks).length > 0) {
+        bookmark_opts.push({type: 'separator'});
+        for(let gb in global_bookmarks) {
+          bookmark_opts.push({
+            id: 'bookmark_'+ global_bookmarks[gb],
+            text: gb,
+            icon: 'bookmark',
+            type: 'button',
+            enabled: manager.path !== global_bookmarks[gb]
+          });
+        }
+      }
       if (!$.isEmptyObject(bookmark)) {
         bookmark_opts.push({ type: 'separator' });
       };

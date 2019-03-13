@@ -708,6 +708,35 @@ module.exports = {
           window: '窗口打开',
           tab: '标签打开',
         },
+        bookmark: {
+          title: '全局书签',
+          nodata: '当前暂无数据, 请单击鼠标右键添加',
+          grid: {
+            name: '名称',
+            path: '目录'
+          },
+          bmenu: {
+            add: '添加书签',
+            del: '删除书签'
+          },
+          add: {
+            title: '添加全局书签',
+            success: '添加成功',
+            namedup: '名称不能重复',
+            name_invalid: '名称不合法',
+            addbtn: '确定'
+          },
+          del: {
+            title: '删除书签',
+            confirm: (num) => antSword.noxss(`你确定要删除 ${typeof(num) === 'number' ? num + ' 个书签' : num+" "}吗？`),
+            success: '删除成功'
+          },
+          edit: {
+            namedup: '名称不能重复',
+            name_invalid: '名称不合法',
+            success: '更新成功'
+          }
+        },
       }
     }
   },

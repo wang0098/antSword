@@ -707,6 +707,35 @@ module.exports = {
           window: 'Window',
           tab: 'Tab',
         },
+        bookmark: {
+          title: 'Global Bookmark',
+          nodata: 'No data, click the right mouse button add',
+          grid: {
+            name: 'Name',
+            path: 'Path'
+          },
+          bmenu: {
+            add: 'Add Bookmark',
+            del: 'Del Bookmark'
+          },
+          add: {
+            title: 'Add to global bookmark',
+            success: 'Add success',
+            namedup: 'The name cannot be duplicated',
+            name_invalid: 'Name is invalid',
+            addbtn: 'Confirm'
+          },
+          del: {
+            title: 'Delete Bookmark',
+            confirm: (num) => antSword.noxss(`Are you sure to delete ${typeof(num) === 'number' ? num + ' Bookmarks' : num+" "}？`),
+            success: 'Delete success'
+          },
+          edit: {
+            namedup: 'The name cannot be duplicated',
+            name_invalid: 'Name is invalid',
+            success: 'Edit success'
+          }
+        },
       }
     }
   },

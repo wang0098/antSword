@@ -28,6 +28,14 @@
 * 优化SQLServer类型数据库默认查询语句
 * php数据管理解析数据时自动猜解编码
 
+### 文件管理
+
+* 新增「全局书签」功能, 可在「系统设置-默认设置」单击鼠标右键添加
+
+![](https://i.loli.net/2019/03/13/5c891b2cc1c30.png)
+
+![](https://i.loli.net/2019/03/13/5c891b2cc1c30.png)
+
 ### 其它
 
 * 新增 「JSP Custom Shell For Oracle」

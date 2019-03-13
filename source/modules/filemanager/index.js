@@ -41,6 +41,7 @@ class FileManager {
 
     let config = {
       openfileintab: false,
+      bookmarks: {},
     };
     
     this.config = JSON.parse(antSword['storage']("adefault_filemanager", false, JSON.stringify(config)));
