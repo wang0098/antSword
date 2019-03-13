@@ -1687,7 +1687,7 @@ class PHP {
               break;
           }
         }
-        encoding = encoding != "" ? encoding : this.opt['encode'];
+        encoding = encoding != "" ? encoding : this.opt.core.__opts__['encode'];
         let text = Decodes.decode(buff, encoding);
       	_data[i] = antSword.noxss(text);
       }
@@ -1749,7 +1749,7 @@ class PHP {
               break;
           }
         }
-        encoding = encoding != "" ? encoding : this.opt['encode'];
+        encoding = encoding != "" ? encoding : this.opt.core.__opts__['encode'];
         let text = Decodes.decode(buff, encoding);
       	_data[i] = antSword.noxss(text, false);
       }
