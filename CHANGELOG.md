@@ -15,11 +15,13 @@
 * 新增 php sqlsrv 连接方式, php5.3之后 mssql 默认不存在,可使用该类型连接 sqlserver >= 2008
 
 > 如果直连shell本地sqlserver, host 部分填 localhost 或者 (local)
+>
 > 如果连接外部,使用 ip,port
 
 * 新增 php oracle_oci8 连接方式, 用于连接 oracle 8i,9i,10g,11g,12c
 
 > host 部分填写: localhost/orcl 或者 localhost:1521/orcl
+>
 > 参考: http://php.net/manual/zh/function.oci-connect.php  connection_string 部分
 
 * 新增 PHP PostgreSQL 类型数据库操作
@@ -32,7 +34,7 @@
 
 * 新增「全局书签」功能, 可在「系统设置-默认设置」单击鼠标右键添加
 
-![](https://i.loli.net/2019/03/13/5c891b2cc1c30.png)
+![](https://i.loli.net/2019/03/13/5c891b279c26a.png)
 
 ![](https://i.loli.net/2019/03/13/5c891b2cc1c30.png)
 
