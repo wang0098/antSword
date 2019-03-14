@@ -295,12 +295,12 @@ class Form {
           let _ = [
             { type: 'settings', position: 'label-right', offsetLeft: 60, labelWidth: 100 },
             { type: 'label', label: LANG['list']['add']['form']['encoder'] },
-            { type: 'radio', name: `encoder_${c}`, value: 'default', label: 'default', checked: true }
+            { type: 'radio', name: `encoder_${c}`, value: 'default', label: `default\t(${LANG['list']['not_recommended']})`, checked: true }
           ];
           if (c !== 'custom') {
             _.push({
               type: 'radio', name: `encoder_${c}`, value: 'random',
-              label: 'random', checked: _encoder === 'random'
+              label: `random\t(${LANG['list']['not_recommended']})`, checked: _encoder === 'random'
             });
           }
           encoders.map((e) => {

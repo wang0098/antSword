@@ -96,6 +96,7 @@ module.exports = {
     },
     list: {
       title: '数据管理',
+      not_recommended: '不推荐',
       grid: {
         url: 'URL地址',
         ip: 'IP地址',

@@ -95,6 +95,7 @@ module.exports = {
     },
     list: {
       title: 'Shell Lists',
+      not_recommended: 'Not recommended',
       grid: {
         url: 'URL',
         ip: 'IP',
