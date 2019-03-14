@@ -50,6 +50,7 @@ class ContextMenu {
       ['delete', 'remove', selectedMultiData, this.delData.bind(this, ids)],
       false,
       ['move', 'share-square', selectedMultiData, null, this.parseMoveCategoryMenu(ids)],
+      ['copy', 'copy', selectedData, this.copyData.bind(this, data[0])],
       ['search', 'search', true],
       false,
       ['clearCache', 'trash-o', selectedData, this.clearCache.bind(this, id)],
@@ -263,6 +264,37 @@ class ContextMenu {
         toastr.error(LANG['list']['del']['error'](ret.toString()), LANG_T['error']);
       }
     });
+  }
+
+  /**
+   * 创建副本
+   * @param  {Object} info 当前选中的数据
+   * @return {[type]}    [description]
+   */
+  copyData(info) {
+    let data = {
+      base: {
+        category: info['category'],
+        url: info['url'],
+        pwd: info['pwd'],
+        note: info['note'],
+        type: info['type'],
+        encode: info['encode'],
+        encoder: info['encoder']
+      },
+      http: info['httpConf'] || {},
+      other: info['otherConf'] || {},
+    }
+    const ret = antSword.ipcRenderer.sendSync('shell-add', data);
+    if (ret instanceof Object) {
+      // 重新加载数据
+      antSword.modules.shellmanager.reloadData({
+        category: data['base']['category']
+      });
+      toastr.success(LANG['list']['add']['success']);
+    } else {
+      toastr.error(LANG['list']['add']['error'](ret.toString()), LANG_T['error']);
+    }
   }
 
   /**

@@ -61,6 +61,7 @@ module.exports = {
       edit: '编辑数据',
       delete: '删除数据',
       move: '移动数据',
+      copy: '创建副本',
       search: '搜索数据',
       plugin: '加载插件',
       pluginDefault: '默认分类',

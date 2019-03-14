@@ -60,6 +60,7 @@ module.exports = {
       edit: 'Edit',
       delete: 'Delete',
       move: 'Move',
+      copy: 'Copy',
       search: 'Search',
       plugin: 'Plugins',
       pluginDefault: 'Default',

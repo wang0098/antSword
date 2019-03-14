@@ -38,12 +38,16 @@
 
 ![](https://i.loli.net/2019/03/13/5c891b2cc1c30.png)
 
+### 数据管理
+
+* shell 配置页面提示不推荐使用 default、random 编码器, 明文传输 Payload 容易受到转义等影响，未来版本将会考虑移除
+* 新增「创建副本」菜单, 复制所选择的 Shell 并在相同分类下创建一个副本
+
 ### 其它
 
 * 新增 「JSP Custom Shell For Oracle」
 * 新增 Decodes 自动猜解编码,在中文少量的情况下,成功率会降低
 * 系统托盘新增「重启应用」菜单
-* shell 配置页面提示不推荐使用 default、random 编码器, 明文传输 Payload 容易受到转义等影响，未来版本将会考虑移除
 
 ### BugFix
 
