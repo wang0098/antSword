@@ -142,7 +142,7 @@ class Menubar {
               if (this.electron.BrowserWindow.getAllWindows().length > 1) {
                 return;
               }
-              this.mainWindow.webContents.reload();//.bind(this.mainWindow.webContents)
+              this.mainWindow.webContents.loadURL('ant-views://index.html');//.bind(this.mainWindow.webContents)
             }
           }, {
             label: LANG['debug']['devtools'],
@@ -185,6 +185,15 @@ class Menubar {
       }, {
         label: LANG['tray']['settings'],
         click: event.sender.send.bind(event.sender, 'menubar', 'settings')
+      }, {
+        label: LANG['debug']['restart'],
+        click: () => {
+          // 在有多个窗口的时候，不刷新
+          if (this.electron.BrowserWindow.getAllWindows().length > 1) {
+            return;
+          }
+          this.mainWindow.webContents.loadURL('ant-views://index.html');
+        }
       }, {
         label: LANG['tray']['about'],
         click: event.sender.send.bind(event.sender, 'menubar', 'settings-about')
