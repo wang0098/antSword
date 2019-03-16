@@ -49,6 +49,7 @@
 * 新增 「JSP Custom Shell For Oracle」
 * 新增 Decodes 自动猜解编码,在中文少量的情况下,成功率会降低
 * 系统托盘新增「重启应用」菜单
+* 虚拟终端打开后提示本地命令菜单 ashelp
 
 ### BugFix
 

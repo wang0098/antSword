@@ -274,6 +274,7 @@ class Terminal {
           }
         }
     });
+    this.term.echo(`[[b;cyan;](*) ${LANG['ascmd']['help']}]`);
   }
 
   /**

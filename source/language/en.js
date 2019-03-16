@@ -199,7 +199,18 @@ module.exports = {
       path: 'Current Path'
     },
     ascmd: {
-      ashelp: `Usage:\nascmd file\t\tExecute the command with file, eg: ascmd /bin/bash\n`,
+      help: 'Enter ashelp to view local commands',
+      ashelp: `Usage:
+ ascmd file\t\tExecute the command with file, eg: ascmd /bin/bash
+ quit\t\tClose terminal
+ exit\t\tClose terminal
+
+Hot Keys:
+ Ctrl =\t\tIncrease font
+ Ctrl -\t\tDecrease font
+ Ctrl L\t\tClean screen
+ Ctrl U\t\tClear the current row
+ `,
       ascmd: (cmd) => antSword.noxss(`Will execute the command with ${cmd}.`),
     },
   },

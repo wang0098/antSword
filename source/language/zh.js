@@ -200,7 +200,18 @@ module.exports = {
       path: '当前路径'
     },
     ascmd: {
-      ashelp: `使用帮助:\nascmd file\t\t指定file来执行命令,eg: ascmd /bin/bash\n`,
+      help: '输入 ashelp 查看本地命令',
+      ashelp: `使用帮助:
+ ascmd file\t\t指定file来执行命令, eg: ascmd /bin/bash
+ quit\t\t关闭终端
+ exit\t\t关闭终端
+
+快捷键:
+ Ctrl =\t\t放大字体
+ Ctrl -\t\t缩小字体
+ Ctrl L\t\t清屏
+ Ctrl U\t\t清除当前行
+`,
       ascmd: (cmd) => antSword.noxss(`将使用 ${cmd} 执行命令.`),
     },
   },
