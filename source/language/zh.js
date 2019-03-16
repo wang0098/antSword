@@ -349,7 +349,8 @@ module.exports = {
             title: '新建',
             folder: '目录',
             file: '文件'
-          }
+          },
+          terminal: '在此处打开终端'
         }
       }
     },

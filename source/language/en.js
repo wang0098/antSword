@@ -348,7 +348,8 @@ module.exports = {
             title: 'Create',
             folder: 'Folder',
             file: 'File'
-          }
+          },
+          terminal: 'Open Terminal Here'
         }
       }
     },

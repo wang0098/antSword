@@ -5,6 +5,7 @@
 const LANG_T = antSword['language']['toastr'];
 const LANG = antSword['language']['filemanager']['files'];
 const clipboard = require('electron').clipboard;
+const Terminal = require('../terminal/');
 
 class Files {
 
@@ -372,7 +373,10 @@ class Files {
         { text: LANG['grid']['contextmenu']['create']['title'], icon: 'fa fa-plus-circle', subMenu: [
           { text: LANG['grid']['contextmenu']['create']['folder'], icon: 'fa fa-folder-o', action: manager.createFolder.bind(manager) },
           { text: LANG['grid']['contextmenu']['create']['file'], icon: 'fa fa-file-o', action: manager.createFile.bind(manager) }
-        ] }
+        ] },
+        { text: LANG['grid']['contextmenu']['terminal'], icon: 'fa fa-terminal', action: () => {
+          new Terminal(self.manager.opts, {'path': self.manager.path});
+        }}
       ];
 
       bmenu(menu, event);

@@ -9,7 +9,7 @@ const LANG_T = antSword['language']['toastr'];
 
 class Terminal {
 
-  constructor(opts) {
+  constructor(opts, options={}) {
     // 生存一个随机ID，用于标识多个窗口dom
     const hash = String(Math.random()).substr(2, 10);
 
@@ -35,6 +35,7 @@ class Terminal {
 
     this.path = '';
     this.opts = opts;
+    this.options = options || {};
     this.hash = hash;
     this.term = null;
     this.cell = cell;
@@ -47,6 +48,12 @@ class Terminal {
       .getInformation()
       .then((ret) => {
         this.initTerminal(ret['info'], ret['dom']);
+        if(this.options.hasOwnProperty("path")) {
+          if(this.isWin && this.path.substr(0,1).toUpperCase() != this.options.path.substr(0,1).toUpperCase()) {
+            this.term.exec(`${this.options.path.substr(0,1).toUpperCase()}:`);
+          }
+          this.term.exec(`cd ${this.options.path}`);
+        }
       })
       .catch((err) => {
         toastr.error((typeof(err) === 'object') ? JSON.stringify(err) : String(err), LANG_T['error']);
