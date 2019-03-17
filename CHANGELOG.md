@@ -25,6 +25,7 @@
 > 参考: http://php.net/manual/zh/function.oci-connect.php  connection_string 部分
 
 * 新增 PHP PostgreSQL 类型数据库操作
+* 新增 PHP PostgreSQL_PDO 类型数据库操作 #133 (thx @B0y1n4o4)
 * 优化 asp(x) Oracle 类型数据库操作
 * 优化 asp(x) SQLServer 类型数据库操作
 * 优化SQLServer类型数据库默认查询语句
