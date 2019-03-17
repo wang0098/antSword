@@ -10,5 +10,10 @@ module.exports = () => ({
     `$m=array('mysql_close','mysqli_close','mssql_close','sqlsrv_close','ora_close','oci_close','ifx_close','sqlite_close','pg_close','dba_close','dbmclose','filepro_fieldcount','sybase_close');
     foreach ($m as $f) {
       echo($f."\\t".(function_exists($f)?'1':'0')."\\n");
+    }
+    if(function_exists('pdo_drivers')){
+      foreach(@pdo_drivers() as $f){
+        echo("pdo_".$f."\\t1\\n");
+      }
     }`.replace(/\n\s+/g, ''),
 })

@@ -13,7 +13,18 @@ module.exports = (arg1, arg2, arg3, arg4, arg5, arg6) => ({
       $pwd=$m?stripslashes($_POST["${arg3}"]):$_POST["${arg3}"];
       $host=split(':',$hst)[0];
       $port=split(':',$hst)[1];
-      $dbh=new PDO("pgsql:host=$host;port=$port;dbname=postgres;",$usr,$pwd);
+      $arr=array(
+        'host'=>$host,
+        'port'=>$port,
+      );
+      $cs='pgsql:';
+      foreach($arr as $k=>$v) {
+        if(empty($v)){
+          continue;
+        }
+        $cs .= "$k=$v;";
+      }
+      $dbh=new PDO($cs,$usr,$pwd);
       if(!$dbh){
         echo("ERROR://CONNECT ERROR");
       }else{
@@ -39,7 +50,19 @@ module.exports = (arg1, arg2, arg3, arg4, arg5, arg6) => ({
       $dbn=$m?stripslashes($_POST["${arg4}"]):$_POST["${arg4}"];
       $host=split(':',$hst)[0];
       $port=split(':',$hst)[1];
-      $dbh=new PDO("pgsql:host=$host;port=$port;dbname=$dbn;",$usr,$pwd);
+      $arr=array(
+        'host'=>$host,
+        'port'=>$port,
+        'dbname'=>$dbn,
+      );
+      $cs='pgsql:';
+      foreach($arr as $k=>$v) {
+        if(empty($v)){
+          continue;
+        }
+        $cs .= "$k=$v;";
+      }
+      $dbh=new PDO($cs,$usr,$pwd);
       if(!$dbh){
         echo("ERROR://CONNECT ERROR");
       }else{
@@ -67,7 +90,19 @@ module.exports = (arg1, arg2, arg3, arg4, arg5, arg6) => ({
       $tab=$m?stripslashes($_POST["${arg5}"]):$_POST["${arg5}"];
       $host=split(':',$hst)[0];
       $port=split(':',$hst)[1];
-      $dbh=new PDO("pgsql:host=$host;port=$port;dbname=$dbn;",$usr,$pwd);
+      $arr=array(
+        'host'=>$host,
+        'port'=>$port,
+        'dbname'=>$dbn,
+      );
+      $cs='pgsql:';
+      foreach($arr as $k=>$v) {
+        if(empty($v)){
+          continue;
+        }
+        $cs .= "$k=$v;";
+      }
+      $dbh=new PDO($cs,$usr,$pwd);
       if(!$dbh){
         echo("ERROR://CONNECT ERROR");
       }else{
@@ -98,14 +133,30 @@ module.exports = (arg1, arg2, arg3, arg4, arg5, arg6) => ({
       $encode=$m?stripslashes($_POST["${arg6}"]):$_POST["${arg6}"];
       $host=split(':',$hst)[0];
       $port=split(':',$hst)[1];
-      $dbh=new PDO("pgsql:host=$host;port=$port;dbname=$dbn;",$usr,$pwd);
+      $arr=array(
+        'host'=>$host,
+        'port'=>$port,
+        'dbname'=>$dbn,
+      );
+      $cs='pgsql:';
+      foreach($arr as $k=>$v) {
+        if(empty($v)){
+          continue;
+        }
+        $cs .= "$k=$v;";
+      }
+      $dbh=new PDO($cs,$usr,$pwd);
       if(!$dbh){
         echo("ERROR://CONNECT ERROR");
       }else{
         $result=$dbh->prepare($sql);
         if(!$result->execute()){
           echo("Status\t|\t\r\n");
-          echo(base64_encode("ERROR://EXECUTE ERROR")."\t|\t\r\n");
+          $err="";
+          foreach(@$result->errorInfo() as $v){
+            $err.=$v." ";
+          }
+          echo(base64_encode("ERROR://".$err)."\t|\t\r\n");
         }else{
           $bool=True;
           while($res=$result->fetch(PDO::FETCH_ASSOC)){
@@ -122,10 +173,11 @@ module.exports = (arg1, arg2, arg3, arg4, arg5, arg6) => ({
             echo "\r\n";
           }
           if($bool){
-            if($result->rowCount()){
+            if(!$result->columnCount()){
               echo("Affect Rows\t|\t\r\n".base64_encode($result->rowCount())."\t|\t\r\n");
             }else{
               echo("Status\t|\t\r\n");
+              echo(base64_encode("ERROR://Table is empty.")."\t|\t\r\n");
             }
           }
         }
