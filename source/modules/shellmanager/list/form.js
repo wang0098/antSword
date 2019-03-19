@@ -293,7 +293,7 @@ class Form {
         selected: c === _default,
         list: ((c) => {
           let _ = [
-            { type: 'settings', position: 'label-right', offsetLeft: 60, labelWidth: 100 },
+            { type: 'settings', position: 'label-right', offsetLeft: 60, labelWidth: 200 },
             { type: 'label', label: LANG['list']['add']['form']['encoder'] },
             { type: 'radio', name: `encoder_${c}`, value: 'default', label: `default\t(${LANG['list']['not_recommended']})`, checked: true }
           ];
