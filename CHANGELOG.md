@@ -48,6 +48,12 @@
 
 可选搜索字段： URL(URL地址), Password(密码), Remark(备注), All(在以上几个字段中出现)
 
+> 如果想搜索其它类型的字段, 可直接在类型框中输入想要搜索的字段
+>
+> 例如搜索 IP地址, 可在搜索字段选择框中输入: ip
+>
+> 具体字段类型名请直接查阅 antData/db.ant
+
 唤醒快捷键 Ctrl+Shift+F 或者 Command + Shift + F (OSX)
 
 退出:
