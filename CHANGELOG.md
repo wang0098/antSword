@@ -2,7 +2,7 @@
 > 有空会补补BUG、添添新功能。    
 > 同时也欢迎大家的参与！感谢各位朋友的支持！ .TAT.
 
-## `v(2.0.6-dev)`
+## 2019/03/20 `v(2.0.6)`
 
 ### 后端模块
 
@@ -12,13 +12,13 @@
 
 * 新增「测试连接」功能
 * 新增「检测」功能, 检测支持的数据库函数(目前仅 PHP,ASP,ASPX 有效, ASP(X)仅检测使用到的组件是否存在)
-* 新增 php sqlsrv 连接方式, php5.3之后 mssql 默认不存在,可使用该类型连接 sqlserver >= 2008
+* 新增 php `sqlsrv` 连接方式, php5.3之后 mssql 默认不存在,可使用该类型连接 sqlserver >= 2008
 
 > 如果直连shell本地sqlserver, host 部分填 localhost 或者 (local)
 >
 > 如果连接外部,使用 ip,port
 
-* 新增 php oracle_oci8 连接方式, 用于连接 oracle 8i,9i,10g,11g,12c
+* 新增 php `oracle_oci8` 连接方式, 用于连接 oracle 8i,9i,10g,11g,12c
 
 > host 部分填写: localhost/orcl 或者 localhost:1521/orcl
 >
