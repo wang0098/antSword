@@ -34,7 +34,7 @@ class Files {
         for(let gb in global_bookmarks) {
           bookmark_opts.push({
             id: 'bookmark_'+ global_bookmarks[gb],
-            text: gb,
+            text: antSword.noxss(gb),
             icon: 'bookmark',
             type: 'button',
             enabled: manager.path !== global_bookmarks[gb]
@@ -47,7 +47,7 @@ class Files {
       for (let _ in bookmark) {
         bookmark_opts.push({
           id: 'bookmark_' + _,
-          text: bookmark[_],
+          text: antSword.noxss(bookmark[_]),
           icon: 'bookmark-o',
           type: 'button',
           enabled: manager.path !== _

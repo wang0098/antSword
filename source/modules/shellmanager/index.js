@@ -80,7 +80,7 @@ class ShellManager {
       this.category['sidebar'].addItem({
         id: _,
         bubble: _data['category'][_],
-        text: `<i class="fa fa-folder-o"></i> ${_}`
+        text: `<i class="fa fa-folder-o"></i> ${antSword.noxss(_)}`
       });
     }
     // 加载分类数据
