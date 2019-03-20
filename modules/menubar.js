@@ -110,6 +110,12 @@ class Menubar {
           }, {
             type: 'separator'
           }, {
+            label: LANG['edit']['search'],
+            accelerator: 'Shift+CmdOrCtrl+F',
+            click: event.sender.send.bind(event.sender, 'menubar', 'shellmanager-search')
+          }, {
+            type: 'separator'
+          }, {
             label: LANG['edit']['selectall'], accelerator: 'CmdOrCtrl+A', role: 'selectall'
           }
         ]

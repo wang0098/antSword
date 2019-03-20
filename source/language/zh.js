@@ -29,7 +29,8 @@ module.exports = {
       cut: '剪切',
       copy: '复制',
       paste: '粘贴',
-      selectall: '全选'
+      selectall: '全选',
+      search: '查找数据'
     },
     window: {
       title: '窗口',

@@ -28,7 +28,8 @@ module.exports = {
       cut: 'Cut',
       copy: 'Copy',
       paste: 'Paste',
-      selectall: 'SelectAll'
+      selectall: 'SelectAll',
+      search: 'Search'
     },
     window: {
       title: 'Window',

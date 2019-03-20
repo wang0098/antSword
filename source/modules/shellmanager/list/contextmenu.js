@@ -51,7 +51,7 @@ class ContextMenu {
       false,
       ['move', 'share-square', selectedMultiData, null, this.parseMoveCategoryMenu(ids)],
       ['copy', 'copy', selectedData, this.copyData.bind(this, data[0])],
-      ['search', 'search', true],
+      ['search', 'search', false, this.searchData.bind(this, event)],
       false,
       ['clearCache', 'trash-o', selectedData, this.clearCache.bind(this, id)],
       ['clearAllCache', 'trash', false, this.clearAllCache.bind(this)]
@@ -301,8 +301,8 @@ class ContextMenu {
    * 搜索数据
    * @return {[type]} [description]
    */
-  searchData() {
-
+  searchData(event) {
+    antSword.modules.shellmanager.searchPop.show(120, document.body.clientHeight, 100, 100);
   }
 
   /**
