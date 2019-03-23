@@ -287,7 +287,15 @@ class Form {
     let ret = [];
     for (let c in antSword['core']) {
       // 加载默认编码器和用户自定义编码器
-      let encoders = antSword['core'][c].prototype.encoders.concat(antSword['encoders'][c]);
+      let encoders;
+      switch(c){
+        case 'php4':
+          encoders = antSword['core']['php4'].prototype.encoders.concat(antSword['encoders']['php']);
+        break;
+        default:
+          encoders = antSword['core'][c].prototype.encoders.concat(antSword['encoders'][c]);
+        break;
+      }
       ret.push({
         text: c.toUpperCase(), value: c,
         selected: c === _default,
