@@ -2,6 +2,12 @@
 > 有空会补补BUG、添添新功能。    
 > 同时也欢迎大家的参与！感谢各位朋友的支持！ .TAT.
 
+## `v(2.0.7)`
+
+### 核心
+
+* 执行命令新增 `antsystem` 函数, 具体见: https://github.com/AntSwordProject/ant_php_extension
+
 ## 2019/03/20 `v(2.0.6)`
 
 ### 后端模块
