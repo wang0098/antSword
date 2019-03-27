@@ -147,7 +147,7 @@ class ADefault {
             var _formvals = form.getValues();
             let config = default_config;
             config.filemanager.openfileintab = _formvals['openfileintab'];
-            
+            config.filemanager.bookmarks = self.filemanager_settings.bookmarks;
             // save
             // save 文件管理设置
             antSword['storage']('adefault_filemanager', config.filemanager);
