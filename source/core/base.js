@@ -182,6 +182,8 @@ class Base {
    */
   parseEncoder(enc) {
     // 加载编码器
+    // https://github.com/AntSwordProject/antSword/issues/135#issuecomment-475842870
+    delete require.cache[require.resolve(`${enc}`)];
     // QAQ！我也不知道为什么，如果直接require变量名，babel编译就会warning，so我只好加个`咯～
     this['__encoder__'][enc.indexOf(`encoder/`) > -1 ? enc.split(`encoder/`)[1]:enc.split(`encoder\\`)[1]] = require(`${enc}`);
   }
