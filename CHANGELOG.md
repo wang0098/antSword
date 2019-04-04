@@ -8,6 +8,11 @@
 
 * 执行命令新增 `antsystem` 函数, 具体见: https://github.com/AntSwordProject/ant_php_extension
 * Fix 编码器保存后不生效的问题 #135 (thx @K4ngx)
+* Fix core download 参数遗漏问题 #142 (thx @RoyTse)
+
+### 其它
+
+* 修复默认设置保存时导致 bookmarks 清空的问题
 
 ## 2019/03/20 `v(2.0.6)`
 
