@@ -30,6 +30,8 @@
 ### 其它
 
 * 修复默认设置保存时导致 bookmarks 清空的问题
+* PHP Custom Shell 新增 listcmd 功能
+* PHP Custom Shell 新增数据库支持函数检查接口
 
 ## 2019/03/20 `v(2.0.6)`
 
