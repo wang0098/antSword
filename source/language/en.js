@@ -203,6 +203,7 @@ module.exports = {
       help: 'Enter ashelp to view local commands',
       ashelp: `Usage:
  ascmd file\t\tExecute the command with file, eg: ascmd /bin/bash
+ aslistcmd\t\tList available command interpreters
  quit\t\tClose terminal
  exit\t\tClose terminal
 

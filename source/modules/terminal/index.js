@@ -150,6 +150,48 @@ class Terminal {
         term.echo(LANG['ascmd']['ashelp']);
         return;
       }
+      if (cmd === 'aslistcmd'){
+        var binarr = "";
+        if (this.isWin) {
+          binarr = [
+            "C:/Windows/System32/cmd.exe",
+            "C:/Windows/SysWOW64/cmd.exe",
+            "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+            "C:/Windows/SysWOW64/WindowsPowerShell/v1.0/powershell.exe",
+          ].join(',');
+        }else{
+          binarr = [
+            "/bin/sh",
+            "/bin/ash",
+            "/bin/bash",
+            "/bin/zsh",
+            "/bin/busybox",
+          ].join(',');
+        }
+        this.core.request(
+          this.core.command.listcmd({
+            binarr: binarr,
+          })
+        ).then((ret) => {
+          let res = ret['text'];
+          if(res.indexOf("ERROR://") > -1){
+            throw res;
+          }
+          let result = "";
+          res.split('\n').map((v) => {
+            var line = v.split('\t');
+            if(line.length == 2){
+              var r = parseInt(line[1]) === 1 ? '[[b;#15af63;]OK]' : '[[b;#E80000;]FAIL]';
+              result += `${line[0]}\t\t\t${r}\n`;
+            }
+          });
+          term.echo(result);
+          term.resume();
+        }).catch((err) => {
+          term.resume();
+        });
+        return;
+      }
       if ( cmd.substr(0,5) === 'ascmd') {
         var sessbin = cmd.substr(5).trim();
         if(sessbin.length>0){
@@ -230,7 +272,7 @@ class Terminal {
         // < 1.0.0 时使用3个参数 completion: (term, value, callback) => {}
         completion: (value, callback) => {
           callback([
-            'ashelp', 'ascmd', 'quit', 'exit'
+            'ashelp', 'ascmd', 'aslistcmd', 'quit', 'exit'
           ].concat(
             this.isWin ? [
               'dir', 'whoami', 'net', 'ipconfig', 'netstat', 'cls',

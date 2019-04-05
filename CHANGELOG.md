@@ -10,6 +10,13 @@
 * Fix 编码器保存后不生效的问题 #135 (thx @K4ngx)
 * Fix core download 参数遗漏问题 #142 (thx @RoyTse)
 
+### 虚拟终端
+
+* 新增自定义命令 `aslistcmd`, 列出可使用的命令解释器 (#123)
+
+![aslistcmd.png](https://i.loli.net/2019/04/05/5ca74815a01a4.png)
+![aslistcmd_win.png](https://i.loli.net/2019/04/05/5ca74819b276e.png)
+
 ### 其它
 
 * 修复默认设置保存时导致 bookmarks 清空的问题
