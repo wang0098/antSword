@@ -204,6 +204,7 @@ module.exports = {
       ashelp: `Usage:
  ascmd file\t\tExecute the command with file, eg: ascmd /bin/bash
  aslistcmd\t\tList available command interpreters
+ aspowershell [on|off]\t\tEnable/Disable PowerShell mode, eg: aspowershell on
  quit\t\tClose terminal
  exit\t\tClose terminal
 
@@ -214,6 +215,10 @@ Hot Keys:
  Ctrl U\t\tClear the current row
  `,
       ascmd: (cmd) => antSword.noxss(`Will execute the command with ${cmd}.`),
+      aspowershell: {
+        on: "Powershell mode enabled",
+        off: "Powershell mode disabled",
+      },
     },
   },
   filemanager: {

@@ -205,6 +205,7 @@ module.exports = {
       ashelp: `使用帮助:
  ascmd file\t\t指定file来执行命令, eg: ascmd /bin/bash
  aslistcmd\t\t列出可使用的命令解释器
+ aspowershell [on|off]\t\t启用/关闭PowerShell模式, eg: aspowershell on
  quit\t\t关闭终端
  exit\t\t关闭终端
 
@@ -215,6 +216,10 @@ module.exports = {
  Ctrl U\t\t清除当前行
 `,
       ascmd: (cmd) => antSword.noxss(`将使用 ${cmd} 执行命令.`),
+      aspowershell: {
+        on: "已启用Powershell模式",
+        off: "已关闭Powershell模式",
+      },
     },
   },
   filemanager: {

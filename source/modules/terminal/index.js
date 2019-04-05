@@ -40,7 +40,9 @@ class Terminal {
     this.term = null;
     this.cell = cell;
     this.isWin = true;
+    this.isPowershell = false;
     this.sessbin = null;
+    this.sess_powershell = null;
     this.core = new antSword['core'][opts['type']](opts);
     this.cache = new antSword['CacheManager'](this.opts['_id']);
 
@@ -202,6 +204,17 @@ class Terminal {
         }
         return;
       }
+      if ( cmd.substr(0,12) === 'aspowershell') {
+        var _switch = cmd.substr(12).trim().toLowerCase();
+        if(_switch === "on") {
+          self.sess_powershell = true;
+          term.echo(LANG['ascmd']['aspowershell']["on"]);
+        }else {
+          self.sess_powershell = false;
+          term.echo(LANG['ascmd']['aspowershell']["off"]);
+        }
+        return;
+      }
       term.pause();
       // 是否有缓存
       let cacheTag = 'command-' + new Buffer(this.path + cmd).toString('base64');
@@ -220,6 +233,14 @@ class Terminal {
       _bin = _confBin || _bin;
       if(self.sessbin !== null) {
         _bin = self.sessbin;
+      }
+      if(self.isWin && _bin.indexOf("powershell") > -1) {
+        self.isPowershell = true
+      }else{
+        self.isPowershell = false
+      }
+      if(self.sess_powershell !== null) {
+        self.isPowershell = self.sess_powershell;
       }
       // 开始执行命令
       this.core.request(
@@ -272,7 +293,7 @@ class Terminal {
         // < 1.0.0 时使用3个参数 completion: (term, value, callback) => {}
         completion: (value, callback) => {
           callback([
-            'ashelp', 'ascmd', 'aslistcmd', 'quit', 'exit'
+            'ashelp', 'ascmd', 'aslistcmd', 'aspowershell', 'quit', 'exit'
           ].concat(
             this.isWin ? [
               'dir', 'whoami', 'net', 'ipconfig', 'netstat', 'cls',
@@ -328,7 +349,7 @@ class Terminal {
   parseCmd(cmd, path) {
     path = path.replace(/\\\\/g, '\\').replace(/"/g, '\\"').replace(/\\/g, '\\\\');
     return (this.isWin
-      ? `cd /d "${path}"&${cmd}&echo [S]&cd&echo [E]`
+      ? this.isPowershell? `cd "${path}";${cmd};echo [S];(pwd).path;echo [E]`:`cd /d "${path}"&${cmd}&echo [S]&cd&echo [E]`
       : `cd "${path}";${cmd};echo [S];pwd;echo [E]`
     );
   }
