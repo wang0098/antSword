@@ -9,6 +9,7 @@
 * 执行命令新增 `antsystem` 函数, 具体见: https://github.com/AntSwordProject/ant_php_extension
 * Fix 编码器保存后不生效的问题 #135 (thx @K4ngx)
 * Fix core download 参数遗漏问题 #142 (thx @RoyTse)
+* Fix #141 (thx @RoyTse)
 
 ### 虚拟终端
 

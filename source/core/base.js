@@ -158,7 +158,7 @@ class Base {
                       retStr = argv[tagStr] || '';
                     }
                     // 组合最终生成模板代码
-                    data[arg] = args[arg].replace(tag, retStr);
+                    data[arg] = data[arg].replace(tag, retStr);
                   }
                 )
               }
