@@ -203,7 +203,7 @@ module.exports = {
     ascmd: {
       help: '输入 ashelp 查看本地命令',
       ashelp: `使用帮助:
- ascmd file\t\t指定file来执行命令, eg: ascmd /bin/bash
+ ascmd [file]\t\t指定file来执行命令, eg: ascmd /bin/bash
  aslistcmd\t\t列出可使用的命令解释器
  aspowershell [on|off]\t\t启用/关闭PowerShell模式, eg: aspowershell on
  quit\t\t关闭终端

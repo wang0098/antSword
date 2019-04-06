@@ -202,7 +202,7 @@ module.exports = {
     ascmd: {
       help: 'Enter ashelp to view local commands',
       ashelp: `Usage:
- ascmd file\t\tExecute the command with file, eg: ascmd /bin/bash
+ ascmd [file]\t\tExecute the command with file, eg: ascmd /bin/bash
  aslistcmd\t\tList available command interpreters
  aspowershell [on|off]\t\tEnable/Disable PowerShell mode, eg: aspowershell on
  quit\t\tClose terminal
