@@ -562,7 +562,8 @@ module.exports = {
       homepage: '主页',
       document: '文档',
       qqgroup: 'Q群',
-      discord: '在线交流'
+      discord: '在线交流',
+      wechat: '关注微信公众号'
     },
     language: {
       title: '语言设置',

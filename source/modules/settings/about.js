@@ -25,7 +25,7 @@ class About {
         </p>
         <div>
           <img src="ant-static://imgs/qrcode.jpg" style="width:100px;"/>
-          <p style="color: #795548;transition: all .5s linear;font-size: 14px;">关注微信公众号</p>
+          <p style="color: #795548;transition: all .5s linear;font-size: 14px;">${LANG['wechat']}</p>
         </div>
       </div>
     `);

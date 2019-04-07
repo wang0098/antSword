@@ -561,7 +561,8 @@ Hot Keys:
       homepage: 'Home',
       document: 'Document',
       qqgroup: 'QQ Group',
-      discord: 'Discord'
+      discord: 'Discord',
+      wechat: 'Fllow us on WeChat'
     },
     language: {
       title: 'Language setting',
