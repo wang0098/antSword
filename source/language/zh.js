@@ -214,6 +214,16 @@ module.exports = {
  Ctrl -\t\t缩小字体
  Ctrl L\t\t清屏
  Ctrl U\t\t清除当前行
+ Ctrl A\t\t光标到行首
+ Ctrl E\t\t光标到行尾
+ Ctrl F/B\t\t前进后退(相当于左右方向键)
+ Ctrl P\t\t上一条命令
+ Ctrl R\t\t搜索命令历史
+ Ctrl D\t\t删除当前光标的字符
+ Ctrl H\t\t删除光标之前的字符
+ Ctrl W\t\t删除光标之前的单词
+ Ctrl K\t\t删除到文本末尾
+ Ctrl T\t\t交换光标处文本
 `,
       ascmd: (cmd) => antSword.noxss(`将使用 ${cmd} 执行命令.`),
       aspowershell: {
