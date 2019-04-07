@@ -160,6 +160,12 @@ class Terminal {
             "C:/Windows/SysWOW64/cmd.exe",
             "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
             "C:/Windows/SysWOW64/WindowsPowerShell/v1.0/powershell.exe",
+            "C:/Windows/System32/WindowsPowerShell/v2.0/powershell.exe",
+            "C:/Windows/SysWOW64/WindowsPowerShell/v2.0/powershell.exe",
+            "C:/Windows/System32/WindowsPowerShell/v3.0/powershell.exe",
+            "C:/Windows/SysWOW64/WindowsPowerShell/v3.0/powershell.exe",
+            "C:/Windows/System32/WindowsPowerShell/v4.0/powershell.exe",
+            "C:/Windows/SysWOW64/WindowsPowerShell/v4.0/powershell.exe",
           ].join(',');
         }else{
           binarr = [
