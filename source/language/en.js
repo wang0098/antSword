@@ -212,7 +212,17 @@ Hot Keys:
  Ctrl =\t\tIncrease font
  Ctrl -\t\tDecrease font
  Ctrl L\t\tClean screen
- Ctrl U\t\tClear the current row
+ Ctrl U\t\tClear the current line
+ Ctrl A\t\tMove cursor to the beginning of the line
+ Ctrl E\t\tMove cursor to the end of the line
+ Ctrl F/B\t\tForward and backward (equivalent to the left and right direction keys)
+ Ctrl P\t\tPrevious command
+ Ctrl R\t\tSearch command history
+ Ctrl D\t\tDelete the character of the current cursor
+ Ctrl H\t\tDeletes the character before the cursor
+ Ctrl W\t\tDelete the word before the cursor
+ Ctrl K\t\tDelete to the end of the text
+ Ctrl T\t\tExchange text at the cursor
  `,
       ascmd: (cmd) => antSword.noxss(`Will execute the command with ${cmd}.`),
       aspowershell: {
