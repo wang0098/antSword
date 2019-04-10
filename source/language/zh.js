@@ -621,7 +621,7 @@ module.exports = {
         dling: (progress)=> `正在下载更新包...${progress}%`,
         dlingnp: (size)=> `正在下载更新包...${size}`,
         dlend: "下载完毕",
-        extract: "正在解压, 请务关闭程序",
+        extract: "正在解压, 请勿关闭程序",
         ing: '努力更新中。。',
         fail: (err) => `更新失败！【${err}】`,
         success: '更新成功！请稍后手动重启应用！'
