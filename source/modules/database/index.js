@@ -218,6 +218,7 @@ class Database {
       'mssql_close': 'MSSQL',
       'sqlsrv_close': 'SQLSRV',
       'ora_close': 'ORACLE',
+      'oci_close': 'ORACLE_OCI8',
       'ifx_close': 'INFORMIX',
       'sqlite_close': 'SQLite',
       'pg_close': 'PostgreSQL',

@@ -29,7 +29,8 @@ module.exports = {
       cut: '剪切',
       copy: '复制',
       paste: '粘贴',
-      selectall: '全选'
+      selectall: '全选',
+      search: '查找数据'
     },
     window: {
       title: '窗口',
@@ -61,6 +62,7 @@ module.exports = {
       edit: '编辑数据',
       delete: '删除数据',
       move: '移动数据',
+      copy: '创建副本',
       search: '搜索数据',
       plugin: '加载插件',
       pluginDefault: '默认分类',
@@ -96,6 +98,7 @@ module.exports = {
     },
     list: {
       title: '数据管理',
+      not_recommended: '不推荐',
       grid: {
         url: 'URL地址',
         ip: 'IP地址',
@@ -198,8 +201,35 @@ module.exports = {
       path: '当前路径'
     },
     ascmd: {
-      ashelp: `使用帮助:\nascmd file\t\t指定file来执行命令,eg: ascmd /bin/bash\n`,
+      help: '输入 ashelp 查看本地命令',
+      ashelp: `使用帮助:
+ ascmd [file]\t\t指定file来执行命令, eg: ascmd /bin/bash
+ aslistcmd\t\t列出可使用的命令解释器
+ aspowershell [on|off]\t\t启用/关闭PowerShell模式, eg: aspowershell on
+ quit\t\t关闭终端
+ exit\t\t关闭终端
+
+快捷键:
+ Ctrl =\t\t放大字体
+ Ctrl -\t\t缩小字体
+ Ctrl L\t\t清屏
+ Ctrl U\t\t清除当前行
+ Ctrl A\t\t光标到行首
+ Ctrl E\t\t光标到行尾
+ Ctrl F/B\t\t前进后退(相当于左右方向键)
+ Ctrl P\t\t上一条命令
+ Ctrl R\t\t搜索命令历史
+ Ctrl D\t\t删除当前光标的字符
+ Ctrl H\t\t删除光标之前的字符
+ Ctrl W\t\t删除光标之前的单词
+ Ctrl K\t\t删除到文本末尾
+ Ctrl T\t\t交换光标处文本
+`,
       ascmd: (cmd) => antSword.noxss(`将使用 ${cmd} 执行命令.`),
+      aspowershell: {
+        on: "已启用Powershell模式",
+        off: "已关闭Powershell模式",
+      },
     },
   },
   filemanager: {
@@ -347,7 +377,8 @@ module.exports = {
             title: '新建',
             folder: '目录',
             file: '文件'
-          }
+          },
+          terminal: '在此处打开终端'
         }
       }
     },
@@ -541,7 +572,8 @@ module.exports = {
       homepage: '主页',
       document: '文档',
       qqgroup: 'Q群',
-      discord: '在线交流'
+      discord: '在线交流',
+      wechat: '关注微信公众号'
     },
     language: {
       title: '语言设置',
@@ -589,7 +621,7 @@ module.exports = {
         dling: (progress)=> `正在下载更新包...${progress}%`,
         dlingnp: (size)=> `正在下载更新包...${size}`,
         dlend: "下载完毕",
-        extract: "正在解压, 请务关闭程序",
+        extract: "正在解压, 请勿关闭程序",
         ing: '努力更新中。。',
         fail: (err) => `更新失败！【${err}】`,
         success: '更新成功！请稍后手动重启应用！'
@@ -707,6 +739,35 @@ module.exports = {
           title: '文件打开方式',
           window: '窗口打开',
           tab: '标签打开',
+        },
+        bookmark: {
+          title: '全局书签',
+          nodata: '当前暂无数据, 请单击鼠标右键添加',
+          grid: {
+            name: '名称',
+            path: '目录'
+          },
+          bmenu: {
+            add: '添加书签',
+            del: '删除书签'
+          },
+          add: {
+            title: '添加全局书签',
+            success: '添加成功',
+            namedup: '名称不能重复',
+            name_invalid: '名称不合法',
+            addbtn: '确定'
+          },
+          del: {
+            title: '删除书签',
+            confirm: (num) => antSword.noxss(`你确定要删除 ${typeof(num) === 'number' ? num + ' 个书签' : num+" "}吗？`),
+            success: '删除成功'
+          },
+          edit: {
+            namedup: '名称不能重复',
+            name_invalid: '名称不合法',
+            success: '更新成功'
+          }
         },
       }
     }

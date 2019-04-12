@@ -79,10 +79,21 @@ class ASP {
         // 生成查询SQL语句
         case 'column':
           let _co = arr[1].split(':');
+          const db = Buffer.from(_co[1], 'base64').toString();
           const table = Buffer.from(_co[2], 'base64').toString();
           const column = Buffer.from(_co[3], 'base64').toString();
-
-          const sql = `SELECT TOP 20 [${column}] FROM [${table}] ORDER BY 1 DESC;`;
+          let sql = "";
+          switch(this.dbconf['type']){
+            case 'mysql':
+              sql = `SELECT \`${column}\` FROM \`${table}\` ORDER BY 1 DESC LIMIT 0,20;`;
+              break;
+            case 'oracle':
+              sql = `SELECT "${table}"."${column}" FROM ${db}.${table} WHERE ROWNUM < 20 ORDER BY 1`;
+              break;
+            default:
+              sql = `SELECT TOP 20 [${column}] FROM [${table}] ORDER BY 1 DESC;`;
+              break;
+          }
           this.manager.query.editor.session.setValue(sql);
           break;
       }
@@ -423,6 +434,9 @@ class ASP {
       })
     ).then((res) => {
       let ret = res['text'];
+      if(ret.indexOf("ERROR://") > -1) {
+        throw ret;
+      }
       const arr = ret.split('\t');
       if (arr.length === 1 && ret === '') {
         toastr.warning(LANG['result']['warning'], LANG_T['warning']);
@@ -466,6 +480,9 @@ class ASP {
       })
     ).then((res) => {
       let ret = res['text'];
+      if(ret.indexOf("ERROR://") > -1) {
+        throw ret;
+      }
       const arr = ret.split('\t');
       const _db = Buffer.from(db).toString('base64');
       // 删除子节点
@@ -499,15 +516,35 @@ class ASP {
       _id: this.manager.opt['_id'],
       id: id
     });
-
+    let sql = "";
+    switch(conf['type']){
+      case "oracle":
+        // sql = `SELECT * FROM ${db}.${table} WHERE ROWNUM=0`;
+        sql = `SELECT COLUMN_NAME,DATA_TYPE,DATA_LENGTH FROM ALL_TAB_COLUMNS WHERE OWNER='${db}' AND TABLE_NAME='${table}' ORDER BY COLUMN_ID`;
+        break;
+      case 'sqlserver':
+      case 'sqloledb_1':
+      case 'sqloledb_1_sspi':
+        sql =  `USE [${this.dbconf['database']}];SELECT TOP 0 * FROM ${table}`;
+        break;
+      case 'mysql':
+        sql = `SELECT * FROM ${table} LIMIT 0,0;`;
+        break;
+      default:
+        sql =  `SELECT TOP 1 * FROM ${table} ORDER BY 1 DESC`;
+        break;
+    }
     this.core.request(
       this.core[`database_${conf['type']}`].show_columns(
       {
         conn: conf['conn'],
-        table: conf['type'] === 'oracle' ? `SELECT * FROM (SELECT A.*,ROWNUM N FROM ${table} A) WHERE N=1` : `USE [${this.dbconf['database']}];SELECT TOP 0 * FROM ${table}`
+        table: sql
       })
     ).then((res) => {
       let ret = res['text'];
+      if(ret.indexOf("ERROR://") > -1) {
+        throw ret;
+      }
       const arr = ret.split('\t');
       const _db = Buffer.from(db).toString('base64');
       const _table = Buffer.from(table).toString('base64');
@@ -526,11 +563,20 @@ class ASP {
           this.manager.list.imgs[3]
         );
       });
+      let presql = "";
+      switch(this.dbconf['type']){
+        case 'mysql':
+          presql = `SELECT * FROM \`${table}\` ORDER BY 1 DESC LIMIT 0,20;`;
+          break;
+        case 'oracle':
+          presql = `SELECT * FROM ${db}.${table} WHERE ROWNUM < 20 ORDER BY 1`;
+          break;
+        default:
+          presql = `SELECT TOP 20 * from [${table}] ORDER BY 1 DESC;`;
+          break;
+      }
       // 更新编辑器SQL语句
-      this.manager.query.editor.session.setValue(
-        conf['type'] === 'oracle'
-        ? `SELECT * FROM (SELECT A.*,ROWNUM N FROM ${table} A ORDER BY 1 DESC) WHERE N>0 AND N<=20`
-        : `SELECT TOP 20 * FROM ${table} ORDER BY 1 DESC;`);
+      this.manager.query.editor.session.setValue(presql);
       this.manager.list.layout.progressOff();
     }).catch((err) => {
       toastr.error(LANG['result']['error']['column'](err['status'] || JSON.stringify(err)), LANG_T['error']);
@@ -550,6 +596,9 @@ class ASP {
       })
     ).then((res) => {
       let ret = res['text'];
+      if(ret.indexOf("ERROR://") > -1) {
+        throw ret;
+      }
       // 更新执行结果
       this.updateResult(ret);
       this.manager.query.layout.progressOff();

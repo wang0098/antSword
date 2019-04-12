@@ -2,27 +2,121 @@
 > 有空会补补BUG、添添新功能。    
 > 同时也欢迎大家的参与！感谢各位朋友的支持！ .TAT.
 
-## `v(2.0.6-dev)`
+## `v(2.0.7.1)`
+
+### 安全更新 (重要)
+
+* Fix toastr 输出时未过滤导致的 xss 漏洞, 由于在 webview 中开启了 nodejs 功能, 可借此引起 RCE #147 (thx @ev0A)
+
+> 为了防止插件中 toastr 出现类似问题, 修改了 toastr 可以输出 html 的特点，以后均不支持输出 html
+
+### 其它
+
+* 修正错别字 #145
+
+## 2019/04/08 `v(2.0.7)`
+
+### 核心
+
+* 执行命令新增 `antsystem` 函数, 具体见: https://github.com/AntSwordProject/ant_php_extension
+* Fix 编码器保存后不生效的问题 #135 (thx @K4ngx)
+* Fix core download 参数遗漏问题 #142 (thx @RoyTse)
+* Fix #141 (thx @RoyTse)
+
+### 虚拟终端
+
+* 新增自定义命令 `aslistcmd`, 列出可使用的命令解释器 (#123)
+
+![aslistcmd.png](https://i.loli.net/2019/04/05/5ca74815a01a4.png)
+![aslistcmd_win.png](https://i.loli.net/2019/04/05/5ca74819b276e.png)
+
+* 新增自定义命令 `aspowershell [on|off]`, 开启/关闭 PowerShell 模式
+
+> 如果`ascmd`命令指定的PowerShell解释器文件名中包函`powershell`关键字, 会自动启用 PowerShell 模式, 如下图:
+
+![aspowershell_default](https://i.loli.net/2019/04/05/5ca753673efe7.png)
+
+> 如果指定的 PowerShell 解释器文件名中不包含 `powershell` 关键字, 则需要手动使用该命令，启用 PowerShell 模式。如果关闭了 PowerShell 模式,则会执行出错，如下图:
+
+![aspowershell_switch](https://i.loli.net/2019/04/05/5ca75368d85fa.png)
+
+### 其它
+
+* 修复默认设置保存时导致 bookmarks 清空的问题
+* PHP Custom Shell 新增 listcmd 功能
+* PHP Custom Shell 新增数据库支持函数检查接口
+* 新增「繁體中文(香港)」和「繁體中文(台灣)」两种语言
+
+## 2019/03/20 `v(2.0.6)`
 
 ### 后端模块
 
 * 分块传输自动根据黑名单字符(eg: eval, assert, execute, response 等)进行随机切割(thx @phith0n)
 
-### 数据管理
+### 数据库管理
 
 * 新增「测试连接」功能
 * 新增「检测」功能, 检测支持的数据库函数(目前仅 PHP,ASP,ASPX 有效, ASP(X)仅检测使用到的组件是否存在)
-* 新增 php sqlsrv 连接方式, php5.3之后 mssql 默认不存在,可使用该类型连接 sqlserver >= 2008
+* 新增 php `sqlsrv` 连接方式, php5.3之后 mssql 默认不存在,可使用该类型连接 sqlserver >= 2008
 
 > 如果直连shell本地sqlserver, host 部分填 localhost 或者 (local)
+>
 > 如果连接外部,使用 ip,port
 
+* 新增 php `oracle_oci8` 连接方式, 用于连接 oracle 8i,9i,10g,11g,12c
+
+> host 部分填写: localhost/orcl 或者 localhost:1521/orcl
+>
+> 参考: http://php.net/manual/zh/function.oci-connect.php  connection_string 部分
+
+* 新增 PHP PostgreSQL 类型数据库操作
+* 新增 PHP PostgreSQL_PDO 类型数据库操作 #133 (thx @B0y1n4o4)
+* 优化 asp(x) Oracle 类型数据库操作
+* 优化 asp(x) SQLServer 类型数据库操作
 * 优化SQLServer类型数据库默认查询语句
 * php数据管理解析数据时自动猜解编码
 
+### 文件管理
+
+* 新增「在此处打开终端」功能, 打开终端后快速跳到当前目录下
+* 新增「全局书签」功能, 可在「系统设置-默认设置」单击鼠标右键添加
+
+![](https://i.loli.net/2019/03/13/5c891b279c26a.png)
+
+![](https://i.loli.net/2019/03/13/5c891b2cc1c30.png)
+
+### 数据管理
+
+* shell 配置页面提示不推荐使用 default、random 编码器, 明文传输 Payload 容易受到转义等影响，未来版本将会考虑移除
+* 新增「创建副本」菜单, 复制所选择的 Shell 并在相同分类下创建一个副本
+* 新增「搜索数据」功能, 搜索本地数据，范围为当前分类下的 Shell
+
+可选搜索字段： URL(URL地址), Password(密码), Remark(备注), All(在以上几个字段中出现)
+
+> 如果想搜索其它类型的字段, 可直接在类型框中输入想要搜索的字段
+>
+> 例如搜索 IP地址, 可在搜索字段选择框中输入: ip
+>
+> 具体字段类型名请直接查阅 antData/db.ant
+
+唤醒快捷键 Ctrl+Shift+F 或者 Command + Shift + F (OSX)
+
+退出:
+
+1) 点击搜索框之外的任何区域
+
+2) 按下 `ESC` 键
+
+3) 再次按下唤醒快捷键
+
+> 在使用快捷键时,如果当前活动 tab 不是数据管理，则会自动跳回数据管理
+
 ### 其它
 
+* 新增 「JSP Custom Shell For Oracle」
 * 新增 Decodes 自动猜解编码,在中文少量的情况下,成功率会降低
+* 系统托盘新增「重启应用」菜单
+* 虚拟终端打开后提示本地命令菜单 ashelp
 
 ### BugFix
 

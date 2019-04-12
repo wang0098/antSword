@@ -5,6 +5,7 @@
 const LANG_T = antSword['language']['toastr'];
 const LANG = antSword['language']['filemanager']['files'];
 const clipboard = require('electron').clipboard;
+const Terminal = require('../terminal/');
 
 class Files {
 
@@ -27,13 +28,26 @@ class Files {
         text: LANG['bookmark']['add'],
         enabled: !bookmark[manager.path]
       }];
+      let global_bookmarks = manager.config.bookmarks || {};
+      if(Object.keys(global_bookmarks).length > 0) {
+        bookmark_opts.push({type: 'separator'});
+        for(let gb in global_bookmarks) {
+          bookmark_opts.push({
+            id: 'bookmark_'+ global_bookmarks[gb],
+            text: antSword.noxss(gb),
+            icon: 'bookmark',
+            type: 'button',
+            enabled: manager.path !== global_bookmarks[gb]
+          });
+        }
+      }
       if (!$.isEmptyObject(bookmark)) {
         bookmark_opts.push({ type: 'separator' });
       };
       for (let _ in bookmark) {
         bookmark_opts.push({
           id: 'bookmark_' + _,
-          text: bookmark[_],
+          text: antSword.noxss(bookmark[_]),
           icon: 'bookmark-o',
           type: 'button',
           enabled: manager.path !== _
@@ -359,7 +373,10 @@ class Files {
         { text: LANG['grid']['contextmenu']['create']['title'], icon: 'fa fa-plus-circle', subMenu: [
           { text: LANG['grid']['contextmenu']['create']['folder'], icon: 'fa fa-folder-o', action: manager.createFolder.bind(manager) },
           { text: LANG['grid']['contextmenu']['create']['file'], icon: 'fa fa-file-o', action: manager.createFile.bind(manager) }
-        ] }
+        ] },
+        { text: LANG['grid']['contextmenu']['terminal'], icon: 'fa fa-terminal', action: () => {
+          new Terminal(self.manager.opts, {'path': self.manager.path});
+        }}
       ];
 
       bmenu(menu, event);

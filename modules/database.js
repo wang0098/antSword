@@ -48,6 +48,27 @@ class Database {
       .on('shell-getPluginDataConf', this.getPluginDataConf.bind(this));
   }
 
+  convertOptstoNedbQuery(opts={}) {
+    var self = this;
+    if(opts instanceof Array) {
+      for (let i = 0; i < opts.length; i++) {
+        opts[i] = self.convertOptstoNedbQuery(opts[i]);
+      }
+    }else if(opts instanceof Object) {
+      Object.keys(opts).map((f) => {
+        if(opts[f] instanceof Object) {
+          opts[f] = self.convertOptstoNedbQuery(opts[f]);
+        }
+        if(f == "$regex") {
+          if(opts[f].charAt(0) == '*') {
+            opts[f] = opts[f].substring(1);
+          }
+          opts[f] = new RegExp(opts[f], 'i');
+        }
+      });
+    }
+    return opts;
+  }
   /**
    * 查询shell数据
    * @param  {Object} event ipcMain对象
@@ -55,6 +76,7 @@ class Database {
    * @return {[type]}       [description]
    */
   findShell(event, opts = {}) {
+    opts = this.convertOptstoNedbQuery(opts);
     logger.debug('findShell', opts);
     this.cursor
       .find(opts)

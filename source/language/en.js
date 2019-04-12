@@ -28,7 +28,8 @@ module.exports = {
       cut: 'Cut',
       copy: 'Copy',
       paste: 'Paste',
-      selectall: 'SelectAll'
+      selectall: 'SelectAll',
+      search: 'Search'
     },
     window: {
       title: 'Window',
@@ -60,6 +61,7 @@ module.exports = {
       edit: 'Edit',
       delete: 'Delete',
       move: 'Move',
+      copy: 'Copy',
       search: 'Search',
       plugin: 'Plugins',
       pluginDefault: 'Default',
@@ -95,6 +97,7 @@ module.exports = {
     },
     list: {
       title: 'Shell Lists',
+      not_recommended: 'Not recommended',
       grid: {
         url: 'URL',
         ip: 'IP',
@@ -197,8 +200,35 @@ module.exports = {
       path: 'Current Path'
     },
     ascmd: {
-      ashelp: `Usage:\nascmd file\t\tExecute the command with file, eg: ascmd /bin/bash\n`,
+      help: 'Enter ashelp to view local commands',
+      ashelp: `Usage:
+ ascmd [file]\t\tExecute the command with file, eg: ascmd /bin/bash
+ aslistcmd\t\tList available command interpreters
+ aspowershell [on|off]\t\tEnable/Disable PowerShell mode, eg: aspowershell on
+ quit\t\tClose terminal
+ exit\t\tClose terminal
+
+Hot Keys:
+ Ctrl =\t\tIncrease font
+ Ctrl -\t\tDecrease font
+ Ctrl L\t\tClean screen
+ Ctrl U\t\tClear the current line
+ Ctrl A\t\tMove cursor to the beginning of the line
+ Ctrl E\t\tMove cursor to the end of the line
+ Ctrl F/B\t\tForward and backward (equivalent to the left and right direction keys)
+ Ctrl P\t\tPrevious command
+ Ctrl R\t\tSearch command history
+ Ctrl D\t\tDelete the character of the current cursor
+ Ctrl H\t\tDeletes the character before the cursor
+ Ctrl W\t\tDelete the word before the cursor
+ Ctrl K\t\tDelete to the end of the text
+ Ctrl T\t\tExchange text at the cursor
+ `,
       ascmd: (cmd) => antSword.noxss(`Will execute the command with ${cmd}.`),
+      aspowershell: {
+        on: "Powershell mode enabled",
+        off: "Powershell mode disabled",
+      },
     },
   },
   filemanager: {
@@ -346,7 +376,8 @@ module.exports = {
             title: 'Create',
             folder: 'Folder',
             file: 'File'
-          }
+          },
+          terminal: 'Open Terminal Here'
         }
       }
     },
@@ -540,7 +571,8 @@ module.exports = {
       homepage: 'Home',
       document: 'Document',
       qqgroup: 'QQ Group',
-      discord: 'Discord'
+      discord: 'Discord',
+      wechat: 'Fllow us on WeChat'
     },
     language: {
       title: 'Language setting',
@@ -706,6 +738,35 @@ module.exports = {
           title: 'Open File in',
           window: 'Window',
           tab: 'Tab',
+        },
+        bookmark: {
+          title: 'Global Bookmark',
+          nodata: 'No data, click the right mouse button add',
+          grid: {
+            name: 'Name',
+            path: 'Path'
+          },
+          bmenu: {
+            add: 'Add Bookmark',
+            del: 'Del Bookmark'
+          },
+          add: {
+            title: 'Add to global bookmark',
+            success: 'Add success',
+            namedup: 'The name cannot be duplicated',
+            name_invalid: 'Name is invalid',
+            addbtn: 'Confirm'
+          },
+          del: {
+            title: 'Delete Bookmark',
+            confirm: (num) => antSword.noxss(`Are you sure to delete ${typeof(num) === 'number' ? num + ' Bookmarks' : num+" "}？`),
+            success: 'Delete success'
+          },
+          edit: {
+            namedup: 'The name cannot be duplicated',
+            name_invalid: 'Name is invalid',
+            success: 'Edit success'
+          }
         },
       }
     }

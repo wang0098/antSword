@@ -287,20 +287,28 @@ class Form {
     let ret = [];
     for (let c in antSword['core']) {
       // 加载默认编码器和用户自定义编码器
-      let encoders = antSword['core'][c].prototype.encoders.concat(antSword['encoders'][c]);
+      let encoders;
+      switch(c){
+        case 'php4':
+          encoders = antSword['core']['php4'].prototype.encoders.concat(antSword['encoders']['php']);
+        break;
+        default:
+          encoders = antSword['core'][c].prototype.encoders.concat(antSword['encoders'][c]);
+        break;
+      }
       ret.push({
         text: c.toUpperCase(), value: c,
         selected: c === _default,
         list: ((c) => {
           let _ = [
-            { type: 'settings', position: 'label-right', offsetLeft: 60, labelWidth: 100 },
+            { type: 'settings', position: 'label-right', offsetLeft: 60, labelWidth: 200 },
             { type: 'label', label: LANG['list']['add']['form']['encoder'] },
-            { type: 'radio', name: `encoder_${c}`, value: 'default', label: 'default', checked: true }
+            { type: 'radio', name: `encoder_${c}`, value: 'default', label: `default\t(${LANG['list']['not_recommended']})`, checked: true }
           ];
           if (c !== 'custom') {
             _.push({
               type: 'radio', name: `encoder_${c}`, value: 'random',
-              label: 'random', checked: _encoder === 'random'
+              label: `random\t(${LANG['list']['not_recommended']})`, checked: _encoder === 'random'
             });
           }
           encoders.map((e) => {
