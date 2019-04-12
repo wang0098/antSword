@@ -235,19 +235,23 @@
 
         if (map.title) {
             $titleElement.append(String(map.title)
+            .replace(/<br\/>/g, "###asbr###")
             .replace(/&/g, "&amp;")
             .replace(/>/g, "&gt;")
             .replace(/</g, "&lt;")
-            .replace(/"/g, "&quot;")).addClass(options.titleClass);
+            .replace(/"/g, "&quot;")
+            .replace(/###asbr###/g, "<br/>")).addClass(options.titleClass);
             $toastElement.append($titleElement);
         }
 
         if (map.message) {
             $messageElement.append(String(map.message)
+            .replace(/<br\/>/g, "###asbr###")
             .replace(/&/g, "&amp;")
             .replace(/>/g, "&gt;")
             .replace(/</g, "&lt;")
-            .replace(/"/g, "&quot;")).addClass(options.messageClass);
+            .replace(/"/g, "&quot;")
+            .replace(/###asbr###/g, "<br/>")).addClass(options.messageClass);
             $toastElement.append($messageElement);
         }
 
