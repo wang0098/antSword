@@ -286,7 +286,7 @@ class FileManager {
     let self = this;
 
     layer.confirm(
-      LANG['delete']['confirm'](files.length > 1 ? files.length : files[0]),
+      LANG['delete']['confirm'](files.length > 1 ? files.length : antSword.noxss(files[0])),
       {
         icon: 2,
         shift: 6,
@@ -531,7 +531,7 @@ class FileManager {
     let that = this;
     const remote_path = this.path + name;
     const win = that.createWin({
-      title: 'Loading File: ' + remote_path,
+      title: 'Loading File: ' + antSword.noxss(remote_path),
       width: 800,
       height: 600,
     });
@@ -548,12 +548,12 @@ class FileManager {
         down_size += _size;
         let down_progress = parseInt(parseFloat(down_size / size).toFixed(2) * 100);
         if (!(down_progress % 5)) {
-          win.setText(`Preview File: ${remote_path} ${down_progress}%`);
+          win.setText(`Preview File: ${antSword.noxss(remote_path)} ${down_progress}%`);
         };
       }
     ).then((_size) => {
       if (_size === size) {
-        win.setText(`Preview File: ${remote_path}`);
+        win.setText(`Preview File: ${antSword.noxss(remote_path)}`);
         let buff = fs.readFileSync(savepath);
         switch (filemime){
           default:
@@ -821,11 +821,11 @@ class FileManager {
       let _id = String(Math.random()).substr(5, 10);
       antSword['tabbar'].addTab(
         `tab_file_${_id}`,
-        `<i class="fa fa-file-o"></i> ${name}`,
+        `<i class="fa fa-file-o"></i> ${antSword.noxss(name)}`,
         null, null, true, true
       );
       win = antSword['tabbar'].cells(`tab_file_${_id}`);
-      hinttext = `IP:${this.opts['ip']} File:${path}`;
+      hinttext = `IP:${this.opts['ip']} File:${antSword.noxss(path)}`;
     }
 
     win.progressOn();
