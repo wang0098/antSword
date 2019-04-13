@@ -47,7 +47,7 @@ class Tabbar {
    * @return {Object}           this
    */
   setTitle(title = 'New Title') {
-    this.cell.setText(`<i class="fa fa-puzzle-piece"></i> ${title}`);
+    this.cell.setText(`<i class="fa fa-puzzle-piece"></i> ${antSword.noxss(title)}`);
     return this;
   }
 
@@ -57,10 +57,12 @@ class Tabbar {
    * @param  {String} html = "" [description]
    * @return {Object}           this
    */
-  safeHTML(html = "") {
+  safeHTML(html = "", sandbox = "") {
     let _html = new Buffer(html).toString('base64');
+    // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#attr-sandbox
     let _iframe = `
       <iframe
+        sandbox="${sandbox}"
         src="data:text/html;base64,${_html}"
         style="width:100%;height:100%;border:0;padding:0;margin:0;">
       </iframe>

@@ -1386,7 +1386,7 @@ class PHP {
         this.tree.insertNewItem(
           `conn::${id}`,
           `database::${id}:${_db}`,
-          _, null,
+          antSword.noxss(_), null,
           this.manager.list.imgs[1],
           this.manager.list.imgs[1],
           this.manager.list.imgs[1]);
@@ -1430,7 +1430,7 @@ class PHP {
         this.tree.insertNewItem(
           `database::${id}:${_db}`,
           `table::${id}:${_db}:${_table}`,
-          _,
+          antSword.noxss(_),
           null,
           this.manager.list.imgs[2],
           this.manager.list.imgs[2],
@@ -1474,11 +1474,11 @@ class PHP {
       // 添加子节点
       arr.map((_) => {
         if (!_) { return };
-        const _column = new Buffer(_.split(' ')[0]).toString('base64');
+        const _column = new Buffer(_.substr(_, _.lastIndexOf(' '))).toString('base64');
         this.tree.insertNewItem(
           `table::${id}:${_db}:${_table}`,
           `column::${id}:${_db}:${_table}:${_column}`,
-          _, null,
+          antSword.noxss(_), null,
           this.manager.list.imgs[3],
           this.manager.list.imgs[3],
           this.manager.list.imgs[3]
@@ -1561,7 +1561,7 @@ class PHP {
       return toastr.error(LANG['result']['error']['parse'], LANG_T['error']);
     };
     // 3.行头
-    let header_arr = arr[0].split('\t|\t');
+    let header_arr = antSword.noxss(arr[0]).split('\t|\t');
     if (header_arr.length === 1) {
       return toastr.warning(LANG['result']['error']['noresult'], LANG_T['warning']);
     };
@@ -1622,7 +1622,7 @@ class PHP {
       return toastr.error(LANG['result']['error']['parse'], LANG_T['error']);
     };
     // 3.行头
-    let header_arr = arr[0].split('\t|\t');
+    let header_arr = antSword.noxss(arr[0]).split('\t|\t');
     if (header_arr.length === 1) {
       return toastr.warning(LANG['result']['error']['noresult'], LANG_T['warning']);
     };
