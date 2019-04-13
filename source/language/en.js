@@ -84,8 +84,8 @@ module.exports = {
       del: {
         title: 'Delete category',
         confirm: 'Are you sure to delete this category?',
-        success: (category) => antSword.noxss(`Delete category(${category}) success!`),
-        error: (category, err) => antSword.noxss(`Delete category(${category}failed!\n${err}`)
+        success: (category) => `Delete category(${category}) success!`,
+        error: (category, err) => `Delete category(${category}failed!\n${err}`
       },
       rename: {
         title: 'Rename category',
@@ -125,7 +125,7 @@ module.exports = {
         test_warning: 'Response is null!',
         warning: 'Please enter the full!',
         success: 'Add shell success!',
-        error: (err) => antSword.noxss(`Add shell failed!\n${err}`)
+        error: (err) => `Add shell failed!\n${err}`
       },
       edit: {
         title: (url) => antSword.noxss(`Edit shell(${url})`),
@@ -143,29 +143,29 @@ module.exports = {
         },
         warning: 'Please enter the full!',
         success: 'Update shell success!',
-        error: (err) => antSword.noxss(`Update shell failed!\n${err}`)
+        error: (err) => `Update shell failed!\n${err}`
       },
       del: {
         title: 'Delete shell',
         confirm: (len) => antSword.noxss(`Are you sure to delete ${len} shells?`),
-        success: (len) => antSword.noxss(`Delete ${len} shells success!`),
-        error: (err) => antSword.noxss(`Delete failed!\n${err}`)
+        success: (len) => `Delete ${len} shells success!`,
+        error: (err) => `Delete failed!\n${err}`
       },
       move: {
-        success: (num) => antSword.noxss(`Move ${num}datas success!`),
-        error: (err) => antSword.noxss(`Move data failed!\n${err}`)
+        success: (num) => `Move ${num}datas success!`,
+        error: (err) => `Move data failed!\n${err}`
       },
       clearCache: {
         title: 'Clear cache',
         confirm: 'Are you sure to clear this cache?',
         success: 'Clear cache success!',
-        error: (err) => antSword.noxss(`Clear cache failed!\n${err}`)
+        error: (err) => `Clear cache failed!\n${err}`
       },
       clearAllCache: {
         title: 'Clear all cache',
         confirm: 'Are you sure to clear all the cache?',
         success: 'Clear all cache success!',
-        error: (err) => antSword.noxss(`Clear all cache failed!\n${err}`)
+        error: (err) => `Clear all cache failed!\n${err}`
       },
       accordion: {
         base: 'Base',
@@ -236,40 +236,40 @@ Hot Keys:
     delete: {
       title: 'Delete',
       confirm: (num) => antSword.noxss(`Are you sure to delete ${typeof(num) === 'number' ? num + ' files' : num} ?`),
-      success: (path) => antSword.noxss(`Delete file [${path}] success!`),
-      error: (path, err) => antSword.noxss(`Delete file [${path}] failed!${err ? '\n' + err : ''}`)
+      success: (path) => `Delete file [${path}] success!`,
+      error: (path, err) => `Delete file [${path}] failed!${err ? '\n' + err : ''}`
     },
     paste: {
-      success: (path) => antSword.noxss(`Paste file success!\n${path}`),
-      error: (path, err) => antSword.noxss(`Paste file [${path}] failed!${err ? '\n' + err : ''}`)
+      success: (path) => `Paste file success!\n${path}`,
+      error: (path, err) => `Paste file [${path}] failed!${err ? '\n' + err : ''}`
     },
     rename: {
       title: 'Rename',
       success: 'Rename success!',
-      error: (err) => antSword.noxss(`Rename failed!${err ? '\n' + err : ''}`)
+      error: (err) => `Rename failed!${err ? '\n' + err : ''}`
     },
     createFolder: {
       title: 'Create Folder',
       value: 'New Folder',
-      success: (path) => antSword.noxss(`Create folder success!\n${path}`),
-      error: (path, err) => antSword.noxss(`Create folder [${path}] failed!${err ? '\n' + err : ''}`)
+      success: (path) => `Create folder success!\n${path}`,
+      error: (path, err) => `Create folder [${path}] failed!${err ? '\n' + err : ''}`
     },
     createFile: {
       title: 'Create File',
       value: 'New File.txt',
-      success: (path) => antSword.noxss(`Create file success!\n${path}`),
-      error: (path, err) => antSword.noxss(`Create file [${path}] failed!${err ? '\n' + err : ''}`)
+      success: (path) => `Create file success!\n${path}`,
+      error: (path, err) => `Create file [${path}] failed!${err ? '\n' + err : ''}`
     },
     retime: {
       title: 'Retime File',
-      success: (path) => antSword.noxss(`Retime file success!\n${path}`),
-      error: (path, err) => antSword.noxss(`Retime file [${path}] failed!${err ? '\n' + err : ''}`)
+      success: (path) => `Retime file success!\n${path}`,
+      error: (path, err) => `Retime file [${path}] failed!${err ? '\n' + err : ''}`
     },
     chmod: {
       title: 'Chmod File',
       check: 'Input should be octal numbers, eg: 0644',
-      success: (path) => antSword.noxss(`Chmod file success!\n${path}`),
-      error: (path, err) => antSword.noxss(`Chmod file [${path}] failed!${err ? '\n' + err : ''}`)
+      success: (path) => `Chmod file success!\n${path}`,
+      error: (path, err) => `Chmod file [${path}] failed!${err ? '\n' + err : ''}`
     },
     wget: {
       title: 'Wget File',
@@ -278,8 +278,8 @@ Hot Keys:
         name: 'WGET',
         start: 'Start to wget file..',
         success: 'Wget success!',
-        failed: (ret) => antSword.noxss(`Failed:${ret}`),
-        error: (err) => antSword.noxss(`Error:${err}`)
+        failed: (ret) => `Failed:${ret}`,
+        error: (err) => `Error:${err}`
       }
     },
     upload: {
@@ -289,11 +289,11 @@ Hot Keys:
         httperr_413: 'Please lower the upload file shard size setting.',
         httperr_etime: 'Request timeout, please increase the timeout period.',
         httperr_econnrefused: 'Connection refused, check target or proxy is enabled.',
-        failed: (err) => antSword.noxss(`Failed:${err}`),
-        error: (err) => antSword.noxss(`Error:${err}`)
+        failed: (err) => `Failed:${err}`,
+        error: (err) => `Error:${err}`
       },
-      success: (path) => antSword.noxss(`Upload file success!\n${path}`),
-      error: (path, err) => antSword.noxss(`Upload file [${path}] failed!${err}`),
+      success: (path) => `Upload file success!\n${path}`,
+      error: (path, err) => `Upload file [${path}] failed!${err}`,
     },
     folder: {
       title: 'Folders'
@@ -320,7 +320,7 @@ Hot Keys:
       prompt: {
         add: {
           title: 'Add to bookmark',
-          success: (path) => antSword.noxss(`Add to bookmark success!\n${path}`),
+          success: (path) => `Add to bookmark success!\n${path}`,
         },
         remove: {
           title: 'Remove bookmark',
@@ -369,8 +369,8 @@ Hot Keys:
             copypath: 'Copy FilePath',
             copysuccess: 'Copy to clipboard successfully!',
             copyfail: 'Copy to clipboard failed!',
-            warning: (id) => antSword.noxss(`Already add to clipboard!\n${id}`),
-            info: (id) => antSword.noxss(`Add file to the clipboard.\n${id}`)
+            warning: (id) => `Already add to clipboard!\n${id}`,
+            info: (id) => `Add file to the clipboard.\n${id}`
           },
           create: {
             title: 'Create',
@@ -388,9 +388,9 @@ Hot Keys:
         mode: 'Mode',
         encode: 'Open with Encoding'
       },
-      loadErr: (err) => antSword.noxss(`Load file error!\n${err}`),
-      success: (path) => antSword.noxss(`Save the file success!\n${path}`),
-      error: (path, err) => antSword.noxss(`Save the file [${path}] failed!${err}`)
+      loadErr: (err) => `Load file error!\n${err}`,
+      success: (path) => `Save the file success!\n${path}`,
+      error: (path, err) => `Save the file [${path}] failed!${err}`
     },
     tasks: {
       title: 'Tasks',
@@ -412,10 +412,10 @@ Hot Keys:
         cancel: 'Cancel download',
         start: 'Start to download',
         success: 'Download success!',
-        error: (err) => antSword.noxss(`Error:${err}`)
+        error: (err) => `Error:${err}`
       },
-      error: (name, err) => antSword.noxss(`Download file [${name}]error!\n${err}`),
-      success: (name) => antSword.noxss(`Download file [${name}] success!`)
+      error: (name, err) => `Download file [${name}]error!\n${err}`,
+      success: (name) => `Download file [${name}] success!`
     }
   },
   database: {
@@ -451,10 +451,10 @@ Hot Keys:
       title: 'Result',
       warning: 'Execution is completed, but no results return!',
       error: {
-        database: (err) => antSword.noxss(`Failed to obtain a list of databases!\n${err}`),
-        table: (err) => antSword.noxss(`Get table data failed!\n${err}`),
-        column: (err) => antSword.noxss(`Failed to obtain field list!\n${err}`),
-        query: (err) => antSword.noxss(`Failure to execute SQL!\n${err}`),
+        database: (err) => `Failed to obtain a list of databases!\n${err}`,
+        table: (err) => `Get table data failed!\n${err}`,
+        column: (err) => `Failed to obtain field list!\n${err}`,
+        query: (err) => `Failure to execute SQL!\n${err}`,
         parse: 'Return data format is incorrect!',
         noresult: 'No query results!'
       },
@@ -486,7 +486,7 @@ Hot Keys:
         title: 'Delete configuration',
         confirm: 'Determine delete this configuration?',
         success: 'Delete configuration success!',
-        error: (err) => antSword.noxss(`Delete configuration failed!\n${err}`)
+        error: (err) => `Delete configuration failed!\n${err}`
       },
       adddb: {
         title: 'New Database',
@@ -772,7 +772,7 @@ Hot Keys:
     }
   },
   plugin: {
-    error: (err) => antSword.noxss(`Load Plugin Store failed!\n${err}`)
+    error: (err) => `Load Plugin Store failed!\n${err}`
   },
   update: {
     title: 'Found updates',

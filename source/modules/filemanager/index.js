@@ -286,7 +286,7 @@ class FileManager {
     let self = this;
 
     layer.confirm(
-      LANG['delete']['confirm'](files.length > 1 ? files.length : antSword.noxss(files[0])),
+      LANG['delete']['confirm'](files.length > 1 ? files.length : files[0]),
       {
         icon: 2,
         shift: 6,
@@ -813,7 +813,7 @@ class FileManager {
     let hinttext = '';
     if (openfileintab == false){
       win = this.createWin({
-        title: LANG['editor']['title'](path),
+        title: LANG['editor']['title'](antSword.noxss(path)),
         width: 800
       });
       win.maximize();  

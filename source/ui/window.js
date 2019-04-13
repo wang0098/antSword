@@ -34,7 +34,7 @@ class Window {
       id, 0, 0,
       opt['width'], opt['height']
     );
-    win.setText(opt['title']);
+    win.setText(antSword.noxss(opt['title']));
     win.centerOnScreen();
     win.button('minmax').show();
     win.button('minmax').enable();
@@ -55,7 +55,7 @@ class Window {
    * @param {String} title = 'New Title' 新标题
    */
   setTitle(title = 'New Title') {
-    this.win.setText(title);
+    this.win.setText(antSword.noxss(title));
   }
 }
 
