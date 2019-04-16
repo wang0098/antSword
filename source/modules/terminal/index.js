@@ -193,7 +193,7 @@ class Terminal {
               result += `${line[0]}\t\t\t${r}\n`;
             }
           });
-          term.echo(antSword.noxss(result));
+          term.echo(result);
           term.resume();
         }).catch((err) => {
           term.resume();
