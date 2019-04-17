@@ -97,7 +97,7 @@ class Files {
           options: bookmark_opts
         },
         { type: 'separator' },
-        { id: 'path', width: 300, type: 'buttonInput', value: manager.path || 'loading..' },
+        { id: 'path', width: 300, type: 'buttonInput', value: antSword.noxss(manager.path) || 'loading..' },
         { id: 'read_path', type: 'button', icon: 'arrow-right', text: LANG['toolbar']['read'] },
         { type: 'separator' }
       ]);
