@@ -7,7 +7,7 @@
 // 密码：ant
 'use strict';
 
-module.exports = (pwd, data) => {
+module.exports = (pwd, data, ext = null) => {
   data[pwd] = data['_'].replace(/eval/ig, 'xxxx');
   delete data['_'];
   return data;

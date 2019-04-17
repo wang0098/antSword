@@ -6,8 +6,7 @@
 
 'use strict';
 
-module.exports = (pwd, data) => {
-
+module.exports = (pwd, data, ext = null) => {
     let randomID = `_0x${Math.random().toString(16).substr(2)}`;
     let hexencoder = "function HexAsciiConvert(hex:String) {var sb:System.Text.StringBuilder = new System.Text.StringBuilder();var i;for(i=0; i< hex.Length; i+=2){sb.Append(System.Convert.ToString(System.Convert.ToChar(Int32.Parse(hex.Substring(i,2), System.Globalization.NumberStyles.HexNumber))));}return sb.ToString();};";
     data[randomID] = Buffer.from(data['_']).toString('hex');

@@ -6,7 +6,7 @@
 
 'use strict';
 
-module.exports = (pwd, data) => {
+module.exports = (pwd, data, ext = null) => {
   let ret = {};
   for (let _ in data) {
     if (_ === '_') { continue };

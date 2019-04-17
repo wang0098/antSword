@@ -5,7 +5,7 @@
 
 'use strict';
 
-module.exports = (pwd, data) => {
+module.exports = (pwd, data, ext = null) => {
   // 生成一个随机变量名
   let randomID = `_0x${Math.random().toString(16).substr(2)}`;
   data[randomID] = Buffer.from(data['_']).toString('base64');

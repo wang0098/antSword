@@ -235,7 +235,7 @@ Hot Keys:
     title: 'FileManager',
     delete: {
       title: 'Delete',
-      confirm: (num) => antSword.noxss(`Are you sure to delete ${typeof(num) === 'number' ? num + ' files' : num} ?`),
+      confirm: (num) => antSword.noxss(`Are you sure to delete ${typeof (num) === 'number' ? num + ' files' : num} ?`),
       success: (path) => `Delete file [${path}] success!`,
       error: (path, err) => `Delete file [${path}] failed!${err ? '\n' + err : ''}`
     },
@@ -522,7 +522,7 @@ Hot Keys:
         gridheader: "Name,Type,Length,Not Null,Key,Auto Increment",
         delete_not_select: "Please select the row you want to delete first",
         save_row_is_null: "The number of rows is empty",
-        cell_valid_error: (i,j)=>`Data format validation failed(row ${i+1}, col ${j+1})`,
+        cell_valid_error: (i, j) => `Data format validation failed(row ${i + 1}, col ${j + 1})`,
         confirmtitle: "New table name",
         invalid_tablename: "Table names should not contain special symbols",
         success: 'Create table successfully',
@@ -535,7 +535,7 @@ Hot Keys:
         error: 'Failed to update table',
       },
       deltable: {
-        title:'Delete Table',
+        title: 'Delete Table',
         confirm: (name) => antSword.noxss(`Are you sure you want to delete table ${name}?`),
         success: 'Delete table successfully',
         error: 'Failed to delete table',
@@ -551,7 +551,7 @@ Hot Keys:
         error: 'Failed to update column',
       },
       delcolumn: {
-        title:'Delete Column',
+        title: 'Delete Column',
         confirm: (name) => antSword.noxss(`Are you sure you want to delete column ${name}?`),
         success: 'Delete column successfully',
         error: 'Failed to delete column',
@@ -615,10 +615,10 @@ Hot Keys:
         }
       },
       message: {
-        githint: (workdir)=>`The current source is Git management, please close the program and go to ${workdir} to manually update`,
+        githint: (workdir) => `The current source is Git management, please close the program and go to ${workdir} to manually update`,
         prepare: "Connecte to server...",
-        dling: (progress)=> `Downloading...${progress}%`,
-        dlingnp: (size)=> `Downloading...${size}`,
+        dling: (progress) => `Downloading...${progress}%`,
+        dlingnp: (size) => `Downloading...${size}`,
         dlend: "Download completed",
         extract: "Unpacking, don't close AntSword",
         ing: 'Downloading..',
@@ -626,7 +626,7 @@ Hot Keys:
         success: 'Update success! Please manually restart the application later!'
       }
     },
-    encoders:{
+    encoders: {
       title: 'Encoder Manager',
       toolbar: {
         new: "New",
@@ -634,11 +634,19 @@ Hot Keys:
         delete: "Delete",
         help: "Help",
         save: "Save",
+        rsa: "RSA Config",
+        generate: "Generate"
       },
       grid: {
         ename: "Name",
         etype: "Type"
       },
+      form: {
+        public_key: "Public Key",
+        private_key: "Private Key",
+        php_code: "PHP Code"
+      },
+      rsa_config_win_title: "RSA Encoder Config",
       edit_win_title: "Edit Encoder",
       delete_title: "Delete Encoder",
       message: {
@@ -654,12 +662,15 @@ Hot Keys:
         delete_not_select: "Please select the row you want to delete first",
         delete_success: "Delete success",
         ename_invalid: "Name can only contain numbers, letters, and underlines",
+        rsa_save_success: "Generate and save RSA success",
+        rsa_save_error: "Generate and save RSA error",
       },
       prompt: {
         create_encoder: "Create Encoder",
       },
       confirm: {
-        delete: (num) => antSword.noxss(`Are you sure to delete ${typeof(num) === 'number' ? num + ' encoders' : num}?`),
+        generate: 'Are you sure to regemerate RSA?',
+        delete: (num) => antSword.noxss(`Are you sure to delete ${typeof (num) === 'number' ? num + ' encoders' : num}?`),
       }
     },
     aproxy: {
@@ -670,7 +681,7 @@ Hot Keys:
       },
       form: {
         label: 'Configure proxy for access to the Internet',
-        mode:{
+        mode: {
           noproxy: 'Do not use agent',
           manualproxy: 'Manually set the proxy'
         },
@@ -689,7 +700,7 @@ Hot Keys:
         content: 'Restart the application to take effect, whether to restart?',
         title: 'Change proxy settings'
       },
-      prompt:{
+      prompt: {
         title: 'Enter the Test-URL',
         success: 'Connect to proxy server successfully',
         error: 'Failed to connect to the proxy server'
@@ -706,7 +717,7 @@ Hot Keys:
       toolbar: {
         save: 'Save'
       },
-      form:{
+      form: {
         shellmanager: {
           title: 'Shell Lists',
           hiddencolumns: {
@@ -759,7 +770,7 @@ Hot Keys:
           },
           del: {
             title: 'Delete Bookmark',
-            confirm: (num) => antSword.noxss(`Are you sure to delete ${typeof(num) === 'number' ? num + ' Bookmarks' : num+" "}？`),
+            confirm: (num) => antSword.noxss(`Are you sure to delete ${typeof (num) === 'number' ? num + ' Bookmarks' : num + " "}？`),
             success: 'Delete success'
           },
           edit: {
@@ -781,7 +792,7 @@ Hot Keys:
   },
   viewsite: {
     toolbar: {
-      useproxy: (s) => `Proxy: ${s?'ON':'OFF'}`,
+      useproxy: (s) => `Proxy: ${s ? 'ON' : 'OFF'}`,
       save: 'Save',
       view: 'View'
     },
