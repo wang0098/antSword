@@ -131,6 +131,7 @@ class Toolbar {
       if (v === 'default') {
         return toastr.warning(LANG['rename']['disable'], LANG_T['warning']);
       };
+      v = antSword.noxss(v);
       // 判断分类是否存在
       if (this.top.sidebar.items(v)) {
         return toastr.warning(LANG['rename']['exists'], LANG_T['warning']);
