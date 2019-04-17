@@ -28,6 +28,7 @@ const antSword = window.antSword = {
   noxss: (html = '', wrap = true) => {
     let _html = String(html)
       .replace(/&/g, "&amp;")
+      .replace(/'/g, "&apos;")
       .replace(/>/g, "&gt;")
       .replace(/</g, "&lt;")
       .replace(/"/g, "&quot;");
