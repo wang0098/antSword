@@ -124,7 +124,7 @@ class CUSTOM {
       items.push({
         id: `conn::${_}`,
         // text: `${conf[_]['type']}:\/\/${conf[_]['user']}@${conf[_]['host']}`,
-        text: conf[_]['type'].toUpperCase(),
+        text: antSword.noxss(conf[_]['type'].toUpperCase()),
         im0: this.manager.list.imgs[0],
         im1: this.manager.list.imgs[0],
         im2: this.manager.list.imgs[0]

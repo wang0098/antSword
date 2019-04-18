@@ -4,6 +4,7 @@
 ## `v(2.0.7.3)
 
 * 主窗口增加 CSP 策略
+* Fix self-xss in database config #151 (thx @miaochiahao)
 
 ## `v(2.0.7.2)`
 

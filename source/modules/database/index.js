@@ -251,7 +251,7 @@ class Database {
         data_arr.push({
           id: i+1,
           data: [
-            func_mapping.hasOwnProperty(item[0]) ? func_mapping[item[0]] : item[0],
+            func_mapping.hasOwnProperty(item[0]) ? func_mapping[item[0]] : antSword.noxss(item[0]),
             parseInt(item[1]) === 1 ? "√" : "×",
           ],
           style: parseInt(item[1]) === 1 ? "background-color:#ADF1B9": "",
