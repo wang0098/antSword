@@ -1,6 +1,12 @@
 # 更新日志
 > 有空会补补BUG、添添新功能。    
 > 同时也欢迎大家的参与！感谢各位朋友的支持！ .TAT.
+
+## `v(2.0.7.3)
+
+* 主窗口增加 CSP 策略
+* Fix self-xss in database config #151 (thx @miaochiahao)
+
 ## `v(2.0.7.2)`
 
 * Fix #150 文件路径输入框未过滤问题
