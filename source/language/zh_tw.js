@@ -607,6 +607,7 @@ module.exports = {
           no: '下次再說'
         },
         body: (ver) => `發現新版本 v${ver}, 是否更新?`,
+        loader_body: (ver) => `加載器新版本 v${ver} 已經發布,當前使用的加載器即將不能使用, 是否退出程序並前往下載最新版加載器?`,
         title: '版本更新',
         changelog: '更新日誌：',
         sources: '更新來源：',

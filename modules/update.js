@@ -17,7 +17,37 @@ class Update {
     this.logger = new electron.Logger('Update');
     electron.ipcMain
     .on('check-update', this.checkUpdate.bind(this))
+    .on('check-loader-update', this.checkLoaderUpdate.bind(this))
     .on('update-download', this.onDownlaod.bind(this));
+  }
+
+  /**
+   * 检查 loader 是否需要更新
+   * @param {[type]} event 
+   */
+  checkLoaderUpdate(event) {
+    this.logger.debug('checkLoaderUpdate..')
+    superagent
+      .get('https://api.github.com/repos/antswordproject/antSword-Loader/releases/latest')
+      .end((err, ret) => {
+        try {
+          let lastInfo = JSON.parse(ret.text);
+          let newVersion = lastInfo['tag_name'];
+          let curVersion = process.env.AS_LOADER_VER || '2.0.1';
+          // 比对版本
+          if (this.CompVersion(curVersion, newVersion)) {
+            this.logger.info('Found a new loader version', newVersion);
+            event.sender.send('notification-loader-update', {
+              ver: newVersion,
+              url: lastInfo['html_url']
+            });
+          } else {
+            this.logger.warn('No new loader version.', newVersion, curVersion);
+          }
+        } catch(e) {
+          this.logger.fatal('ERR', e);
+        }
+      });
   }
 
   /**

@@ -606,6 +606,7 @@ Hot Keys:
           no: 'Cancel'
         },
         body: (ver) => `Found new version v${ver}, update now?`,
+        loader_body: (ver) => `The new version of the Loader v${ver} has been released, the currently used loader will not be available, will you quit the program and go to download the latest version of the Loader?`,
         title: 'Update to version',
         changelog: 'Change Logs: ',
         sources: 'Download source: ',
