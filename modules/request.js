@@ -115,7 +115,11 @@ class Request {
       let _postarr = [];
       for(var key in _postData){
         if(_postData.hasOwnProperty(key)){
-          _postarr.push(`${key}=${encodeURIComponent(_postData[key])}`);
+          let _tmp = encodeURIComponent(_postData[key])
+            .replace(/asunescape\((.+?)\)/g, function($, $1){
+              return unescape($1);
+            }); // 后续可能需要二次处理的在这里追加
+          _postarr.push(`${key}=${_tmp}`);
         }
       }
       let antstream = new AntRead(_postarr.join("&"), {'step': parseInt(opts['chunkStepMin']), 'stepmax': parseInt(opts['chunkStepMax'])});
@@ -157,10 +161,22 @@ class Request {
     }else{
       // 通过替换函数方式来实现发包方式切换, 后续可改成别的
       const old_send = _request.send;
+      let _postarr = [];
       if(opts['useMultipart'] == 1) {
         _request.send = _request.field;
+        _postarr = _postData;
       }else{
         _request.send = old_send;
+        for(var key in _postData) {
+          if(_postData.hasOwnProperty(key)) {
+            let _tmp = encodeURIComponent(_postData[key])
+              .replace(/asunescape\((.+?)\)/g, function($, $1){
+                return unescape($1)
+              }); // 后续可能需要二次处理的在这里追加
+            _postarr.push(`${key}=${_tmp}`);
+          }
+        }
+        _postarr = _postarr.join('&');
       }
       _request
         .proxy(APROXY_CONF['uri'])
@@ -169,7 +185,7 @@ class Request {
         .timeout(opts.timeout || REQ_TIMEOUT)
         // 忽略HTTPS
         .ignoreHTTPS(opts['ignoreHTTPS'])
-        .send(_postData)
+        .send(_postarr)
         .parse((res, callback) => {
           this.parse(opts['tag_s'], opts['tag_e'], (chunk) => {
             event.sender.send('request-chunk-' + opts['hash'], chunk);
@@ -273,10 +289,21 @@ class Request {
     }else{
       // 通过替换函数方式来实现发包方式切换, 后续可改成别的
       const old_send = _request.send;
+      let _postarr = [];
       if(opts['useMultipart'] == 1) {
         _request.send = _request.field;
       }else{
         _request.send = old_send;
+        for(var key in _postData) {
+          if(_postData.hasOwnProperty(key)) {
+            let _tmp = encodeURIComponent(_postData[key])
+              .replace(/asunescape\((.+?)\)/g, function($, $1){
+                return unescape($1)
+              }); // 后续可能需要二次处理的在这里追加
+            _postarr.push(`${key}=${_tmp}`);
+          }
+        }
+        _postarr = _postarr.join('&');
       }
       _request
         .proxy(APROXY_CONF['uri'])
@@ -285,7 +312,7 @@ class Request {
         // .timeout(timeout)
         // 忽略HTTPS
         .ignoreHTTPS(opts['ignoreHTTPS'])
-        .send(_postData)
+        .send(_postarr)
         .pipe(through(
           (chunk) => {
             // 判断数据流中是否包含后截断符？长度++
