@@ -1145,7 +1145,7 @@ class PHP {
     let tablename = Buffer.from(treeselect.split('::')[1].split(":")[2],"base64").toString();
     // const hash = (+new Date * Math.random()).toString(16).substr(2, 8);
     layer.prompt({
-      value: tablename,
+      value: antSword.noxss(tablename),
       title: `<i class="fa fa-file-code-o"></i> ${LANG['form']['edittable']['title']}`
     },(value, i, e) => {
       if(!value.match(/^[a-zA-Z0-9_]+$/)){
@@ -1185,6 +1185,7 @@ class PHP {
     const id = treeselect.split('::')[1].split(":")[0];
     let dbname = Buffer.from(treeselect.split('::')[1].split(":")[1],"base64").toString();
     let tablename = Buffer.from(treeselect.split('::')[1].split(":")[2],"base64").toString();
+    // 已在 lang 中过滤
     layer.confirm(LANG['form']['deltable']['confirm'](tablename), {
       icon: 2, shift: 6,
       title: LANG['form']['deltable']['title']
@@ -1282,7 +1283,7 @@ class PHP {
       return
     }
     layer.prompt({
-      value: columnname,
+      value: antSword.noxss(columnname),
       title: `<i class="fa fa-file-code-o"></i> ${LANG['form']['editcolumn']['title']}`
     },(value, i, e) => {
       if(!value.match(/^[a-zA-Z0-9_]+$/)){
@@ -1323,6 +1324,7 @@ class PHP {
     let dbname = Buffer.from(treeselect.split('::')[1].split(":")[1],"base64").toString();
     let tablename = Buffer.from(treeselect.split('::')[1].split(":")[2],"base64").toString();
     let columnname = Buffer.from(treeselect.split('::')[1].split(":")[3],"base64").toString();
+    // 已在 lang 中过滤
     layer.confirm(LANG['form']['delcolumn']['confirm'](columnname), {
       icon: 2, shift: 6,
       title: LANG['form']['delcolumn']['title']

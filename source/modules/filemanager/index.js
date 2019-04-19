@@ -286,7 +286,7 @@ class FileManager {
     let self = this;
 
     layer.confirm(
-      LANG['delete']['confirm'](files.length > 1 ? files.length : files[0]),
+      LANG['delete']['confirm'](files.length > 1 ? files.length : files[0]), // 已在 lang 中过滤
       {
         icon: 2,
         shift: 6,
@@ -492,7 +492,7 @@ class FileManager {
   // 设置文件和目录权限
   chmodFile(name, oldmod) {
     layer.prompt({
-      value: oldmod,
+      value: antSword.noxss(oldmod),
       title: `<i class="fa fa-users"></i> ${LANG['chmod']['title']} (${antSword.noxss(name)})`,
     }, (value, i, e) => {
       if(!value.match(/^[0-7]{4}$/)){
@@ -625,7 +625,7 @@ class FileManager {
     // 获取URL
     let _index = layer.prompt({
       title: `<i class="fa fa-cloud-download"></i> ${LANG['wget']['title']}`,
-      content: '<input type="text" style="width:300px;" class="layui-layer-input" id="url_' + hash + '" value="http://" placeholder="target url"><p/><input style="width:300px;" type="text" id="path_' + hash + '" class="layui-layer-input" value="' + self.path + '" placeholder="file name">',
+      content: '<input type="text" style="width:300px;" class="layui-layer-input" id="url_' + hash + '" value="http://" placeholder="target url"><p/><input style="width:300px;" type="text" id="path_' + hash + '" class="layui-layer-input" value="' + antSword.noxss(self.path) + '" placeholder="file name">',
       btn: ['wget'],
       yes: (i) => {
 
