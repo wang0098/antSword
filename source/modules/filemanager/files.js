@@ -137,7 +137,7 @@ class Files {
         case 'bookmark_add':
           // 添加书签
           layer.prompt({
-            value: self.manager.path,
+            value: antSword.noxss(self.manager.path),
             title: LANG['prompt']['add']['title']
           }, (value, i, e) => {
             bookmark[self.manager.path] = value;
