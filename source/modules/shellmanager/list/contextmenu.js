@@ -8,6 +8,7 @@ const ViewSite = require('../../viewsite/');
 const Terminal = require('../../terminal/');
 const Database = require('../../database/');
 const FileManager = require('../../filemanager/');
+const clipboard = require('electron').clipboard;
 const LANG = antSword['language']['shellmanager'];
 const LANG_T = antSword['language']['toastr'];
 
@@ -38,6 +39,7 @@ class ContextMenu {
       ['viewsite', 'chrome', selectedData, () => {
         new ViewSite(data[0]);
       }],
+      ['copyurl', 'copy', selectedData, this.copyUrl.bind(this, data[0])],
       false,
       ['plugin', 'folder-o', selectedMultiData, null, this.parsePlugContextMenu(data)],
       [
@@ -350,6 +352,20 @@ class ContextMenu {
         toastr.error(LANG['list']['clearAllCache']['error'](ret), LANG_T['error']);
       }
     });
+  }
+  /**
+   * 复制URL
+   * @param {opt} info 
+   */
+  copyUrl(info) {
+    let url = info['url'];
+    clipboard.writeText(url);
+    let txt = clipboard.readText();
+    if(txt == url) {
+      toastr.success('Copy Success', LANG_T['success']);
+    }else{
+      toastr.error('Copy Failed', LANG_T['error']);
+    }
   }
 }
 
