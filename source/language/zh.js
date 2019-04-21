@@ -69,7 +69,8 @@ module.exports = {
       pluginStore: '插件市场',
       clearCache: '清空缓存',
       clearAllCache: '清空所有缓存',
-      viewsite: '浏览网站'
+      viewsite: '浏览网站',
+      copyurl: '复制URL'
     },
     category: {
       title: '分类目录',

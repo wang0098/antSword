@@ -69,7 +69,8 @@ module.exports = {
       pluginStore: '插件市場',
       clearCache: '清空緩存',
       clearAllCache: '清空所有緩存',
-      viewsite: '瀏覽網站'
+      viewsite: '瀏覽網站',
+      copyurl: '複製URL'
     },
     category: {
       title: '分類目錄',
