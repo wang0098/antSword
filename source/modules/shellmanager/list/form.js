@@ -50,6 +50,7 @@ class Form {
             "type": opts.base['type'],
             "encode": opts.base['encode'],
             "encoder": opts.base['encoder'],
+            "decoder": opts.base['decoder'],
             "httpConf": opts.http,
             "otherConf": opts.other,
           }
@@ -194,7 +195,8 @@ class Form {
       note: '',
       type: 'php',
       encode: 'utf8',
-      encoder: 'default'
+      encoder: 'default',
+      decoder: 'default'
     }, arg);
     const form = this.accordion.cells('base').attachForm([
       { type: 'settings', position: 'label-left', labelWidth: 80, inputWidth: 400 },
@@ -213,7 +215,7 @@ class Form {
           name: 'encode', readonly: true, options: this._parseEncodes(opt.encode)
         }, {
           type: 'combo', label: LANG['list']['add']['form']['type'],
-          name: 'type', readonly: true, options: this._parseTypes(opt.type, opt.encoder)
+          name: 'type', readonly: true, options: this._parseTypes(opt.type, opt.encoder, opt.decoder)
         }
       ] }
     ], true);
@@ -283,17 +285,20 @@ class Form {
    * @param {String} _encoder 默认编码器
    * @return {array} [description]
    */
-  _parseTypes(_default = 'php', _encoder = 'default') {
+  _parseTypes(_default = 'php', _encoder = 'default', _decoder = 'default') {
     let ret = [];
     for (let c in antSword['core']) {
       // 加载默认编码器和用户自定义编码器
       let encoders;
+      let decoders;
       switch(c){
         case 'php4':
           encoders = antSword['core']['php4'].prototype.encoders.concat(antSword['encoders']['php']);
+          decoders = antSword['core'][c].prototype.decoders;
         break;
         default:
           encoders = antSword['core'][c].prototype.encoders.concat(antSword['encoders'][c]);
+          decoders = antSword['core'][c].prototype.decoders;
         break;
       }
       ret.push({
@@ -315,6 +320,16 @@ class Form {
             _.push({
               type: 'radio', name: `encoder_${c}`,
               value: e, label: e, checked: e === _encoder
+            })
+          });
+
+          _.push({
+            type: 'label', label: LANG['list']['add']['form']['decoder']
+          });
+          decoders.map((e) => {
+            _.push({
+              type: 'radio', name: `decoder_${c}`,
+              value: e, label: e, checked: e === _decoder
             })
           });
           return _;
@@ -340,7 +355,8 @@ class Form {
       note: base['note'],
       type: base['type'],
       encode: base['encode'],
-      encoder: base[`encoder_${base['type']}`]
+      encoder: base[`encoder_${base['type']}`],
+      decoder: base[`decoder_${base['type']}`]
     };
     // 提取需要的http数据
     let [headers, bodys] = [{}, {}];

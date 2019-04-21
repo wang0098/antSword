@@ -53,6 +53,7 @@ class Base {
         ](pwd, data);
       }
     }
+    this['__decoder__'] = {}
     // 解析自定义编码器
     this.user_encoders.map((_) => {
       this.parseEncoder(`${_}`);
@@ -201,6 +202,11 @@ class Base {
     this['__encoder__'][enc.indexOf(`encoder/`) > -1 ? enc.split(`encoder/`)[1] : enc.split(`encoder\\`)[1]] = require(`${enc}`);
   }
 
+  parseDecoder(dec) {
+    delete require.cache[require.resolve(`${dec}`)];
+    this['__decoder__'][dec.indexOf(`decoder/`) > -1 ? dec.split(`decoder/`)[1] : dec.split(`decoder\\`)[1]] = require(`${dec}`);
+  }
+
   /**
    * 编码处理并返回操作
    * @param  {String} tag_s 前截断符
@@ -243,13 +249,13 @@ class Base {
         .once(`request-${hash}`, (event, ret) => {
           return res({
             'encoding': ret['encoding'] || "",
-            'text': ret['text'],
-            'buff': ret['buff']
+            'text': this.__decoder__[this.__opts__['decoder']||'default'].decode_str(ret['text']),
+            'buff': this.__decoder__[this.__opts__['decoder']||'default'].decode_buff(ret['buff'])
           });
         })
         // HTTP请求返回字节流
         .on(`request-chunk-${hash}`, (event, ret) => {
-          return chunkCallBack ? chunkCallBack(ret) : null;
+          return chunkCallBack ? chunkCallBack(this.__decoder__[this.__opts__['decoder']||'default'].decode_buff(ret)) : null;
         })
         // 数据请求错误
         .once(`request-error-${hash}`, (event, ret) => {
@@ -283,7 +289,7 @@ class Base {
    * @return {Promise}                  Promise操作对象
    */
   download(savePath, postCode, progressCallback) {
-    const opt = this.complete(postCode);
+    const opt = this.complete(postCode, true);
     return new Promise((ret, rej) => {
       // 随机ID(用于监听数据来源)
       const hash = (String(+new Date) + String(Math.random())).substr(10, 10).replace('.', '_');
