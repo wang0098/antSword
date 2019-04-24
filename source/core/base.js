@@ -65,8 +65,14 @@ class Base {
    */
   rsaEncrypt() {
     let key = new NodeRSA();
-    let priKey = fs.readFileSync(path.join(remote.process.env.AS_WORKDIR, `antData/key_rsa`));
-    key.importKey(priKey.toString(), 'private');
+    try{
+      let priKey = fs.readFileSync(path.join(remote.process.env.AS_WORKDIR, `antData/key_rsa`));
+      if(priKey.length > 0){
+        key.importKey(priKey.toString(), 'private');
+      }
+    }catch(e) {
+
+    }
     return key;
   }
 
