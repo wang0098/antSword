@@ -2,6 +2,57 @@
 > 有空会补补BUG、添添新功能。    
 > 同时也欢迎大家的参与！感谢各位朋友的支持！ .TAT.
 
+## 2019/04/24 `v(2.1.0)`
+
+### 重要提醒
+
+从该版本开始, 将逐渐**不兼容老版本加载器**, 建议马上升级 AntSword Loader 到 4.0.3 版本: [下载地址](https://github.com/AntSwordProject/AntSword-Loader/tree/4.0.3)
+
+### 依赖相关更新
+
+* 升级 `Electron` 到 `4.0.3` (Chromium `69.0.3497.106` and Node `10.11.0`)
+
+> 影响较大的是编码器中关于 Buffer 相关的操作, 原来的 `new Buffer()` 方式已被弃用, 请更改为 `Buffer.from()`
+
+* 升级 `Semanticui` 到 `2.2.7`
+* 升级 `ACE Editor` 到 `1.4.3`
+* 调整 `ant-views://`、`ant-src://`、`ant-static://` 协议, 注册为标准scheme
+
+> 默认情况下 web storage apis (localStorage, sessionStorage, webSQL, indexedDB, cookies) 被禁止访问非标准schemes
+
+* 添加 `node-rsa` 依赖包
+
+### 安全更新
+
+* 主窗口中增加 CSP 策略
+
+### 功能更新
+
+* 新增「复制 Shell URL」功能
+* 编码器新增扩展参数
+* 编码器添加 RSA 模式，目前仅支持 PHP (@virink)
+* 新增 asp `insert_percent` 编码器 #152
+* 编码器中支持 `asunescape()` 标记
+
+> asunescape 括号中的内容在HTTP请求时,不会进行urlEncode
+>
+> eg:
+>
+> `data["key1"] = "++asunescape(@@@)++";  => "key1=%3B%3B@@@%3B%3B"`
+
+* 新增 Loader 更新检查功能
+* 插件市场新增「更新插件」功能
+
+### 插件相关
+
+* 新增 [「绕过disable_functions」插件](https://github.com/Medicean/as_bypass_php_disable_functions) (Author: @Medicean & @howmp)
+
+> 突破 disable_functions 执行系统命令，绕过 Open_basedir 等安全机制
+
+* 新增 [「GodOfHacker」插件](https://github.com/virink/as_plugin_godofhacker) (Author: @virink)
+
+> 黑客神器，谁用谁知道！
+
 ## `v(2.0.7.3)
 
 * 主窗口增加 CSP 策略
