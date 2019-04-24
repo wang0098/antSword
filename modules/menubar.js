@@ -148,7 +148,7 @@ class Menubar {
               if (this.electron.BrowserWindow.getAllWindows().length > 1) {
                 return;
               }
-              this.mainWindow.webContents.loadURL('ant-views://index.html');//.bind(this.mainWindow.webContents)
+              this.mainWindow.webContents.loadURL('ant-views://front/index.html');//.bind(this.mainWindow.webContents)
             }
           }, {
             label: LANG['debug']['devtools'],
@@ -198,7 +198,7 @@ class Menubar {
           if (this.electron.BrowserWindow.getAllWindows().length > 1) {
             return;
           }
-          this.mainWindow.webContents.loadURL('ant-views://index.html');
+          this.mainWindow.webContents.loadURL('ant-views://front/index.html');
         }
       }, {
         label: LANG['tray']['about'],

@@ -7,6 +7,8 @@
 'use strict';
 
 const iconv = require('iconv-lite');
+const NodeRSA = require('node-rsa');
+const fs = require('fs');
 
 class Base {
 
@@ -52,9 +54,20 @@ class Base {
       }
     }
     // 解析自定义编码器
-    this.user_encoders.map((_)=>{
+    this.user_encoders.map((_) => {
       this.parseEncoder(`${_}`);
     });
+  }
+
+  /**
+   * 返回 RSA 对象
+   * @return {Object}
+   */
+  rsaEncrypt() {
+    let key = new NodeRSA();
+    let priKey = fs.readFileSync(path.join(remote.process.env.AS_WORKDIR, `antData/key_rsa`));
+    key.importKey(priKey.toString(), 'private');
+    return key;
   }
 
   /**
@@ -85,8 +98,8 @@ class Base {
        * @return {String}     编码后的字符串
        */
       base64(str) {
-        return new Buffer(
-          iconv.encode(new Buffer(str), encode)
+        return Buffer.from(
+          iconv.encode(Buffer.from(str), encode)
         ).toString('base64');
       },
       /**
@@ -95,7 +108,7 @@ class Base {
        * @return {Buffer}     转换完成的buffer
        */
       buffer(str) {
-        return new Buffer(str).toString('hex').toUpperCase();
+        return Buffer.from(str).toString('hex').toUpperCase();
       },
       /**
        * 字符串转16进制（进行编码转换
@@ -103,8 +116,8 @@ class Base {
        * @return {Buffer}     转换完成的buffer
        */
       hex(str) {
-        return new Buffer(
-          iconv.encode(new Buffer(str), encode)
+        return Buffer.from(
+          iconv.encode(Buffer.from(str), encode)
         ).toString('hex').toUpperCase();
       }
     }
@@ -131,7 +144,7 @@ class Base {
     for (let funcName in templateObj) {
       this[templateName][funcName] = (
         (args) => {
-          if (typeof(args) === 'object') {
+          if (typeof (args) === 'object') {
             // 如果脚本函数需要参数，则进行解析
             return (argv) => {
               let data = {};
@@ -152,7 +165,7 @@ class Base {
                       (func = formatter[tagArr[0]])
                     ) {
                       // 如果包含有分割标签且该格式化函数存在，则调用该函数进行处理
-                      retStr = func( argv[tagArr[1] || ''] );
+                      retStr = func(argv[tagArr[1] || '']);
                     } else {
                       // 否则替换直接返回字符串
                       retStr = argv[tagStr] || '';
@@ -185,7 +198,7 @@ class Base {
     // https://github.com/AntSwordProject/antSword/issues/135#issuecomment-475842870
     delete require.cache[require.resolve(`${enc}`)];
     // QAQ！我也不知道为什么，如果直接require变量名，babel编译就会warning，so我只好加个`咯～
-    this['__encoder__'][enc.indexOf(`encoder/`) > -1 ? enc.split(`encoder/`)[1]:enc.split(`encoder\\`)[1]] = require(`${enc}`);
+    this['__encoder__'][enc.indexOf(`encoder/`) > -1 ? enc.split(`encoder/`)[1] : enc.split(`encoder\\`)[1]] = require(`${enc}`);
   }
 
   /**
@@ -196,10 +209,14 @@ class Base {
    * @return {Object}       最终生成数据// 将返回三个参数对象：tag_s,tag_e,data
    */
   encodeComplete(tag_s, tag_e, data) {
+    let ext = {
+      rsa: this.rsaEncrypt()
+    }
     // 编码器处理
     let finalData = this.__encoder__[this.__opts__['encoder']](
       this.__opts__['pwd'],
-      data
+      data,
+      ext
     );
     return {
       'tag_s': tag_s,
@@ -225,7 +242,7 @@ class Base {
         // 请求完毕返回数据{text,buff}
         .once(`request-${hash}`, (event, ret) => {
           return res({
-            'encoding': ret['encoding']||"",
+            'encoding': ret['encoding'] || "",
             'text': ret['text'],
             'buff': ret['buff']
           });

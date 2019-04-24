@@ -42,7 +42,7 @@ class ASP {
         id: arr[0]
       });
       if (arr.length > 1) {
-        this.dbconf['database'] = new Buffer(arr[1], 'base64').toString();
+        this.dbconf['database'] = Buffer.from(arr[1], 'base64').toString();
         // 更新SQL编辑器
         this.enableEditor();
         // manager.query.update(this.currentConf);
@@ -64,7 +64,7 @@ class ASP {
           let _db = arr[1].split(':');
           this.getTables(
             _db[0],
-            new Buffer(_db[1], 'base64').toString()
+            Buffer.from(_db[1], 'base64').toString()
           );
           break;
         // 获取表名字段
@@ -72,16 +72,16 @@ class ASP {
           let _tb = arr[1].split(':');
           this.getColumns(
             _tb[0],
-            new Buffer(_tb[1], 'base64').toString(),
-            new Buffer(_tb[2], 'base64').toString()
+            Buffer.from(_tb[1], 'base64').toString(),
+            Buffer.from(_tb[2], 'base64').toString()
           );
           break;
         // 生成查询SQL语句
         case 'column':
           let _co = arr[1].split(':');
-          const db = new Buffer(_co[1], 'base64').toString();
-          const table = new Buffer(_co[2], 'base64').toString();
-          const column = new Buffer(_co[3], 'base64').toString();
+          const db = Buffer.from(_co[1], 'base64').toString();
+          const table = Buffer.from(_co[2], 'base64').toString();
+          const column = Buffer.from(_co[3], 'base64').toString();
           let sql = "";
           switch(this.dbconf['type']){
             case 'mysql':
@@ -447,7 +447,7 @@ class ASP {
       // 添加子节点
       arr.map((_) => {
         if (!_) { return };
-        const _db = new Buffer(_).toString('base64');
+        const _db = Buffer.from(_).toString('base64');
         this.tree.insertNewItem(
           `conn::${id}`,
           `database::${id}:${_db}`,
@@ -484,13 +484,13 @@ class ASP {
         throw ret;
       }
       const arr = ret.split('\t');
-      const _db = new Buffer(db).toString('base64');
+      const _db = Buffer.from(db).toString('base64');
       // 删除子节点
       this.tree.deleteChildItems(`database::${id}:${_db}`);
       // 添加子节点
       arr.map((_) => {
         if (!_) { return };
-        const _table = new Buffer(_).toString('base64');
+        const _table = Buffer.from(_).toString('base64');
         this.tree.insertNewItem(
           `database::${id}:${_db}`,
           `table::${id}:${_db}:${_table}`,
@@ -546,14 +546,14 @@ class ASP {
         throw ret;
       }
       const arr = ret.split('\t');
-      const _db = new Buffer(db).toString('base64');
-      const _table = new Buffer(table).toString('base64');
+      const _db = Buffer.from(db).toString('base64');
+      const _table = Buffer.from(table).toString('base64');
       // 删除子节点
       this.tree.deleteChildItems(`table::${id}:${_db}:${_table}`);
       // 添加子节点
       arr.map((_) => {
         if (!_) { return };
-        const _column = new Buffer(_.substr(_, _.lastIndexOf(' '))).toString('base64');
+        const _column = Buffer.from(_.substr(_, _.lastIndexOf(' '))).toString('base64');
         this.tree.insertNewItem(
           `table::${id}:${_db}:${_table}`,
           `column::${id}:${_db}:${_table}:${_column}`,
@@ -674,7 +674,7 @@ class ASP {
       if (!filePath) { return; };
       let headerStr = grid.hdrLabels.join(',');
       let dataStr = grid.serializeToCSV();
-      let tempDataBuffer = new Buffer(headerStr+'\n'+dataStr);
+      let tempDataBuffer = Buffer.from(headerStr+'\n'+dataStr);
       fs.writeFileSync(filePath, tempDataBuffer);
       toastr.success(LANG['result']['dump']['success'], LANG_T['success']);
     });

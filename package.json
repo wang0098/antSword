@@ -1,6 +1,6 @@
 {
   "name": "antsword",
-  "version": "2.0.7.3",
+  "version": "2.1.0",
   "description": "中国蚁剑是一款跨平台的开源网站管理工具",
   "main": "app.js",
   "dependencies": {
@@ -9,6 +9,7 @@
     "iconv-lite": "^0.4.23",
     "jschardet": "^1.6.0",
     "nedb": "^1.5.1",
+    "node-rsa": "^1.0.5",
     "superagent": "^3.8.3",
     "superagent-proxy": "^1.0.3",
     "tar": "^4.4.6",

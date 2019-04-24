@@ -58,7 +58,7 @@ class Tabbar {
    * @return {Object}           this
    */
   safeHTML(html = "", sandbox = "") {
-    let _html = new Buffer(html).toString('base64');
+    let _html = Buffer.from(html).toString('base64');
     // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#attr-sandbox
     let _iframe = `
       <iframe

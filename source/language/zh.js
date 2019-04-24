@@ -237,7 +237,7 @@ module.exports = {
     title: '文件管理',
     delete: {
       title: '删除文件',
-      confirm: (num) => antSword.noxss(`你确定要删除 ${typeof(num) === 'number' ? num + ' 个文件' : num} 吗？`),
+      confirm: (num) => antSword.noxss(`你确定要删除 ${typeof (num) === 'number' ? num + ' 个文件' : num} 吗？`),
       success: (path) => `删除文件成功！\n${path}`,
       error: (path, err) => `删除文件 [${path}] 失败！${err ? '\n' + err : ''}`
     },
@@ -524,7 +524,7 @@ module.exports = {
         gridheader: "名称,类型,长度,不为空,主键,自增长",
         delete_not_select: "请先选中要删除的行",
         save_row_is_null: "行数为空",
-        cell_valid_error: (i,j)=>`数据格式校验失败(${i+1}行,${j+1}列)`,
+        cell_valid_error: (i, j) => `数据格式校验失败(${i + 1}行,${j + 1}列)`,
         confirmtitle: "输入新表名",
         invalid_tablename: "表名不能带有特殊符号",
         success: '新建表成功',
@@ -537,7 +537,7 @@ module.exports = {
         error: '修改表名失败',
       },
       deltable: {
-        title:'删除表',
+        title: '删除表',
         confirm: (name) => antSword.noxss(`确定要删除表 ${name} 吗?`),
         success: '删除表成功',
         error: '删除表失败',
@@ -553,7 +553,7 @@ module.exports = {
         error: '修改列名失败'
       },
       delcolumn: {
-        title:'删除列',
+        title: '删除列',
         confirm: (name) => antSword.noxss(`确定要删除列 ${name} 吗?`),
         success: '删除列成功',
         error: '删除列失败',
@@ -608,6 +608,7 @@ module.exports = {
           no: '下次再说'
         },
         body: (ver) => `发现新版本 v${ver}, 是否更新?`,
+        loader_body: (ver) => `加载器新版本 v${ver} 已经发布,当前使用的加载器即将不能使用, 是否退出程序并前往下载最新版加载器?`,
         title: '版本更新',
         changelog: '更新日志：',
         sources: '更新来源：',
@@ -617,10 +618,10 @@ module.exports = {
         }
       },
       message: {
-        githint: (workdir)=>`当前源码为Git管理，请关闭程序并前往 ${workdir} 手动更新`,
+        githint: (workdir) => `当前源码为Git管理，请关闭程序并前往 ${workdir} 手动更新`,
         prepare: "连接更新服务器...",
-        dling: (progress)=> `正在下载更新包...${progress}%`,
-        dlingnp: (size)=> `正在下载更新包...${size}`,
+        dling: (progress) => `正在下载更新包...${progress}%`,
+        dlingnp: (size) => `正在下载更新包...${size}`,
         dlend: "下载完毕",
         extract: "正在解压, 请勿关闭程序",
         ing: '努力更新中。。',
@@ -628,7 +629,7 @@ module.exports = {
         success: '更新成功！请稍后手动重启应用！'
       }
     },
-    encoders:{
+    encoders: {
       title: '编码管理',
       toolbar: {
         new: "新建",
@@ -636,11 +637,19 @@ module.exports = {
         delete: "删除",
         help: "帮助",
         save: "保存",
+        rsa: "RSA配置",
+        generate: "生成"
       },
       grid: {
         ename: "名称",
         etype: "类型"
       },
+      form: {
+        public_key: "公钥",
+        private_key: "私钥",
+        php_code: "PHP 代码"
+      },
+      rsa_config_win_title: "RSA编码器配置",
       edit_win_title: "编辑编码器",
       delete_title: "删除编码器",
       message: {
@@ -656,12 +665,15 @@ module.exports = {
         delete_not_select: "请先选中要删除的行",
         delete_success: "删除成功",
         ename_invalid: "名称只能包含数字、字母、下划线",
+        rsa_save_success: "生成 RSA 密钥对成功",
+        rsa_save_error: "生成 RSA 密钥对错误",
       },
       prompt: {
         create_encoder: "创建编码器",
       },
       confirm: {
-        delete: (num) => antSword.noxss(`你确定要删除 ${typeof(num) === 'number' ? num + ' 个编码器' : num+" "}吗？`),
+        generate: '你确定要重新生成?',
+        delete: (num) => antSword.noxss(`你确定要删除 ${typeof (num) === 'number' ? num + ' 个编码器' : num + " "}吗？`),
       }
     },
     aproxy: {
@@ -672,7 +684,7 @@ module.exports = {
       },
       form: {
         label: '配置访问互联网的代理',
-        mode:{
+        mode: {
           noproxy: '不使用代理',
           manualproxy: '手动设置代理'
         },
@@ -691,7 +703,7 @@ module.exports = {
         content: '重启应用生效，是否重启？',
         title: '更改代理设置'
       },
-      prompt:{
+      prompt: {
         title: '输入测试的 URL',
         success: '连接到代理服务器成功',
         error: '连接到代理服务器失败'
@@ -708,7 +720,7 @@ module.exports = {
       toolbar: {
         save: '保存'
       },
-      form:{
+      form: {
         shellmanager: {
           title: '数据管理',
           hiddencolumns: {
@@ -761,7 +773,7 @@ module.exports = {
           },
           del: {
             title: '删除书签',
-            confirm: (num) => antSword.noxss(`你确定要删除 ${typeof(num) === 'number' ? num + ' 个书签' : num+" "}吗？`),
+            confirm: (num) => antSword.noxss(`你确定要删除 ${typeof (num) === 'number' ? num + ' 个书签' : num + " "}吗？`),
             success: '删除成功'
           },
           edit: {
@@ -782,7 +794,7 @@ module.exports = {
   },
   viewsite: {
     toolbar: {
-      useproxy: (s) => `代理: ${s?'开':'关'}`,
+      useproxy: (s) => `代理: ${s ? '开' : '关'}`,
       save: '保存',
       view: '浏览'
     },

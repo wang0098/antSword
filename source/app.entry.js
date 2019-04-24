@@ -257,6 +257,28 @@ ipcRenderer
     }, 555);
   })
   /**
+   * 通知提示 Loader 更新
+   * @param  {[type]} 'notification-loader-update' [description]
+   * @param  {[type]} (e,                   opt           [description]
+   * @return {[type]}                       [description]
+   */
+  .on('notification-loader-update', (e, opt) => {
+    const LANG = antSword["language"]["settings"]["update"];
+    let n = new Notification(antSword['language']['update']['title'], {
+      body: antSword['language']['update']['body'](opt['ver'])
+    });
+    n.addEventListener('click', () => {
+      antSword.shell.openExternal(opt['url']);
+    });
+    layer.confirm(LANG['prompt']['loader_body'](opt['ver']), {
+      icon: 3, shift: 6,
+      title: LANG['prompt']['title']
+    }, (_) => {
+      antSword.shell.openExternal(opt['url']);
+      antSword.remote.app.quit();
+    });
+  })
+  /**
    * 通知提示更新
    * @param  {[type]} 'notification-update' [description]
    * @param  {[type]} (e,                   opt           [description]
@@ -387,13 +409,16 @@ ipcRenderer
 antSword.reloadPlug();
 antSword['menubar'].reg('check-update', ()=>{
   antSword.ipcRenderer.send('check-update');
+  antSword.ipcRenderer.send('check-loader-update');
 });
 
 if(new Date() - new Date(antSword['storage']('lastautocheck', false, "0")) >= 86400000) {
   // 检查更新
   antSword['storage']('lastautocheck', new Date().getTime());
-  setTimeout(
-    antSword.ipcRenderer.send.bind(antSword.ipcRenderer, 'check-update'),
+  setTimeout(() => {
+      antSword.ipcRenderer.send.bind(antSword.ipcRenderer, 'check-update');
+      antSword.ipcRenderer.send.bind(antSword.ipcRenderer, 'check-loader-update');
+    },
     1000 * 60
   );
 }

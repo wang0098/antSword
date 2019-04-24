@@ -237,7 +237,7 @@ module.exports = {
     title: '文件管理',
     delete: {
       title: '刪除文件',
-      confirm: (num) => antSword.noxss(`你確定要刪除 ${typeof(num) === 'number' ? num + ' 個文件' : num} 嗎？`),
+      confirm: (num) => antSword.noxss(`你確定要刪除 ${typeof (num) === 'number' ? num + ' 個文件' : num} 嗎？`),
       success: (path) => `刪除文件成功！\n${path}`,
       error: (path, err) => `刪除文件 [${path}] 失敗！${err ? '\n' + err : ''}`
     },
@@ -524,7 +524,7 @@ module.exports = {
         gridheader: "名稱,類型,長度,不為空,主鍵,自增長",
         delete_not_select: "請先選中要刪除的行",
         save_row_is_null: "行數為空",
-        cell_valid_error: (i,j)=>`數據格式校驗失敗(${i+1}行,${j+1}列)`,
+        cell_valid_error: (i, j) => `數據格式校驗失敗(${i + 1}行,${j + 1}列)`,
         confirmtitle: "輸入新表名",
         invalid_tablename: "表名不能帶有特殊符號",
         success: '新建表成功',
@@ -537,7 +537,7 @@ module.exports = {
         error: '修改表名失敗',
       },
       deltable: {
-        title:'刪除表',
+        title: '刪除表',
         confirm: (name) => antSword.noxss(`確定要刪除表 ${name} 嗎?`),
         success: '刪除表成功',
         error: '刪除表失敗',
@@ -553,7 +553,7 @@ module.exports = {
         error: '修改列名失敗'
       },
       delcolumn: {
-        title:'刪除列',
+        title: '刪除列',
         confirm: (name) => antSword.noxss(`確定要刪除列 ${name} 嗎?`),
         success: '刪除列成功',
         error: '刪除列失敗',
@@ -608,6 +608,7 @@ module.exports = {
           no: '下次再說'
         },
         body: (ver) => `發現新版本 v${ver}, 是否更新?`,
+        loader_body: (ver) => `加載器新版本 v${ver} 已經發布,當前使用的加載器即將不能使用, 是否退出程序並前往下載最新版加載器?`,
         title: '版本更新',
         changelog: '更新日誌：',
         sources: '更新來源：',
@@ -617,10 +618,10 @@ module.exports = {
         }
       },
       message: {
-        githint: (workdir)=>`當前源碼為Git管理，請關閉程序並前往 ${workdir} 手動更新`,
+        githint: (workdir) => `當前源碼為Git管理，請關閉程序並前往 ${workdir} 手動更新`,
         prepare: "連接更新服務器...",
-        dling: (progress)=> `正在下載更新包...${progress}%`,
-        dlingnp: (size)=> `正在下載更新包...${size}`,
+        dling: (progress) => `正在下載更新包...${progress}%`,
+        dlingnp: (size) => `正在下載更新包...${size}`,
         dlend: "下載完畢",
         extract: "正在解壓, 請勿關閉程序",
         ing: '努力更新中。。',
@@ -628,7 +629,7 @@ module.exports = {
         success: '更新成功！請稍後手動重啟應用！'
       }
     },
-    encoders:{
+    encoders: {
       title: '編碼管理',
       toolbar: {
         new: "新建",
@@ -636,11 +637,19 @@ module.exports = {
         delete: "刪除",
         help: "幫助",
         save: "保存",
+        rsa: "RSA配置",
+        generate: "生成"
       },
       grid: {
         ename: "名稱",
         etype: "類型"
       },
+      form: {
+        public_key: "公鑰",
+        private_key: "私鑰",
+        php_code: "PHP 代碼"
+      },
+      rsa_config_win_title: "RSA編碼器配置",
       edit_win_title: "編輯編碼器",
       delete_title: "刪除編碼器",
       message: {
@@ -656,12 +665,15 @@ module.exports = {
         delete_not_select: "請先選中要刪除的行",
         delete_success: "刪除成功",
         ename_invalid: "名稱只能包含數字、字母、下劃線",
+        rsa_save_success: "生成 RSA 密鑰對成功",
+        rsa_save_error: "生成 RSA 密鑰對錯誤",
       },
       prompt: {
         create_encoder: "創建編碼器",
       },
       confirm: {
-        delete: (num) => antSword.noxss(`你確定要刪除 ${typeof(num) === 'number' ? num + ' 個編碼器' : num+" "}嗎？`),
+        generate: '妳確定要重新生成?',
+        delete: (num) => antSword.noxss(`你確定要刪除 ${typeof (num) === 'number' ? num + ' 個編碼器' : num + " "}嗎？`),
       }
     },
     aproxy: {
@@ -672,7 +684,7 @@ module.exports = {
       },
       form: {
         label: '配置訪問互聯網的代理',
-        mode:{
+        mode: {
           noproxy: '不使用代理',
           manualproxy: '手動設置代理'
         },
@@ -691,7 +703,7 @@ module.exports = {
         content: '重啟應用生效，是否重啟？',
         title: '更改代理設置'
       },
-      prompt:{
+      prompt: {
         title: '輸入測試的 URL',
         success: '連接到代理服務器成功',
         error: '連接到代理服務器失敗'
@@ -708,7 +720,7 @@ module.exports = {
       toolbar: {
         save: '保存'
       },
-      form:{
+      form: {
         shellmanager: {
           title: '數據管理',
           hiddencolumns: {
@@ -761,7 +773,7 @@ module.exports = {
           },
           del: {
             title: '刪除書籤',
-            confirm: (num) => antSword.noxss(`你確定要刪除 ${typeof(num) === 'number' ? num + ' 個書籤' : num+" "}嗎？`),
+            confirm: (num) => antSword.noxss(`你確定要刪除 ${typeof (num) === 'number' ? num + ' 個書籤' : num + " "}嗎？`),
             success: '刪除成功'
           },
           edit: {
@@ -782,7 +794,7 @@ module.exports = {
   },
   viewsite: {
     toolbar: {
-      useproxy: (s) => `代理: ${s?'開':'關'}`,
+      useproxy: (s) => `代理: ${s ? '開' : '關'}`,
       save: '保存',
       view: '瀏覽'
     },

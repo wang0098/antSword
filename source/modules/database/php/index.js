@@ -32,7 +32,7 @@ class PHP {
         id: arr[0]
       });
       if (arr.length > 1) {
-        this.dbconf['database'] = new Buffer(arr[1], 'base64').toString();
+        this.dbconf['database'] = Buffer.from(arr[1], 'base64').toString();
         // 更新SQL编辑器
         this.enableEditor();
         // manager.query.update(this.currentConf);
@@ -55,7 +55,7 @@ class PHP {
           let _db = arr[1].split(':');
           this.getTables(
             _db[0],
-            new Buffer(_db[1], 'base64').toString()
+            Buffer.from(_db[1], 'base64').toString()
           );
           break;
         // 获取表名字段
@@ -63,17 +63,16 @@ class PHP {
           let _tb = arr[1].split(':');
           this.getColumns(
             _tb[0],
-            new Buffer(_tb[1], 'base64').toString(),
-            new Buffer(_tb[2], 'base64').toString()
+            Buffer.from(_tb[1], 'base64').toString(),
+            Buffer.from(_tb[2], 'base64').toString()
           );
           break;
         // 生成查询SQL语句
         case 'column':
           let _co = arr[1].split(':');
-          const db = new Buffer(_co[1], 'base64').toString();
-          const table = new Buffer(_co[2], 'base64').toString();
-          const column = new Buffer(_co[3], 'base64').toString();
-
+          const db = new Buffer.from(_co[1], 'base64').toString();
+          const table = new Buffer.from(_co[2], 'base64').toString();
+          const column = new Buffer.from(_co[3], 'base64').toString();
           let sql = "";
           switch(this.dbconf['type']){
             case 'mssql':
@@ -796,7 +795,7 @@ class PHP {
   editDatabase() {
     // 获取配置
     const id = this.tree.getSelected().split('::')[1].split(":")[0];
-    let dbname = new Buffer(this.tree.getSelected().split('::')[1].split(":")[1],"base64").toString();
+    let dbname = Buffer.from(this.tree.getSelected().split('::')[1].split(":")[1],"base64").toString();
     const hash = (+new Date * Math.random()).toString(16).substr(2, 8);
     switch(this.dbconf['type']){
     case "mysqli":
@@ -920,8 +919,7 @@ class PHP {
   delDatabase() {
     // 获取配置
     const id = this.tree.getSelected().split('::')[1].split(":")[0];
-    let dbname = new Buffer(this.tree.getSelected().split('::')[1].split(":")[1],"base64").toString();
-    // 已在 lang 中过滤
+    let dbname = Buffer.from(this.tree.getSelected().split('::')[1].split(":")[1],"base64").toString();
     layer.confirm(LANG['form']['deldb']['confirm'](dbname), {
       icon: 2, shift: 6,
       title: LANG['form']['deldb']['title']
@@ -956,7 +954,7 @@ class PHP {
   addTable() {
     // 获取配置
     const id = this.tree.getSelected().split('::')[1].split(":")[0];
-    let dbname = new Buffer(this.tree.getSelected().split('::')[1].split(":")[1],"base64").toString();
+    let dbname = Buffer.from(this.tree.getSelected().split('::')[1].split(":")[1],"base64").toString();
     const hash = (+new Date * Math.random()).toString(16).substr(2, 8);
     switch(this.dbconf['type']){
     case "mysqli":
@@ -1143,8 +1141,8 @@ class PHP {
     // 获取配置
     const treeselect = this.tree.getSelected();
     const id = treeselect.split('::')[1].split(":")[0];
-    let dbname = new Buffer(treeselect.split('::')[1].split(":")[1],"base64").toString();
-    let tablename = new Buffer(treeselect.split('::')[1].split(":")[2],"base64").toString();
+    let dbname = Buffer.from(treeselect.split('::')[1].split(":")[1],"base64").toString();
+    let tablename = Buffer.from(treeselect.split('::')[1].split(":")[2],"base64").toString();
     // const hash = (+new Date * Math.random()).toString(16).substr(2, 8);
     layer.prompt({
       value: antSword.noxss(tablename),
@@ -1185,8 +1183,8 @@ class PHP {
     // 获取配置
     const treeselect = this.tree.getSelected();
     const id = treeselect.split('::')[1].split(":")[0];
-    let dbname = new Buffer(treeselect.split('::')[1].split(":")[1],"base64").toString();
-    let tablename = new Buffer(treeselect.split('::')[1].split(":")[2],"base64").toString();
+    let dbname = Buffer.from(treeselect.split('::')[1].split(":")[1],"base64").toString();
+    let tablename = Buffer.from(treeselect.split('::')[1].split(":")[2],"base64").toString();
     // 已在 lang 中过滤
     layer.confirm(LANG['form']['deltable']['confirm'](tablename), {
       icon: 2, shift: 6,
@@ -1221,8 +1219,8 @@ class PHP {
   descTable() {
     const treeselect = this.tree.getSelected();
     const id = treeselect.split('::')[1].split(":")[0];
-    let dbname = new Buffer(treeselect.split('::')[1].split(":")[1],"base64").toString();
-    let tablename = new Buffer(treeselect.split('::')[1].split(":")[2],"base64").toString();
+    let dbname = Buffer.from(treeselect.split('::')[1].split(":")[1],"base64").toString();
+    let tablename = Buffer.from(treeselect.split('::')[1].split(":")[2],"base64").toString();
     switch(this.dbconf['type']){
       case "mysqli":
       case "mysql":
@@ -1239,8 +1237,8 @@ class PHP {
   showcreateTable() {
     const treeselect = this.tree.getSelected();
     const id = treeselect.split('::')[1].split(":")[0];
-    let dbname = new Buffer(treeselect.split('::')[1].split(":")[1],"base64").toString();
-    let tablename = new Buffer(treeselect.split('::')[1].split(":")[2],"base64").toString();
+    let dbname = Buffer.from(treeselect.split('::')[1].split(":")[1],"base64").toString();
+    let tablename = Buffer.from(treeselect.split('::')[1].split(":")[2],"base64").toString();
     switch(this.dbconf['type']){
       case "mysqli":
       case "mysql":
@@ -1259,9 +1257,9 @@ class PHP {
     // 获取配置
     const treeselect = this.tree.getSelected();
     const id = treeselect.split('::')[1].split(":")[0];
-    let dbname = new Buffer(treeselect.split('::')[1].split(":")[1],"base64").toString();
-    let tablename = new Buffer(treeselect.split('::')[1].split(":")[2],"base64").toString();
-    let columnname = new Buffer(treeselect.split('::')[1].split(":")[3],"base64").toString();
+    let dbname = Buffer.from(treeselect.split('::')[1].split(":")[1],"base64").toString();
+    let tablename = Buffer.from(treeselect.split('::')[1].split(":")[2],"base64").toString();
+    let columnname = Buffer.from(treeselect.split('::')[1].split(":")[3],"base64").toString();
     
   }
 
@@ -1270,9 +1268,9 @@ class PHP {
     // 获取配置
     const treeselect = this.tree.getSelected();
     const id = treeselect.split('::')[1].split(":")[0];
-    let dbname = new Buffer(treeselect.split('::')[1].split(":")[1],"base64").toString();
-    let tablename = new Buffer(treeselect.split('::')[1].split(":")[2],"base64").toString();
-    let columnname = new Buffer(treeselect.split('::')[1].split(":")[3],"base64").toString();
+    let dbname = Buffer.from(treeselect.split('::')[1].split(":")[1],"base64").toString();
+    let tablename = Buffer.from(treeselect.split('::')[1].split(":")[2],"base64").toString();
+    let columnname = Buffer.from(treeselect.split('::')[1].split(":")[3],"base64").toString();
     let columntyperaw = this.tree.getSelectedItemText();
     let columntype = null;
     var ctypereg = new RegExp(columnname+'\\s\\((.+?\\))\\)');
@@ -1323,10 +1321,10 @@ class PHP {
     // 获取配置
     const treeselect = this.tree.getSelected();
     const id = treeselect.split('::')[1].split(":")[0];
-    let dbname = new Buffer(treeselect.split('::')[1].split(":")[1],"base64").toString();
-    let tablename = new Buffer(treeselect.split('::')[1].split(":")[2],"base64").toString();
-    let columnname = new Buffer(treeselect.split('::')[1].split(":")[3],"base64").toString();
-    // 已在LANG中过滤
+    let dbname = Buffer.from(treeselect.split('::')[1].split(":")[1],"base64").toString();
+    let tablename = Buffer.from(treeselect.split('::')[1].split(":")[2],"base64").toString();
+    let columnname = Buffer.from(treeselect.split('::')[1].split(":")[3],"base64").toString();
+    // 已在 lang 中过滤
     layer.confirm(LANG['form']['delcolumn']['confirm'](columnname), {
       icon: 2, shift: 6,
       title: LANG['form']['delcolumn']['title']
@@ -1385,7 +1383,7 @@ class PHP {
       // 添加子节点
       arr.map((_) => {
         if (!_) { return };
-        const _db = new Buffer(_).toString('base64');
+        const _db = Buffer.from(_).toString('base64');
         this.tree.insertNewItem(
           `conn::${id}`,
           `database::${id}:${_db}`,
@@ -1423,13 +1421,13 @@ class PHP {
         throw ret;
       }
       const arr = ret.split('\t');
-      const _db = new Buffer(db).toString('base64');
+      const _db = Buffer.from(db).toString('base64');
       // 删除子节点
       this.tree.deleteChildItems(`database::${id}:${_db}`);
       // 添加子节点
       arr.map((_) => {
         if (!_) { return };
-        const _table = new Buffer(_).toString('base64');
+        const _table = Buffer.from(_).toString('base64');
         this.tree.insertNewItem(
           `database::${id}:${_db}`,
           `table::${id}:${_db}:${_table}`,
@@ -1470,14 +1468,14 @@ class PHP {
         throw ret;
       }
       const arr = ret.split('\t');
-      const _db = new Buffer(db).toString('base64');
-      const _table = new Buffer(table).toString('base64');
+      const _db = Buffer.from(db).toString('base64');
+      const _table = Buffer.from(table).toString('base64');
       // 删除子节点
       this.tree.deleteChildItems(`table::${id}:${_db}:${_table}`);
       // 添加子节点
       arr.map((_) => {
         if (!_) { return };
-        const _column = new Buffer(_.substr(_, _.lastIndexOf(' '))).toString('base64');
+        const _column = Buffer.from(_.substr(_, _.lastIndexOf(' '))).toString('base64');
         this.tree.insertNewItem(
           `table::${id}:${_db}:${_table}`,
           `column::${id}:${_db}:${_table}:${_column}`,
@@ -1577,7 +1575,7 @@ class PHP {
     arr.map((_) => {
       let _data = _.split('\t|\t');
       for (let i = 0; i < _data.length; i ++) {
-        let buff = new Buffer(_data[i], "base64");
+        let buff = Buffer.from(_data[i], "base64");
         let encoding = Decodes.detectEncoding(buff, {defaultEncoding: "unknown"});
         if(encoding == "unknown") {
           switch(this.dbconf['type']){
@@ -1639,7 +1637,7 @@ class PHP {
       let _data = _.split('\t|\t');
       for (let i = 0; i < _data.length; i ++) {
         // _data[i] = antSword.noxss(new Buffer(_data[i], "base64").toString(), false);
-        let buff = new Buffer(_data[i], "base64");
+        let buff = new Buffer.from(_data[i], "base64");
         let encoding = Decodes.detectEncoding(buff, {defaultEncoding: "unknown"});
         if(encoding == "unknown") {
           switch(this.dbconf['type']){
@@ -1708,7 +1706,7 @@ class PHP {
       if (!filePath) { return; };
       let headerStr = grid.hdrLabels.join(',');
       let dataStr = grid.serializeToCSV();
-      let tempDataBuffer = new Buffer(headerStr+'\n'+dataStr);
+      let tempDataBuffer = Buffer.from(headerStr+'\n'+dataStr);
       fs.writeFileSync(filePath, tempDataBuffer);
       toastr.success(LANG['result']['dump']['success'], LANG_T['success']);
     });

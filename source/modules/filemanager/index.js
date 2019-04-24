@@ -153,7 +153,7 @@ class FileManager {
 
     if (!path.endsWith('/')) { path += '/' };
     this.path = path;
-    let cache_tag = 'filemanager-files-' + new Buffer(this.path).toString('base64');
+    let cache_tag = 'filemanager-files-' + Buffer.from(this.path).toString('base64');
 
     // 判断是否有缓存
     // if (cache = this.cache[path]) {
@@ -536,7 +536,7 @@ class FileManager {
       height: 600,
     });
     var filemime = mime.lookup(name);
-    let savepath = PATH.join(process.env.AS_WORKDIR,`antData/.temp/`,new Buffer(name).toString("hex"));
+    let savepath = PATH.join(process.env.AS_WORKDIR,`antData/.temp/`,Buffer.from(name).toString("hex"));
     win.cell.lastChild['style']['overflow'] = 'scroll';
     win.cell.lastChild['style']['textAlign'] = 'center';
 
@@ -557,7 +557,7 @@ class FileManager {
         let buff = fs.readFileSync(savepath);
         switch (filemime){
           default:
-            let data = new Buffer(buff).toString('base64');
+            let data = Buffer.from(buff).toString('base64');
             win.attachHTMLString(`<img style="width:100%" src="data:/${filemime};base64,${data}"/>`);
             break;
         }
@@ -912,7 +912,7 @@ class FileManager {
         editor.session.setMode(`ace/mode/${mode}`);
       }else if (id.startsWith('encode_')) {
         let encode = id.split('_')[1];
-        editor.session.setValue(iconv.decode(new Buffer(codes), encode).toString());
+        editor.session.setValue(iconv.decode(Buffer.from(codes), encode).toString());
       }else{
         console.info('toolbar.onClick', id);
       }
