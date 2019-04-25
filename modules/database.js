@@ -156,6 +156,7 @@ class Database {
           addr: ret['addr'],
           encode: opts.base['encode'],
           encoder: opts.base['encoder'],
+          decoder: opts.base['decoder'],
           httpConf: opts.http,
           otherConf: opts.other,
           ctime: +new Date,
@@ -198,6 +199,7 @@ class Database {
             type: _new.base['type'],
             encode: _new.base['encode'],
             encoder: _new.base['encoder'],
+            decoder: _new.base['decoder'],
             httpConf: _new.http,
             otherConf: _new.other,
             utime: +new Date

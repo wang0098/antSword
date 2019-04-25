@@ -30,6 +30,9 @@ class ASPX extends Base {
     this.encoders.map((_) => {
       this.parseEncoder(`./aspx/encoder/${_}`);
     });
+    this.decoders.map((_) => {
+      this.parseDecoder(`./aspx/decoder/${_}`);
+    });
   }
 
   /**
@@ -38,6 +41,10 @@ class ASPX extends Base {
    */
   get encoders() {
     return ["base64","hex"];
+  }
+
+  get decoders() {
+    return ["default"];
   }
 
   /**

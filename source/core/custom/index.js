@@ -23,6 +23,9 @@ class CUSTOM extends Base {
     this.encoders.map((_) => {
       this.parseEncoder(`./custom/encoder/${_}`);
     });
+    this.decoders.map((_) => {
+      this.parseDecoder(`./custom/decoder/${_}`);
+    });
   }
 
   /**
@@ -31,6 +34,10 @@ class CUSTOM extends Base {
    */
   get encoders() {
     return ['base64','hex'];
+  }
+
+  get decoders() {
+    return ["default", "base64"];
   }
 
   /**

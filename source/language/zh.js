@@ -121,7 +121,8 @@ module.exports = {
           note: '网站备注',
           encode: '编码设置',
           type: '连接类型',
-          encoder: '编码器'
+          encoder: '编码器',
+          decoder: '解码器',
         },
         test_success: '连接成功!',
         test_warning: '返回数据为空',

@@ -27,6 +27,10 @@ class ASP extends Base {
     this.encoders.map((_) => {
       this.parseEncoder(`./asp/encoder/${_}`);
     });
+    
+    this.decoders.map((_) => {
+      this.parseDecoder(`./asp/decoder/${_}`);
+    });
   }
 
   /**
@@ -35,6 +39,10 @@ class ASP extends Base {
    */
   get encoders() {
     return ['insert_percent', 'xxxxdog'];
+  }
+
+  get decoders() {
+    return ['default'];
   }
 
   /**
