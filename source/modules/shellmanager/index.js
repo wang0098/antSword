@@ -46,6 +46,14 @@ class ShellManager {
   reloadData(arg = {}) {
     if(this.searchPop.isVisible()) {
       let sdata = this.searchForm.getValues();
+      try {
+        RegExp(sdata['searchtext']);
+      } catch(e) {
+        var tmpstr = sdata['searchtext'].replace(/([\$\(\)\*\+\.\[\?\\\^\{\|])/g, function($, $1){
+          return `\\${$1}`;
+        });
+        sdata['searchtext'] = tmpstr;
+      }
       var searchObj = {};
       switch(sdata['searchtype']) {
         case 'all':
