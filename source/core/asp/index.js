@@ -50,7 +50,7 @@ class ASP extends Base {
    * @param  {Object} data 通过模板解析后的代码对象
    * @return {Promise}     返回一个Promise操作对象
    */
-  complete(data) {
+  complete(data, force_default=false) {
     // 分隔符号
     let tag_s = Math.random().toString(16).substr(2, 5); // '->|';
     let tag_e = Math.random().toString(16).substr(2, 5); // '|<-';
