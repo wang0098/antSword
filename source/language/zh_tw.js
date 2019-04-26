@@ -447,7 +447,29 @@ module.exports = {
     query: {
       title: '執行SQL',
       exec: '執行',
-      clear: '清空'
+      clear: '清空',
+      bookmark: {
+        title: '書籤',
+        add: '添加書籤',
+        del: '移除書籤',
+        clear: '清空書籤',
+      },
+      prompt: {
+        add: {
+          title: '添加SQL書籤',
+          success: (sql) => `添加書籤成功!\nSQL: ${sql}`,
+        },
+        remove: {
+          title: '移除書籤',
+          confirm: '確定移除此書籤?',
+          success: '移除書籤成功',
+        },
+        clear: {
+          title: '清空書籤',
+          confirm: '確定清空所有書籤嗎?',
+          success: '清空書籤成功',
+        },
+      }
     },
     result: {
       title: '執行結果',
@@ -766,6 +788,38 @@ module.exports = {
           },
           add: {
             title: '添加全局書籤',
+            success: '添加成功',
+            namedup: '名稱不能重複',
+            name_invalid: '名稱不合法',
+            addbtn: '確定'
+          },
+          del: {
+            title: '刪除書籤',
+            confirm: (num) => antSword.noxss(`你確定要刪除 ${typeof (num) === 'number' ? num + ' 個書籤' : num + " "}嗎？`),
+            success: '刪除成功'
+          },
+          edit: {
+            namedup: '名稱不能重複',
+            name_invalid: '名稱不合法',
+            success: '更新成功'
+          }
+        },
+      },
+      database: {
+        title: '數據管理',
+        bookmark: {
+          title: '全局書籤',
+          nodata: '當前暫無數據, 請單擊鼠標右鍵添加',
+          grid: {
+            name: '名稱',
+            path: 'SQL'
+          },
+          bmenu: {
+            add: '添加書籤',
+            del: '刪除書籤'
+          },
+          add: {
+            title: '添加全局SQL書籤',
             success: '添加成功',
             namedup: '名稱不能重複',
             name_invalid: '名稱不合法',

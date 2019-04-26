@@ -8,12 +8,17 @@
 
 const LANG = antSword['language']['database'];
 const LANG_T = antSword['language']['toastr'];
+const crypto = require('crypto');
 
 class Database {
 
   constructor(opt) {
     this.hash = (+new Date * Math.random()).toString(16).substr(2, 8);
-
+    this.opt = opt;
+    let config = {
+      bookmarks: {},
+    };
+    this.config = JSON.parse(antSword['storage']("adefault_database", false, JSON.stringify(config)));
     // 初始化UI
     const tabbar = antSword['tabbar'];
     tabbar.addTab(
@@ -32,7 +37,6 @@ class Database {
     this.query = this.initQuery(this.layout_right.cells('a'));
     this.result = this.initResult(this.layout_right.cells('b'));
 
-    this.opt = opt;
     this.win = new dhtmlXWindows();
     this.win.attachViewportTo(this.cell.cell);
 
@@ -98,31 +102,11 @@ class Database {
 
   // 初始化右侧::SQL执行
   initQuery(layout) {
+    let self = this;
     layout.setText(`<i class="fa fa-code"></i> ${LANG['query']['title']}`);
     layout.setHeight('200');
 
     let editor;
-    // SQL语句toolbar
-    const toolbar = layout.attachToolbar();
-    toolbar.loadStruct([
-      { id: 'exec', text: LANG['query']['exec'], icon: 'play', type: 'button', disabled: true },
-      // { type: 'separator' },
-      // { id: 'import', text: '导入', icon: 'download', type: 'button' },
-      { type: 'separator' },
-      { id: 'clear', text: LANG['query']['clear'], icon: 'remove', type: 'button' }
-    ]);
-
-    toolbar.attachEvent('onClick', (id) => {
-      switch(id) {
-        case 'clear':
-          editor.session.setValue('');
-          break;
-        case 'exec':
-          this.drive.execSQL(editor.session.getValue());
-          break;
-      }
-    });
-
     // SQL语句编辑器
     editor = ace.edit(layout.cell.lastChild);
     editor.$blockScrolling = Infinity;
@@ -152,7 +136,146 @@ class Database {
 
     editor.session.setValue("SELECT 'Hello antSword :)' AS welcome;");
 
+    // SQL语句toolbar
+    const toolbar = layout.attachToolbar();
+    let bookmark = JSON.parse(this.storage('dbbookmarks').get('{}'));
+    let reloadToolbar = () => {
+      let bookmark_opts = [{
+        id: 'bookmark_add',
+        type: 'button',
+        icon: 'plus-circle',
+        text: LANG['query']['bookmark']['add'],
+        // enabled: !!bookmark[Buffer.from(editor.session.getValue()).toString('base64')],
+      }];
+      let global_bookmarks = this.config.bookmarks || {};
+      if(Object.keys(global_bookmarks).length > 0) {
+        bookmark_opts.push({type: 'separator'});
+        for(let gb in global_bookmarks) {
+          bookmark_opts.push({
+            id: 'bookmark_'+ global_bookmarks[gb],
+            text: antSword.noxss(gb),
+            icon: 'bookmark',
+            type: 'button',
+            // enabled: Buffer.from(editor.session.getValue()).toString('base64') != global_bookmarks[gb] ,
+          });
+        }
+      }
+      if (!$.isEmptyObject(bookmark)) {
+        bookmark_opts.push({ type: 'separator' });
+      };
+      for (let _ in bookmark) {
+        bookmark_opts.push({
+          id: 'bookmark_' + _, // _ 是 base64 格式
+          text: antSword.noxss(bookmark[_]),
+          icon: 'bookmark-o',
+          type: 'button',
+          // enabled: Buffer.from(editor.session.getValue()).toString('base64') != _ ,
+        });
+      }
+      // 添加清除按钮
+      if (bookmark_opts.length > 2) {
+        bookmark_opts.push({
+          type: 'separator'
+        });
+        bookmark_opts.push({
+          id: 'bookmark_remove',
+          icon: 'remove',
+          text: LANG['query']['bookmark']['del'],
+          type: 'button',
+        });
+        bookmark_opts.push({
+          id: 'bookmark_clear',
+          icon: 'trash-o',
+          text: LANG['query']['bookmark']['clear'],
+          type: 'button'
+        });
+      };
+      let btnstatus = {};
+      ['exec', 'clear'].map((btn)=>{
+        try{
+          btnstatus[btn] = toolbar.isEnabled(btn);
+        }catch(e){
+          btnstatus[btn] = true;
+        }
+      })
+      toolbar.clearAll();
+      toolbar.loadStruct([
+        { id: 'exec', text: LANG['query']['exec'], icon: 'play', type: 'button', disabled: !btnstatus['exec'] },
+        // { type: 'separator' },
+        // { id: 'import', text: '导入', icon: 'download', type: 'button' },
+        { type: 'separator' },
+        { id: 'clear', text: LANG['query']['clear'], icon: 'remove', type: 'button' },
+        { type: 'separator' },
+        { id: 'bookmark', text: LANG['query']['bookmark']['title'], icon: 'bookmark', type: 'buttonSelect', openAll: true, options: bookmark_opts },
+      ]);
+    }
+
+    reloadToolbar();
+    toolbar.attachEvent('onClick', (id) => {
+      switch(id) {
+        case 'clear':
+          editor.session.setValue('');
+          break;
+        case 'exec':
+          this.drive.execSQL(editor.session.getValue());
+          break;
+        case 'bookmark_add':
+          // 添加书签
+          layer.prompt({
+            value: antSword.noxss(editor.session.getValue()),
+            title: LANG['query']['prompt']['add']['title']
+          }, (value, i, e) => {
+            bookmark[Buffer.from(editor.session.getValue()).toString('base64')] = value;
+            self.storage('dbbookmarks').set(JSON.stringify(bookmark));
+            toastr.success(LANG['query']['prompt']['add']['success'](editor.session.getValue()), LANG_T['success']);
+            reloadToolbar();
+            layer.close(i);
+          });
+          break;
+        case 'bookmark_remove':
+          layer.confirm(
+            LANG['query']['prompt']['remove']['confirm']
+            , {
+              icon: 2, shift: 6,
+              title: `<i class="fa fa-remove"></i> ${LANG['query']['prompt']['remove']['title']}`,
+            }
+            , (_) => {
+              // 删除书签并刷新
+              delete bookmark[Buffer.from(editor.session.getValue()).toString('base64')];
+              self.storage('dbbookmarks').set(JSON.stringify(bookmark));
+              reloadToolbar();
+              toastr.success(LANG['query']['prompt']['remove']['success'], LANG_T['success']);
+              layer.close(_);
+            }
+          )
+          break;
+        case 'bookmark_clear':
+          layer.confirm(
+            LANG['query']['prompt']['clear']['confirm']
+            , {
+              icon: 2, shift: 6,
+              title: `<i class="fa fa-trash-o"></i> ${LANG['query']['prompt']['clear']['title']}`
+            }
+            , (_) => {
+              bookmark = {};
+              self.storage('dbbookmarks').set('{}');
+              reloadToolbar();
+              toastr.success(LANG['query']['prompt']['clear']['success'], LANG_T['success']);
+              layer.close(_);
+            }
+          );
+          break;
+        default:
+          let arr = id.split('_');
+          if (arr.length === 2 && arr[0] === 'bookmark') {
+            editor.session.setValue(Buffer.from(arr[1], 'base64').toString());
+            // toolbar.enableItem('exec');
+          };
+      }
+    });
+
     return {
+      reloadToolbar: reloadToolbar,
       editor: editor,
       layout: layout,
       toolbar: toolbar
@@ -266,6 +389,19 @@ class Database {
       win.progressOff();
       toastr.error(JSON.stringify(err), LANG_T['error']);
     });
+  }
+
+  // 本地存储
+  // storage('save_key').get('{}')
+  // storage('save_key').set('{a:123}')
+  storage(key) {
+    let md5 = crypto.createHash('md5');
+    md5.update(this.opt['url']);
+    const k = `${md5.digest('hex').substr(0, 11)}_${key}`
+    return {
+      get: (def) => localStorage.getItem(k) || def,
+      set: (val) => localStorage.setItem(k, val)
+    }
   }
 }
 

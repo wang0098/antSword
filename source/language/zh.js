@@ -448,7 +448,29 @@ module.exports = {
     query: {
       title: '执行SQL',
       exec: '执行',
-      clear: '清空'
+      clear: '清空',
+      bookmark: {
+        title: '书签',
+        add: '添加书签',
+        del: '移除书签',
+        clear: '清空书签',
+      },
+      prompt: {
+        add: {
+          title: '添加SQL书签',
+          success: (sql) => `添加书签成功!\nSQL: ${sql}`,
+        },
+        remove: {
+          title: '移除书签',
+          confirm: '确定移除此书签?',
+          success: '移除书签成功',
+        },
+        clear: {
+          title: '清空书签',
+          confirm: '确定清空所有书签吗?',
+          success: '清空书签成功',
+        },
+      }
     },
     result: {
       title: '执行结果',
@@ -767,6 +789,38 @@ module.exports = {
           },
           add: {
             title: '添加全局书签',
+            success: '添加成功',
+            namedup: '名称不能重复',
+            name_invalid: '名称不合法',
+            addbtn: '确定'
+          },
+          del: {
+            title: '删除书签',
+            confirm: (num) => antSword.noxss(`你确定要删除 ${typeof (num) === 'number' ? num + ' 个书签' : num + " "}吗？`),
+            success: '删除成功'
+          },
+          edit: {
+            namedup: '名称不能重复',
+            name_invalid: '名称不合法',
+            success: '更新成功'
+          }
+        },
+      },
+      database: {
+        title: '数据管理',
+        bookmark: {
+          title: '全局书签',
+          nodata: '当前暂无数据, 请单击鼠标右键添加',
+          grid: {
+            name: '名称',
+            path: 'SQL'
+          },
+          bmenu: {
+            add: '添加书签',
+            del: '删除书签'
+          },
+          add: {
+            title: '添加全局SQL书签',
             success: '添加成功',
             namedup: '名称不能重复',
             name_invalid: '名称不合法',

@@ -446,7 +446,29 @@ Hot Keys:
     query: {
       title: 'Exec SQL',
       exec: 'Run',
-      clear: 'Clear'
+      clear: 'Clear',
+      bookmark: {
+        title: 'Bookmark',
+        add: 'Add bookmark',
+        del: 'Remove this bookmark',
+        clear: 'Clear all bookmarks',
+      },
+      prompt: {
+        add: {
+          title: 'Add to bookmark',
+          success: (path) => `Add to bookmark success!\n${path}`,
+        },
+        remove: {
+          title: 'Remove bookmark',
+          confirm: 'Remove this bookmark ?',
+          success: 'Remove bookmark success!'
+        },
+        clear: {
+          title: 'Clear all bookmarks',
+          confirm: 'Clear all bookmarks ?',
+          success: 'Clear all bookmark success!'
+        }
+      },
     },
     result: {
       title: 'Result',
@@ -765,6 +787,38 @@ Hot Keys:
           },
           add: {
             title: 'Add to global bookmark',
+            success: 'Add success',
+            namedup: 'The name cannot be duplicated',
+            name_invalid: 'Name is invalid',
+            addbtn: 'Confirm'
+          },
+          del: {
+            title: 'Delete Bookmark',
+            confirm: (num) => antSword.noxss(`Are you sure to delete ${typeof (num) === 'number' ? num + ' Bookmarks' : num + " "}？`),
+            success: 'Delete success'
+          },
+          edit: {
+            namedup: 'The name cannot be duplicated',
+            name_invalid: 'Name is invalid',
+            success: 'Edit success'
+          }
+        },
+      },
+      database: {
+        title: 'Database',
+        bookmark: {
+          title: 'Global Bookmark',
+          nodata: 'No data, click the right mouse button add',
+          grid: {
+            name: 'Name',
+            path: 'SQL'
+          },
+          bmenu: {
+            add: 'Add Bookmark',
+            del: 'Del Bookmark'
+          },
+          add: {
+            title: 'Add to global SQL bookmark',
             success: 'Add success',
             namedup: 'The name cannot be duplicated',
             name_invalid: 'Name is invalid',
