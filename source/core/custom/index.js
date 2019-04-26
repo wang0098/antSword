@@ -37,7 +37,7 @@ class CUSTOM extends Base {
   }
 
   get decoders() {
-    return ["default", "base64"];
+    return ["default"];
   }
 
   /**
