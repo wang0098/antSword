@@ -572,7 +572,7 @@ class CUSTOM {
       return toastr.error(LANG['result']['error']['parse'], LANG_T['error']);
     };
     // 3.行头
-    let header_arr = antSword.noxss(arr[0]).split('\t|\t');
+    let header_arr = antSword.noxss(arr[0]).replace(/,/g, '&#44;').split('\t|\t');
     if (header_arr.length === 1) {
       return toastr.warning(LANG['result']['error']['noresult'], LANG_T['warning']);
     };
