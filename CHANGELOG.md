@@ -20,9 +20,13 @@
 
 * 添加SQL语句书签功能, 将常用的 SQL 语句保存成书签
 
+![db_bookmark_2.jpg](https://i.loli.net/2019/04/27/5cc3e8ec1c23c.jpg)
+
 ### 其它
 
 * 「默认设置」数据管理项中, 增加「全局书签」设置, 设置一些自己常用的 SQL 语句
+
+![db_bookmark_1.jpg](https://i.loli.net/2019/04/27/5cc3e8ea2abff.jpg)
 
 ## 2019/04/24 `v(2.1.0)`
 
