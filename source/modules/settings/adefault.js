@@ -369,7 +369,6 @@ class ADefault {
         bpath: self.database_settings.bookmarks[t],
         data: [
           `<i class="fa fa-bookmark-o"></i>`,
-          // TODO: 测试是否会引起XSS
           t,
           Buffer.from(self.database_settings.bookmarks[t], 'base64').toString(),
         ]
