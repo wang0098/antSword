@@ -39,6 +39,8 @@ $test = new Test;
 
 ![db_bookmark_2.jpg](https://i.loli.net/2019/04/27/5cc3e8ec1c23c.jpg)
 
+* 修复数据库查询结果字段名有逗号时异常
+
 ### 其它
 
 * 「默认设置」数据管理项中, 增加「全局书签」设置, 设置一些自己常用的 SQL 语句
