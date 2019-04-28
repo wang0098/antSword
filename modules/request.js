@@ -292,6 +292,7 @@ class Request {
       let _postarr = [];
       if(opts['useMultipart'] == 1) {
         _request.send = _request.field;
+        _postarr = _postData;
       }else{
         _request.send = old_send;
         for(var key in _postData) {
