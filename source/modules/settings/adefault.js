@@ -64,9 +64,9 @@ class ADefault {
             ]},
           ]
         }, {
-          type: 'fieldset', label: '<i class="fa fa-database"></i> 数据管理', list: [
+          type: 'fieldset', label: `<i class="fa fa-database"></i> ${LANG['database']['title']}`, list: [
             { type: 'block', list: [
-              { type: 'label', label: '全局书签' },
+              { type: 'label', label: `${LANG['database']['bookmark']['title']}` },
               {type: 'container', name: 'database_bookmarks', inputWidth: 600, inputHeight: 200},
             ]},
           ]

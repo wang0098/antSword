@@ -807,7 +807,7 @@ module.exports = {
         },
       },
       database: {
-        title: '数据管理',
+        title: '数据操作',
         bookmark: {
           title: '全局书签',
           nodata: '当前暂无数据, 请单击鼠标右键添加',

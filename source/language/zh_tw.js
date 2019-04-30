@@ -806,7 +806,7 @@ module.exports = {
         },
       },
       database: {
-        title: '數據管理',
+        title: '數據操作',
         bookmark: {
           title: '全局書籤',
           nodata: '當前暫無數據, 請單擊鼠標右鍵添加',
