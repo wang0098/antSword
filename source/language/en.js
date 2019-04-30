@@ -835,6 +835,71 @@ Hot Keys:
             success: 'Edit success'
           }
         },
+      },
+      shellmanager: {
+        title: 'ShellManager',
+        header: {
+          title: 'Default HTTP Headers',
+          nodata: 'No HTTP Header data, click the right mouse button add',
+          grid: {
+            name: 'Name',
+            value: 'Vaule',
+          },
+          bmenu: {
+            add: 'Add HTTP Header',
+            del: 'Del HTTP Header'
+          },
+          add: {
+            title: 'Add HTTP Header',
+            success: 'Add success',
+            namedup: 'The name cannot be duplicated',
+            name_invalid: 'Name is invalid',
+            addbtn: 'Confirm'
+          },
+          del: {
+            title: 'Delete HTTP Header',
+            confirm: (num) => antSword.noxss(`Are you sure to delete ${typeof (num) === 'number' ? num + ' Headers' : num + " "}?`),
+            success: 'Delete success'
+          },
+          edit: {
+            namedup: 'The name cannot be duplicated',
+            name_invalid: 'Name is invalid',
+            success: 'Edit success'
+          }
+        },
+        body: {
+          title: 'Default HTTP Body',
+          nodata: 'No HTTP Body data, click the right mouse button add',
+          grid: {
+            name: 'Name',
+            value: 'Value',
+          },
+          bmenu: {
+            add: 'Add HTTP Body',
+            del: 'Del HTTP Body'
+          },
+          add: {
+            title: 'Add HTTP Body',
+            success: 'Add success',
+            namedup: 'The name cannot be duplicated',
+            name_invalid: 'Name is invalid',
+            addbtn: 'Confirm'
+          },
+          del: {
+            title: 'Delete HTTP Body',
+            confirm: (num) => antSword.noxss(`Are you sure to delete ${typeof (num) === 'number' ? num + ' HTTP Body' : num + " "}?`),
+            success: 'Delete success'
+          },
+          edit: {
+            namedup: 'The name cannot be duplicated',
+            name_invalid: 'Name is invalid',
+            success: 'Edit success'
+          }
+        },
+        other: {
+          nohttps: 'Ignore HTTPS certificate',
+          requestTimeout: 'Request timeout',
+        }
       }
     }
   },

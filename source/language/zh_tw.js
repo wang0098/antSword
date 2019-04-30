@@ -836,6 +836,71 @@ module.exports = {
             success: '更新成功'
           }
         },
+      },
+      shellmanager: {
+        title: '數據管理',
+        header: {
+          title: '默認請求頭',
+          nodata: '暫無全局請求頭, 請單擊右鍵添加',
+          grid: {
+            name: '名稱',
+            value: '值',
+          },
+          bmenu: {
+            add: '添加請求頭',
+            del: '刪除請求頭'
+          },
+          add: {
+            title: '添加默認請求頭',
+            success: '添加成功',
+            namedup: '名稱不能重複',
+            name_invalid: '名稱不合法',
+            addbtn: '確定'
+          },
+          del: {
+            title: '刪除默認請求頭',
+            confirm: (num) => antSword.noxss(`你確定要刪除 ${typeof (num) === 'number' ? num + ' 個請求頭' : num + " "}嗎？`),
+            success: '刪除成功'
+          },
+          edit: {
+            namedup: '名稱不能重複',
+            name_invalid: '名稱不合法',
+            success: '更新成功'
+          }
+        },
+        body: {
+          title: '默認請求 Body',
+          nodata: '暫無默認Body, 請單擊右鍵添加',
+          grid: {
+            name: '名稱',
+            value: '值',
+          },
+          bmenu: {
+            add: '添加Body',
+            del: '刪除Body'
+          },
+          add: {
+            title: '添加默認請求Body',
+            success: '添加成功',
+            namedup: '名稱不能重複',
+            name_invalid: '名稱不合法',
+            addbtn: '確定'
+          },
+          del: {
+            title: '刪除默認請求頭Body',
+            confirm: (num) => antSword.noxss(`你確定要刪除 ${typeof (num) === 'number' ? num + ' 個請求Body' : num + " "}嗎？`),
+            success: '刪除成功'
+          },
+          edit: {
+            namedup: '名稱不能重複',
+            name_invalid: '名稱不合法',
+            success: '更新成功'
+          }
+        },
+        other: {
+          nohttps: '忽略HTTPS證書',
+          requestTimeout: '請求超時',
+        }
       }
     }
   },

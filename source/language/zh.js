@@ -837,6 +837,71 @@ module.exports = {
             success: '更新成功'
           }
         },
+      },
+      shellmanager: {
+        title: '数据管理',
+        header: {
+          title: '默认请求头',
+          nodata: '暂无全局请求头, 请单击右键添加',
+          grid: {
+            name: '名称',
+            value: '值',
+          },
+          bmenu: {
+            add: '添加请求头',
+            del: '删除请求头'
+          },
+          add: {
+            title: '添加默认请求头',
+            success: '添加成功',
+            namedup: '名称不能重复',
+            name_invalid: '名称不合法',
+            addbtn: '确定'
+          },
+          del: {
+            title: '删除默认请求头',
+            confirm: (num) => antSword.noxss(`你确定要删除 ${typeof (num) === 'number' ? num + ' 个请求头' : num + " "}吗？`),
+            success: '删除成功'
+          },
+          edit: {
+            namedup: '名称不能重复',
+            name_invalid: '名称不合法',
+            success: '更新成功'
+          }
+        },
+        body: {
+          title: '默认请求 Body',
+          nodata: '暂无默认Body, 请单击右键添加',
+          grid: {
+            name: '名称',
+            value: '值',
+          },
+          bmenu: {
+            add: '添加Body',
+            del: '删除Body'
+          },
+          add: {
+            title: '添加默认请求Body',
+            success: '添加成功',
+            namedup: '名称不能重复',
+            name_invalid: '名称不合法',
+            addbtn: '确定'
+          },
+          del: {
+            title: '删除默认请求头Body',
+            confirm: (num) => antSword.noxss(`你确定要删除 ${typeof (num) === 'number' ? num + ' 个请求Body' : num + " "}吗？`),
+            success: '删除成功'
+          },
+          edit: {
+            namedup: '名称不能重复',
+            name_invalid: '名称不合法',
+            success: '更新成功'
+          }
+        },
+        other: {
+          nohttps: '忽略HTTPS证书',
+          requestTimeout: '请求超时',
+        }
       }
     }
   },

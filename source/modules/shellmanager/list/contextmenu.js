@@ -190,11 +190,24 @@ class ContextMenu {
    * 添加数据
    */
   addData() {
+    let config = {
+      headers: {},
+      bodys: {},
+      others: {},
+    };
+    let shellmanager_setting = JSON.parse(antSword['storage']("adefault_shellmanager", false, JSON.stringify(config)));
+    let args = {
+      httpConf: {
+        headers: shellmanager_setting.headers,
+        body: shellmanager_setting.bodys,
+      },
+      otherConf: shellmanager_setting.others || {},
+    };
     new Form({
       title: LANG['list']['add']['title'],
       icon: 'plus-circle',
       text: LANG['list']['add']['toolbar']['add']
-    }, {}, (data) => {
+    }, args, (data) => {
       return new Promise((res, rej) => {
         // 获取当前分类
         data['base']['category'] = antSword.modules.shellmanager.category.sidebar.getActiveItem();

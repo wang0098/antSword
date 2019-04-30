@@ -22,6 +22,14 @@ class ADefault {
       database: {
         bookmarks: {},
       },
+      shellmanager: {
+        headers: {},
+        bodys: {},
+        others: {
+          "ignore-https": 0,
+          "request-timeout": '10000',
+        },
+      }
     };
     // 读取配置
     const filemanager_settings = JSON.parse(antSword['storage']("adefault_filemanager", false, JSON.stringify(default_config.filemanager)));
@@ -36,6 +44,17 @@ class ADefault {
       this.database_settings.bookmarks = default_config.database.bookmarks;
     }
 
+    const shellmanager_settings = JSON.parse(antSword['storage']("adefault_shellmanager", false, JSON.stringify(default_config.shellmanager)));
+    this.shellmanager_settings = shellmanager_settings;
+    if(!this.shellmanager_settings.headers) {
+      this.shellmanager_settings.headers = default_config.shellmanager.headers;
+    }
+    if(!this.shellmanager_settings.bodys) {
+      this.shellmanager_settings.bodys = default_config.shellmanager.bodys;
+    }
+    if(!this.shellmanager_settings.others) {
+      this.shellmanager_settings.others = default_config.shellmanager.others;
+    }
     const toolbar = cell.attachToolbar();
     toolbar.loadStruct([
       { id: 'save', type: 'button', text: LANG['toolbar']['save'], icon: 'save' }
@@ -70,6 +89,34 @@ class ADefault {
               {type: 'container', name: 'database_bookmarks', inputWidth: 600, inputHeight: 200},
             ]},
           ]
+        }, {
+          type: 'fieldset', label: `<i class="fa fa-th-large"></i> ${LANG['shellmanager']['title']}`, list: [
+            { type: 'block', list: [
+              { type: 'checkbox', position: 'label-right', name: 'shellmanager_ignore-https', label: LANG['shellmanager']['other']['nohttps'], checked: self.shellmanager_settings.others['ignore-https'] === 1 },
+              { type: "label", label: LANG['shellmanager']['other']['requestTimeout']},
+              { type: "combo", position: 'label-right', label: '/ms', inputWidth: 100, name: "shellmanager_request-timeout", options: ((items) => {
+                let ret = [];
+                // 如果自定义的路径不在items里，则++
+                if (items.indexOf(self.shellmanager_settings.others['request-timeout']) === -1) {
+                  items.unshift(self.shellmanager_settings.others['request-timeout']);
+                }
+                items.map((_) => {
+                  ret.push({
+                    text: _,
+                    value: _,
+                    selected: self.shellmanager_settings.others['request-timeout'] === _
+                  })
+                });
+                return ret;
+              })([
+                '5000', '10000', '30000', '60000'
+              ])},
+              { type: 'label', label: LANG['shellmanager']['header']['title'] },
+              { type: 'container', name: 'shellmanager_headers', inputWidth: 600, inputHeight: 150 },
+              { type: 'label', label: LANG['shellmanager']['body']['title'] },
+              { type: 'container', name: 'shellmanager_bodys', inputWidth: 600, inputHeight: 150 },
+            ]},
+          ]
         },
         // 后续其它模块
       ]}, 
@@ -87,14 +134,7 @@ class ADefault {
     bookmark_grid.setInitWidths("40,*,200");
     bookmark_grid.setColAlign("center,left,left");
     bookmark_grid.enableMultiselect(true);
-    // grid右键
-    // 空白数据右键fix
-    $('.objbox').on('contextmenu', (e) => {
-      (e.target.nodeName === 'DIV' && e.target.grid === bookmark_grid && bookmark_grid.callEvent instanceof Function && antSword['tabbar'].getActiveTab() === "tab_about" && sidebar.getActiveItem() === "adefault") ? bookmark_grid.callEvent('onRightClick', [-1, -1, e]) : null;
-    });
-    $('.objbox').on('click', (e) => {
-      bmenu.hide();
-    });
+
     bookmark_grid.attachEvent('onRightClick', (id, lid, event)=>{
       let _ids = (bookmark_grid.getSelectedId()|| '').split(',');
       if (id === -1) {
@@ -169,14 +209,6 @@ class ADefault {
     db_bookmark_grid.setColAlign("center,left,left");
     db_bookmark_grid.enableMultiselect(true);
 
-    // grid右键
-    // 空白数据右键fix
-    $('.objbox').on('contextmenu', (e) => {
-      (e.target.nodeName === 'DIV' && e.target.grid === db_bookmark_grid && db_bookmark_grid.callEvent instanceof Function && antSword['tabbar'].getActiveTab() === "tab_about" && sidebar.getActiveItem() === "adefault") ? db_bookmark_grid.callEvent('onRightClick', [-1, -1, e]) : null;
-    });
-    $('.objbox').on('click', (e) => {
-      bmenu.hide();
-    });
     db_bookmark_grid.attachEvent('onRightClick', (id, lid, event)=>{
       let _ids = (db_bookmark_grid.getSelectedId()|| '').split(',');
       if (id === -1) {
@@ -242,10 +274,16 @@ class ADefault {
             config.filemanager.bookmarks = self.filemanager_settings.bookmarks;
             
             config.database.bookmarks = self.database_settings.bookmarks;
+
+            config.shellmanager.headers = self.shellmanager_settings.headers;
+            config.shellmanager.bodys = self.shellmanager_settings.bodys;
+            config.shellmanager.others["ignore-https"] = _formvals['shellmanager_ignore-https'];
+            config.shellmanager.others["request-timeout"] = _formvals['shellmanager_request-timeout'];
             // save
             // save 文件管理设置
             antSword['storage']('adefault_filemanager', config.filemanager);
             antSword['storage']('adefault_database', config.database);
+            antSword['storage']('adefault_shellmanager', config.shellmanager);
             toastr.success(LANG['success'], LANG_T['success']);
             // 重启应用
             layer.confirm(LANG['confirm']['content'], {
@@ -261,9 +299,168 @@ class ADefault {
       }
     });
 
+    // 数据管理配置
+    // 请求 headers
+    let shellmanager_headers_grid = new dhtmlXGridObject(form.getContainer('shellmanager_headers'));
+    shellmanager_headers_grid.setHeader(`
+    &nbsp;,
+    ${LANG['shellmanager']['header']['grid']['name']},
+    ${LANG['shellmanager']['header']['grid']['value']}
+    `);
+    shellmanager_headers_grid.setColTypes("ro,edtxt,edtxt");
+    shellmanager_headers_grid.setColSorting('str,str,str');
+    shellmanager_headers_grid.setInitWidths("40,200,*");
+    shellmanager_headers_grid.setColAlign("center,left,left");
+    shellmanager_headers_grid.enableMultiselect(true);
+
+    shellmanager_headers_grid.attachEvent('onRightClick', (id, lid, event)=>{
+      let _ids = (shellmanager_headers_grid.getSelectedId()|| '').split(',');
+      if (id === -1) {
+        _ids = [];
+      } else if (_ids.length === 1) {
+        // 如果没有选中？则选中右键对应选项
+        shellmanager_headers_grid.selectRowById(id);
+        _ids = [id];
+      };
+      let ids = [];
+      _ids.map((_) => {
+        ids.push(shellmanager_headers_grid.getRowAttribute(_, 'bname'));
+      });
+      id = ids[0] || '';
+
+      let menu = [
+        { text: LANG['shellmanager']['header']['bmenu']['add'], icon: 'fa fa-plus-circle', action: self.addShellmanagerHeaders.bind(self)},
+        { text: LANG['shellmanager']['header']['bmenu']['del'], icon: 'fa fa-trash-o', action: () => {
+          self.delShellmanagerHeaders(ids);
+        }},
+      ];
+      bmenu(menu, event);
+      return true;
+    });
+
+    shellmanager_headers_grid.attachEvent("onEditCell", function(stage,rId,cInd,nValue,oValue){
+      // 2 编辑完成
+      if(stage === 2) {
+        if(nValue === oValue){return;}
+        var obname = shellmanager_headers_grid.getRowAttribute(rId, "bname");
+        var obpath = shellmanager_headers_grid.getRowAttribute(rId, "bvalue");
+        switch(cInd){ // 具体是哪一列被编辑了
+          case 1: // name
+            // if(!nValue.match(/^[a-zA-Z0-9_/]+$/)){
+            //   toastr.error(LANG["filemanager"]['bookmark']['edit']["name_invalid"], LANG_T['error']);
+            //   return
+            // }
+            if(self.shellmanager_settings.headers.hasOwnProperty(obname)){
+              delete self.shellmanager_settings.headers[obname];
+              self.shellmanager_settings.headers[nValue] = obpath;
+            }
+            toastr.success(LANG["shellmanager"]['header']['edit']["success"], LANG_T["success"]);
+            break;
+          case 2: // value
+            if(self.shellmanager_settings.headers.hasOwnProperty(obname)){
+              self.shellmanager_settings.headers[obname] = nValue;
+            }
+          break;
+        }
+        antSword['storage']('adefault_shellmanager', self.shellmanager_settings);
+        self.reloadShellmanagerHeaders();
+      }
+    });
+
+    shellmanager_headers_grid.init();
+    this.shellmanager_headers_grid = shellmanager_headers_grid;
+
+    // 请求Body
+    let shellmanager_bodys_grid = new dhtmlXGridObject(form.getContainer('shellmanager_bodys'));
+    shellmanager_bodys_grid.setHeader(`
+    &nbsp;,
+    ${LANG['shellmanager']['body']['grid']['name']},
+    ${LANG['shellmanager']['body']['grid']['value']}
+    `);
+    shellmanager_bodys_grid.setColTypes("ro,edtxt,edtxt");
+    shellmanager_bodys_grid.setColSorting('str,str,str');
+    shellmanager_bodys_grid.setInitWidths("40,200,*");
+    shellmanager_bodys_grid.setColAlign("center,left,left");
+    shellmanager_bodys_grid.enableMultiselect(true);
+
+    shellmanager_bodys_grid.attachEvent('onRightClick', (id, lid, event)=>{
+      let _ids = (shellmanager_bodys_grid.getSelectedId()|| '').split(',');
+      if (id === -1) {
+        _ids = [];
+      } else if (_ids.length === 1) {
+        // 如果没有选中？则选中右键对应选项
+        shellmanager_bodys_grid.selectRowById(id);
+        _ids = [id];
+      };
+      let ids = [];
+      _ids.map((_) => {
+        ids.push(shellmanager_bodys_grid.getRowAttribute(_, 'bname'));
+      });
+      id = ids[0] || '';
+
+      let menu = [
+        { text: LANG['shellmanager']['body']['bmenu']['add'], icon: 'fa fa-plus-circle', action: self.addShellmanagerBodys.bind(self)},
+        { text: LANG['shellmanager']['body']['bmenu']['del'], icon: 'fa fa-trash-o', action: () => {
+          self.delShellmanagerBodys(ids);
+        }},
+      ];
+      bmenu(menu, event);
+      return true;
+    });
+
+    shellmanager_bodys_grid.attachEvent("onEditCell", function(stage,rId,cInd,nValue,oValue){
+      // 2 编辑完成
+      if(stage === 2) {
+        if(nValue === oValue){return;}
+        var obname = shellmanager_bodys_grid.getRowAttribute(rId, "bname");
+        var obpath = shellmanager_bodys_grid.getRowAttribute(rId, "bvalue");
+        switch(cInd){ // 具体是哪一列被编辑了
+          case 1: // name
+            // if(!nValue.match(/^[a-zA-Z0-9_/]+$/)){
+            //   toastr.error(LANG["shellmanager"]['body']['edit']["name_invalid"], LANG_T['error']);
+            //   return
+            // }
+            if(self.shellmanager_settings.bodys.hasOwnProperty(obname)){
+              delete self.shellmanager_settings.bodys[obname];
+              self.shellmanager_settings.bodys[nValue] = obpath;
+            }
+            toastr.success(LANG["shellmanager"]['body']['edit']["success"], LANG_T["success"]);
+            break;
+          case 2: // path
+            if(self.shellmanager_settings.bodys.hasOwnProperty(obname)){
+              self.shellmanager_settings.bodys[obname] = nValue;
+            }
+          break;
+        }
+        antSword['storage']('adefault_shellmanager', self.shellmanager_settings);
+        self.reloadShellmanagerBodys();
+      }
+    });
+
+    shellmanager_bodys_grid.init();
+    this.shellmanager_bodys_grid = shellmanager_bodys_grid;
+
+    // grid右键
+    [ bookmark_grid, db_bookmark_grid, shellmanager_headers_grid, shellmanager_bodys_grid].forEach((g) => {
+      // 空白数据右键fix
+      $('.objbox').on('contextmenu', (e) => {
+        (e.target.nodeName === 'DIV' && e.target.grid === g && g.callEvent instanceof Function && antSword['tabbar'].getActiveTab() === "tab_about" && sidebar.getActiveItem() === "adefault") ? g.callEvent('onRightClick', [-1, -1, e]) : null;
+      });
+    });
+    $('.objbox').on('click', (e) => {
+      bmenu.hide();
+    });
+
     this.reloadFMBookmarks();
     this.reloadDatabaseBookmarks();
+    this.reloadShellManager();
   }
+
+  reloadShellManager() {
+    this.reloadShellmanagerHeaders();
+    this.reloadShellmanagerBodys();
+  }
+
   // 重载 bookmarks grid
   reloadFMBookmarks(){
     let self = this;
@@ -446,6 +643,184 @@ class ADefault {
         antSword['storage']('adefault_database', self.database_settings);
         self.reloadDatabaseBookmarks();
         toastr.success(LANG['database']['bookmark']['del']['success'], LANG_T['success']);
+      }
+    )
+  }
+
+  // 重载 shellmanager headers grid
+  reloadShellmanagerHeaders(){
+    let self = this;
+    let data = [];
+    let _id = 1;
+    Object.keys(self.shellmanager_settings.headers).map((t)=>{
+      data.push({
+        id: _id,
+        bname: t,
+        bvalue: self.shellmanager_settings.headers[t],
+        data: [
+          `<i class="fa fa-bookmark-o"></i>`,
+          t,
+          self.shellmanager_settings.headers[t],
+        ]
+      });
+      _id++;
+    });
+    if(data.length == 0){
+      data.push({
+        id: _id,
+        bname: '',
+        bvalue: '',
+        data: [
+          `<i class="fa fa-bookmark-o"></i>`,
+          LANG['shellmanager']['header']['nodata'],
+          '&nbsp;'
+        ]
+      });
+    }
+    self.shellmanager_headers_grid.clearAll();
+    self.shellmanager_headers_grid.parse({
+      'rows': data
+    }, 'json');
+  }
+
+  addShellmanagerHeaders() {
+    let self = this;
+    let hash = +new Date();
+    let index = layer.prompt({
+      title: `<i class="fa fa-bookmark"></i> ${LANG['shellmanager']['header']['add']['title']}`,
+      content: '<input type="text" style="width:300px;" class="layui-layer-input" id="bname_' + hash + '" value="" placeholder="name"><p/><input style="width:300px;" type="text" id="bvalue_' + hash + '" class="layui-layer-input" value="" placeholder="value">',
+      btn: [LANG['shellmanager']['header']['add']['addbtn']],
+      yes: (i) => {
+        let _bname = $(`#bname_${hash}`);
+        let _bvalue = $(`#bvalue_${hash}`);
+        let bname = _bname.val();
+        let bvalue = _bvalue.val();
+        let gbm = self.shellmanager_settings.headers;
+        if(gbm.hasOwnProperty(bname)) {
+          _bname.focus();
+          return toastr.warning(LANG['shellmanager']['header']['add']['namedup'], LANG_T['warning']);
+        }
+        gbm[bname] = bvalue;
+        self.shellmanager_settings.headers = gbm;
+        antSword['storage']('adefault_shellmanager', self.shellmanager_settings);
+        self.reloadShellmanagerHeaders();
+        toastr.success(LANG['shellmanager']['header']['add']['success'], LANG_T['success']);
+        layer.close(i);
+      }
+    });
+  }
+
+  delShellmanagerHeaders(ids) {
+    let self = this;
+    if(ids.length === 1 && !ids[0]) {
+      return
+    }
+    layer.confirm(
+      LANG['shellmanager']['header']['del']['confirm'](ids.length > 1 ? ids.length:ids[0]),
+      {
+        icon: 2,
+        shift: 6,
+        title: `<i class="fa fa-trash"></i> ${LANG['shellmanager']['header']['del']['title']}`,
+      },
+      (_) => {
+        layer.close(_);
+        ids.map((p)=>{
+          if(self.shellmanager_settings.headers.hasOwnProperty(p)) {
+            delete self.shellmanager_settings.headers[p];
+          }
+        });
+        antSword['storage']('adefault_shellmanager', self.shellmanager_settings);
+        self.reloadShellmanagerHeaders();
+        toastr.success(LANG['shellmanager']['header']['del']['success'], LANG_T['success']);
+      }
+    )
+  }
+
+  // 重载 shellmanager bodys grid
+  reloadShellmanagerBodys(){
+    let self = this;
+    let data = [];
+    let _id = 1;
+    Object.keys(self.shellmanager_settings.bodys).map((t)=>{
+      data.push({
+        id: _id,
+        bname: t,
+        bvalue: self.shellmanager_settings.bodys[t],
+        data: [
+          `<i class="fa fa-bookmark-o"></i>`,
+          t,
+          self.shellmanager_settings.bodys[t],
+        ]
+      });
+      _id++;
+    });
+    if(data.length == 0){
+      data.push({
+        id: _id,
+        bname: '',
+        bvalue: '',
+        data: [
+          `<i class="fa fa-bookmark-o"></i>`,
+          LANG['shellmanager']['body']['nodata'],
+          '&nbsp;'
+        ]
+      });
+    }
+    self.shellmanager_bodys_grid.clearAll();
+    self.shellmanager_bodys_grid.parse({
+      'rows': data
+    }, 'json');
+  }
+
+  addShellmanagerBodys() {
+    let self = this;
+    let hash = +new Date();
+    let index = layer.prompt({
+      title: `<i class="fa fa-bookmark"></i> ${LANG['shellmanager']['body']['add']['title']}`,
+      content: '<input type="text" style="width:300px;" class="layui-layer-input" id="bname_' + hash + '" value="" placeholder="name"><p/><input style="width:300px;" type="text" id="bvalue_' + hash + '" class="layui-layer-input" value="" placeholder="value">',
+      btn: [LANG['shellmanager']['body']['add']['addbtn']],
+      yes: (i) => {
+        let _bname = $(`#bname_${hash}`);
+        let _bvalue = $(`#bvalue_${hash}`);
+        let bname = _bname.val();
+        let bvalue = _bvalue.val();
+        let gbm = self.shellmanager_settings.bodys;
+        if(gbm.hasOwnProperty(bname)) {
+          _bname.focus();
+          return toastr.warning(LANG['shellmanager']['body']['add']['namedup'], LANG_T['warning']);
+        }
+        gbm[bname] = bvalue;
+        self.shellmanager_settings.bodys = gbm;
+        antSword['storage']('adefault_shellmanager', self.shellmanager_settings);
+        self.reloadShellmanagerBodys();
+        toastr.success(LANG['shellmanager']['body']['add']['success'], LANG_T['success']);
+        layer.close(i);
+      }
+    });
+  }
+
+  delShellmanagerBodys(ids) {
+    let self = this;
+    if(ids.length === 1 && !ids[0]) {
+      return
+    }
+    layer.confirm(
+      LANG['shellmanager']['body']['del']['confirm'](ids.length > 1 ? ids.length:ids[0]),
+      {
+        icon: 2,
+        shift: 6,
+        title: `<i class="fa fa-trash"></i> ${LANG['shellmanager']['body']['del']['title']}`,
+      },
+      (_) => {
+        layer.close(_);
+        ids.map((p)=>{
+          if(self.shellmanager_settings.bodys.hasOwnProperty(p)) {
+            delete self.shellmanager_settings.bodys[p];
+          }
+        });
+        antSword['storage']('adefault_shellmanager', self.shellmanager_settings);
+        self.reloadShellmanagerBodys();
+        toastr.success(LANG['shellmanager']['body']['del']['success'], LANG_T['success']);
       }
     )
   }

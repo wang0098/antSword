@@ -8,6 +8,20 @@
 
 * 修复 download multipart 发包时 download 发包为空的问题 (asunescape 功能引起)
 
+### 数据管理
+
+* 「添加数据」时自动载入「默认设置」中「数据管理」全局配置内容
+
+![adefault_shellmanager_2.png](https://i.loli.net/2019/04/30/5cc83fb205051.png)
+
+### 其它
+
+* 「默认设置」新增「数据管理」设置, 可配置「是否忽略HTTPS证书」、「默认请求超时时长」、「默认 HTTP Header」和「默认 HTTP Body」
+
+> 该配置项仅在「添加数据」时生效，不影响已有配置的 Shell。在添加数据界面修改相应的值, 仅对当前 Shell 配置产生影响，不会影响到默认配置
+
+![adefault_shellmanager_1.png](https://i.loli.net/2019/04/30/5cc83fafdf0d8.png)
+
 ## 2019/04/27 `v(2.1.1)`
 
 ### 核心模块
