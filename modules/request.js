@@ -16,7 +16,7 @@ const { Readable } = require("stream");
 
 let logger;
 // 请求UA
-const USER_AGENT = 'antSword/v2.0';
+const USER_AGENT = 'antSword/v2.1';
 
 // 请求超时
 const REQ_TIMEOUT = 10000;
