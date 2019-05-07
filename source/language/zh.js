@@ -662,6 +662,7 @@ module.exports = {
         help: "帮助",
         save: "保存",
         rsa: "RSA配置",
+        more: "获取更多",
         generate: "生成"
       },
       grid: {

@@ -660,6 +660,7 @@ Hot Keys:
         help: "Help",
         save: "Save",
         rsa: "RSA Config",
+        more: "Get More",
         generate: "Generate"
       },
       grid: {

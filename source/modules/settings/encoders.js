@@ -52,7 +52,9 @@ class Encoders {
       { type: 'button', text: LANG['toolbar']['edit'], icon: 'fa fa-edit', id: 'edit' },
       { type: 'button', text: LANG['toolbar']['delete'], icon: 'fa fa-trash-o', id: 'delete' },
       { type: 'separator' },
-      { type: 'button', text: LANG['toolbar']['rsa'], icon: 'fa fa-key', id: 'rsa' }
+      { type: 'button', text: LANG['toolbar']['rsa'], icon: 'fa fa-key', id: 'rsa' },
+      { type: 'separator' },
+      { type: 'button', text: LANG['toolbar']['more'], icon: 'fa fa-chrome', id: 'more' },
     ]);
 
     toolbar.attachEvent("onClick", (id) => {
@@ -78,6 +80,9 @@ class Encoders {
           break;
         case "rsa":
           that.rsaConfig();
+          break;
+        case "more":
+          antSword.shell.openExternal("https://github.com/AntSwordProject/AwesomeEncoder");
           break;
       }
     });
