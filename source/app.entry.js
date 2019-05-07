@@ -303,8 +303,8 @@ ipcRenderer
     const WIN = require('ui/window');
     let win = new WIN({
       title: antSword['language']['update']['title'],
-      height:130,
-      width:280
+      height:430,
+      width:480
     });
     win.win.setIconCss("update-winicon");
     win.win.button("minmax").hide();
@@ -314,22 +314,50 @@ ipcRenderer
 
     let formdata = [
     {type:"label" , name:"form_msg", label:LANG["prompt"]["body"](opt['ver']), offsetLeft: 5},
+    {type: "container", name: "form_body", label: "", inputWidth: 450, inputHeight: 300},
     {type: "block", list:[
+      {type:"newcolumn", offset:20},
       {type:"button" , name:"updatebtn", value: `<i class="fa fa-cloud-download"></i> ${LANG["prompt"]["btns"]["ok"]}`, className:"background-color: #39c;"},
-      {type:"newcolumn", offset:15},
-      {type:"button" , name:"canclebtn", value: `${LANG["prompt"]["btns"]["no"]}`},
+      {type:"newcolumn", offset:20},
+      {type:"button" , name:"changelogbtn", value: `<i class="fa fa-chrome"></i> ${LANG["prompt"]["btns"]["changelog"]}`},
+      {type:"newcolumn", offset:20},
+      {type:"button" , name:"canclebtn", value: `<i class="fa fa-remove"></i> ${LANG["prompt"]["btns"]["no"]}`},
       ]
     }];
     uplayout.cells('a').attachForm(formdata, true);
     win.win.attachEvent('onParkUp', () => {
+      if(win.win.isParked()){
+        win.win.wins._winSetSize(win.win._idd, 240, (win.win.wins.w[win.win._idd].hdr.offsetHeight+win.win.wins.conf.ofs_h), false, true);
+      }
       win.win.setPosition(document.body.clientWidth-300,document.body.clientHeight-150);
       return true;
     });
     win.win.attachEvent('onParkDown', () =>{
+      win.win.setDimension(478, 428);
       win.win.centerOnScreen();
       return true;
     });
     const form = uplayout.cells('a').attachForm(formdata, true);
+    let form_body = new dhtmlXLayoutObject(form.getContainer('form_body'), '1C');
+    form_body.cells('a').hideHeader();
+    const marked = require('marked');
+    let _html = `<html>
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+    body {
+      zoom:80%;
+    }
+    img {
+      width:100%;
+    }
+    </style>
+    </head>
+    <body>
+      ${marked(opt['body']).replace(/<a.+?(href=".+?")/g, "<a")}
+    </body>
+    </html>`;
+    form_body.cells('a').attachHTMLString(`<iframe sandbox="" src="data:text/html;base64,${Buffer.from(_html).toString('base64')}" style="width:100%;height:100%;border:0;padding:0;margin:0;"></iframe>`);
     form.attachEvent("onButtonClick", (name)=>{
       switch (name) {
         case "updatebtn":
@@ -366,6 +394,9 @@ ipcRenderer
           break;
         case "canclebtn":
           win.close();
+          break;
+        case "changelogbtn":
+          antSword.shell.openExternal(opt['url']);
           break;
       }
     });

@@ -39,7 +39,8 @@ class Update {
             this.logger.info('Found a new loader version', newVersion);
             event.sender.send('notification-loader-update', {
               ver: newVersion,
-              url: lastInfo['html_url']
+              url: lastInfo['html_url'],
+              body: lastInfo['body']
             });
           } else {
             this.logger.warn('No new loader version.', newVersion, curVersion);
@@ -69,7 +70,8 @@ class Update {
             this.logger.info('Found a new version', newVersion);
             event.sender.send('notification-update', {
               ver: newVersion,
-              url: lastInfo['html_url']
+              url: lastInfo['html_url'],
+              body: lastInfo['body']
             });
           } else {
             this.logger.warn('No new version.', newVersion, curVersion);

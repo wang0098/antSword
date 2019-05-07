@@ -22,6 +22,9 @@
 
 ![adefault_shellmanager_1.png](https://i.loli.net/2019/04/30/5cc83fafdf0d8.png)
 
+* 新增第三方库 marked 0.6.2 用于 markdown 渲染
+* 更新提示窗口新增 ReleaseNote 显示(缩放显示,图片看不清可直接前往 github 查看详细更新日志), 新增 「更新日志」按钮(点击后直接打开 github release 页)
+
 ## 2019/04/27 `v(2.1.1)`
 
 ### 核心模块

@@ -628,7 +628,8 @@ module.exports = {
       prompt: {
         btns: {
           ok: '立即更新',
-          no: '下次再说'
+          no: '下次再说',
+          changelog: '更新日志'
         },
         body: (ver) => `发现新版本 v${ver}, 是否更新?`,
         loader_body: (ver) => `加载器新版本 v${ver} 已经发布,当前使用的加载器即将不能使用, 是否退出程序并前往下载最新版加载器?`,
