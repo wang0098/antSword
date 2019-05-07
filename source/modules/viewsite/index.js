@@ -51,7 +51,7 @@ class ViewSite {
   _initToolbar() {
     const toolbar = this.cell.attachToolbar();
     toolbar.loadStruct([
-      { id: 'url', width: 400, type: 'buttonInput', value: this.opts.url || 'loading..' },
+      { id: 'url', width: 400, type: 'buttonInput', value: antSword.noxss(this.opts.url) || 'loading..' },
       { type: 'separator' },
       { id: 'useproxy', type: 'buttonTwoState', icon: 'paper-plane', text: LANG['toolbar'].useproxy(this.useproxy), pressed: this.useproxy, disabled: antSword.aproxymode === "noproxy"},
       { type: 'separator' },
