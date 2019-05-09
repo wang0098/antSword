@@ -222,6 +222,7 @@ class Base {
    */
   encodeComplete(tag_s, tag_e, data) {
     let ext = {
+      opts: this.__opts__,
       rsa: this.rsaEncrypt()
     }
     // 编码器处理

@@ -7,6 +7,9 @@
 ### 核心模块
 
 * 修复 download multipart 发包时 download 发包为空的问题 (asunescape 功能引起)
+* 编码器 ext 参数新增元素 opts, 值为当前 shell 的配置
+
+> 有了这个,你就可以根据 shell 的配置信息来动态的进行加密了, 比如用 Cookie 里面的 SessionID 来作为秘钥
 
 ### 数据管理
 
