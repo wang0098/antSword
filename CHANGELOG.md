@@ -10,6 +10,9 @@
 * 编码器 ext 参数新增元素 opts, 值为当前 shell 的配置
 
 > 有了这个,你就可以根据 shell 的配置信息来动态的进行加密了, 比如用 Cookie 里面的 SessionID 来作为秘钥
+>
+> 与之相关的一个 Demo, PHP aes-256-cfb (zeroPadding) 编码器
+> https://github.com/AntSwordProject/AwesomeEncoder/blob/master/php/aes_256_cfb_zero_padding.js
 
 ### 数据管理
 
