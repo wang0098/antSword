@@ -11,10 +11,24 @@
 
 > 有了这个,你就可以根据 shell 的配置信息来动态的进行加密了, 比如用 Cookie 里面的 SessionID 来作为秘钥
 >
-> 与之相关的一个 Demo, PHP aes-256-cfb (zeroPadding) 编码器
-> https://github.com/AntSwordProject/AwesomeEncoder/blob/master/php/aes_256_cfb_zero_padding.js
+> 与之相关的一个 Demo, PHP AES-256-CFB (zeroPadding) 编码器
+> https://github.com/AntSwordProject/AwesomeEncoder/blob/master/php/encoder/aes_256_cfb_zero_padding.js
+>
+> 另一个 Demo, PHP AES-128-ECB (zeroPadding) 编码器
+> https://github.com/AntSwordProject/AwesomeEncoder/blob/master/php/encoder/aes_128_ecb_zero_padding.js
 
 * 解码器新增 ext 参数, 用于获取 shell 配置和rsa私钥
+
+> 有了这个,解码器可以进行一些更为灵活的用法了. 比如用 Cookie 中的 SessionID 来作为秘钥, 对返回的内容进行解密
+>
+> 与之相关的一个 Demo, PHP AES-256-CFB (Zero Padding) 解码器
+> https://github.com/AntSwordProject/AwesomeEncoder/blob/master/php/decoder/aes_256_cfb_zero_padding.js
+>
+> 另一个 Demo, PHP AES-128-ECB (zeroPadding) 解码器
+> https://github.com/AntSwordProject/AwesomeEncoder/blob/master/php/decoder/aes_128_ecb_zero_padding.js
+
+PS: 可以用 `AES-256-CFB` 编码器, 对请求包进行加密, 返回包加密使用 `AES-128-ECB` 解码器
+
 * 支持加载用户自定义解码器
 
 ### 数据管理
