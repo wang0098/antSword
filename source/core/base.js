@@ -247,6 +247,10 @@ class Base {
    */
   request(code, chunkCallBack) {
     const opt = this.complete(code);
+    let ext = {
+      opts: this.__opts__,
+      rsa: this.rsaEncrypt()
+    }
     return new Promise((res, rej) => {
       // 随机ID(用于监听数据来源)
       const hash = (String(+new Date) + String(Math.random())).substr(10, 10).replace('.', '_');
@@ -256,8 +260,8 @@ class Base {
         .once(`request-${hash}`, (event, ret) => {
           return res({
             'encoding': ret['encoding'] || "",
-            'text': this.__decoder__[this.__opts__['decoder']||'default'].decode_str(ret['text']),
-            'buff': this.__decoder__[this.__opts__['decoder']||'default'].decode_buff(ret['buff'])
+            'text': this.__decoder__[this.__opts__['decoder']||'default'].decode_str(ret['text'], ext),
+            'buff': this.__decoder__[this.__opts__['decoder']||'default'].decode_buff(ret['buff'], ext)
           });
         })
         // HTTP请求返回字节流

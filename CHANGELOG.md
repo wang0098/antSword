@@ -14,6 +14,8 @@
 > 与之相关的一个 Demo, PHP aes-256-cfb (zeroPadding) 编码器
 > https://github.com/AntSwordProject/AwesomeEncoder/blob/master/php/aes_256_cfb_zero_padding.js
 
+* 解码器新增 ext 参数, 用于获取 shell 配置和rsa私钥
+
 ### 数据管理
 
 * 「添加数据」时自动载入「默认设置」中「数据管理」全局配置内容
