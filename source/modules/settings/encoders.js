@@ -282,6 +282,7 @@ class Encoders {
     editor.session.setUseWrapMode(true);
     editor.session.setWrapLimitRange(null, null);
     editor.setOptions({
+      tabSize: 2,
       fontSize: '14px',
       enableBasicAutocompletion: true,
       enableSnippets: true,
