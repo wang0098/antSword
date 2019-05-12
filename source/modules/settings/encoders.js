@@ -138,7 +138,7 @@ class Encoders {
               toastr.error(LANG["message"]["ename_invalid"], LANG_T['error']);
               return
             }
-            if (that._checkname(nValue, oetype)) {
+            if (that._checkname(nValue, oetype, oedtype)) {
               toastr.error(LANG['message']['ename_duplicate'], LANG_T['error']);
               return;
             }
@@ -151,7 +151,7 @@ class Encoders {
               toastr.error(LANG['message']["etype_error"], LANG_T['error']);
               return
             }
-            if (that._checkname(oename, nValue)) {
+            if (that._checkname(oename, nValue, oedtype)) {
               toastr.error(LANG['message']['ename_duplicate'], LANG_T['error']);
               return;
             }
@@ -190,7 +190,7 @@ class Encoders {
         toastr.error(LANG["message"]["ename_invalid"], LANG_T['error']);
         return
       }
-      if (self._checkname(value, type)) {
+      if (self._checkname(value, type, edtype)) {
         toastr.error(LANG["message"]["ename_duplicate"], LANG_T['error']);
         layer.close(i);
         return
@@ -550,8 +550,9 @@ module.exports = {
 }`;
   }
   // 检查 name 是否重复
-  _checkname(name, t) {
-    let tstr = ',' + antSword['encoders'][t].join(',') + ',';
+  _checkname(name, t, edtype) {
+    let key = `${edtype}s`;
+    let tstr = ',' + antSword[key][t].join(',') + ',';
     return tstr.indexOf("," + name + ",") != -1;
   }
   // 解析数据
