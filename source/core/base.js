@@ -58,6 +58,9 @@ class Base {
     this.user_encoders.map((_) => {
       this.parseEncoder(`${_}`);
     });
+    this.user_decoders.map((_) => {
+      this.parseDecoder(`${_}`);
+    });
   }
 
   /**

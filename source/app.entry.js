@@ -48,6 +48,11 @@ const antSword = window.antSword = {
    */
   encoders: {},
   /**
+   * 自定义解码器
+   * @type {Object}
+   */
+  decoders: {},
+  /**
    * 核心模块
    * @type {Object}
    */
@@ -174,6 +179,56 @@ antSword['encoders'] = (function(){
   //   encoders[farr[0]].push(farr[1]);
   // });
   return encoders;
+})();
+
+// 加载解码器
+antSword['decoders'] = (function() {
+  var decoders = {asp:[], aspx:[], php:[], custom:[]};
+  var decoders_path = {asp:[], aspx:[], php:[], custom:[]};
+  let userdecoder_path = path.join(remote.process.env.AS_WORKDIR, 'antData/encoders');
+  // 初始化
+  !fs.existsSync(userdecoder_path) ? fs.mkdirSync(userdecoder_path) : null;
+  ['asp', 'aspx', 'php', 'custom'].map((t)=>{
+    !fs.existsSync(path.join(userdecoder_path, `${t}`))? fs.mkdirSync(path.join(userdecoder_path, `${t}`)):null;
+    let t_path = path.join(userdecoder_path, `${t}/decoder/`);
+    !fs.existsSync(t_path) ? fs.mkdirSync(t_path) : null;
+
+    let es = fs.readdirSync(t_path);
+    if(es){
+      es.map((_)=>{
+        if(!_.endsWith(".js")){
+          return
+        }
+        decoders[t].push(_.slice(0,-3));
+        decoders_path[t].push(path.join(t_path, _.slice(0,-3)));
+      });
+    }
+    antSword["core"][t].prototype.user_decoders = decoders_path[t];
+  });
+
+  // // custom
+  // let es = fs.readdirSync(userdecoder_path);
+  // if(es){
+  //   es.map((_)=>{
+  //     console.log(_);
+  //     let farr = _.split("#");
+  //     encoders[farr[0]].push(farr[1].slice(0,-3));
+  //   });
+  // }
+  // default
+  // ['asp','aspx','php','custom'].map((t)=>{
+  //   antSword["core"][t].prototype.encoders.map((e)=>{
+  //     encoders[t].push(e);
+  //   });
+  //   encoders[t] = encoders[t].unique();
+  // });
+  // fs.readdirSync(path.join(process.env.AS_WORKDIR,'encoder'),(err,f) => {
+  //   if(err || !f) return ;
+  //   console.debug(f);
+  //   let farr = f.split("#");
+  //   encoders[farr[0]].push(farr[1]);
+  // });
+  return decoders;
 })();
 
 // 加载代理

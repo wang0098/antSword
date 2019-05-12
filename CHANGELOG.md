@@ -15,6 +15,7 @@
 > https://github.com/AntSwordProject/AwesomeEncoder/blob/master/php/aes_256_cfb_zero_padding.js
 
 * 解码器新增 ext 参数, 用于获取 shell 配置和rsa私钥
+* 支持加载用户自定义解码器
 
 ### 数据管理
 

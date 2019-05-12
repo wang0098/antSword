@@ -294,11 +294,11 @@ class Form {
       switch(c){
         case 'php4':
           encoders = antSword['core']['php4'].prototype.encoders.concat(antSword['encoders']['php']);
-          decoders = antSword['core'][c].prototype.decoders;
+          decoders = antSword['core']['php4'].prototype.decoders.concat(antSword['decoders']['php']);
         break;
         default:
           encoders = antSword['core'][c].prototype.encoders.concat(antSword['encoders'][c]);
-          decoders = antSword['core'][c].prototype.decoders;
+          decoders = antSword['core'][c].prototype.decoders.concat(antSword['decoders'][c]);
         break;
       }
       ret.push({
