@@ -653,8 +653,11 @@ Hot Keys:
     },
     encoders: {
       title: 'Encoder Manager',
+      encoder: "Encoder",
+      decoder: "Decoder",
       toolbar: {
-        new: "New",
+        new: "New Encoder",
+        new_decoder: "New Decoder",
         edit: "Edit",
         delete: "Delete",
         help: "Help",
@@ -665,7 +668,12 @@ Hot Keys:
       },
       grid: {
         ename: "Name",
-        etype: "Type"
+        etype: "Shell Type",
+        edtype: {
+          title: "Type",
+          encoder: "Encoder",
+          decoder: "Decoder",
+        },
       },
       form: {
         public_key: "Public Key",
@@ -673,17 +681,17 @@ Hot Keys:
         php_code: "PHP Code"
       },
       rsa_config_win_title: "RSA Encoder Config",
-      edit_win_title: "Edit Encoder",
-      delete_title: "Delete Encoder",
+      edit_win_title: "Edit",
+      delete_title: "Delete",
       message: {
-        ename_duplicate: "The encoder name cannot be duplicated",
+        ename_duplicate: "The name cannot be duplicated",
         rename_success: "Rename success",
-        etype_error: "Encoder type error",
+        etype_error: "Type error",
         retype_success: "Modify type success",
-        create_success: "Create encoder success",
+        create_success: "Create success",
         edit_not_select: "Please select the row you want to edit first",
         edit_only_single: "You can only edit one",
-        edit_null_value: "Encoder content can not be empty",
+        edit_null_value: "Content can not be empty",
         edit_save_success: "Save success",
         delete_not_select: "Please select the row you want to delete first",
         delete_success: "Delete success",
@@ -693,6 +701,7 @@ Hot Keys:
       },
       prompt: {
         create_encoder: "Create Encoder",
+        create_decoder: "Create Decoder",
       },
       confirm: {
         generate: 'Are you sure to regemerate RSA?',

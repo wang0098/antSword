@@ -18,6 +18,7 @@ class Encoders {
   constructor(sidebar) {
     var that = this;
     this.encoders = antSword["encoders"];
+    this.decoders = antSword["decoders"];
 
     let keyPath = path.join(remote.process.env.AS_WORKDIR, `antData/`);
     this.rsa = {
@@ -48,6 +49,14 @@ class Encoders {
           { id: 'new_php_rsa', icon: 'file-code-o', type: 'button', text: "PHP RSA" }
         ]
       },
+      {
+        type: 'buttonSelect', text: LANG['toolbar']['new_decoder'], icon: 'plus-circle', id: 'new_decoder', openAll: true,
+        options: [
+          { id: 'new_php_decoder', icon: 'file-code-o', type: 'button', text: "PHP" },
+          { type: 'separator' },
+          { id: 'new_custom_decoder', icon: 'file-code-o', type: 'button', text: "Custom" },
+        ]
+      },
       { type: 'separator' },
       { type: 'button', text: LANG['toolbar']['edit'], icon: 'fa fa-edit', id: 'edit' },
       { type: 'button', text: LANG['toolbar']['delete'], icon: 'fa fa-trash-o', id: 'delete' },
@@ -72,6 +81,12 @@ class Encoders {
         case "new_custom":
           that.createEncoder(id);
           break;
+        case "new_php_decoder":
+          that.createEncoder(id, 'decoder');
+          break;
+        case "new_custom_decoder":
+          that.createEncoder(id, 'decoder');
+          break;
         case "edit":
           that.editEncoder();
           break;
@@ -91,12 +106,13 @@ class Encoders {
     grid.setHeader(`
       &nbsp;,
       ${LANG['grid']['ename']},
-      ${LANG['grid']['etype']}
+      ${LANG['grid']['etype']},
+      ${LANG['grid']['edtype']['title']}
     `);
-    grid.setColTypes("ro,edtxt,coro");
-    grid.setColSorting('str,str,str');
-    grid.setInitWidths("40,*,150");
-    grid.setColAlign("center,left,center");
+    grid.setColTypes("ro,edtxt,coro,ro");
+    grid.setColSorting('str,str,str,str');
+    grid.setInitWidths("40,*,150,150");
+    grid.setColAlign("center,left,center,center");
     grid.enableMultiselect(true);
     var combobox = grid.getCombo(2);
     combobox.put("asp", "ASP");
@@ -113,6 +129,7 @@ class Encoders {
         var oename = grid.getRowAttribute(rId, "ename");
         var oepath = grid.getRowAttribute(rId, "epath");
         var oetype = grid.getRowAttribute(rId, "etype");
+        var oedtype = grid.getRowAttribute(rId, "edtype");
         oepath = oepath + ".js";
         switch (cInd) {
           case 1:
@@ -125,7 +142,7 @@ class Encoders {
               toastr.error(LANG['message']['ename_duplicate'], LANG_T['error']);
               return;
             }
-            fs.renameSync(oepath, path.join(remote.process.env.AS_WORKDIR, `antData/encoders/${oetype}/encoder/${nValue}.js`));
+            fs.renameSync(oepath, path.join(remote.process.env.AS_WORKDIR, `antData/encoders/${oetype}/${oedtype}/${nValue}.js`));
             toastr.success(LANG['message']["rename_success"], LANG_T["success"]);
             break
           case 2:
@@ -138,11 +155,16 @@ class Encoders {
               toastr.error(LANG['message']['ename_duplicate'], LANG_T['error']);
               return;
             }
-            fs.renameSync(oepath, path.join(remote.process.env.AS_WORKDIR, `antData/encoders/${nValue}/encoder/${oename}.js`));
+            if(oedtype === "decoder" && nValue != "php" && nValue != "custom") {
+              toastr.error("Not Support", LANG_T["error"]);
+              return;
+            }
+            fs.renameSync(oepath, path.join(remote.process.env.AS_WORKDIR, `antData/encoders/${nValue}/${oedtype}/${oename}.js`));
             toastr.success(LANG['message']["retype_success"], LANG_T["success"]);
             break
         }
         that.syncencoders();
+        that.syncdecoders();
       }
     });
     grid.init();
@@ -153,14 +175,15 @@ class Encoders {
   }
 
   // 创建新的编码器
-  createEncoder(id) {
+  createEncoder(id, edtype="encoder") {
     let self = this;
     let idArr = id.split('_');
     let type = idArr[1];
-    let rsa = idArr.length >= 3 ? '_rsa' : '';
+    let rsa = idArr.length >= 3 ? (idArr[2] === 'rsa' ? '_rsa':'') : '';
+
     layer.prompt({
-      value: `myencoder`,
-      title: `<i class="fa fa-file-code-o"></i> ${LANG["prompt"]["create_encoder"]}`
+      value: `my${edtype}`,
+      title: `<i class="fa fa-file-code-o"></i> `+ LANG["prompt"][`create_${edtype}`]
     }, (value, i, e) => {
       value = value.toLocaleLowerCase();
       if (!value.match(/^[a-zA-Z0-9_]+$/)) {
@@ -172,9 +195,19 @@ class Encoders {
         layer.close(i);
         return
       }
-      let savePath = path.join(remote.process.env.AS_WORKDIR, `antData/encoders/${type}/encoder/${value}${rsa}.js`);
+      let savePath = path.join(remote.process.env.AS_WORKDIR, `antData/encoders/${type}/${edtype}/${value}${rsa}.js`);
 
-      fs.writeFileSync(savePath, rsa ? self.default_rsa_template : self.default_template);
+      let filedata = '';
+      if (edtype === 'encoder') {
+        if(rsa) {
+          filedata = self.default_rsa_template;
+        }else{
+          filedata = self.default_template;
+        }
+      }else{
+        filedata = self.default_decoder_template;
+      }
+      fs.writeFileSync(savePath, filedata);
 
       var ids = self.grid.getAllRowIds();
       let _id = 1;
@@ -182,11 +215,15 @@ class Encoders {
         _id = parseInt(ids[ids.length - 1]);
       }
       _id++;
-      self.grid.addRow(_id, `${_id},${antSword.noxss(value)},${type}`);
+      self.grid.addRow(_id, `${_id},${antSword.noxss(value)},${type},${edtype}`);
       toastr.success(LANG["message"]["create_success"], LANG_T["success"]);
       self.cell.progressOff();
       layer.close(i);
-      self.syncencoders();
+      if(edtype === 'encoder') {
+        self.syncencoders();
+      }else{
+        self.syncdecoders();
+      }
     });
   }
 
@@ -207,9 +244,10 @@ class Encoders {
     let _id = _ids[0];
     const ename = self.grid.getRowAttribute(_id, 'ename');
     const epath = self.grid.getRowAttribute(_id, 'epath');
+    const edtype = self.grid.getRowAttribute(_id, 'edtype');
     let buff = fs.readFileSync(epath + ".js");
     let opt = {
-      title: `${LANG["edit_win_title"]}: ${ename}`,
+      title: `${LANG["edit_win_title"]}${LANG[edtype]}: ${ename}`,
       width: 800,
       height: 600,
     };
@@ -265,7 +303,11 @@ class Encoders {
     // 定时刷新
     const inter = setInterval(editor.resize.bind(editor), 200);
     _win.win.attachEvent('onClose', () => {
-      self.syncencoders();
+      if(edtype === 'encoder') {
+        self.syncencoders();
+      }else{
+        self.syncdecoders();
+      }
       clearInterval(inter);
       return true;
     });
@@ -404,6 +446,7 @@ eval($cmd);`);
         });
         toastr.success(LANG["message"]["delete_success"], LANG_T["success"]);
         self.syncencoders();
+        self.syncdecoders();
       });
   }
 
@@ -420,7 +463,7 @@ eval($cmd);`);
 * @param  {Array}  data  编码器处理前的 payload 数组
 * @return {Array}  data  编码器处理后的 payload 数组
 */
-module.exports = (pwd, data) => {
+module.exports = (pwd, data, ext={}) => {
   // ##########    请在下方编写你自己的代码   ###################
   // 以下代码为 PHP Base64 样例
 
@@ -455,7 +498,7 @@ module.exports = (pwd, data) => {
  * @param  {Array}  data  编码器处理前的 payload 数组
  * @return {Array}  data  编码器处理后的 payload 数组
  */
-module.exports = (pwd, data, ext) => {
+module.exports = (pwd, data, ext={}) => {
     let n = Math.ceil(data['_'].length / 80);
     let l = Math.ceil(data['_'].length / n);
     let r = []
@@ -465,6 +508,44 @@ module.exports = (pwd, data, ext) => {
     data[pwd] = r.join("|");
     delete data['_'];
     return data;
+}`;
+  }
+  get default_decoder_template() {
+    return `/**
+ * php::base64解码器
+ * Create at: ${new Date().format("yyyy/MM/dd hh:mm:ss")}
+ */
+
+'use strict';
+
+module.exports = {
+  /**
+   * @returns {string} asenc 将返回数据base64编码
+   * 自定义输出函数名称必须为 asenc
+   * 该函数使用的语法需要和shell保持一致
+   */
+  asoutput: () => {
+    return \`function asenc($out){
+      return @base64_encode($out);
+    }
+    \`.replace(/\\n\\s+/g, '');
+  },
+  /**
+   * 解码字符串
+   * @param {string} data 要被解码的字符串
+   * @returns {string} 解码后的字符串
+   */
+  decode_str: (data, ext={}) => {
+    return Buffer.from(data, 'base64').toString();
+  },
+  /**
+   * 解码 Buffer
+   * @param {string} data 要被解码的 Buffer
+   * @returns {string} 解码后的 Buffer
+   */
+  decode_buff: (data, ext={}) => {
+    return Buffer.from(data.toString(), 'base64');
+  }
 }`;
   }
   // 检查 name 是否重复
@@ -484,11 +565,32 @@ module.exports = (pwd, data, ext) => {
           id: _id,
           ename: _,
           epath: path.join(remote.process.env.AS_WORKDIR, `antData/encoders/${t}/encoder/${_}`),
-          etype: t,
+          etype: t, // shell Type
+          edtype: 'encoder',
           data: [
             `<i class="fa fa-file-code-o"></i>`,
             antSword.noxss(_),
-            t
+            t,
+            LANG['grid']['edtype']['encoder']
+          ]
+        });
+        _id++;
+      });
+    });
+
+    Object.keys(self.decoders).map((t) => {
+      self.decoders[t].map(_ => {
+        data.push({
+          id: _id,
+          ename: _,
+          epath: path.join(remote.process.env.AS_WORKDIR, `antData/encoders/${t}/decoder/${_}`),
+          etype: t, // shell Type
+          edtype: 'decoder',
+          data: [
+            `<i class="fa fa-file-code-o"></i>`,
+            antSword.noxss(_),
+            t,
+            `<span style="color:green;">${LANG['grid']['edtype']['decoder']}</span>`
           ]
         });
         _id++;
@@ -529,6 +631,37 @@ module.exports = (pwd, data, ext) => {
       return encoders;
     })();
     this.encoders = antSword["encoders"];
+    this.parseData();
+  }
+
+  // 同步到全局编码器
+  syncdecoders() {
+    antSword['decoders'] = (function () {
+      var decoders = { asp: [], aspx: [], php: [], custom: [] };
+      var decoders_path = { asp: [], aspx: [], php: [], custom: [] };
+      let userdecoder_path = path.join(remote.process.env.AS_WORKDIR, 'antData/encoders');
+      // 初始化
+      !fs.existsSync(userdecoder_path) ? fs.mkdirSync(userdecoder_path) : null;
+      ['asp', 'aspx', 'php', 'custom'].map((t) => {
+        !fs.existsSync(path.join(userdecoder_path, `${t}`)) ? fs.mkdirSync(path.join(userdecoder_path, `${t}`)) : null;
+        let t_path = path.join(userdecoder_path, `${t}/decoder/`);
+        !fs.existsSync(t_path) ? fs.mkdirSync(t_path) : null;
+
+        let es = fs.readdirSync(t_path);
+        if (es) {
+          es.map((_) => {
+            if (!_.endsWith(".js")) {
+              return
+            }
+            decoders[t].push(_.slice(0, -3));
+            decoders_path[t].push(path.join(t_path, _.slice(0, -3)));
+          });
+        }
+        antSword["core"][t].prototype.user_decoders = decoders_path[t];
+      });
+      return decoders;
+    })();
+    this.decoders = antSword["decoders"];
     this.parseData();
   }
 }

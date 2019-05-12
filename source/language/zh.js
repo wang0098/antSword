@@ -655,8 +655,11 @@ module.exports = {
     },
     encoders: {
       title: '编码管理',
+      encoder: "编码器",
+      decoder: "解码器",
       toolbar: {
-        new: "新建",
+        new: "新建编码器",
+        new_decoder: "新建解码器",
         edit: "编辑",
         delete: "删除",
         help: "帮助",
@@ -667,7 +670,12 @@ module.exports = {
       },
       grid: {
         ename: "名称",
-        etype: "类型"
+        etype: "Shell类型",
+        edtype: {
+          title: "类型",
+          encoder: "编码器",
+          decoder: "解码器",
+        },
       },
       form: {
         public_key: "公钥",
@@ -675,17 +683,17 @@ module.exports = {
         php_code: "PHP 代码"
       },
       rsa_config_win_title: "RSA编码器配置",
-      edit_win_title: "编辑编码器",
-      delete_title: "删除编码器",
+      edit_win_title: "编辑",
+      delete_title: "删除",
       message: {
-        ename_duplicate: "编码器名称不能重复",
+        ename_duplicate: "名称不能重复",
         rename_success: "重命名成功",
-        etype_error: "编码器类型错误",
+        etype_error: "类型错误",
         retype_success: "类型修改成功",
-        create_success: "新增编码器成功",
+        create_success: "新增成功",
         edit_not_select: "请先选中要编辑的行",
         edit_only_single: "只能编辑一个",
-        edit_null_value: "编码器内容不能为空",
+        edit_null_value: "内容不能为空",
         edit_save_success: "保存成功",
         delete_not_select: "请先选中要删除的行",
         delete_success: "删除成功",
@@ -695,6 +703,7 @@ module.exports = {
       },
       prompt: {
         create_encoder: "创建编码器",
+        create_decoder: "创建解码器",
       },
       confirm: {
         generate: '你确定要重新生成?',
