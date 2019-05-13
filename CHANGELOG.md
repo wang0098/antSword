@@ -2,12 +2,12 @@
 > 有空会补补BUG、添添新功能。    
 > 同时也欢迎大家的参与！感谢各位朋友的支持！ .TAT.
 
-## `v(2.1.2)`
+## 2019/05/13 `v(2.1.2)`
 
 ### 核心模块
 
-* 修复 download multipart 发包时 download 发包为空的问题 (asunescape 功能引起)
-* 编码器 ext 参数新增元素 opts, 值为当前 shell 的配置
+* 修复 multipart 发包方式 download 发包为空的问题 (`asunescape` 功能引起), 更新后需要关闭程序重启后生效
+* 编码器 `ext` 参数新增元素 `opts`, 值为当前 shell 的配置
 
 > 有了这个,你就可以根据 shell 的配置信息来动态的进行加密了, 比如用 Cookie 里面的 SessionID 来作为秘钥
 >
@@ -17,7 +17,7 @@
 > 另一个 Demo, PHP AES-128-ECB (zeroPadding) 编码器
 > https://github.com/AntSwordProject/AwesomeEncoder/blob/master/php/encoder/aes_128_ecb_zero_padding.js
 
-* 解码器新增 ext 参数, 用于获取 shell 配置和rsa私钥
+* 解码器新增 `ext` 参数, 用于获取 shell 配置和rsa私钥
 
 > 有了这个,解码器可以进行一些更为灵活的用法了. 比如用 Cookie 中的 SessionID 来作为秘钥, 对返回的内容进行解密
 >
@@ -29,13 +29,13 @@
 
 PS: 
 
-可以用 `AES-256-CFB` 编码器, 对请求包进行加密, 返回包加密使用 `AES-128-ECB` 解码器
+* 可以用 `AES-256-CFB` 编码器, 对请求包进行加密, 返回包加密使用 `AES-128-ECB` 解码器
 
-可以用 `AES-128-ECB` 编码器, 对请求包进行加密, 返回包加密使用 `AES-256-CFB` 解码器
+* 也可以用 `AES-128-ECB` 编码器, 对请求包进行加密, 返回包加密使用 `AES-256-CFB` 解码器
 
-当然, 你可以根据自己的喜好, 用自己喜欢的 AES 加密方式, 这些怎么组合, 都看你
+当然, 你可以根据自己的喜好, 用自己喜欢的 AES 加密方式, 这些怎么组合, 都看你。你要不喜欢用 AES, 你想用什么就用什么。
 
-* 支持加载用户自定义解码器
+* 支持加载用户自定义解码器, 同编码器一样, 现在可以加载用户自己自定义的解码器了, 以PHP为例, 加载位置为 `antData/encoders/php/decoder/`
 
 ### 数据管理
 
@@ -55,6 +55,12 @@ PS:
 * 更新提示窗口新增 ReleaseNote 显示(缩放显示,图片看不清可直接前往 github 查看详细更新日志), 新增 「更新日志」按钮(点击后直接打开 github release 页)
 * 「编码管理」新增「获取更多」按钮, 打开浏览器访问 AwesomeEncoder(自定义编码器分享), 如果你有比较好的 Encoder, 欢迎向这个仓库提PR
 * 「编码管理」新增解码器管理, 可创建自定义解码器
+
+![aencoder.png](https://i.loli.net/2019/05/13/5cd95654c75ac23085.png)
+
+* 新增第三方库 `crypto-js` 3.1.9-1 , 可以更方便的进行各种加解密处理了
+
+> nodejs 自带 `crypto` 库, 也可使用 `crypto-js` 这个库来进行加密处理, 这个第三方库使用起来相对更简单一些, 但同时限制也会多一些, 自行取舍
 
 ## 2019/04/27 `v(2.1.1)`
 
