@@ -24,10 +24,16 @@
 > 与之相关的一个 Demo, PHP AES-256-CFB (Zero Padding) 解码器
 > https://github.com/AntSwordProject/AwesomeEncoder/blob/master/php/decoder/aes_256_cfb_zero_padding.js
 >
-> 另一个 Demo, PHP AES-128-ECB (zeroPadding) 解码器
-> https://github.com/AntSwordProject/AwesomeEncoder/blob/master/php/decoder/aes_128_ecb_zero_padding.js
+> 另一个 Demo, PHP AES-128-ECB (pkcs7Padding) 解码器
+> https://github.com/AntSwordProject/AwesomeEncoder/blob/master/php/decoder/aes_128_ecb_pkcs7_padding.js
 
-PS: 可以用 `AES-256-CFB` 编码器, 对请求包进行加密, 返回包加密使用 `AES-128-ECB` 解码器
+PS: 
+
+可以用 `AES-256-CFB` 编码器, 对请求包进行加密, 返回包加密使用 `AES-128-ECB` 解码器
+
+可以用 `AES-128-ECB` 编码器, 对请求包进行加密, 返回包加密使用 `AES-256-CFB` 解码器
+
+当然, 你可以根据自己的喜好, 用自己喜欢的 AES 加密方式, 这些怎么组合, 都看你
 
 * 支持加载用户自定义解码器
 
