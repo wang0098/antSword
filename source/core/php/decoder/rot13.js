@@ -20,10 +20,7 @@ module.exports = {
     }
     `.replace(/\n\s+/g, '');
   },
-  decode_str: (data) => {
-    return rot13encode(data);
-  },
-  decode_buff: (data) => {
-    return Buffer.from(rot13encode(data.toString()));
+  decode_buff: (buff) => {
+    return Buffer.from(rot13encode(buff.toString()));
   }
 }

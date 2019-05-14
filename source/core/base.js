@@ -261,10 +261,14 @@ class Base {
       antSword['ipcRenderer']
         // 请求完毕返回数据{text,buff}
         .once(`request-${hash}`, (event, ret) => {
+          let buff = this.__decoder__[this.__opts__['decoder']||'default'].decode_buff(ret['buff'], ext);
+          let encoding = antSword.Decodes.detectEncoding(buff, {defaultEncoding: "unknown"});
+          encoding = encoding != "unknown" ? encoding : this.__opts__['encode'];
+          let text = antSword.Decodes.decode(buff, encoding);
           return res({
-            'encoding': ret['encoding'] || "",
-            'text': this.__decoder__[this.__opts__['decoder']||'default'].decode_str(ret['text'], ext),
-            'buff': this.__decoder__[this.__opts__['decoder']||'default'].decode_buff(ret['buff'], ext)
+            'encoding': encoding || "",
+            'text': text,
+            'buff': buff,
           });
         })
         // HTTP请求返回字节流
