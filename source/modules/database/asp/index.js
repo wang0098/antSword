@@ -5,6 +5,7 @@
 
 const LANG = antSword['language']['database'];
 const LANG_T = antSword['language']['toastr'];
+const dialog = antSword.remote.dialog;
 
 class ASP {
 
@@ -666,7 +667,6 @@ class ASP {
   dumpResult() {
     const grid = this.manager.result.layout.getAttachedObject();
     let filename = `${this.core.__opts__.ip}_${new Date().format("yyyyMMddhhmmss")}.csv`;
-    antSword['test'] = this;
     dialog.showSaveDialog({
       title: LANG['result']['dump']['title'],
       defaultPath: filename

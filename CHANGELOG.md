@@ -15,6 +15,7 @@
 ### 其它
 
 * 修复 `jsp_custom_script_for_mysql.jsp` 使用 `base64` 编码器连接数据库时 `characterEncoding` 二次解码导致的无法识别的问题 #171
+* 修复 `ASP`、`Custom` 数据库管理导出问题 #172
 
 ## 2019/05/13 `v(2.1.2)`
 
