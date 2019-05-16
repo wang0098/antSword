@@ -6,6 +6,7 @@
 const LANG = antSword['language']['database'];
 const LANG_T = antSword['language']['toastr'];
 const dialog = antSword.remote.dialog;
+const fs = require('fs');
 
 class ASP {
 
