@@ -11,6 +11,7 @@
 > `decode_str` 其实相当于是 `decode_buff` 执行后调用了 `toString`
 
 * 解码器解码后, 增加猜解字符编码流程
+* 修复 PHP mysqli 指定其它端口时失败的问题
 
 ### 其它
 
