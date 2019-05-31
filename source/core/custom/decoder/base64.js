@@ -20,6 +20,6 @@ module.exports = {
    * @returns {string} 解码后的 Buffer
    */
   decode_buff: (data, ext={}) => {
-    return Buffer.from(data, 'base64');
+    return Buffer.from(data.toString(), 'base64');
   }
 }

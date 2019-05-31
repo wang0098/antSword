@@ -21,6 +21,6 @@ module.exports = {
    * @returns {string} 解码后的 Buffer
    */
   decode_buff: (data, ext={}) => {
-    return Buffer.from(Buffer.from(data, 'hex'), 'base64');
+    return Buffer.from(Buffer.from(data.toString(), 'hex').toString(), 'base64');
   }
 }

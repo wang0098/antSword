@@ -20,6 +20,6 @@ module.exports = {
    * @returns {string} 解码后的 Buffer
    */
   decode_buff: (data, ext={}) => {
-    return Buffer.from(data, 'hex');
+    return Buffer.from(data.toString(), 'hex');
   }
 }
