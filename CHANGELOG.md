@@ -12,11 +12,15 @@
 
 * 解码器解码后, 增加猜解字符编码流程
 * 修复 PHP mysqli 指定其它端口时失败的问题
+* CUSTOM 类型新增 `hex`, `base64`, `hex_base64` 三种类型解码器 (需要对应 Shell 实现该功能, 参考: `jsp_custom_script_for_mysql.jsp`)
+
+ > hex_base64 是指 shell 返回数据时, 先将明文数据使用 base64 编码, 再将结果 hex 编码
 
 ### 其它
 
 * 修复 `jsp_custom_script_for_mysql.jsp` 使用 `base64` 编码器连接数据库时 `characterEncoding` 二次解码导致的无法识别的问题 #171
 * 修复 `ASP`、`Custom` 数据库管理导出问题 #172
+* `jsp_custom_script_for_mysql.jsp` 新增解码器支持
 
 ## 2019/05/13 `v(2.1.2)`
 

