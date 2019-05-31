@@ -12,7 +12,7 @@
 ———————————————————————————————————————————————
 
 说明：
- 1. AntSword >= v1.1-dev
+ 1. AntSword >= v2.1.0
  2. 创建 Shell 时选择 custom 模式连接
  3. 数据库连接：
     com.mysql.jdbc.Driver

