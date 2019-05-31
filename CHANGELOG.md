@@ -16,6 +16,10 @@
 
  > hex_base64 是指 shell 返回数据时, 先将明文数据使用 base64 编码, 再将结果 hex 编码
 
+* ASPX 新增 `url_unicode` 编码器 (thx @yzddmr6 https://github.com/AntSwordProject/AwesomeEncoder/issues/2)
+
+> 将 pwd payload 全部转换成 `%uxxxx` 这种形式, eg: `Re` => `%u0052%u0065`
+
 ### 其它
 
 * 修复 `jsp_custom_script_for_mysql.jsp` 使用 `base64` 编码器连接数据库时 `characterEncoding` 二次解码导致的无法识别的问题 #171
