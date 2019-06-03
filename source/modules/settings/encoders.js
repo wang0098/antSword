@@ -532,14 +532,6 @@ module.exports = {
     \`.replace(/\\n\\s+/g, '');
   },
   /**
-   * 解码字符串
-   * @param {string} data 要被解码的字符串
-   * @returns {string} 解码后的字符串
-   */
-  decode_str: (data, ext={}) => {
-    return Buffer.from(data, 'base64').toString();
-  },
-  /**
    * 解码 Buffer
    * @param {string} data 要被解码的 Buffer
    * @returns {string} 解码后的 Buffer
