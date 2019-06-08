@@ -16,7 +16,8 @@ class Menubar {
     // 清空菜单栏
     Menu.setApplicationMenu(Menu.buildFromTemplate([]));
     // 监听重载菜单事件
-    electron.ipcMain
+    electron
+      .ipcMain
       .on('quit', app.quit.bind(app))
       .on('menubar', this.reload.bind(this));
 
@@ -46,77 +47,119 @@ class Menubar {
           {
             label: LANG['main']['about'],
             accelerator: 'Shift+CmdOrCtrl+I',
-            click: event.sender.send.bind(event.sender, 'menubar', 'settings-about')
+            click: event
+              .sender
+              .send
+              .bind(event.sender, 'menubar', 'settings-about')
           }, {
             label: LANG['main']['language'],
             accelerator: 'Shift+CmdOrCtrl+L',
-            click: event.sender.send.bind(event.sender, 'menubar', 'settings-language')
+            click: event
+              .sender
+              .send
+              .bind(event.sender, 'menubar', 'settings-language')
           }, {
             label: LANG['main']['aproxy'],
             accelerator: 'Shift+CmdOrCtrl+A',
-            click: event.sender.send.bind(event.sender, 'menubar', 'settings-aproxy')
+            click: event
+              .sender
+              .send
+              .bind(event.sender, 'menubar', 'settings-aproxy')
           }, {
             label: LANG['main']['display'],
             accelerator: 'Shift+CmdOrCtrl+D',
-            click: event.sender.send.bind(event.sender, 'menubar', 'settings-display')
+            click: event
+              .sender
+              .send
+              .bind(event.sender, 'menubar', 'settings-display')
           }, {
             type: 'separator'
           }, {
             label: LANG['main']['encoders'],
             accelerator: 'Shift+CmdOrCtrl+E',
-            click: event.sender.send.bind(event.sender, 'menubar', 'settings-encoders')
+            click: event
+              .sender
+              .send
+              .bind(event.sender, 'menubar', 'settings-encoders')
           }, {
             type: 'separator'
           }, {
             label: LANG['main']['settings'],
             accelerator: 'Shift+CmdOrCtrl+S',
-            click: event.sender.send.bind(event.sender, 'menubar', 'settings')
+            click: event
+              .sender
+              .send
+              .bind(event.sender, 'menubar', 'settings')
           }, {
             type: 'separator'
           }, {
             label: LANG['main']['pluginStore'],
             accelerator: 'Shift+CmdOrCtrl+P',
-            click: event.sender.send.bind(event.sender, 'menubar', 'plugin-store')
+            click: event
+              .sender
+              .send
+              .bind(event.sender, 'menubar', 'plugin-store')
           }, {
             type: 'separator'
           }, {
             label: LANG['main']['update'],
             accelerator: 'Shift+CmdOrCtrl+U',
-            click: event.sender.send.bind(event.sender, 'menubar', 'check-update')
-          },{
+            click: event
+              .sender
+              .send
+              .bind(event.sender, 'menubar', 'check-update')
+          }, {
             type: 'separator'
           }, {
             label: LANG['main']['quit'],
             accelerator: 'Command+Q',
-            click: this.app.quit.bind(this.app)
-          },
+            click: this
+              .app
+              .quit
+              .bind(this.app)
+          }
         ]
       }, {
         // 编辑
         label: LANG['edit']['title'],
         submenu: [
           {
-            label: LANG['edit']['undo'], accelerator: 'CmdOrCtrl+Z', role: 'undo'
+            label: LANG['edit']['undo'],
+            accelerator: 'CmdOrCtrl+Z',
+            role: 'undo'
           }, {
-            label: LANG['edit']['redo'], accelerator: 'Shift+CmdOrCtrl+Z', role: 'redo'
+            label: LANG['edit']['redo'],
+            accelerator: 'Shift+CmdOrCtrl+Z',
+            role: 'redo'
           }, {
             type: 'separator'
           }, {
-            label: LANG['edit']['cut'], accelerator: 'CmdOrCtrl+X', role: 'cut'
+            label: LANG['edit']['cut'],
+            accelerator: 'CmdOrCtrl+X',
+            role: 'cut'
           }, {
-            label: LANG['edit']['copy'], accelerator: 'CmdOrCtrl+C', role: 'copy'
+            label: LANG['edit']['copy'],
+            accelerator: 'CmdOrCtrl+C',
+            role: 'copy'
           }, {
-            label: LANG['edit']['paste'], accelerator: 'CmdOrCtrl+V', role: 'paste'
+            label: LANG['edit']['paste'],
+            accelerator: 'CmdOrCtrl+V',
+            role: 'paste'
           }, {
             type: 'separator'
           }, {
             label: LANG['edit']['search'],
             accelerator: 'Shift+CmdOrCtrl+F',
-            click: event.sender.send.bind(event.sender, 'menubar', 'shellmanager-search')
+            click: event
+              .sender
+              .send
+              .bind(event.sender, 'menubar', 'shellmanager-search')
           }, {
             type: 'separator'
           }, {
-            label: LANG['edit']['selectall'], accelerator: 'CmdOrCtrl+A', role: 'selectall'
+            label: LANG['edit']['selectall'],
+            accelerator: 'CmdOrCtrl+A',
+            role: 'selectall'
           }
         ]
       }, {
@@ -124,16 +167,28 @@ class Menubar {
         label: LANG['window']['title'],
         submenu: [
           {
-            label: LANG['window']['next'], accelerator: 'Shift+CmdOrCtrl+Right',
-            click: event.sender.send.bind(event.sender, 'menubar', 'tabbar-next')
+            label: LANG['window']['next'],
+            accelerator: 'Shift+CmdOrCtrl+Right',
+            click: event
+              .sender
+              .send
+              .bind(event.sender, 'menubar', 'tabbar-next')
           }, {
-            label: LANG['window']['prev'], accelerator: 'Shift+CmdOrCtrl+Left',
-            click: event.sender.send.bind(event.sender, 'menubar', 'tabbar-prev')
+            label: LANG['window']['prev'],
+            accelerator: 'Shift+CmdOrCtrl+Left',
+            click: event
+              .sender
+              .send
+              .bind(event.sender, 'menubar', 'tabbar-prev')
           }, {
             type: 'separator'
           }, {
-            label: LANG['window']['close'], accelerator: 'Shift+CmdOrCtrl+W',
-            click: event.sender.send.bind(event.sender, 'menubar', 'tabbar-close')
+            label: LANG['window']['close'],
+            accelerator: 'Shift+CmdOrCtrl+W',
+            click: event
+              .sender
+              .send
+              .bind(event.sender, 'menubar', 'tabbar-close')
           }
         ]
       }, {
@@ -148,27 +203,42 @@ class Menubar {
               if (this.electron.BrowserWindow.getAllWindows().length > 1) {
                 return;
               }
-              this.mainWindow.webContents.loadURL('ant-views://front/index.html');//.bind(this.mainWindow.webContents)
+              this
+                .mainWindow
+                .webContents
+                .loadURL('ant-views://front/index.html'); //.bind(this.mainWindow.webContents)
             }
           }, {
             label: LANG['debug']['devtools'],
             accelerator: 'Alt+CmdOrCtrl+J',
-            click: this.mainWindow.webContents.toggleDevTools.bind(this.mainWindow.webContents)
+            click: this
+              .mainWindow
+              .webContents
+              .toggleDevTools
+              .bind(this.mainWindow.webContents)
           }
         ]
       }
     ];
     // 更新菜单栏
-    this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(template));
+    this
+      .Menu
+      .setApplicationMenu(this.Menu.buildFromTemplate(template));
     if (this.trayIcon) {
-      this.trayIcon.setContextMenu(this.Menu.buildFromTemplate([]));  
-    }else{
+      this
+        .trayIcon
+        .setContextMenu(this.Menu.buildFromTemplate([]));
+    } else {
       let image;
       if (process.platform === 'darwin' || process.platform === 'linux') {
-         image = this.nativeImage.createFromPath(this.path.join(__dirname, '../static/imgs/tray-icon-mac-2.png'));
-      }else{
+        image = this
+          .nativeImage
+          .createFromPath(this.path.join(__dirname, '../static/imgs/tray-icon-mac-2.png'));
+      } else {
         // windows下的Tray图标
-        image = this.nativeImage.createFromPath(this.path.join(__dirname, '../static/imgs/tray-icon-win-colorful.ico'));
+        image = this
+          .nativeImage
+          .createFromPath(this.path.join(__dirname, '../static/imgs/tray-icon-win-colorful.ico'));
       }
       image.setTemplateImage(true);
       this.trayIcon = new this.Tray(image);
@@ -177,20 +247,29 @@ class Menubar {
       {
         label: LANG['tray']['show'],
         click: () => {
-          this.mainWindow.show();
+          this
+            .mainWindow
+            .show();
         }
       }, {
         label: LANG['tray']['hide'],
         click: () => {
           if (process.platform == 'darwin') {
-            this.app.hide();
-          }else{
-            this.mainWindow.hide();
+            this
+              .app
+              .hide();
+          } else {
+            this
+              .mainWindow
+              .hide();
           }
         }
       }, {
         label: LANG['tray']['settings'],
-        click: event.sender.send.bind(event.sender, 'menubar', 'settings')
+        click: event
+          .sender
+          .send
+          .bind(event.sender, 'menubar', 'settings')
       }, {
         label: LANG['debug']['restart'],
         click: () => {
@@ -198,31 +277,51 @@ class Menubar {
           if (this.electron.BrowserWindow.getAllWindows().length > 1) {
             return;
           }
-          this.mainWindow.webContents.loadURL('ant-views://front/index.html');
+          this
+            .mainWindow
+            .webContents
+            .loadURL('ant-views://front/index.html');
         }
       }, {
         label: LANG['tray']['about'],
-        click: event.sender.send.bind(event.sender, 'menubar', 'settings-about')
+        click: event
+          .sender
+          .send
+          .bind(event.sender, 'menubar', 'settings-about')
       }, {
         type: 'separator'
       }, {
         label: LANG['tray']['quit'],
-        click: this.app.quit.bind(this.app)
+        click: this
+          .app
+          .quit
+          .bind(this.app)
       }
     ];
 
-    this.trayIcon.on('click', () => {
-      if (process.platform == 'darwin') return;
-      if (this.mainWindow.isVisible()) {
-          this.mainWindow.hide();
-      }else{
-        this.mainWindow.show();
-      }
-    });
+    this
+      .trayIcon
+      .on('click', () => {
+        if (process.platform == 'darwin') 
+          return;
+        if (this.mainWindow.isVisible()) {
+          this
+            .mainWindow
+            .hide();
+        } else {
+          this
+            .mainWindow
+            .show();
+        }
+      });
 
-    this.trayIcon.setToolTip(LANG['tray']['tip']);
+    this
+      .trayIcon
+      .setToolTip(LANG['tray']['tip']);
 
-    this.trayIcon.setContextMenu(this.Menu.buildFromTemplate(trayMenuTemplate));
+    this
+      .trayIcon
+      .setContextMenu(this.Menu.buildFromTemplate(trayMenuTemplate));
 
   }
 

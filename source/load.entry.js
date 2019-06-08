@@ -11,7 +11,9 @@
 const path = require('path');
 const Module = require('module').Module;
 const {remote} = require('electron');
-Module.globalPaths.push(path.join(remote.process.env.AS_WORKDIR, 'source'));
+Module
+  .globalPaths
+  .push(path.join(remote.process.env.AS_WORKDIR, 'source'));
 
 // 开始加载时间
 let APP_START_TIME = +new Date;
@@ -22,39 +24,40 @@ window.addEventListener('load', () => {
    * @param  {String} format 格式化字符串，如yyyy/mm/dd hh:ii:ss
    * @return {String}        格式化完毕的字符串
    */
-  Date.prototype.format = function(format) {
+  Date.prototype.format = function (format) {
     let o = {
-      "M+" : this.getMonth()+1,
-      "d+" : this.getDate(),
-      "h+" : this.getHours(),
-      "m+" : this.getMinutes(),
-      "s+" : this.getSeconds(),
-      "q+" : Math.floor((this.getMonth()+3)/3),
-      "S" : this.getMilliseconds()
+      "M+": this.getMonth() + 1,
+      "d+": this.getDate(),
+      "h+": this.getHours(),
+      "m+": this.getMinutes(),
+      "s+": this.getSeconds(),
+      "q+": Math.floor((this.getMonth() + 3) / 3),
+      "S": this.getMilliseconds()
     }
-    if(/(y+)/.test(format)) {
-      format=format.replace(RegExp.$1, (this.getFullYear()+"").substr(4- RegExp.$1.length))
+    if (/(y+)/.test(format)) {
+      format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length))
     };
-    for(let k in o) {
-      if(new RegExp("("+ k +")").test(format)) {
-        format = format.replace(RegExp.$1, RegExp.$1.length==1? o[k] : ("00"+ o[k]).substr((""+ o[k]).length));
+    for (let k in o) {
+      if (new RegExp("(" + k + ")").test(format)) {
+        format = format.replace(RegExp.$1, RegExp.$1.length == 1
+          ? o[k]
+          : ("00" + o[k]).substr(("" + o[k]).length));
       }
     }
     return format;
   }
 
-  Array.prototype.unique = function(){
+  Array.prototype.unique = function () {
     var res = [];
     var json = {};
-    for(var i = 0; i < this.length; i++){
-      if(!json[this[i]]){
+    for (var i = 0; i < this.length; i++) {
+      if (!json[this[i]]) {
         res.push(this[i]);
         json[this[i]] = 1;
       }
     }
     return res;
   }
-
 
   /**
    * 加载JS函数
@@ -66,7 +69,9 @@ window.addEventListener('load', () => {
       let script = document.createElement('script');
       script.src = js;
       script.onload = res;
-      document.head.appendChild(script);
+      document
+        .head
+        .appendChild(script);
     });
   }
 
@@ -81,7 +86,9 @@ window.addEventListener('load', () => {
       style.rel = 'stylesheet';
       style.href = css;
       style.onload = res;
-      document.head.appendChild(style);
+      document
+        .head
+        .appendChild(style);
     });
   }
 
@@ -91,47 +98,30 @@ window.addEventListener('load', () => {
   function loadingUI() {
     let now = new Date();
     /** 加载圣诞节 loading 效果 */
-    if(now.getMonth()+1 == 12) {
-      document.getElementById('loading').classList.add('loading_christmas');
+    if (now.getMonth() + 1 == 12) {
+      document
+        .getElementById('loading')
+        .classList
+        .add('loading_christmas');
     }
   }
   loadingUI();
   // 开始加载css
-  loadCSS('ant-static://libs/bmenu/bmenu.css')
-    .then(() => loadCSS('ant-static://libs/toastr/toastr.min.css'))
-    .then(() => loadCSS('ant-static://libs/layer/src/skin/layer.css'))
-    .then(() => loadCSS('ant-static://libs/layer/src/skin/layer.ext.css'))
-    .then(() => loadCSS('ant-static://libs/laydate/need/laydate.css'))
-    .then(() => loadCSS('ant-static://libs/laydate/skins/default/laydate.css'))
-    .then(() => loadCSS('ant-static://libs/terminal/css/jquery.terminal-1.1.1.css'))
-    .then(() => loadCSS('ant-static://libs/font-awesome/css/font-awesome.min.css'))
-    .then(() => loadCSS('ant-static://libs/dhtmlx/codebase/dhtmlx.css'))
-    .then(() => loadCSS('ant-static://libs/dhtmlx/skins/mytheme/dhtmlx.css'))
-    .then(() => loadCSS('ant-static://css/index.css'));
+  loadCSS('ant-static://libs/bmenu/bmenu.css').then(() => loadCSS('ant-static://libs/toastr/toastr.min.css')).then(() => loadCSS('ant-static://libs/layer/src/skin/layer.css')).then(() => loadCSS('ant-static://libs/layer/src/skin/layer.ext.css')).then(() => loadCSS('ant-static://libs/laydate/need/laydate.css')).then(() => loadCSS('ant-static://libs/laydate/skins/default/laydate.css')).then(() => loadCSS('ant-static://libs/terminal/css/jquery.terminal-1.1.1.css')).then(() => loadCSS('ant-static://libs/font-awesome/css/font-awesome.min.css')).then(() => loadCSS('ant-static://libs/dhtmlx/codebase/dhtmlx.css')).then(() => loadCSS('ant-static://libs/dhtmlx/skins/mytheme/dhtmlx.css')).then(() => loadCSS('ant-static://css/index.css'));
 
   // 加载js资源
-  loadJS('ant-static://libs/jquery/jquery.js')
-    .then(() => loadJS('ant-static://libs/ace/ace.js'))
-    .then(() => loadJS('ant-static://libs/ace/ext-language_tools.js'))
-    .then(() => loadJS('ant-static://libs/bmenu/bmenu.js'))
-    .then(() => loadJS('ant-static://libs/toastr/toastr.js'))
-    .then(() => loadJS('ant-static://libs/layer/src/layer.js'))
-    .then(() => loadJS('ant-static://libs/laydate/laydate.js'))
-    .then(() => loadJS('ant-static://libs/terminal/js/jquery.terminal-min-1.1.1.js'))
-    .then(() => loadJS('ant-static://libs/dhtmlx/codebase/dhtmlx.js'))
-    .then(() => {
-      /**
+  loadJS('ant-static://libs/jquery/jquery.js').then(() => loadJS('ant-static://libs/ace/ace.js')).then(() => loadJS('ant-static://libs/ace/ext-language_tools.js')).then(() => loadJS('ant-static://libs/bmenu/bmenu.js')).then(() => loadJS('ant-static://libs/toastr/toastr.js')).then(() => loadJS('ant-static://libs/layer/src/layer.js')).then(() => loadJS('ant-static://libs/laydate/laydate.js')).then(() => loadJS('ant-static://libs/terminal/js/jquery.terminal-min-1.1.1.js')).then(() => loadJS('ant-static://libs/dhtmlx/codebase/dhtmlx.js')).then(() => {
+    /**
        * 配置layer弹出层
        * @param  {[type]} {extend: 'extend/layer.ext.js'} [description]
        * @return {[type]}          [description]
        */
-      layer.config({extend: 'extend/layer.ext.js'});
-      // 加载程序入口
-      require('app.entry');
-      // LOGO
-      console.group('LOGO');
-      console.log(
-  `%c
+    layer.config({extend: 'extend/layer.ext.js'});
+    // 加载程序入口
+    require('app.entry');
+    // LOGO
+    console.group('LOGO');
+    console.log(`%c
           _____     _   _____                 _
          |  _  |___| |_|   __|_ _ _ ___ ___ _| |
          |     |   |  _|__   | | | | . |  _| . |
@@ -139,15 +129,10 @@ window.addEventListener('load', () => {
 
      ->| Ver: %c${antSword.package.version}%c
    -+=>| Git: %c${antSword.package.repository['url']}%c
-     -*| End: %c${+new Date - APP_START_TIME}%c/ms
+     -*| End: %c${ + new Date - APP_START_TIME}%c/ms
 
-  `,
-      'color: #F44336;', 'color: #9E9E9E;',
-      'color: #4CAF50;', 'color: #9E9E9E;',
-      'color: #2196F3;', 'color: #9E9E9E;',
-      'color: #FF9800;', 'color: #9E9E9E;'
-      );
-      APP_START_TIME = null;
-      console.groupEnd();
-    });
+  `, 'color: #F44336;', 'color: #9E9E9E;', 'color: #4CAF50;', 'color: #9E9E9E;', 'color: #2196F3;', 'color: #9E9E9E;', 'color: #FF9800;', 'color: #9E9E9E;');
+    APP_START_TIME = null;
+    console.groupEnd();
+  });
 });

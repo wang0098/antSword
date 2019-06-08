@@ -20,7 +20,7 @@ module.exports = {
    * @param {string} data 要被解码的 Buffer
    * @returns {string} 解码后的 Buffer
    */
-  decode_buff: (data, ext={}) => {
+  decode_buff: (data, ext = {}) => {
     return Buffer.from(Buffer.from(data.toString(), 'hex').toString(), 'base64');
   }
 }

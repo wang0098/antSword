@@ -13,14 +13,10 @@ class Sidebar {
    */
   constructor(cell, top) {
     this.top = top;
-    const sidebar = cell.attachSidebar({
-      template: 'text',
-      width: 222
-    });
+    const sidebar = cell.attachSidebar({template: 'text', width: 222});
     // 默认分类
     sidebar.addItem({
-      id: 'default',
-      bubble: 0,
+      id: 'default', bubble: 0,
       // selected: true,
       text: `<i class="fa fa-folder-o"></i> ${LANG['default']}</i>`
     });
@@ -38,14 +34,15 @@ class Sidebar {
   _onSelect(id) {
     // 更新工具栏按钮状态
     ['del', 'rename'].map((_) => {
-      this.top.toolbar[
-        id === 'default' ? 'disableItem' : 'enableItem'
-      ](_)
+      this.top.toolbar[id === 'default'
+          ? 'disableItem'
+          : 'enableItem'](_)
     });
     // 重新加载数据
-    this.top.top.reloadData({
-      category: id
-    });
+    this
+      .top
+      .top
+      .reloadData({category: id});
   }
 }
 

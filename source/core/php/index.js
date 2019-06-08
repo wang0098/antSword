@@ -14,7 +14,9 @@ class PHP extends Base {
     super(opts);
     // 解析模板
     [
-      'base', 'command', 'filemanager',
+      'base',
+      'command',
+      'filemanager',
       'database/mysql',
       'database/mysqli',
       'database/mssql',
@@ -28,12 +30,16 @@ class PHP extends Base {
       this.parseTemplate(`./php/template/${_}`);
     });
     // 解析编码器
-    this.encoders.map((_) => {
-      this.parseEncoder(`./php/encoder/${_}`);
-    });
-    this.decoders.map((_) => {
-      this.parseDecoder(`./php/decoder/${_}`);
-    });
+    this
+      .encoders
+      .map((_) => {
+        this.parseEncoder(`./php/encoder/${_}`);
+      });
+    this
+      .decoders
+      .map((_) => {
+        this.parseDecoder(`./php/decoder/${_}`);
+      });
   }
 
   /**
@@ -54,16 +60,24 @@ class PHP extends Base {
    * @param {bool} force_default 强制使用 default 解码
    * @return {Promise}     返回一个Promise操作对象
    */
-  complete(data, force_default=false) {
+  complete(data, force_default = false) {
     // 分隔符号
 
-    let tag_s = Math.random().toString(16).substr(2, 5); // "->|";
-    let tag_e = Math.random().toString(16).substr(2, 5); // "|<-";
+    let tag_s = Math
+      .random()
+      .toString(16)
+      .substr(2, 5); // "->|";
+    let tag_e = Math
+      .random()
+      .toString(16)
+      .substr(2, 5); // "|<-";
     let asencCode;
-    if(!force_default){
+    if (!force_default) {
       asencCode = this.__decoder__[this.__opts__['decoder'] || 'default'].asoutput();
-    }else{
-      asencCode = this.__decoder__['default'].asoutput();
+    } else {
+      asencCode = this
+        .__decoder__['default']
+        .asoutput();
     }
     // 组合完整的代码
     let tmpCode = data['_'];

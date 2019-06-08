@@ -16,12 +16,13 @@ class Window {
    */
   constructor(opts) {
     // 生成一个随机ID，用于指定唯一的窗口
-    let id = 'win_' + (Math.random() * +new Date).toString(16).replace('.', '').substr(0,11);
+    let id = 'win_' + (Math.random() * + new Date)
+      .toString(16)
+      .replace('.', '')
+      .substr(0, 11);
     // 默认配置
     let opt = $.extend({
-      title: id,
-      width: 500,
-      height: 400,
+      title: id, width: 500, height: 400,
       // 在那个dom内显示
       view: document.body
     }, opts);
@@ -30,14 +31,15 @@ class Window {
     let winObj = new dhtmlXWindows();
     winObj.attachViewportTo(opt['view']);
 
-    let win = winObj.createWindow(
-      id, 0, 0,
-      opt['width'], opt['height']
-    );
+    let win = winObj.createWindow(id, 0, 0, opt['width'], opt['height']);
     win.setText(antSword.noxss(opt['title']));
     win.centerOnScreen();
-    win.button('minmax').show();
-    win.button('minmax').enable();
+    win
+      .button('minmax')
+      .show();
+    win
+      .button('minmax')
+      .enable();
 
     this.win = win;
   }
@@ -47,7 +49,9 @@ class Window {
    * @return {[type]} [description]
    */
   close() {
-    this.win.close();
+    this
+      .win
+      .close();
   }
 
   /**
@@ -55,7 +59,9 @@ class Window {
    * @param {String} title = 'New Title' 新标题
    */
   setTitle(title = 'New Title') {
-    this.win.setText(antSword.noxss(title));
+    this
+      .win
+      .setText(antSword.noxss(title));
   }
 }
 

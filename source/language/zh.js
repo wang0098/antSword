@@ -122,7 +122,7 @@ module.exports = {
           encode: '编码设置',
           type: '连接类型',
           encoder: '编码器',
-          decoder: '解码器',
+          decoder: '解码器'
         },
         test_success: '连接成功!',
         test_warning: '返回数据为空',
@@ -183,7 +183,8 @@ module.exports = {
           usechunk: '开启分块传输发包',
           min: '最小分块',
           max: '最大分块',
-          exphint: '该功能目前为实验性功能, 无法与 Multipart 同时使用,部分类型的服务端可能不支持Chunked传输。此外,建议超时时长设置30s以上,避免网速不好的情况下影响数据传输。',
+          exphint: '该功能目前为实验性功能, 无法与 Multipart 同时使用,部分类型的服务端可能不支持Chunked传输。此外,建议超时时长设置30s以上,避免网速不好的情' +
+              '况下影响数据传输。'
         },
         terminalCache: '虚拟终端使用缓存',
         filemanagerCache: '文件管理使用缓存',
@@ -230,49 +231,65 @@ module.exports = {
       ascmd: (cmd) => antSword.noxss(`将使用 ${cmd} 执行命令.`),
       aspowershell: {
         on: "已启用Powershell模式",
-        off: "已关闭Powershell模式",
-      },
-    },
+        off: "已关闭Powershell模式"
+      }
+    }
   },
   filemanager: {
     title: '文件管理',
     delete: {
       title: '删除文件',
-      confirm: (num) => antSword.noxss(`你确定要删除 ${typeof (num) === 'number' ? num + ' 个文件' : num} 吗？`),
+      confirm: (num) => antSword.noxss(`你确定要删除 ${typeof(num) === 'number'
+        ? num + ' 个文件'
+        : num} 吗？`),
       success: (path) => `删除文件成功！\n${path}`,
-      error: (path, err) => `删除文件 [${path}] 失败！${err ? '\n' + err : ''}`
+      error: (path, err) => `删除文件 [${path}] 失败！${err
+        ? '\n' + err
+        : ''}`
     },
     paste: {
       success: (path) => `粘贴文件成功！\n${path}`,
-      error: (path, err) => `粘贴文件 [${path}] 失败！${err ? '\n' + err : ''}`
+      error: (path, err) => `粘贴文件 [${path}] 失败！${err
+        ? '\n' + err
+        : ''}`
     },
     rename: {
       title: '重命名',
       success: '重命名文件成功！',
-      error: (err) => `重命名文件失败！${err ? '\n' + err : ''}`
+      error: (err) => `重命名文件失败！${err
+        ? '\n' + err
+        : ''}`
     },
     createFolder: {
       title: '新建目录',
       value: '新目录',
       success: (path) => `新建目录成功！\n${path}`,
-      error: (path, err) => `新建目录 [${path}] 失败！${err ? '\n' + err : ''}`
+      error: (path, err) => `新建目录 [${path}] 失败！${err
+        ? '\n' + err
+        : ''}`
     },
     createFile: {
       title: '新建文件',
       value: '新文件.txt',
       success: (path) => `新建文件成功！\n${path}`,
-      error: (path, err) => `新建文件 [${path}] 失败！${err ? '\n' + err : ''}`
+      error: (path, err) => `新建文件 [${path}] 失败！${err
+        ? '\n' + err
+        : ''}`
     },
     retime: {
       title: '更改时间',
       success: (path) => `更改文件时间成功！\n${path}`,
-      error: (path, err) => `更改文件时间 [${path}] 失败！${err ? '\n' + err : ''}`
+      error: (path, err) => `更改文件时间 [${path}] 失败！${err
+        ? '\n' + err
+        : ''}`
     },
     chmod: {
       title: '更改权限',
       check: "输入应为八进制数表示的权限, eg: 0644",
       success: (path) => `更改文件权限成功！\n${path}`,
-      error: (path, err) => `更改文件权限 [${path}] 失败！${err ? '\n' + err : ''}`
+      error: (path, err) => `更改文件权限 [${path}] 失败！${err
+        ? '\n' + err
+        : ''}`
     },
     wget: {
       title: 'Wget下载文件',
@@ -296,7 +313,7 @@ module.exports = {
         error: (err) => `出错:${err}`
       },
       success: (path) => `上传文件成功！\n${path}`,
-      error: (path, err) => `上传文件 [${path}] 失败！${err}`,
+      error: (path, err) => `上传文件 [${path}] 失败！${err}`
     },
     folder: {
       title: '目录列表'
@@ -323,7 +340,7 @@ module.exports = {
       prompt: {
         add: {
           title: '添加到书签',
-          success: (path) => `添加书签成功！\n${path}`,
+          success: (path) => `添加书签成功！\n${path}`
         },
         remove: {
           title: '移除书签',
@@ -356,7 +373,7 @@ module.exports = {
           edit: {
             title: '编辑文件',
             openwindow: '窗口打开',
-            opentab: '标签打开',
+            opentab: '标签打开'
           },
           delete: '删除文件',
           rename: '重命名文件',
@@ -442,7 +459,7 @@ module.exports = {
         desctable: '查看表结构',
         addcolumn: '添加列',
         editcolumn: '编辑列名',
-        delcolumn: '删除列',
+        delcolumn: '删除列'
       }
     },
     query: {
@@ -453,23 +470,23 @@ module.exports = {
         title: '书签',
         add: '添加书签',
         del: '移除书签',
-        clear: '清空书签',
+        clear: '清空书签'
       },
       prompt: {
         add: {
           title: '添加SQL书签',
-          success: (sql) => `添加书签成功!\nSQL: ${sql}`,
+          success: (sql) => `添加书签成功!\nSQL: ${sql}`
         },
         remove: {
           title: '移除书签',
           confirm: '确定移除此书签?',
-          success: '移除书签成功',
+          success: '移除书签成功'
         },
         clear: {
           title: '清空书签',
           confirm: '确定清空所有书签吗?',
-          success: '清空书签成功',
-        },
+          success: '清空书签成功'
+        }
       }
     },
     result: {
@@ -485,7 +502,7 @@ module.exports = {
       },
       dump: {
         title: "导出查询结果",
-        success: "导出成功",
+        success: "导出成功"
       }
     },
     notsupport: '该功能暂不支持当前类型数据库',
@@ -521,7 +538,7 @@ module.exports = {
         createbtn: '创建',
         cancelbtn: '取消',
         success: '创建数据库成功',
-        error: '创建数据库失败',
+        error: '创建数据库失败'
       },
       editdb: {
         title: '修改数据库',
@@ -531,13 +548,13 @@ module.exports = {
         updatebtn: '修改',
         cancelbtn: '取消',
         success: '修改数据库成功',
-        error: '修改数据库失败',
+        error: '修改数据库失败'
       },
       deldb: {
         title: '删除数据库',
         confirm: (name) => antSword.noxss(`确定要删除数据库 ${name} 吗?`),
         success: '删除数据库成功',
-        error: '删除数据库失败',
+        error: '删除数据库失败'
       },
       addtable: {
         title: '新建表',
@@ -551,23 +568,21 @@ module.exports = {
         confirmtitle: "输入新表名",
         invalid_tablename: "表名不能带有特殊符号",
         success: '新建表成功',
-        error: '新建表失败',
+        error: '新建表失败'
       },
       edittable: {
         title: "输入新表名",
         invalid_tablename: "表名不能带有特殊符号",
         success: '修改表名成功',
-        error: '修改表名失败',
+        error: '修改表名失败'
       },
       deltable: {
         title: '删除表',
         confirm: (name) => antSword.noxss(`确定要删除表 ${name} 吗?`),
         success: '删除表成功',
-        error: '删除表失败',
+        error: '删除表失败'
       },
-      addcolumn: {
-
-      },
+      addcolumn: {},
       editcolumn: {
         title: "输入新列名",
         invalid_tablename: "列名不能带有特殊符号",
@@ -579,14 +594,14 @@ module.exports = {
         title: '删除列',
         confirm: (name) => antSword.noxss(`确定要删除列 ${name} 吗?`),
         success: '删除列成功',
-        error: '删除列失败',
+        error: '删除列失败'
       }
     },
     probedb: {
       title: '检测数据库函数支持',
       success: '检测完毕',
       coltype: '连接类型',
-      issupport: '状态',
+      issupport: '状态'
     }
   },
   settings: {
@@ -674,8 +689,8 @@ module.exports = {
         edtype: {
           title: "类型",
           encoder: "编码器",
-          decoder: "解码器",
-        },
+          decoder: "解码器"
+        }
       },
       form: {
         public_key: "公钥",
@@ -699,15 +714,17 @@ module.exports = {
         delete_success: "删除成功",
         ename_invalid: "名称只能包含数字、字母、下划线",
         rsa_save_success: "生成 RSA 密钥对成功",
-        rsa_save_error: "生成 RSA 密钥对错误",
+        rsa_save_error: "生成 RSA 密钥对错误"
       },
       prompt: {
         create_encoder: "创建编码器",
-        create_decoder: "创建解码器",
+        create_decoder: "创建解码器"
       },
       confirm: {
         generate: '你确定要重新生成?',
-        delete: (num) => antSword.noxss(`你确定要删除 ${typeof (num) === 'number' ? num + ' 个编码器' : num + " "}吗？`),
+        delete: (num) => antSword.noxss(`你确定要删除 ${typeof(num) === 'number'
+          ? num + ' 个编码器'
+          : num + " "}吗？`)
       }
     },
     aproxy: {
@@ -778,14 +795,14 @@ module.exports = {
         title: '更改默认设置'
       },
       toolbar: {
-        save: '保存',
+        save: '保存'
       },
       filemanager: {
         title: '文件管理',
         openfileintab: {
           title: '文件打开方式',
           window: '窗口打开',
-          tab: '标签打开',
+          tab: '标签打开'
         },
         bookmark: {
           title: '全局书签',
@@ -807,7 +824,9 @@ module.exports = {
           },
           del: {
             title: '删除书签',
-            confirm: (num) => antSword.noxss(`你确定要删除 ${typeof (num) === 'number' ? num + ' 个书签' : num + " "}吗？`),
+            confirm: (num) => antSword.noxss(`你确定要删除 ${typeof(num) === 'number'
+              ? num + ' 个书签'
+              : num + " "}吗？`),
             success: '删除成功'
           },
           edit: {
@@ -815,7 +834,7 @@ module.exports = {
             name_invalid: '名称不合法',
             success: '更新成功'
           }
-        },
+        }
       },
       database: {
         title: '数据操作',
@@ -839,7 +858,9 @@ module.exports = {
           },
           del: {
             title: '删除书签',
-            confirm: (num) => antSword.noxss(`你确定要删除 ${typeof (num) === 'number' ? num + ' 个书签' : num + " "}吗？`),
+            confirm: (num) => antSword.noxss(`你确定要删除 ${typeof(num) === 'number'
+              ? num + ' 个书签'
+              : num + " "}吗？`),
             success: '删除成功'
           },
           edit: {
@@ -847,7 +868,7 @@ module.exports = {
             name_invalid: '名称不合法',
             success: '更新成功'
           }
-        },
+        }
       },
       shellmanager: {
         title: '数据管理',
@@ -856,7 +877,7 @@ module.exports = {
           nodata: '暂无全局请求头, 请单击右键添加',
           grid: {
             name: '名称',
-            value: '值',
+            value: '值'
           },
           bmenu: {
             add: '添加请求头',
@@ -871,7 +892,9 @@ module.exports = {
           },
           del: {
             title: '删除默认请求头',
-            confirm: (num) => antSword.noxss(`你确定要删除 ${typeof (num) === 'number' ? num + ' 个请求头' : num + " "}吗？`),
+            confirm: (num) => antSword.noxss(`你确定要删除 ${typeof(num) === 'number'
+              ? num + ' 个请求头'
+              : num + " "}吗？`),
             success: '删除成功'
           },
           edit: {
@@ -885,7 +908,7 @@ module.exports = {
           nodata: '暂无默认Body, 请单击右键添加',
           grid: {
             name: '名称',
-            value: '值',
+            value: '值'
           },
           bmenu: {
             add: '添加Body',
@@ -900,7 +923,9 @@ module.exports = {
           },
           del: {
             title: '删除默认请求头Body',
-            confirm: (num) => antSword.noxss(`你确定要删除 ${typeof (num) === 'number' ? num + ' 个请求Body' : num + " "}吗？`),
+            confirm: (num) => antSword.noxss(`你确定要删除 ${typeof(num) === 'number'
+              ? num + ' 个请求Body'
+              : num + " "}吗？`),
             success: '删除成功'
           },
           edit: {
@@ -911,7 +936,7 @@ module.exports = {
         },
         other: {
           nohttps: '忽略HTTPS证书',
-          requestTimeout: '请求超时',
+          requestTimeout: '请求超时'
         }
       }
     }
@@ -921,11 +946,13 @@ module.exports = {
   },
   update: {
     title: '发现更新',
-    body: (ver) => `新的版本：${ver}, 查看更新日志`,
+    body: (ver) => `新的版本：${ver}, 查看更新日志`
   },
   viewsite: {
     toolbar: {
-      useproxy: (s) => `代理: ${s ? '开' : '关'}`,
+      useproxy: (s) => `代理: ${s
+        ? '开'
+        : '关'}`,
       save: '保存',
       view: '浏览'
     },

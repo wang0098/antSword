@@ -15,22 +15,32 @@ class ASP extends Base {
     super(opts);
     // 解析模板
     [
-      'base', 'command', 'filemanager',
-      'database/dsn', 'database/mysql',
-      'database/access', 'database/oracle',
-      'database/sqlserver', 'database/sqloledb_1',
-      'database/sqloledb_1_sspi', 'database/microsoft_jet_oledb_4_0'
+      'base',
+      'command',
+      'filemanager',
+      'database/dsn',
+      'database/mysql',
+      'database/access',
+      'database/oracle',
+      'database/sqlserver',
+      'database/sqloledb_1',
+      'database/sqloledb_1_sspi',
+      'database/microsoft_jet_oledb_4_0'
     ].map((_) => {
       this.parseTemplate(`./asp/template/${_}`);
     });
     // 解析编码器
-    this.encoders.map((_) => {
-      this.parseEncoder(`./asp/encoder/${_}`);
-    });
-    
-    this.decoders.map((_) => {
-      this.parseDecoder(`./asp/decoder/${_}`);
-    });
+    this
+      .encoders
+      .map((_) => {
+        this.parseEncoder(`./asp/encoder/${_}`);
+      });
+
+    this
+      .decoders
+      .map((_) => {
+        this.parseDecoder(`./asp/decoder/${_}`);
+      });
   }
 
   /**
@@ -50,13 +60,21 @@ class ASP extends Base {
    * @param  {Object} data 通过模板解析后的代码对象
    * @return {Promise}     返回一个Promise操作对象
    */
-  complete(data, force_default=false) {
+  complete(data, force_default = false) {
     // 分隔符号
-    let tag_s = Math.random().toString(16).substr(2, 5); // '->|';
-    let tag_e = Math.random().toString(16).substr(2, 5); // '|<-';
+    let tag_s = Math
+      .random()
+      .toString(16)
+      .substr(2, 5); // '->|';
+    let tag_e = Math
+      .random()
+      .toString(16)
+      .substr(2, 5); // '|<-';
 
     // let formatter = new this.format(this.__opts__['encode']);
-    let formatter = Base.prototype.format(this.__opts__['encode']);
+    let formatter = Base
+      .prototype
+      .format(this.__opts__['encode']);
 
     // hex编码一次数据
     let hexCode = formatter['hex'](data['_']);

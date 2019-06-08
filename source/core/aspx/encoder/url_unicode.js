@@ -8,21 +8,23 @@
 'use strict';
 
 function char2unicode(c) {
-  if(c.length != 1) {
+  if (c.length != 1) {
     return '';
   }
   let buff = Buffer.alloc(4, '0');
-  let hexstr = c.charCodeAt().toString(16);
+  let hexstr = c
+    .charCodeAt()
+    .toString(16);
   buff.write(hexstr, buff.length - hexstr.length, hexstr.length);
   return "\\u" + buff.toString();
 }
 
-function string2unicode(str){
-    var ret = "";
-    for(var i=0; i<str.length; i++){
-        ret += char2unicode(str[i]);
-    }
-    return ret;
+function string2unicode(str) {
+  var ret = "";
+  for (var i = 0; i < str.length; i++) {
+    ret += char2unicode(str[i]);
+  }
+  return ret;
 }
 
 /*
@@ -30,7 +32,7 @@ function string2unicode(str){
 * @param  {Array}  data  编码器处理前的 payload 数组
 * @return {Array}  data  编码器处理后的 payload 数组
 */
-module.exports = (pwd, data, ext={}) => {
+module.exports = (pwd, data, ext = {}) => {
   data[pwd] = string2unicode(data['_']).replace(/\\u/g, 'asunescape(%)u');
   // 删除 _ 原有的payload
   delete data['_'];

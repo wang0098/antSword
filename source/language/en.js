@@ -181,7 +181,10 @@ module.exports = {
           usechunk: 'Use Chunked send payload.',
           min: 'Min Block',
           max: 'Max Block',
-          exphint: 'This feature is currently experimental and cannot be used with Multipart. Some types of servers may not support Chunked transfers. In addition, it is recommended to set the timeout period to 30s or more to avoid data transmission when the network speed is not good.',
+          exphint: 'This feature is currently experimental and cannot be used with Multipart. Some t' +
+              'ypes of servers may not support Chunked transfers. In addition, it is recommende' +
+              'd to set the timeout period to 30s or more to avoid data transmission when the n' +
+              'etwork speed is not good.'
         },
         terminalCache: "Use the terminal's cache",
         filemanagerCache: "Use the filemanager's cache",
@@ -228,49 +231,65 @@ Hot Keys:
       ascmd: (cmd) => antSword.noxss(`Will execute the command with ${cmd}.`),
       aspowershell: {
         on: "Powershell mode enabled",
-        off: "Powershell mode disabled",
-      },
-    },
+        off: "Powershell mode disabled"
+      }
+    }
   },
   filemanager: {
     title: 'FileManager',
     delete: {
       title: 'Delete',
-      confirm: (num) => antSword.noxss(`Are you sure to delete ${typeof (num) === 'number' ? num + ' files' : num} ?`),
+      confirm: (num) => antSword.noxss(`Are you sure to delete ${typeof(num) === 'number'
+        ? num + ' files'
+        : num} ?`),
       success: (path) => `Delete file [${path}] success!`,
-      error: (path, err) => `Delete file [${path}] failed!${err ? '\n' + err : ''}`
+      error: (path, err) => `Delete file [${path}] failed!${err
+        ? '\n' + err
+        : ''}`
     },
     paste: {
       success: (path) => `Paste file success!\n${path}`,
-      error: (path, err) => `Paste file [${path}] failed!${err ? '\n' + err : ''}`
+      error: (path, err) => `Paste file [${path}] failed!${err
+        ? '\n' + err
+        : ''}`
     },
     rename: {
       title: 'Rename',
       success: 'Rename success!',
-      error: (err) => `Rename failed!${err ? '\n' + err : ''}`
+      error: (err) => `Rename failed!${err
+        ? '\n' + err
+        : ''}`
     },
     createFolder: {
       title: 'Create Folder',
       value: 'New Folder',
       success: (path) => `Create folder success!\n${path}`,
-      error: (path, err) => `Create folder [${path}] failed!${err ? '\n' + err : ''}`
+      error: (path, err) => `Create folder [${path}] failed!${err
+        ? '\n' + err
+        : ''}`
     },
     createFile: {
       title: 'Create File',
       value: 'New File.txt',
       success: (path) => `Create file success!\n${path}`,
-      error: (path, err) => `Create file [${path}] failed!${err ? '\n' + err : ''}`
+      error: (path, err) => `Create file [${path}] failed!${err
+        ? '\n' + err
+        : ''}`
     },
     retime: {
       title: 'Retime File',
       success: (path) => `Retime file success!\n${path}`,
-      error: (path, err) => `Retime file [${path}] failed!${err ? '\n' + err : ''}`
+      error: (path, err) => `Retime file [${path}] failed!${err
+        ? '\n' + err
+        : ''}`
     },
     chmod: {
       title: 'Chmod File',
       check: 'Input should be octal numbers, eg: 0644',
       success: (path) => `Chmod file success!\n${path}`,
-      error: (path, err) => `Chmod file [${path}] failed!${err ? '\n' + err : ''}`
+      error: (path, err) => `Chmod file [${path}] failed!${err
+        ? '\n' + err
+        : ''}`
     },
     wget: {
       title: 'Wget File',
@@ -294,7 +313,7 @@ Hot Keys:
         error: (err) => `Error:${err}`
       },
       success: (path) => `Upload file success!\n${path}`,
-      error: (path, err) => `Upload file [${path}] failed!${err}`,
+      error: (path, err) => `Upload file [${path}] failed!${err}`
     },
     folder: {
       title: 'Folders'
@@ -321,7 +340,7 @@ Hot Keys:
       prompt: {
         add: {
           title: 'Add to bookmark',
-          success: (path) => `Add to bookmark success!\n${path}`,
+          success: (path) => `Add to bookmark success!\n${path}`
         },
         remove: {
           title: 'Remove bookmark',
@@ -354,7 +373,7 @@ Hot Keys:
           edit: {
             title: 'Edit',
             openwindow: 'Open in Window',
-            opentab: 'Open in Tab',
+            opentab: 'Open in Tab'
           },
           delete: 'Delete',
           rename: 'Rename',
@@ -440,7 +459,7 @@ Hot Keys:
         deltable: 'Del Table',
         addcolumn: 'New Column',
         editcolumn: 'Edit ColumnName',
-        delcolumn: 'Del Column',
+        delcolumn: 'Del Column'
       }
     },
     query: {
@@ -451,12 +470,12 @@ Hot Keys:
         title: 'Bookmark',
         add: 'Add bookmark',
         del: 'Remove this bookmark',
-        clear: 'Clear all bookmarks',
+        clear: 'Clear all bookmarks'
       },
       prompt: {
         add: {
           title: 'Add to bookmark',
-          success: (path) => `Add to bookmark success!\n${path}`,
+          success: (path) => `Add to bookmark success!\n${path}`
         },
         remove: {
           title: 'Remove bookmark',
@@ -468,7 +487,7 @@ Hot Keys:
           confirm: 'Clear all bookmarks ?',
           success: 'Clear all bookmark success!'
         }
-      },
+      }
     },
     result: {
       title: 'Result',
@@ -483,7 +502,7 @@ Hot Keys:
       },
       dump: {
         title: "Export Data",
-        success: "Export success",
+        success: "Export success"
       }
     },
     notsupport: 'Not support the current database type',
@@ -519,7 +538,7 @@ Hot Keys:
         createbtn: 'OK',
         cancelbtn: 'Cancel',
         success: 'Create database successfully',
-        error: 'Failed to create database',
+        error: 'Failed to create database'
       },
       editdb: {
         title: 'Database Properties',
@@ -529,13 +548,13 @@ Hot Keys:
         updatebtn: 'OK',
         cancelbtn: 'Cancel',
         success: 'Edit database successfully',
-        error: 'Failed to edit database',
+        error: 'Failed to edit database'
       },
       deldb: {
         title: 'Delete Database',
         confirm: (name) => antSword.noxss(`Are you sure you want to delete database ${name} ?`),
         success: 'Delete database successfully',
-        error: 'Failed to delete database',
+        error: 'Failed to delete database'
       },
       addtable: {
         title: 'New Table',
@@ -549,42 +568,40 @@ Hot Keys:
         confirmtitle: "New table name",
         invalid_tablename: "Table names should not contain special symbols",
         success: 'Create table successfully',
-        error: 'Failed to create table',
+        error: 'Failed to create table'
       },
       edittable: {
         title: "New table name",
         invalid_tablename: "Table names should not contain special symbols",
         success: 'Update table name successfully',
-        error: 'Failed to update table',
+        error: 'Failed to update table'
       },
       deltable: {
         title: 'Delete Table',
         confirm: (name) => antSword.noxss(`Are you sure you want to delete table ${name}?`),
         success: 'Delete table successfully',
-        error: 'Failed to delete table',
+        error: 'Failed to delete table'
       },
-      addcolumn: {
-
-      },
+      addcolumn: {},
       editcolumn: {
         title: "New column name",
         invalid_tablename: "Column names should not contain special symbols",
         get_column_type_error: "Get column type error",
         success: 'Update column name successfully',
-        error: 'Failed to update column',
+        error: 'Failed to update column'
       },
       delcolumn: {
         title: 'Delete Column',
         confirm: (name) => antSword.noxss(`Are you sure you want to delete column ${name}?`),
         success: 'Delete column successfully',
-        error: 'Failed to delete column',
+        error: 'Failed to delete column'
       }
     },
     probedb: {
       title: 'Detect database function support',
       success: 'Check completed',
       coltype: 'ConnType',
-      issupport: 'Support',
+      issupport: 'Support'
     }
   },
   settings: {
@@ -672,8 +689,8 @@ Hot Keys:
         edtype: {
           title: "Type",
           encoder: "Encoder",
-          decoder: "Decoder",
-        },
+          decoder: "Decoder"
+        }
       },
       form: {
         public_key: "Public Key",
@@ -697,15 +714,17 @@ Hot Keys:
         delete_success: "Delete success",
         ename_invalid: "Name can only contain numbers, letters, and underlines",
         rsa_save_success: "Generate and save RSA success",
-        rsa_save_error: "Generate and save RSA error",
+        rsa_save_error: "Generate and save RSA error"
       },
       prompt: {
         create_encoder: "Create Encoder",
-        create_decoder: "Create Decoder",
+        create_decoder: "Create Decoder"
       },
       confirm: {
         generate: 'Are you sure to regemerate RSA?',
-        delete: (num) => antSword.noxss(`Are you sure to delete ${typeof (num) === 'number' ? num + ' encoders' : num}?`),
+        delete: (num) => antSword.noxss(`Are you sure to delete ${typeof(num) === 'number'
+          ? num + ' encoders'
+          : num}?`)
       }
     },
     aproxy: {
@@ -776,14 +795,14 @@ Hot Keys:
         title: 'Change default settings'
       },
       toolbar: {
-        save: 'Save',
+        save: 'Save'
       },
       filemanager: {
         title: 'FileManager',
         openfileintab: {
           title: 'Open File in',
           window: 'Window',
-          tab: 'Tab',
+          tab: 'Tab'
         },
         bookmark: {
           title: 'Global Bookmark',
@@ -805,7 +824,9 @@ Hot Keys:
           },
           del: {
             title: 'Delete Bookmark',
-            confirm: (num) => antSword.noxss(`Are you sure to delete ${typeof (num) === 'number' ? num + ' Bookmarks' : num + " "}？`),
+            confirm: (num) => antSword.noxss(`Are you sure to delete ${typeof(num) === 'number'
+              ? num + ' Bookmarks'
+              : num + " "}？`),
             success: 'Delete success'
           },
           edit: {
@@ -813,7 +834,7 @@ Hot Keys:
             name_invalid: 'Name is invalid',
             success: 'Edit success'
           }
-        },
+        }
       },
       database: {
         title: 'Database',
@@ -837,7 +858,9 @@ Hot Keys:
           },
           del: {
             title: 'Delete Bookmark',
-            confirm: (num) => antSword.noxss(`Are you sure to delete ${typeof (num) === 'number' ? num + ' Bookmarks' : num + " "}？`),
+            confirm: (num) => antSword.noxss(`Are you sure to delete ${typeof(num) === 'number'
+              ? num + ' Bookmarks'
+              : num + " "}？`),
             success: 'Delete success'
           },
           edit: {
@@ -845,7 +868,7 @@ Hot Keys:
             name_invalid: 'Name is invalid',
             success: 'Edit success'
           }
-        },
+        }
       },
       shellmanager: {
         title: 'ShellManager',
@@ -854,7 +877,7 @@ Hot Keys:
           nodata: 'No HTTP Header data, click the right mouse button add',
           grid: {
             name: 'Name',
-            value: 'Vaule',
+            value: 'Vaule'
           },
           bmenu: {
             add: 'Add HTTP Header',
@@ -869,7 +892,9 @@ Hot Keys:
           },
           del: {
             title: 'Delete HTTP Header',
-            confirm: (num) => antSword.noxss(`Are you sure to delete ${typeof (num) === 'number' ? num + ' Headers' : num + " "}?`),
+            confirm: (num) => antSword.noxss(`Are you sure to delete ${typeof(num) === 'number'
+              ? num + ' Headers'
+              : num + " "}?`),
             success: 'Delete success'
           },
           edit: {
@@ -883,7 +908,7 @@ Hot Keys:
           nodata: 'No HTTP Body data, click the right mouse button add',
           grid: {
             name: 'Name',
-            value: 'Value',
+            value: 'Value'
           },
           bmenu: {
             add: 'Add HTTP Body',
@@ -898,7 +923,9 @@ Hot Keys:
           },
           del: {
             title: 'Delete HTTP Body',
-            confirm: (num) => antSword.noxss(`Are you sure to delete ${typeof (num) === 'number' ? num + ' HTTP Body' : num + " "}?`),
+            confirm: (num) => antSword.noxss(`Are you sure to delete ${typeof(num) === 'number'
+              ? num + ' HTTP Body'
+              : num + " "}?`),
             success: 'Delete success'
           },
           edit: {
@@ -909,7 +936,7 @@ Hot Keys:
         },
         other: {
           nohttps: 'Ignore HTTPS certificate',
-          requestTimeout: 'Request timeout',
+          requestTimeout: 'Request timeout'
         }
       }
     }
@@ -919,12 +946,13 @@ Hot Keys:
   },
   update: {
     title: 'Found updates',
-    body: (ver) => `New version: ${ver}, view changelog`,
-
+    body: (ver) => `New version: ${ver}, view changelog`
   },
   viewsite: {
     toolbar: {
-      useproxy: (s) => `Proxy: ${s ? 'ON' : 'OFF'}`,
+      useproxy: (s) => `Proxy: ${s
+        ? 'ON'
+        : 'OFF'}`,
       save: 'Save',
       view: 'View'
     },

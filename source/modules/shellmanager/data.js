@@ -16,7 +16,7 @@ module.exports = {
     ret.map((_) => {
       let _c = _['category'] || 'default';
       category[_c] = category[_c] || 0;
-      category[_c] ++;
+      category[_c]++;
       if ((arg instanceof Object) && arg['category'] && arg['category'] !== _['category']) {
         return;
       };
@@ -26,7 +26,10 @@ module.exports = {
       data.push({
         id: _['_id'],
         data: [
-          antSword.noxss(_['url']), _['ip'], _['addr'], antSword.noxss(_['note']),
+          antSword.noxss(_['url']),
+          _['ip'],
+          _['addr'],
+          antSword.noxss(_['note']),
           new Date(_['ctime']).format('yyyy/MM/dd hh:mm:ss'),
           new Date(_['utime']).format('yyyy/MM/dd hh:mm:ss')
         ]
@@ -39,9 +42,6 @@ module.exports = {
     if (typeof(category['default']) === 'object') {
       category['default'] = 0;
     };
-    return {
-      data: data,
-      category: category
-    }
+    return {data: data, category: category}
   }
 }
