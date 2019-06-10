@@ -183,7 +183,7 @@ module.exports = {
           min: '最小分塊',
           max: '最大分塊',
           exphint: '該功能目前為實驗性功能, 無法與 Multipart 同時使用,部分類型的服務端可能不支持Chunked傳輸。此外,建議超時時長設置30s以上,避免網速不好的情' +
-              '況下影響數據傳輸。'
+            '況下影響數據傳輸。'
         },
         terminalCache: '虛擬終端使用緩存',
         filemanagerCache: '文件管理使用緩存',

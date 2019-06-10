@@ -7,10 +7,10 @@
 
 'use strict';
 /*
-* @param  {String} pwd   连接密码
-* @param  {Array}  data  编码器处理前的 payload 数组
-* @return {Array}  data  编码器处理后的 payload 数组
-*/
+ * @param  {String} pwd   连接密码
+ * @param  {Array}  data  编码器处理前的 payload 数组
+ * @return {Array}  data  编码器处理后的 payload 数组
+ */
 module.exports = (pwd, data) => {
     let _tmp = data['_'].replace(/(eval|cute|execute|server|script|timeout|resume|next|function|for|else|response|mid|end|step|write|then|isnumeric)/ig, function ($, $1) {
         // asunescape(%) 表示括号内的内容不会被 URL 编码

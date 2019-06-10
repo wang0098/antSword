@@ -39,187 +39,177 @@ class Menubar {
    */
   reload(event, LANG) {
     // 菜单模板
-    const template = [
-      {
-        // 主菜单
-        label: LANG['main']['title'],
-        submenu: [
-          {
-            label: LANG['main']['about'],
-            accelerator: 'Shift+CmdOrCtrl+I',
-            click: event
-              .sender
-              .send
-              .bind(event.sender, 'menubar', 'settings-about')
-          }, {
-            label: LANG['main']['language'],
-            accelerator: 'Shift+CmdOrCtrl+L',
-            click: event
-              .sender
-              .send
-              .bind(event.sender, 'menubar', 'settings-language')
-          }, {
-            label: LANG['main']['aproxy'],
-            accelerator: 'Shift+CmdOrCtrl+A',
-            click: event
-              .sender
-              .send
-              .bind(event.sender, 'menubar', 'settings-aproxy')
-          }, {
-            label: LANG['main']['display'],
-            accelerator: 'Shift+CmdOrCtrl+D',
-            click: event
-              .sender
-              .send
-              .bind(event.sender, 'menubar', 'settings-display')
-          }, {
-            type: 'separator'
-          }, {
-            label: LANG['main']['encoders'],
-            accelerator: 'Shift+CmdOrCtrl+E',
-            click: event
-              .sender
-              .send
-              .bind(event.sender, 'menubar', 'settings-encoders')
-          }, {
-            type: 'separator'
-          }, {
-            label: LANG['main']['settings'],
-            accelerator: 'Shift+CmdOrCtrl+S',
-            click: event
-              .sender
-              .send
-              .bind(event.sender, 'menubar', 'settings')
-          }, {
-            type: 'separator'
-          }, {
-            label: LANG['main']['pluginStore'],
-            accelerator: 'Shift+CmdOrCtrl+P',
-            click: event
-              .sender
-              .send
-              .bind(event.sender, 'menubar', 'plugin-store')
-          }, {
-            type: 'separator'
-          }, {
-            label: LANG['main']['update'],
-            accelerator: 'Shift+CmdOrCtrl+U',
-            click: event
-              .sender
-              .send
-              .bind(event.sender, 'menubar', 'check-update')
-          }, {
-            type: 'separator'
-          }, {
-            label: LANG['main']['quit'],
-            accelerator: 'Command+Q',
-            click: this
-              .app
-              .quit
-              .bind(this.app)
-          }
-        ]
+    const template = [{
+      // 主菜单
+      label: LANG['main']['title'],
+      submenu: [{
+        label: LANG['main']['about'],
+        accelerator: 'Shift+CmdOrCtrl+I',
+        click: event
+          .sender
+          .send
+          .bind(event.sender, 'menubar', 'settings-about')
       }, {
-        // 编辑
-        label: LANG['edit']['title'],
-        submenu: [
-          {
-            label: LANG['edit']['undo'],
-            accelerator: 'CmdOrCtrl+Z',
-            role: 'undo'
-          }, {
-            label: LANG['edit']['redo'],
-            accelerator: 'Shift+CmdOrCtrl+Z',
-            role: 'redo'
-          }, {
-            type: 'separator'
-          }, {
-            label: LANG['edit']['cut'],
-            accelerator: 'CmdOrCtrl+X',
-            role: 'cut'
-          }, {
-            label: LANG['edit']['copy'],
-            accelerator: 'CmdOrCtrl+C',
-            role: 'copy'
-          }, {
-            label: LANG['edit']['paste'],
-            accelerator: 'CmdOrCtrl+V',
-            role: 'paste'
-          }, {
-            type: 'separator'
-          }, {
-            label: LANG['edit']['search'],
-            accelerator: 'Shift+CmdOrCtrl+F',
-            click: event
-              .sender
-              .send
-              .bind(event.sender, 'menubar', 'shellmanager-search')
-          }, {
-            type: 'separator'
-          }, {
-            label: LANG['edit']['selectall'],
-            accelerator: 'CmdOrCtrl+A',
-            role: 'selectall'
-          }
-        ]
+        label: LANG['main']['language'],
+        accelerator: 'Shift+CmdOrCtrl+L',
+        click: event
+          .sender
+          .send
+          .bind(event.sender, 'menubar', 'settings-language')
       }, {
-        // 窗口
-        label: LANG['window']['title'],
-        submenu: [
-          {
-            label: LANG['window']['next'],
-            accelerator: 'Shift+CmdOrCtrl+Right',
-            click: event
-              .sender
-              .send
-              .bind(event.sender, 'menubar', 'tabbar-next')
-          }, {
-            label: LANG['window']['prev'],
-            accelerator: 'Shift+CmdOrCtrl+Left',
-            click: event
-              .sender
-              .send
-              .bind(event.sender, 'menubar', 'tabbar-prev')
-          }, {
-            type: 'separator'
-          }, {
-            label: LANG['window']['close'],
-            accelerator: 'Shift+CmdOrCtrl+W',
-            click: event
-              .sender
-              .send
-              .bind(event.sender, 'menubar', 'tabbar-close')
-          }
-        ]
+        label: LANG['main']['aproxy'],
+        accelerator: 'Shift+CmdOrCtrl+A',
+        click: event
+          .sender
+          .send
+          .bind(event.sender, 'menubar', 'settings-aproxy')
       }, {
-        // 调试
-        label: LANG['debug']['title'],
-        submenu: [
-          {
-            label: LANG['debug']['restart'],
-            accelerator: 'Shift+CmdOrCtrl+R',
-            click: () => {
-              // 在有多个窗口的时候，不刷新
-              if (this.electron.BrowserWindow.getAllWindows().length > 1) {
-                return;
-              }
-              this
-                .mainWindow
-                .webContents
-                .loadURL('ant-views://front/index.html'); //.bind(this.mainWindow.webContents)
-            }
-          }, {
-            label: LANG['debug']['devtools'],
-            accelerator: 'Alt+CmdOrCtrl+J',
-            click: this
-              .mainWindow
-              .webContents
-              .toggleDevTools
-              .bind(this.mainWindow.webContents)
+        label: LANG['main']['display'],
+        accelerator: 'Shift+CmdOrCtrl+D',
+        click: event
+          .sender
+          .send
+          .bind(event.sender, 'menubar', 'settings-display')
+      }, {
+        type: 'separator'
+      }, {
+        label: LANG['main']['encoders'],
+        accelerator: 'Shift+CmdOrCtrl+E',
+        click: event
+          .sender
+          .send
+          .bind(event.sender, 'menubar', 'settings-encoders')
+      }, {
+        type: 'separator'
+      }, {
+        label: LANG['main']['settings'],
+        accelerator: 'Shift+CmdOrCtrl+S',
+        click: event
+          .sender
+          .send
+          .bind(event.sender, 'menubar', 'settings')
+      }, {
+        type: 'separator'
+      }, {
+        label: LANG['main']['pluginStore'],
+        accelerator: 'Shift+CmdOrCtrl+P',
+        click: event
+          .sender
+          .send
+          .bind(event.sender, 'menubar', 'plugin-store')
+      }, {
+        type: 'separator'
+      }, {
+        label: LANG['main']['update'],
+        accelerator: 'Shift+CmdOrCtrl+U',
+        click: event
+          .sender
+          .send
+          .bind(event.sender, 'menubar', 'check-update')
+      }, {
+        type: 'separator'
+      }, {
+        label: LANG['main']['quit'],
+        accelerator: 'Command+Q',
+        click: this
+          .app
+          .quit
+          .bind(this.app)
+      }]
+    }, {
+      // 编辑
+      label: LANG['edit']['title'],
+      submenu: [{
+        label: LANG['edit']['undo'],
+        accelerator: 'CmdOrCtrl+Z',
+        role: 'undo'
+      }, {
+        label: LANG['edit']['redo'],
+        accelerator: 'Shift+CmdOrCtrl+Z',
+        role: 'redo'
+      }, {
+        type: 'separator'
+      }, {
+        label: LANG['edit']['cut'],
+        accelerator: 'CmdOrCtrl+X',
+        role: 'cut'
+      }, {
+        label: LANG['edit']['copy'],
+        accelerator: 'CmdOrCtrl+C',
+        role: 'copy'
+      }, {
+        label: LANG['edit']['paste'],
+        accelerator: 'CmdOrCtrl+V',
+        role: 'paste'
+      }, {
+        type: 'separator'
+      }, {
+        label: LANG['edit']['search'],
+        accelerator: 'Shift+CmdOrCtrl+F',
+        click: event
+          .sender
+          .send
+          .bind(event.sender, 'menubar', 'shellmanager-search')
+      }, {
+        type: 'separator'
+      }, {
+        label: LANG['edit']['selectall'],
+        accelerator: 'CmdOrCtrl+A',
+        role: 'selectall'
+      }]
+    }, {
+      // 窗口
+      label: LANG['window']['title'],
+      submenu: [{
+        label: LANG['window']['next'],
+        accelerator: 'Shift+CmdOrCtrl+Right',
+        click: event
+          .sender
+          .send
+          .bind(event.sender, 'menubar', 'tabbar-next')
+      }, {
+        label: LANG['window']['prev'],
+        accelerator: 'Shift+CmdOrCtrl+Left',
+        click: event
+          .sender
+          .send
+          .bind(event.sender, 'menubar', 'tabbar-prev')
+      }, {
+        type: 'separator'
+      }, {
+        label: LANG['window']['close'],
+        accelerator: 'Shift+CmdOrCtrl+W',
+        click: event
+          .sender
+          .send
+          .bind(event.sender, 'menubar', 'tabbar-close')
+      }]
+    }, {
+      // 调试
+      label: LANG['debug']['title'],
+      submenu: [{
+        label: LANG['debug']['restart'],
+        accelerator: 'Shift+CmdOrCtrl+R',
+        click: () => {
+          // 在有多个窗口的时候，不刷新
+          if (this.electron.BrowserWindow.getAllWindows().length > 1) {
+            return;
           }
-        ]
-      }
-    ];
+          this
+            .mainWindow
+            .webContents
+            .loadURL('ant-views://front/index.html'); //.bind(this.mainWindow.webContents)
+        }
+      }, {
+        label: LANG['debug']['devtools'],
+        accelerator: 'Alt+CmdOrCtrl+J',
+        click: this
+          .mainWindow
+          .webContents
+          .toggleDevTools
+          .bind(this.mainWindow.webContents)
+      }]
+    }];
     // 更新菜单栏
     this
       .Menu
@@ -243,66 +233,64 @@ class Menubar {
       image.setTemplateImage(true);
       this.trayIcon = new this.Tray(image);
     }
-    var trayMenuTemplate = [
-      {
-        label: LANG['tray']['show'],
-        click: () => {
-          this
-            .mainWindow
-            .show();
-        }
-      }, {
-        label: LANG['tray']['hide'],
-        click: () => {
-          if (process.platform == 'darwin') {
-            this
-              .app
-              .hide();
-          } else {
-            this
-              .mainWindow
-              .hide();
-          }
-        }
-      }, {
-        label: LANG['tray']['settings'],
-        click: event
-          .sender
-          .send
-          .bind(event.sender, 'menubar', 'settings')
-      }, {
-        label: LANG['debug']['restart'],
-        click: () => {
-          // 在有多个窗口的时候，不刷新
-          if (this.electron.BrowserWindow.getAllWindows().length > 1) {
-            return;
-          }
-          this
-            .mainWindow
-            .webContents
-            .loadURL('ant-views://front/index.html');
-        }
-      }, {
-        label: LANG['tray']['about'],
-        click: event
-          .sender
-          .send
-          .bind(event.sender, 'menubar', 'settings-about')
-      }, {
-        type: 'separator'
-      }, {
-        label: LANG['tray']['quit'],
-        click: this
-          .app
-          .quit
-          .bind(this.app)
+    var trayMenuTemplate = [{
+      label: LANG['tray']['show'],
+      click: () => {
+        this
+          .mainWindow
+          .show();
       }
-    ];
+    }, {
+      label: LANG['tray']['hide'],
+      click: () => {
+        if (process.platform == 'darwin') {
+          this
+            .app
+            .hide();
+        } else {
+          this
+            .mainWindow
+            .hide();
+        }
+      }
+    }, {
+      label: LANG['tray']['settings'],
+      click: event
+        .sender
+        .send
+        .bind(event.sender, 'menubar', 'settings')
+    }, {
+      label: LANG['debug']['restart'],
+      click: () => {
+        // 在有多个窗口的时候，不刷新
+        if (this.electron.BrowserWindow.getAllWindows().length > 1) {
+          return;
+        }
+        this
+          .mainWindow
+          .webContents
+          .loadURL('ant-views://front/index.html');
+      }
+    }, {
+      label: LANG['tray']['about'],
+      click: event
+        .sender
+        .send
+        .bind(event.sender, 'menubar', 'settings-about')
+    }, {
+      type: 'separator'
+    }, {
+      label: LANG['tray']['quit'],
+      click: this
+        .app
+        .quit
+        .bind(this.app)
+    }];
 
     this
       .trayIcon
       .on('click', () => {
-        if (process.platform == 'darwin') 
+        if (process.platform == 'darwin')
           return;
         if (this.mainWindow.isVisible()) {
           this

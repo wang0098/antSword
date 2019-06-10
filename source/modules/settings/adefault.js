@@ -9,7 +9,10 @@ class ADefault {
 
   constructor(sidebar) {
     var self = this;
-    sidebar.addItem({id: 'adefault', text: `<i class="fa fa-sliders"></i> ${LANG['title']}`});
+    sidebar.addItem({
+      id: 'adefault',
+      text: `<i class="fa fa-sliders"></i> ${LANG['title']}`
+    });
     const cell = sidebar.cells('adefault');
     const default_config = {
       filemanager: {
@@ -53,151 +56,134 @@ class ADefault {
       this.shellmanager_settings.others = default_config.shellmanager.others;
     }
     const toolbar = cell.attachToolbar();
-    toolbar.loadStruct([
-      {
-        id: 'save',
-        type: 'button',
-        text: LANG['toolbar']['save'],
-        icon: 'save'
-      }
-    ]);
+    toolbar.loadStruct([{
+      id: 'save',
+      type: 'button',
+      text: LANG['toolbar']['save'],
+      icon: 'save'
+    }]);
     // 表单
-    const form = cell.attachForm([
-      {
-        type: 'block',
-        name: 'filemanager',
-        list: [
-          // {type: "label", label: LANG['filemanager']['title']},
-          {
-            type: "fieldset",
-            label: `<i class="fa fa-folder"></i> ${LANG['filemanager']['title']}`,
-            list: [
-              {
-                type: "block",
-                list: [
-                  {
-                    type: "label",
-                    label: LANG['filemanager']['openfileintab']['title']
-                  }, {
-                    type: 'newcolumn',
-                    offset: 20
-                  }, {
-                    type: "radio",
-                    label: LANG['filemanager']['openfileintab']['window'],
-                    name: 'openfileintab',
-                    checked: filemanager_settings.openfileintab == false,
-                    position: "label-right",
-                    value: false
-                  }, {
-                    type: 'newcolumn',
-                    offset: 20
-                  }, {
-                    type: "radio",
-                    label: LANG['filemanager']['openfileintab']['tab'],
-                    name: 'openfileintab',
-                    checked: filemanager_settings.openfileintab == true,
-                    position: "label-right",
-                    value: true
-                  }
-                ]
-              },
-              // 后续文件管理其它设置
-              {
-                type: 'block',
-                list: [
-                  {
-                    type: 'label',
-                    label: LANG['filemanager']['bookmark']['title']
-                  }, {
-                    type: 'container',
-                    name: 'filemanager_bookmarks',
-                    inputWidth: 600,
-                    inputHeight: 200
-                  }
-                ]
-              }
-            ]
-          }, {
-            type: 'fieldset',
-            label: `<i class="fa fa-database"></i> ${LANG['database']['title']}`,
-            list: [
-              {
-                type: 'block',
-                list: [
-                  {
-                    type: 'label',
-                    label: `${LANG['database']['bookmark']['title']}`
-                  }, {
-                    type: 'container',
-                    name: 'database_bookmarks',
-                    inputWidth: 600,
-                    inputHeight: 200
-                  }
-                ]
-              }
-            ]
-          }, {
-            type: 'fieldset',
-            label: `<i class="fa fa-th-large"></i> ${LANG['shellmanager']['title']}`,
-            list: [
-              {
-                type: 'block',
-                list: [
-                  {
-                    type: 'checkbox',
-                    position: 'label-right',
-                    name: 'shellmanager_ignore-https',
-                    label: LANG['shellmanager']['other']['nohttps'],
-                    checked: self.shellmanager_settings.others['ignore-https'] === 1
-                  }, {
-                    type: "label",
-                    label: LANG['shellmanager']['other']['requestTimeout']
-                  }, {
-                    type: "combo",
-                    position: 'label-right',
-                    label: '/ms',
-                    inputWidth: 100,
-                    name: "shellmanager_request-timeout",
-                    options: ((items) => {
-                      let ret = [];
-                      // 如果自定义的路径不在items里，则++
-                      if (items.indexOf(self.shellmanager_settings.others['request-timeout']) === -1) {
-                        items.unshift(self.shellmanager_settings.others['request-timeout']);
-                      }
-                      items.map((_) => {
-                        ret.push({
-                          text: _,
-                          value: _,
-                          selected: self.shellmanager_settings.others['request-timeout'] === _
-                        })
-                      });
-                      return ret;
-                    })(['5000', '10000', '30000', '60000'])
-                  }, {
-                    type: 'label',
-                    label: LANG['shellmanager']['header']['title']
-                  }, {
-                    type: 'container',
-                    name: 'shellmanager_headers',
-                    inputWidth: 600,
-                    inputHeight: 150
-                  }, {
-                    type: 'label',
-                    label: LANG['shellmanager']['body']['title']
-                  }, {
-                    type: 'container',
-                    name: 'shellmanager_bodys',
-                    inputWidth: 600,
-                    inputHeight: 150
-                  }
-                ]
-              }
-            ]
-          },
-          // 后续其它模块
-        ]
-      }
-    ], true);
+    const form = cell.attachForm([{
+      type: 'block',
+      name: 'filemanager',
+      list: [
+        // {type: "label", label: LANG['filemanager']['title']},
+        {
+          type: "fieldset",
+          label: `<i class="fa fa-folder"></i> ${LANG['filemanager']['title']}`,
+          list: [{
+              type: "block",
+              list: [{
+                type: "label",
+                label: LANG['filemanager']['openfileintab']['title']
+              }, {
+                type: 'newcolumn',
+                offset: 20
+              }, {
+                type: "radio",
+                label: LANG['filemanager']['openfileintab']['window'],
+                name: 'openfileintab',
+                checked: filemanager_settings.openfileintab == false,
+                position: "label-right",
+                value: false
+              }, {
+                type: 'newcolumn',
+                offset: 20
+              }, {
+                type: "radio",
+                label: LANG['filemanager']['openfileintab']['tab'],
+                name: 'openfileintab',
+                checked: filemanager_settings.openfileintab == true,
+                position: "label-right",
+                value: true
+              }]
+            },
+            // 后续文件管理其它设置
+            {
+              type: 'block',
+              list: [{
+                type: 'label',
+                label: LANG['filemanager']['bookmark']['title']
+              }, {
+                type: 'container',
+                name: 'filemanager_bookmarks',
+                inputWidth: 600,
+                inputHeight: 200
+              }]
+            }
+          ]
+        }, {
+          type: 'fieldset',
+          label: `<i class="fa fa-database"></i> ${LANG['database']['title']}`,
+          list: [{
+            type: 'block',
+            list: [{
+              type: 'label',
+              label: `${LANG['database']['bookmark']['title']}`
+            }, {
+              type: 'container',
+              name: 'database_bookmarks',
+              inputWidth: 600,
+              inputHeight: 200
+            }]
+          }]
+        }, {
+          type: 'fieldset',
+          label: `<i class="fa fa-th-large"></i> ${LANG['shellmanager']['title']}`,
+          list: [{
+            type: 'block',
+            list: [{
+              type: 'checkbox',
+              position: 'label-right',
+              name: 'shellmanager_ignore-https',
+              label: LANG['shellmanager']['other']['nohttps'],
+              checked: self.shellmanager_settings.others['ignore-https'] === 1
+            }, {
+              type: "label",
+              label: LANG['shellmanager']['other']['requestTimeout']
+            }, {
+              type: "combo",
+              position: 'label-right',
+              label: '/ms',
+              inputWidth: 100,
+              name: "shellmanager_request-timeout",
+              options: ((items) => {
+                let ret = [];
+                // 如果自定义的路径不在items里，则++
+                if (items.indexOf(self.shellmanager_settings.others['request-timeout']) === -1) {
+                  items.unshift(self.shellmanager_settings.others['request-timeout']);
+                }
+                items.map((_) => {
+                  ret.push({
+                    text: _,
+                    value: _,
+                    selected: self.shellmanager_settings.others['request-timeout'] === _
+                  })
+                });
+                return ret;
+              })(['5000', '10000', '30000', '60000'])
+            }, {
+              type: 'label',
+              label: LANG['shellmanager']['header']['title']
+            }, {
+              type: 'container',
+              name: 'shellmanager_headers',
+              inputWidth: 600,
+              inputHeight: 150
+            }, {
+              type: 'label',
+              label: LANG['shellmanager']['body']['title']
+            }, {
+              type: 'container',
+              name: 'shellmanager_bodys',
+              inputWidth: 600,
+              inputHeight: 150
+            }]
+          }]
+        },
+        // 后续其它模块
+      ]
+    }], true);
     form.enableLiveValidation(true);
 
     let bookmark_grid = new dhtmlXGridObject(form.getContainer('filemanager_bookmarks'));
@@ -227,21 +213,19 @@ class ADefault {
       });
       id = ids[0] || '';
 
-      let menu = [
-        {
-          text: LANG['filemanager']['bookmark']['bmenu']['add'],
-          icon: 'fa fa-plus-circle',
-          action: self
-            .addBookMarks
-            .bind(self)
-        }, {
-          text: LANG['filemanager']['bookmark']['bmenu']['del'],
-          icon: 'fa fa-trash-o',
-          action: () => {
-            self.delBookMarks(ids);
-          }
+      let menu = [{
+        text: LANG['filemanager']['bookmark']['bmenu']['add'],
+        icon: 'fa fa-plus-circle',
+        action: self
+          .addBookMarks
+          .bind(self)
+      }, {
+        text: LANG['filemanager']['bookmark']['bmenu']['del'],
+        icon: 'fa fa-trash-o',
+        action: () => {
+          self.delBookMarks(ids);
         }
-      ];
+      }];
       bmenu(menu, event);
       return true;
     });
@@ -311,21 +295,19 @@ class ADefault {
       });
       id = ids[0] || '';
 
-      let dbmenu = [
-        {
-          text: LANG['database']['bookmark']['bmenu']['add'],
-          icon: 'fa fa-plus-circle',
-          action: self
-            .addDatabaseBookMarks
-            .bind(self)
-        }, {
-          text: LANG['database']['bookmark']['bmenu']['del'],
-          icon: 'fa fa-trash-o',
-          action: () => {
-            self.delDatabaseBookMarks(ids);
-          }
+      let dbmenu = [{
+        text: LANG['database']['bookmark']['bmenu']['add'],
+        icon: 'fa fa-plus-circle',
+        action: self
+          .addDatabaseBookMarks
+          .bind(self)
+      }, {
+        text: LANG['database']['bookmark']['bmenu']['del'],
+        icon: 'fa fa-trash-o',
+        action: () => {
+          self.delDatabaseBookMarks(ids);
         }
-      ];
+      }];
       bmenu(dbmenu, event);
       return true;
     });
@@ -426,21 +408,19 @@ class ADefault {
       });
       id = ids[0] || '';
 
-      let menu = [
-        {
-          text: LANG['shellmanager']['header']['bmenu']['add'],
-          icon: 'fa fa-plus-circle',
-          action: self
-            .addShellmanagerHeaders
-            .bind(self)
-        }, {
-          text: LANG['shellmanager']['header']['bmenu']['del'],
-          icon: 'fa fa-trash-o',
-          action: () => {
-            self.delShellmanagerHeaders(ids);
-          }
+      let menu = [{
+        text: LANG['shellmanager']['header']['bmenu']['add'],
+        icon: 'fa fa-plus-circle',
+        action: self
+          .addShellmanagerHeaders
+          .bind(self)
+      }, {
+        text: LANG['shellmanager']['header']['bmenu']['del'],
+        icon: 'fa fa-trash-o',
+        action: () => {
+          self.delShellmanagerHeaders(ids);
         }
-      ];
+      }];
       bmenu(menu, event);
       return true;
     });
@@ -506,21 +486,19 @@ class ADefault {
       });
       id = ids[0] || '';
 
-      let menu = [
-        {
-          text: LANG['shellmanager']['body']['bmenu']['add'],
-          icon: 'fa fa-plus-circle',
-          action: self
-            .addShellmanagerBodys
-            .bind(self)
-        }, {
-          text: LANG['shellmanager']['body']['bmenu']['del'],
-          icon: 'fa fa-trash-o',
-          action: () => {
-            self.delShellmanagerBodys(ids);
-          }
+      let menu = [{
+        text: LANG['shellmanager']['body']['bmenu']['add'],
+        icon: 'fa fa-plus-circle',
+        action: self
+          .addShellmanagerBodys
+          .bind(self)
+      }, {
+        text: LANG['shellmanager']['body']['bmenu']['del'],
+        icon: 'fa fa-trash-o',
+        action: () => {
+          self.delShellmanagerBodys(ids);
         }
-      ];
+      }];
       bmenu(menu, event);
       return true;
     });
@@ -562,9 +540,8 @@ class ADefault {
     [bookmark_grid, db_bookmark_grid, shellmanager_headers_grid, shellmanager_bodys_grid].forEach((g) => {
       // 空白数据右键fix
       $('.objbox').on('contextmenu', (e) => {
-        (e.target.nodeName === 'DIV' && e.target.grid === g && g.callEvent instanceof Function && antSword['tabbar'].getActiveTab() === "tab_about" && sidebar.getActiveItem() === "adefault")
-          ? g.callEvent('onRightClick', [-1, -1, e])
-          : null;
+        (e.target.nodeName === 'DIV' && e.target.grid === g && g.callEvent instanceof Function && antSword['tabbar'].getActiveTab() === "tab_about" && sidebar.getActiveItem() === "adefault") ?
+        g.callEvent('onRightClick', [-1, -1, e]): null;
       });
     });
     $('.objbox').on('click', (e) => {
@@ -623,9 +600,10 @@ class ADefault {
   addBookMarks() {
     let self = this;
     let hash = +new Date();
-    let index = layer.prompt({title: `<i class="fa fa-bookmark"></i> ${LANG['filemanager']['bookmark']['add']['title']}`,
+    let index = layer.prompt({
+      title: `<i class="fa fa-bookmark"></i> ${LANG['filemanager']['bookmark']['add']['title']}`,
       content: '<input type="text" style="width:300px;" class="layui-layer-input" id="bname_' + hash + '" value="" placeholder="bookmark name"><p/><input style="width:300px;" type="tex' +
-          't" id="bpath_' + hash + '" class="layui-layer-input" value="" placeholder="bookmark path">',
+        't" id="bpath_' + hash + '" class="layui-layer-input" value="" placeholder="bookmark path">',
       btn: [LANG['filemanager']['bookmark']['add']['addbtn']],
       yes: (i) => {
         let _bname = $(`#bname_${hash}`);
@@ -656,9 +634,9 @@ class ADefault {
     if (ids.length === 1 && !ids[0]) {
       return
     }
-    layer.confirm(LANG['filemanager']['bookmark']['del']['confirm'](ids.length > 1
-      ? ids.length
-      : ids[0]), {
+    layer.confirm(LANG['filemanager']['bookmark']['del']['confirm'](ids.length > 1 ?
+      ids.length :
+      ids[0]), {
       icon: 2,
       shift: 6,
       title: `<i class="fa fa-trash"></i> ${LANG['filemanager']['bookmark']['del']['title']}`
@@ -716,9 +694,10 @@ class ADefault {
   addDatabaseBookMarks() {
     let self = this;
     let hash = +new Date();
-    let index = layer.prompt({title: `<i class="fa fa-bookmark"></i> ${LANG['database']['bookmark']['add']['title']}`,
+    let index = layer.prompt({
+      title: `<i class="fa fa-bookmark"></i> ${LANG['database']['bookmark']['add']['title']}`,
       content: '<input type="text" style="width:300px;" class="layui-layer-input" id="bname_' + hash + '" value="" placeholder="bookmark name"><p/><input style="width:300px;" type="tex' +
-          't" id="bpath_' + hash + '" class="layui-layer-input" value="" placeholder="bookmark sql">',
+        't" id="bpath_' + hash + '" class="layui-layer-input" value="" placeholder="bookmark sql">',
       btn: [LANG['database']['bookmark']['add']['addbtn']],
       yes: (i) => {
         let _bname = $(`#bname_${hash}`);
@@ -749,9 +728,9 @@ class ADefault {
     if (ids.length === 1 && !ids[0]) {
       return
     }
-    layer.confirm(LANG['database']['bookmark']['del']['confirm'](ids.length > 1
-      ? ids.length
-      : ids[0]), {
+    layer.confirm(LANG['database']['bookmark']['del']['confirm'](ids.length > 1 ?
+      ids.length :
+      ids[0]), {
       icon: 2,
       shift: 6,
       title: `<i class="fa fa-trash"></i> ${LANG['database']['bookmark']['del']['title']}`
@@ -807,9 +786,10 @@ class ADefault {
   addShellmanagerHeaders() {
     let self = this;
     let hash = +new Date();
-    let index = layer.prompt({title: `<i class="fa fa-bookmark"></i> ${LANG['shellmanager']['header']['add']['title']}`,
+    let index = layer.prompt({
+      title: `<i class="fa fa-bookmark"></i> ${LANG['shellmanager']['header']['add']['title']}`,
       content: '<input type="text" style="width:300px;" class="layui-layer-input" id="bname_' + hash + '" value="" placeholder="name"><p/><input style="width:300px;" type="text" id="bv' +
-          'alue_' + hash + '" class="layui-layer-input" value="" placeholder="value">',
+        'alue_' + hash + '" class="layui-layer-input" value="" placeholder="value">',
       btn: [LANG['shellmanager']['header']['add']['addbtn']],
       yes: (i) => {
         let _bname = $(`#bname_${hash}`);
@@ -836,9 +816,9 @@ class ADefault {
     if (ids.length === 1 && !ids[0]) {
       return
     }
-    layer.confirm(LANG['shellmanager']['header']['del']['confirm'](ids.length > 1
-      ? ids.length
-      : ids[0]), {
+    layer.confirm(LANG['shellmanager']['header']['del']['confirm'](ids.length > 1 ?
+      ids.length :
+      ids[0]), {
       icon: 2,
       shift: 6,
       title: `<i class="fa fa-trash"></i> ${LANG['shellmanager']['header']['del']['title']}`
@@ -894,9 +874,10 @@ class ADefault {
   addShellmanagerBodys() {
     let self = this;
     let hash = +new Date();
-    let index = layer.prompt({title: `<i class="fa fa-bookmark"></i> ${LANG['shellmanager']['body']['add']['title']}`,
+    let index = layer.prompt({
+      title: `<i class="fa fa-bookmark"></i> ${LANG['shellmanager']['body']['add']['title']}`,
       content: '<input type="text" style="width:300px;" class="layui-layer-input" id="bname_' + hash + '" value="" placeholder="name"><p/><input style="width:300px;" type="text" id="bv' +
-          'alue_' + hash + '" class="layui-layer-input" value="" placeholder="value">',
+        'alue_' + hash + '" class="layui-layer-input" value="" placeholder="value">',
       btn: [LANG['shellmanager']['body']['add']['addbtn']],
       yes: (i) => {
         let _bname = $(`#bname_${hash}`);
@@ -923,9 +904,9 @@ class ADefault {
     if (ids.length === 1 && !ids[0]) {
       return
     }
-    layer.confirm(LANG['shellmanager']['body']['del']['confirm'](ids.length > 1
-      ? ids.length
-      : ids[0]), {
+    layer.confirm(LANG['shellmanager']['body']['del']['confirm'](ids.length > 1 ?
+      ids.length :
+      ids[0]), {
       icon: 2,
       shift: 6,
       title: `<i class="fa fa-trash"></i> ${LANG['shellmanager']['body']['del']['title']}`

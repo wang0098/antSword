@@ -24,9 +24,9 @@ class Logger {
     let tm = new Date()
       .toTimeString()
       .split(' ')[0];
-    let log = typeof logs === 'object'
-      ? JSON.stringify(logs)
-      : String(logs);
+    let log = typeof logs === 'object' ?
+      JSON.stringify(logs) :
+      String(logs);
     return `[${tm}] ${type.toUpperCase()}::${this.tag}\t${log}`;
   }
 

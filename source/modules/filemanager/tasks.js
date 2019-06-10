@@ -50,7 +50,7 @@ class Tasks {
       .cell
       .expand();
     // 创建一个随机ID
-    const hash = String(+ new Date() + Math.random()).replace('.', '_');
+    const hash = String(+new Date() + Math.random()).replace('.', '_');
     this
       .grid
       .addRow(hash, [

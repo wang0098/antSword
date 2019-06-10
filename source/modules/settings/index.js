@@ -40,7 +40,10 @@ class Settings {
     tabbar.addTab('tab_about', '<i class="fa fa-cog"></i>', null, null, true, true);
     const cell = tabbar.tabs('tab_about');
 
-    const sidebar = cell.attachSidebar({template: 'text', width: 200});
+    const sidebar = cell.attachSidebar({
+      template: 'text',
+      width: 200
+    });
     this.about = new About(sidebar);
     this.language = new Language(sidebar);
     // this.update = new Update(sidebar);

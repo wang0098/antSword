@@ -19,9 +19,9 @@ class CUSTOM {
     this.conns = {
       'mysql': 'com.mysql.jdbc.Driver\r\njdbc:mysql://localhost/test?user=root&password=123456',
       'sqlserver': 'com.microsoft.sqlserver.jdbc.SQLServerDriver\r\njdbc:sqlserver://127.0.0.1:1433;' +
-          'databaseName=test;user=sa;password=123456',
+        'databaseName=test;user=sa;password=123456',
       'oracle': 'oracle.jdbc.driver.OracleDriver\r\njdbc:oracle:thin:@127.0.0.1:1521/test\r\nuser' +
-          '\r\npassword'
+        '\r\npassword'
     };
     // 1. 初始化TREE UI
     this.tree = this
@@ -36,9 +36,9 @@ class CUSTOM {
       .tree
       .attachEvent('onClick', (id) => {
         // 更改按钮状态
-        id.startsWith('conn::')
-          ? this.enableToolbar()
-          : this.disableToolbar();
+        id.startsWith('conn::') ?
+          this.enableToolbar() :
+          this.disableToolbar();
         // 设置当前配置
         const tmp = id.split('::');
         const arr = tmp[1].split(':');
@@ -65,7 +65,7 @@ class CUSTOM {
           throw new Error('ID ERR: ' + id)
         };
         switch (arr[0]) {
-            // 获取数据库列表
+          // 获取数据库列表
           case 'conn':
             this.getDatabases(arr[1]);
             break;
@@ -109,31 +109,29 @@ class CUSTOM {
         this
           .tree
           .callEvent('onClick', [id]);
-        bmenu([
-          {
-            text: LANG['list']['menu']['add'],
-            icon: 'fa fa-plus-circle',
-            action: this
-              .addConf
-              .bind(this)
-          }, {
-            divider: true
-          }, {
-            text: LANG['list']['menu']['edit'],
-            icon: 'fa fa-edit',
-            action: this
-              .editConf
-              .bind(this)
-          }, {
-            divider: true
-          }, {
-            text: LANG['list']['menu']['del'],
-            icon: 'fa fa-remove',
-            action: this
-              .delConf
-              .bind(this)
-          }
-        ], event);
+        bmenu([{
+          text: LANG['list']['menu']['add'],
+          icon: 'fa fa-plus-circle',
+          action: this
+            .addConf
+            .bind(this)
+        }, {
+          divider: true
+        }, {
+          text: LANG['list']['menu']['edit'],
+          icon: 'fa fa-edit',
+          action: this
+            .editConf
+            .bind(this)
+        }, {
+          divider: true
+        }, {
+          text: LANG['list']['menu']['del'],
+          icon: 'fa fa-remove',
+          action: this
+            .delConf
+            .bind(this)
+        }], event);
       });
   }
 
@@ -172,7 +170,7 @@ class CUSTOM {
 
   // 添加配置
   addConf() {
-    const hash = (+ new Date * Math.random())
+    const hash = (+new Date * Math.random())
       .toString(16)
       .substr(2, 8);
     // 创建窗口
@@ -189,73 +187,69 @@ class CUSTOM {
     win.denyResize();
     // 工具栏
     const toolbar = win.attachToolbar();
-    toolbar.loadStruct([
-      {
-        id: 'add',
-        type: 'button',
-        icon: 'plus-circle',
-        text: LANG['form']['toolbar']['add']
-      }, {
-        type: 'separator'
-      }, {
-        id: 'clear',
-        type: 'button',
-        icon: 'remove',
-        text: LANG['form']['toolbar']['clear']
-      }, {
-        type: 'separator'
-      }, {
-        id: 'test',
-        type: 'button',
-        icon: 'spinner',
-        text: LANG['form']['toolbar']['test']
-      }
-    ]);
+    toolbar.loadStruct([{
+      id: 'add',
+      type: 'button',
+      icon: 'plus-circle',
+      text: LANG['form']['toolbar']['add']
+    }, {
+      type: 'separator'
+    }, {
+      id: 'clear',
+      type: 'button',
+      icon: 'remove',
+      text: LANG['form']['toolbar']['clear']
+    }, {
+      type: 'separator'
+    }, {
+      id: 'test',
+      type: 'button',
+      icon: 'spinner',
+      text: LANG['form']['toolbar']['test']
+    }]);
 
     // form
-    const form = win.attachForm([
-      {
-        type: 'settings',
-        position: 'label-left',
-        labelWidth: 80,
-        inputWidth: 280
-      }, {
-        type: 'block',
-        inputWidth: 'auto',
-        offsetTop: 12,
-        list: [
-          {
-            type: 'combo',
-            label: LANG['form']['type'],
-            readonly: true,
-            name: 'type',
-            options: (() => {
-              let ret = [];
-              for (let _ in this.conns) {
-                ret.push({
-                  text: _.toUpperCase(),
-                  value: _
-                });
-              }
-              return ret;
-            })()
-          }, {
-            type: 'input',
-            label: LANG['form']['conn'],
-            name: 'conn',
-            required: true,
-            value: 'com.mysql.jdbc.Driver\r\njdbc:mysql://localhost/test?user=root&password=123456',
-            rows: 9
+    const form = win.attachForm([{
+      type: 'settings',
+      position: 'label-left',
+      labelWidth: 80,
+      inputWidth: 280
+    }, {
+      type: 'block',
+      inputWidth: 'auto',
+      offsetTop: 12,
+      list: [{
+        type: 'combo',
+        label: LANG['form']['type'],
+        readonly: true,
+        name: 'type',
+        options: (() => {
+          let ret = [];
+          for (let _ in this.conns) {
+            ret.push({
+              text: _.toUpperCase(),
+              value: _
+            });
           }
-        ]
-      }
-    ], true);
+          return ret;
+        })()
+      }, {
+        type: 'input',
+        label: LANG['form']['conn'],
+        name: 'conn',
+        required: true,
+        value: 'com.mysql.jdbc.Driver\r\njdbc:mysql://localhost/test?user=root&password=123456',
+        rows: 9
+      }]
+    }], true);
 
     form.attachEvent('onChange', (_, id) => {
       if (_ !== 'type') {
         return
       };
-      form.setFormData({conn: this.conns[id]});
+      form.setFormData({
+        conn: this.conns[id]
+      });
     });
 
     // 工具栏点击事件
@@ -281,8 +275,8 @@ class CUSTOM {
           this
             .tree
             .insertNewItem(0, `conn::${id}`,
-            // `${data['type']}:\/\/${data['user']}@${data['host']}`,
-            data['type'].toUpperCase(), null, this.manager.list.imgs[0], this.manager.list.imgs[0], this.manager.list.imgs[0]);
+              // `${data['type']}:\/\/${data['user']}@${data['host']}`,
+              data['type'].toUpperCase(), null, this.manager.list.imgs[0], this.manager.list.imgs[0], this.manager.list.imgs[0]);
           break;
         case 'test':
           if (!form.validate()) {
@@ -293,7 +287,9 @@ class CUSTOM {
           win.progressOn();
           this
             .core
-            .request(this.core[`database_${_data['type']}`].show_databases({conn: _data['conn']}))
+            .request(this.core[`database_${_data['type']}`].show_databases({
+              conn: _data['conn']
+            }))
             .then((res) => {
               if (res['text'].length > 0) {
                 if (res['text'].indexOf("ERROR://") > -1) {
@@ -325,7 +321,7 @@ class CUSTOM {
       _id: this.manager.opt['_id'],
       id: id
     });
-    const hash = (+ new Date * Math.random())
+    const hash = (+new Date * Math.random())
       .toString(16)
       .substr(2, 8);
     // 创建窗口
@@ -342,74 +338,70 @@ class CUSTOM {
     win.denyResize();
     // 工具栏
     const toolbar = win.attachToolbar();
-    toolbar.loadStruct([
-      {
-        id: 'edit',
-        type: 'button',
-        icon: 'edit',
-        text: LANG['form']['toolbar']['edit']
-      }, {
-        type: 'separator'
-      }, {
-        id: 'clear',
-        type: 'button',
-        icon: 'remove',
-        text: LANG['form']['toolbar']['clear']
-      }, {
-        type: 'separator'
-      }, {
-        id: 'test',
-        type: 'button',
-        icon: 'spinner',
-        text: LANG['form']['toolbar']['test']
-      }
-    ]);
+    toolbar.loadStruct([{
+      id: 'edit',
+      type: 'button',
+      icon: 'edit',
+      text: LANG['form']['toolbar']['edit']
+    }, {
+      type: 'separator'
+    }, {
+      id: 'clear',
+      type: 'button',
+      icon: 'remove',
+      text: LANG['form']['toolbar']['clear']
+    }, {
+      type: 'separator'
+    }, {
+      id: 'test',
+      type: 'button',
+      icon: 'spinner',
+      text: LANG['form']['toolbar']['test']
+    }]);
 
     // form
-    const form = win.attachForm([
-      {
-        type: 'settings',
-        position: 'label-left',
-        labelWidth: 80,
-        inputWidth: 280
-      }, {
-        type: 'block',
-        inputWidth: 'auto',
-        offsetTop: 12,
-        list: [
-          {
-            type: 'combo',
-            label: LANG['form']['type'],
-            readonly: true,
-            name: 'type',
-            options: (() => {
-              let ret = [];
-              for (let _ in this.conns) {
-                ret.push({
-                  text: _.toUpperCase(),
-                  value: _,
-                  selected: conf['type'] === _
-                });
-              }
-              return ret;
-            })()
-          }, {
-            type: 'input',
-            label: LANG['form']['conn'],
-            name: 'conn',
-            required: true,
-            value: conf['conn'],
-            rows: 9
+    const form = win.attachForm([{
+      type: 'settings',
+      position: 'label-left',
+      labelWidth: 80,
+      inputWidth: 280
+    }, {
+      type: 'block',
+      inputWidth: 'auto',
+      offsetTop: 12,
+      list: [{
+        type: 'combo',
+        label: LANG['form']['type'],
+        readonly: true,
+        name: 'type',
+        options: (() => {
+          let ret = [];
+          for (let _ in this.conns) {
+            ret.push({
+              text: _.toUpperCase(),
+              value: _,
+              selected: conf['type'] === _
+            });
           }
-        ]
-      }
-    ], true);
+          return ret;
+        })()
+      }, {
+        type: 'input',
+        label: LANG['form']['conn'],
+        name: 'conn',
+        required: true,
+        value: conf['conn'],
+        rows: 9
+      }]
+    }], true);
 
     form.attachEvent('onChange', (_, id) => {
       if (_ !== 'type') {
         return
       };
-      form.setFormData({conn: this.conns[id]});
+      form.setFormData({
+        conn: this.conns[id]
+      });
     });
 
     // 工具栏点击事件
@@ -448,7 +440,9 @@ class CUSTOM {
           win.progressOn();
           this
             .core
-            .request(this.core[`database_${_data['type']}`].show_databases({conn: _data['conn']}))
+            .request(this.core[`database_${_data['type']}`].show_databases({
+              conn: _data['conn']
+            }))
             .then((res) => {
               if (res['text'].length > 0) {
                 if (res['text'].indexOf("ERROR://") > -1) {
@@ -517,9 +511,9 @@ class CUSTOM {
       .request(this.core[`database_${conf['type']}`].show_databases({
         conn: conf['conn'],
         encode: this.manager.opt.encode,
-        db: ['access', 'microsoft_jet_oledb_4_0'].indexOf(conf['type']) > -1
-          ? conf['conn'].match(/[\w]+.mdb$/)
-          : 'database'
+        db: ['access', 'microsoft_jet_oledb_4_0'].indexOf(conf['type']) > -1 ?
+          conf['conn'].match(/[\w]+.mdb$/) :
+          'database'
       }))
       .then((res) => {
         let ret = res['text'];
@@ -579,7 +573,11 @@ class CUSTOM {
 
     this
       .core
-      .request(this.core[`database_${conf['type']}`].show_tables({conn: conf['conn'], encode: this.manager.opt.encode, db: db}))
+      .request(this.core[`database_${conf['type']}`].show_tables({
+        conn: conf['conn'],
+        encode: this.manager.opt.encode,
+        db: db
+      }))
       .then((res) => {
         let ret = res['text'];
         const arr = ret.split('\t');
@@ -633,7 +631,12 @@ class CUSTOM {
 
     this
       .core
-      .request(this.core[`database_${conf['type']}`].show_columns({conn: conf['conn'], encode: this.manager.opt.encode, db: db, table: table}))
+      .request(this.core[`database_${conf['type']}`].show_columns({
+        conn: conf['conn'],
+        encode: this.manager.opt.encode,
+        db: db,
+        table: table
+      }))
       .then((res) => {
         let ret = res['text'];
         const arr = ret.split('\t');
@@ -665,9 +668,9 @@ class CUSTOM {
           .query
           .editor
           .session
-          .setValue(conf['type'] === 'oracle'
-            ? `SELECT * FROM (SELECT A.*,ROWNUM N FROM ${db}.${table} A ORDER BY 1 DESC) WHERE N>0 AND N<=20`
-            : `SELECT * FROM ${db}.${table} ORDER BY 1 DESC LIMIT 0,20;`);
+          .setValue(conf['type'] === 'oracle' ?
+            `SELECT * FROM (SELECT A.*,ROWNUM N FROM ${db}.${table} A ORDER BY 1 DESC) WHERE N>0 AND N<=20` :
+            `SELECT * FROM ${db}.${table} ORDER BY 1 DESC LIMIT 0,20;`);
         this
           .manager
           .list
@@ -694,7 +697,11 @@ class CUSTOM {
 
     this
       .core
-      .request(this.core[`database_${this.dbconf['type']}`].query({conn: this.dbconf['conn'], encode: this.manager.opt.encode, sql: sql}))
+      .request(this.core[`database_${this.dbconf['type']}`].query({
+        conn: this.dbconf['conn'],
+        encode: this.manager.opt.encode,
+        sql: sql
+      }))
       .then((res) => {
         let ret = res['text'];
         // 更新执行结果
@@ -769,9 +776,9 @@ class CUSTOM {
       'rows': grid_data
     }, 'json');
     // 启用导出按钮
-    this.manager.result.toolbar[grid_data.length > 0
-        ? 'enableItem'
-        : 'disableItem']('dump');
+    this.manager.result.toolbar[grid_data.length > 0 ?
+      'enableItem' :
+      'disableItem']('dump');
   }
 
   // 导出查询数据
@@ -786,7 +793,8 @@ class CUSTOM {
       .__opts__
       .ip}_${new Date()
       .format("yyyyMMddhhmmss")}.csv`;
-    dialog.showSaveDialog({title: LANG['result']['dump']['title'],
+    dialog.showSaveDialog({
+      title: LANG['result']['dump']['title'],
       defaultPath: filename
     }, (filePath) => {
       if (!filePath) {

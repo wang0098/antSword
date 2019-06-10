@@ -11,7 +11,7 @@
 class Tabbar {
   constructor(opts) {
     // 生成一个随机ID，用于指定唯一的面板
-    let id = 'tabbar_' + (Math.random() * + new Date)
+    let id = 'tabbar_' + (Math.random() * +new Date)
       .toString(16)
       .replace('.', '')
       .substr(0, 11);
@@ -86,9 +86,9 @@ class Tabbar {
    * @return {Object}           this
    */
   showLoading(loading = true) {
-    this.cell[loading
-        ? 'progressOn'
-        : 'progressOff']();
+    this.cell[loading ?
+      'progressOn' :
+      'progressOff']();
     return this;
   }
 }

@@ -23,7 +23,10 @@ class Database {
    */
   constructor(electron) {
     logger = new electron.Logger('Database');
-    this.cursor = new Datastore({filename: CONF.dataPath, autoload: true});
+    this.cursor = new Datastore({
+      filename: CONF.dataPath,
+      autoload: true
+    });
     // 监听事件
     electron
       .ipcMain
@@ -56,7 +59,7 @@ class Database {
       Object
         .keys(opts)
         .map((f) => {
-          if (opts[f]instanceof Object) {
+          if (opts[f] instanceof Object) {
             opts[f] = self.convertOptstoNedbQuery(opts[f]);
           }
           if (f == "$regex") {
@@ -81,7 +84,9 @@ class Database {
     this
       .cursor
       .find(opts)
-      .sort({utime: -1})
+      .sort({
+        utime: -1
+      })
       .exec((err, ret) => {
         event.returnValue = ret || [];
       });
@@ -125,7 +130,10 @@ class Database {
         }
         // 获取地理位置
         const _addr = qqwry.searchIP(ip);
-        return res({ip: ip, addr: `${_addr.Country} ${_addr.Area}`});
+        return res({
+          ip: ip,
+          addr: `${_addr.Country} ${_addr.Area}`
+        });
       })
     })
   }
@@ -159,8 +167,8 @@ class Database {
             decoder: opts.base['decoder'],
             httpConf: opts.http,
             otherConf: opts.other,
-            ctime: + new Date,
-            utime: + new Date
+            ctime: +new Date,
+            utime: +new Date
           }, (_err, _ret) => {
             event.returnValue = _err || _ret;
           });
@@ -205,7 +213,7 @@ class Database {
               decoder: _new.base['decoder'],
               httpConf: _new.http,
               otherConf: _new.other,
-              utime: + new Date
+              utime: +new Date
             }
           }, (_err, _ret) => {
             event.returnValue = _err || _ret;
@@ -232,7 +240,7 @@ class Database {
       }, {
         $set: {
           httpConf: opt.conf,
-          utime: + new Date
+          utime: +new Date
         }
       }, (_err, _ret) => {
         event.returnValue = _err || _ret;
@@ -319,7 +327,7 @@ class Database {
       }, {
         $set: {
           category: opts['category'] || 'default',
-          utime: + new Date
+          utime: +new Date
         }
       }, {
         multi: true
@@ -343,7 +351,7 @@ class Database {
       }, (err, ret) => {
         let confs = ret['database'] || {};
         // 随机Id（顺序增长
-        const random_id = parseInt(+ new Date + Math.random() * 1000).toString(16);
+        const random_id = parseInt(+new Date + Math.random() * 1000).toString(16);
         // 添加到配置
         confs[random_id] = opts['data'];
         // 更新数据库
@@ -354,7 +362,7 @@ class Database {
           }, {
             $set: {
               database: confs,
-              utime: + new Date
+              utime: +new Date
             }
           }, (_err, _ret) => {
             event.returnValue = random_id;
@@ -386,7 +394,7 @@ class Database {
           }, {
             $set: {
               database: confs,
-              utime: + new Date
+              utime: +new Date
             }
           }, (_err, _ret) => {
             event.returnValue = opts['id'];
@@ -419,7 +427,7 @@ class Database {
           }, {
             $set: {
               database: confs,
-              utime: + new Date
+              utime: +new Date
             }
           }, (_err, _ret) => {
             event.returnValue = _err || _ret;
@@ -462,11 +470,11 @@ class Database {
         ret['plugins'] = ret['plugins'] || {};
         let confs = ret['plugins'][plugin] || {};
         // 随机Id（顺序增长
-        const random_id = parseInt(+ new Date + Math.random() * 1000).toString(16);
+        const random_id = parseInt(+new Date + Math.random() * 1000).toString(16);
         // 添加到配置
         confs[random_id] = opts['data'];
         let setdata = {
-          utime: + new Date
+          utime: +new Date
         }
         setdata[`plugins.${plugin}`] = confs;
 
@@ -501,7 +509,7 @@ class Database {
         // 添加到配置
         confs[opts['id']] = opts['data'];
         let setdata = {
-          utime: + new Date
+          utime: +new Date
         }
         setdata[`plugins.${plugin}`] = confs;
         // 更新数据库
@@ -537,7 +545,7 @@ class Database {
         // 2. 删除配置
         delete confs[opts['id']];
         let setdata = {
-          utime: + new Date
+          utime: +new Date
         }
         setdata[`plugins.${plugin}`] = confs;
         // 3. 更新数据库

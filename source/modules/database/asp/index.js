@@ -22,11 +22,11 @@ class ASP {
       'access': 'Driver={Microsoft Access Driver(*.mdb)};DBQ=c:\\test.mdb',
       'sqlserver': 'Driver={Sql Server};Server=(local);Database=master;Uid=sa;Pwd=',
       'sqloledb_1': 'Provider=SQLOLEDB.1;User ID=sa;Password=;Initial Catalog=master;Data Source=(loc' +
-          'al);',
+        'al);',
       'sqloledb_1_sspi': 'Provider=SQLOLEDB.1;Initial Catalog=master;Data Source=(local);Integrated Securi' +
-          'ty=SSPI;',
+        'ty=SSPI;',
       'oracle': 'Provider=OraOLEDB.Oracle;Data Source=test;User Id=sys;Password=;Persist Security' +
-          ' Info=True;',
+        ' Info=True;',
       'microsoft_jet_oledb_4_0': 'Provider=Microsoft.Jet.OLEDB.4.0;Data Source=c:\\test.mdb'
     };
     // 1. 初始化TREE UI
@@ -42,9 +42,9 @@ class ASP {
       .tree
       .attachEvent('onClick', (id) => {
         // 更改按钮状态
-        id.startsWith('conn::')
-          ? this.enableToolbar()
-          : this.disableToolbar();
+        id.startsWith('conn::') ?
+          this.enableToolbar() :
+          this.disableToolbar();
         // 设置当前配置
         const tmp = id.split('::');
         const arr = tmp[1].split(':');
@@ -71,7 +71,7 @@ class ASP {
           throw new Error('ID ERR: ' + id)
         };
         switch (arr[0]) {
-            // 获取数据库列表
+          // 获取数据库列表
           case 'conn':
             this.getDatabases(arr[1]);
             break;
@@ -125,31 +125,29 @@ class ASP {
         this
           .tree
           .callEvent('onClick', [id]);
-        bmenu([
-          {
-            text: LANG['list']['menu']['add'],
-            icon: 'fa fa-plus-circle',
-            action: this
-              .addConf
-              .bind(this)
-          }, {
-            divider: true
-          }, {
-            text: LANG['list']['menu']['edit'],
-            icon: 'fa fa-edit',
-            action: this
-              .editConf
-              .bind(this)
-          }, {
-            divider: true
-          }, {
-            text: LANG['list']['menu']['del'],
-            icon: 'fa fa-remove',
-            action: this
-              .delConf
-              .bind(this)
-          }
-        ], event);
+        bmenu([{
+          text: LANG['list']['menu']['add'],
+          icon: 'fa fa-plus-circle',
+          action: this
+            .addConf
+            .bind(this)
+        }, {
+          divider: true
+        }, {
+          text: LANG['list']['menu']['edit'],
+          icon: 'fa fa-edit',
+          action: this
+            .editConf
+            .bind(this)
+        }, {
+          divider: true
+        }, {
+          text: LANG['list']['menu']['del'],
+          icon: 'fa fa-remove',
+          action: this
+            .delConf
+            .bind(this)
+        }], event);
       });
   }
 
@@ -188,7 +186,7 @@ class ASP {
 
   // 添加配置
   addConf() {
-    const hash = (+ new Date * Math.random())
+    const hash = (+new Date * Math.random())
       .toString(16)
       .substr(2, 8);
     // 创建窗口
@@ -205,73 +203,69 @@ class ASP {
     win.denyResize();
     // 工具栏
     const toolbar = win.attachToolbar();
-    toolbar.loadStruct([
-      {
-        id: 'add',
-        type: 'button',
-        icon: 'plus-circle',
-        text: LANG['form']['toolbar']['add']
-      }, {
-        type: 'separator'
-      }, {
-        id: 'clear',
-        type: 'button',
-        icon: 'remove',
-        text: LANG['form']['toolbar']['clear']
-      }, {
-        type: 'separator'
-      }, {
-        id: 'test',
-        type: 'button',
-        icon: 'spinner',
-        text: LANG['form']['toolbar']['test']
-      }
-    ]);
+    toolbar.loadStruct([{
+      id: 'add',
+      type: 'button',
+      icon: 'plus-circle',
+      text: LANG['form']['toolbar']['add']
+    }, {
+      type: 'separator'
+    }, {
+      id: 'clear',
+      type: 'button',
+      icon: 'remove',
+      text: LANG['form']['toolbar']['clear']
+    }, {
+      type: 'separator'
+    }, {
+      id: 'test',
+      type: 'button',
+      icon: 'spinner',
+      text: LANG['form']['toolbar']['test']
+    }]);
 
     // form
-    const form = win.attachForm([
-      {
-        type: 'settings',
-        position: 'label-left',
-        labelWidth: 80,
-        inputWidth: 280
-      }, {
-        type: 'block',
-        inputWidth: 'auto',
-        offsetTop: 12,
-        list: [
-          {
-            type: 'combo',
-            label: LANG['form']['type'],
-            readonly: true,
-            name: 'type',
-            options: (() => {
-              let ret = [];
-              for (let _ in this.conns) {
-                ret.push({
-                  text: _.toUpperCase(),
-                  value: _
-                });
-              }
-              return ret;
-            })()
-          }, {
-            type: 'input',
-            label: LANG['form']['conn'],
-            name: 'conn',
-            required: true,
-            value: 'Dsn=DsnName;',
-            rows: 9
+    const form = win.attachForm([{
+      type: 'settings',
+      position: 'label-left',
+      labelWidth: 80,
+      inputWidth: 280
+    }, {
+      type: 'block',
+      inputWidth: 'auto',
+      offsetTop: 12,
+      list: [{
+        type: 'combo',
+        label: LANG['form']['type'],
+        readonly: true,
+        name: 'type',
+        options: (() => {
+          let ret = [];
+          for (let _ in this.conns) {
+            ret.push({
+              text: _.toUpperCase(),
+              value: _
+            });
           }
-        ]
-      }
-    ], true);
+          return ret;
+        })()
+      }, {
+        type: 'input',
+        label: LANG['form']['conn'],
+        name: 'conn',
+        required: true,
+        value: 'Dsn=DsnName;',
+        rows: 9
+      }]
+    }], true);
 
     form.attachEvent('onChange', (_, id) => {
       if (_ !== 'type') {
         return
       };
-      form.setFormData({conn: this.conns[id]});
+      form.setFormData({
+        conn: this.conns[id]
+      });
     });
 
     // 工具栏点击事件
@@ -297,8 +291,8 @@ class ASP {
           this
             .tree
             .insertNewItem(0, `conn::${id}`,
-            // `${data['type']}:\/\/${data['user']}@${data['host']}`,
-            data['type'].toUpperCase(), null, this.manager.list.imgs[0], this.manager.list.imgs[0], this.manager.list.imgs[0]);
+              // `${data['type']}:\/\/${data['user']}@${data['host']}`,
+              data['type'].toUpperCase(), null, this.manager.list.imgs[0], this.manager.list.imgs[0], this.manager.list.imgs[0]);
           break;
         case 'test':
           if (!form.validate()) {
@@ -309,7 +303,9 @@ class ASP {
           win.progressOn();
           this
             .core
-            .request(this.core[`database_${_data['type']}`].show_databases({conn: _data['conn']}))
+            .request(this.core[`database_${_data['type']}`].show_databases({
+              conn: _data['conn']
+            }))
             .then((res) => {
               if (res['text'].length > 0) {
                 if (res['text'].indexOf("ERROR://") > -1) {
@@ -341,7 +337,7 @@ class ASP {
       _id: this.manager.opt['_id'],
       id: id
     });
-    const hash = (+ new Date * Math.random())
+    const hash = (+new Date * Math.random())
       .toString(16)
       .substr(2, 8);
     // 创建窗口
@@ -358,74 +354,70 @@ class ASP {
     win.denyResize();
     // 工具栏
     const toolbar = win.attachToolbar();
-    toolbar.loadStruct([
-      {
-        id: 'edit',
-        type: 'button',
-        icon: 'edit',
-        text: LANG['form']['toolbar']['edit']
-      }, {
-        type: 'separator'
-      }, {
-        id: 'clear',
-        type: 'button',
-        icon: 'remove',
-        text: LANG['form']['toolbar']['clear']
-      }, {
-        type: 'separator'
-      }, {
-        id: 'test',
-        type: 'button',
-        icon: 'spinner',
-        text: LANG['form']['toolbar']['test']
-      }
-    ]);
+    toolbar.loadStruct([{
+      id: 'edit',
+      type: 'button',
+      icon: 'edit',
+      text: LANG['form']['toolbar']['edit']
+    }, {
+      type: 'separator'
+    }, {
+      id: 'clear',
+      type: 'button',
+      icon: 'remove',
+      text: LANG['form']['toolbar']['clear']
+    }, {
+      type: 'separator'
+    }, {
+      id: 'test',
+      type: 'button',
+      icon: 'spinner',
+      text: LANG['form']['toolbar']['test']
+    }]);
 
     // form
-    const form = win.attachForm([
-      {
-        type: 'settings',
-        position: 'label-left',
-        labelWidth: 80,
-        inputWidth: 280
-      }, {
-        type: 'block',
-        inputWidth: 'auto',
-        offsetTop: 12,
-        list: [
-          {
-            type: 'combo',
-            label: LANG['form']['type'],
-            readonly: true,
-            name: 'type',
-            options: (() => {
-              let ret = [];
-              for (let _ in this.conns) {
-                ret.push({
-                  text: _.toUpperCase(),
-                  value: _,
-                  selected: conf['type'] === _
-                });
-              }
-              return ret;
-            })()
-          }, {
-            type: 'input',
-            label: LANG['form']['conn'],
-            name: 'conn',
-            required: true,
-            value: conf['conn'],
-            rows: 9
+    const form = win.attachForm([{
+      type: 'settings',
+      position: 'label-left',
+      labelWidth: 80,
+      inputWidth: 280
+    }, {
+      type: 'block',
+      inputWidth: 'auto',
+      offsetTop: 12,
+      list: [{
+        type: 'combo',
+        label: LANG['form']['type'],
+        readonly: true,
+        name: 'type',
+        options: (() => {
+          let ret = [];
+          for (let _ in this.conns) {
+            ret.push({
+              text: _.toUpperCase(),
+              value: _,
+              selected: conf['type'] === _
+            });
           }
-        ]
-      }
-    ], true);
+          return ret;
+        })()
+      }, {
+        type: 'input',
+        label: LANG['form']['conn'],
+        name: 'conn',
+        required: true,
+        value: conf['conn'],
+        rows: 9
+      }]
+    }], true);
 
     form.attachEvent('onChange', (_, id) => {
       if (_ !== 'type') {
         return
       };
-      form.setFormData({conn: this.conns[id]});
+      form.setFormData({
+        conn: this.conns[id]
+      });
     });
 
     // 工具栏点击事件
@@ -463,7 +455,9 @@ class ASP {
           win.progressOn();
           this
             .core
-            .request(this.core[`database_${_data['type']}`].show_databases({conn: _data['conn']}))
+            .request(this.core[`database_${_data['type']}`].show_databases({
+              conn: _data['conn']
+            }))
             .then((res) => {
               if (res['text'].length > 0) {
                 if (res['text'].indexOf("ERROR://") > -1) {
@@ -532,9 +526,9 @@ class ASP {
       .core
       .request(this.core[`database_${conf['type']}`].show_databases({
         conn: conf['conn'],
-        dbname: ['access', 'microsoft_jet_oledb_4_0'].indexOf(conf['type']) > -1
-          ? conf['conn'].match(/[\w]+.mdb$/)
-          : 'database'
+        dbname: ['access', 'microsoft_jet_oledb_4_0'].indexOf(conf['type']) > -1 ?
+          conf['conn'].match(/[\w]+.mdb$/) :
+          'database'
       }))
       .then((res) => {
         let ret = res['text'];
@@ -597,7 +591,10 @@ class ASP {
 
     this
       .core
-      .request(this.core[`database_${conf['type']}`].show_tables({conn: conf['conn'], dbname: db}))
+      .request(this.core[`database_${conf['type']}`].show_tables({
+        conn: conf['conn'],
+        dbname: db
+      }))
       .then((res) => {
         let ret = res['text'];
         if (ret.indexOf("ERROR://") > -1) {
@@ -671,7 +668,10 @@ class ASP {
     }
     this
       .core
-      .request(this.core[`database_${conf['type']}`].show_columns({conn: conf['conn'], table: sql}))
+      .request(this.core[`database_${conf['type']}`].show_columns({
+        conn: conf['conn'],
+        table: sql
+      }))
       .then((res) => {
         let ret = res['text'];
         if (ret.indexOf("ERROR://") > -1) {
@@ -745,7 +745,11 @@ class ASP {
 
     this
       .core
-      .request(this.core[`database_${this.dbconf['type']}`].query({conn: this.dbconf['conn'], sql: sql, dbname: this.dbconf['database']}))
+      .request(this.core[`database_${this.dbconf['type']}`].query({
+        conn: this.dbconf['conn'],
+        sql: sql,
+        dbname: this.dbconf['database']
+      }))
       .then((res) => {
         let ret = res['text'];
         if (ret.indexOf("ERROR://") > -1) {
@@ -823,9 +827,9 @@ class ASP {
       'rows': grid_data
     }, 'json');
     // 启用导出按钮
-    this.manager.result.toolbar[grid_data.length > 0
-        ? 'enableItem'
-        : 'disableItem']('dump');
+    this.manager.result.toolbar[grid_data.length > 0 ?
+      'enableItem' :
+      'disableItem']('dump');
   }
 
   // 导出查询数据
@@ -840,7 +844,8 @@ class ASP {
       .__opts__
       .ip}_${new Date()
       .format("yyyyMMddhhmmss")}.csv`;
-    dialog.showSaveDialog({title: LANG['result']['dump']['title'],
+    dialog.showSaveDialog({
+      title: LANG['result']['dump']['title'],
       defaultPath: filename
     }, (filePath) => {
       if (!filePath) {

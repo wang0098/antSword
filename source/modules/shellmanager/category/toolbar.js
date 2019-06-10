@@ -41,7 +41,9 @@ class Toolbar {
     ].map((_) => {
       // 分隔符
       if (!_) {
-        return _tbObj.push({type: 'separator'})
+        return _tbObj.push({
+          type: 'separator'
+        })
       }
       let _tb = {
         id: _[0],
@@ -95,7 +97,7 @@ class Toolbar {
       layer.close(_);
       // 1. 删除分类数据
       const ret = antSword['ipcRenderer'].sendSync('shell-clear', category);
-      if (typeof(ret) === 'number') {
+      if (typeof (ret) === 'number') {
         toastr.success(LANG['del']['success'](category), LANG_T['success']);
         // 2. 跳转到默认分类
         this
@@ -166,7 +168,11 @@ class Toolbar {
         this
           .top
           .sidebar
-          .addItem({id: v, bubble: ret, text: `<i class="fa fa-folder-o"></i> ${v}`});
+          .addItem({
+            id: v,
+            bubble: ret,
+            text: `<i class="fa fa-folder-o"></i> ${v}`
+          });
         // 跳转分类
         setTimeout(() => {
           this

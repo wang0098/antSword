@@ -62,21 +62,19 @@ class ShellManager {
       var searchObj = {};
       switch (sdata['searchtype']) {
         case 'all':
-          searchObj["$or"] = [
-            {
-              "url": {
-                $regex: sdata['searchtext']
-              }
-            }, {
-              "pwd": {
-                $regex: sdata['searchtext']
-              }
-            }, {
-              "note": {
-                $regex: sdata['searchtext']
-              }
+          searchObj["$or"] = [{
+            "url": {
+              $regex: sdata['searchtext']
             }
-          ];
+          }, {
+            "pwd": {
+              $regex: sdata['searchtext']
+            }
+          }, {
+            "note": {
+              $regex: sdata['searchtext']
+            }
+          }];
           break;
         default:
           searchObj[sdata['searchtype']] = {
@@ -140,39 +138,35 @@ class ShellManager {
   initSearchUI() {
     let that = this;
     let searchPop = new dhtmlXPopup();
-    let formData = [
-      {
-        type: "settings",
-        position: "label-left",
-        labelWidth: 80,
-        inputWidth: 130
+    let formData = [{
+      type: "settings",
+      position: "label-left",
+      labelWidth: 80,
+      inputWidth: 130
+    }, {
+      type: "combo",
+      name: 'searchtype',
+      options: [{
+        text: "All",
+        value: "all",
+        selected: true
       }, {
-        type: "combo",
-        name: 'searchtype',
-        options: [
-          {
-            text: "All",
-            value: "all",
-            selected: true
-          }, {
-            text: "URL",
-            value: "url"
-          }, {
-            text: "Password",
-            value: "pwd"
-          }, {
-            text: "Remark",
-            value: "note"
-          }
-        ]
+        text: "URL",
+        value: "url"
       }, {
-        type: 'newcolumn',
-        offset: 20
+        text: "Password",
+        value: "pwd"
       }, {
-        type: "input",
-        name: "searchtext"
-      }
-    ];
+        text: "Remark",
+        value: "note"
+      }]
+    }, {
+      type: 'newcolumn',
+      offset: 20
+    }, {
+      type: "input",
+      name: "searchtext"
+    }];
     searchPop.attachEvent("onShow", function () {
       if (that.searchForm == null) {
         that.searchForm = searchPop.attachForm(formData);

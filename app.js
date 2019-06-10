@@ -8,7 +8,11 @@
 
 const path = require('path');
 const electron = require('electron');
-const {app, protocol, BrowserWindow} = require('electron');
+const {
+  app,
+  protocol,
+  BrowserWindow
+} = require('electron');
 
 // 注册为标准 scheme, 默认情况下web storage apis (localStorage, sessionStorage, webSQL,
 // indexedDB, cookies) 被禁止访问非标准schemes
@@ -16,9 +20,9 @@ protocol.registerStandardSchemes(['ant-views', 'ant-static', 'ant-src']);
 
 app.once('ready', () => {
   /**
-     * 注册静态资源protocol
-     * - 可通过注册的协议访问资源文件，如ant-static://libs/jquery.jquery.js
-     */
+   * 注册静态资源protocol
+   * - 可通过注册的协议访问资源文件，如ant-static://libs/jquery.jquery.js
+   */
   [
     [
       'static', '/static/', 13
@@ -66,14 +70,14 @@ app.once('ready', () => {
 
   // 窗口事件监听
   mainWindow.on('close', (event) => {
-    event.preventDefault();
-    app.exit(0);
-  }).on('minimize', (event) => {
-    event.preventDefault();
-    if (process.platform == 'darwin') {
-      app.hide();
-    } else {
-      mainWindow.hide();
+      event.preventDefault();
+      app.exit(0);
+    }).on('minimize', (event) => {
+      event.preventDefault();
+      if (process.platform == 'darwin') {
+        app.hide();
+      } else {
+        mainWindow.hide();
       }
     })
     .on('resize', reloadUI)

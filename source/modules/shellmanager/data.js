@@ -39,9 +39,12 @@ module.exports = {
     if ((arg instanceof Object) && arg['category'] && !category[arg['category']]) {
       category[arg['category']] = 0;
     };
-    if (typeof(category['default']) === 'object') {
+    if (typeof (category['default']) === 'object') {
       category['default'] = 0;
     };
-    return {data: data, category: category}
+    return {
+      data: data,
+      category: category
+    }
   }
 }

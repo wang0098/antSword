@@ -28,10 +28,10 @@ function string2unicode(str) {
 }
 
 /*
-* @param  {String} pwd   连接密码
-* @param  {Array}  data  编码器处理前的 payload 数组
-* @return {Array}  data  编码器处理后的 payload 数组
-*/
+ * @param  {String} pwd   连接密码
+ * @param  {Array}  data  编码器处理前的 payload 数组
+ * @return {Array}  data  编码器处理后的 payload 数组
+ */
 module.exports = (pwd, data, ext = {}) => {
   data[pwd] = string2unicode(data['_']).replace(/\\u/g, 'asunescape(%)u');
   // 删除 _ 原有的payload

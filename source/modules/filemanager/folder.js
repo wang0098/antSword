@@ -96,9 +96,9 @@ class Folder {
         let _path = path + _;
         let _obj = {
           id: (_path),
-          text: antSword.noxss((_.length === 1 || (_.endsWith(':/') && _.length === 3))
-            ? _
-            : _.replace(/\/$/, ''))
+          text: antSword.noxss((_.length === 1 || (_.endsWith(':/') && _.length === 3)) ?
+            _ :
+            _.replace(/\/$/, ''))
         };
         let _result = parseItem(obj[_], _path);
         if (_result) {

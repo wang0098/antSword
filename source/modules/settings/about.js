@@ -7,7 +7,11 @@ const LANG = antSword['language']['settings']['about'];
 class About {
 
   constructor(sidebar) {
-    sidebar.addItem({id: 'about', selected: true, text: `<i class="fa fa-heart-o"></i> ${LANG['title']}`});
+    sidebar.addItem({
+      id: 'about',
+      selected: true,
+      text: `<i class="fa fa-heart-o"></i> ${LANG['title']}`
+    });
     const cell = sidebar.cells('about');
     cell.attachHTMLString(`
       <div align="center" class="about">

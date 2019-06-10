@@ -11,9 +11,7 @@ const crypto = require('crypto');
 class Database {
 
   constructor(opt) {
-    this.hash = (+ new Date * Math.random())
-      .toString(16)
-      .substr(2, 8);
+    this.hash = (+new Date * Math.random()).toString(16).substr(2, 8);
     this.opt = opt;
     let config = {
       bookmarks: {}
@@ -23,36 +21,26 @@ class Database {
     const tabbar = antSword['tabbar'];
     tabbar.addTab(`tab_database_${this.hash}`, `<i class="fa fa-database"></i> ${opt['ip']}`, null, null, true, true);
     this.cell = tabbar.cells(`tab_database_${this.hash}`);
-    this
-      .cell
-      .progressOn();
+    this.cell.progressOn();
 
     // layout
-    this.layout_main = this
-      .cell
-      .attachLayout('2U');
-    this.layout_right = this
-      .layout_main
-      .cells('b')
-      .attachLayout('2E');
+    this.layout_main = this.cell.attachLayout('2U');
+    this.layout_right = this.layout_main.cells('b').attachLayout('2E');
 
     this.list = this.initList(this.layout_main.cells('a'));
     this.query = this.initQuery(this.layout_right.cells('a'));
     this.result = this.initResult(this.layout_right.cells('b'));
 
     this.win = new dhtmlXWindows();
-    this
-      .win
-      .attachViewportTo(this.cell.cell);
+    this.win.attachViewportTo(this.cell.cell);
 
     // 加载数据库驱动
     const _module = require(`./${opt['type']}/index`);
-    this.drive = new _module({core: new antSword['core'][opt['type']](opt),
+    this.drive = new _module({
+      core: new antSword['core'][opt['type']](opt),
       super: this
     });
-    this
-      .cell
-      .progressOff();
+    this.cell.progressOff();
   }
 
   // 初始化左侧列表
@@ -64,108 +52,106 @@ class Database {
     const imgs = [
       // connect
       'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAPCAQAAACouOyaAAAABGdBTUEAAL' +
-        'GPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAK' +
-          'qNIzIAAAAJcEhZcwAAAGQAAABkAA+Wxd0AAAEUSURBVCjPddA9S1txAIXx370JwVCJ0YRCI4FARl2EOr' +
-          'rZdu4USjt0yDewg7uLk1/AF0gcXJylu7MQEUpbaCHcraGNbSik6r1/h2ZIhpzpnIdnOkxnz8B3A/vTMJ' +
-          '5RarpeOFGbr0RSYw+zdFb5ouXSO5/NzYJDQUdxGuZBVVGEIEOmOlljAyKxNz5YFoGykpEhCH47cBqp+O' +
-          'i5X/6Bkif++gMKKnpe8cwnd95qamo6EnQnvWXsq3peEASJb2CI20l/KhOE2IqCWEWMBUsoKSJWlVOwwp' +
-          'VE4sYmdvQl+nax4Voi0Ys1tG0bqWPNuS1n1rFq7KX3arFMKpUJCNLJ+v9RKpXlZY7dW/QTP7S9VtbBUM' +
-          'OFvNwjiZlZspGW2aUAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTUtMDctMjVUMjE6NDk6MzQrMDg6MDAa6y' +
-          'DqAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE0LTA1LTAxVDIxOjEyOjA2KzA4OjAwmIBnWAAAAE50RVh0c2' +
-          '9mdHdhcmUASW1hZ2VNYWdpY2sgNi44LjgtMTAgUTE2IHg4Nl82NCAyMDE1LTA3LTE5IGh0dHA6Ly93d3' +
-          'cuaW1hZ2VtYWdpY2sub3JnBQycNQAAACV0RVh0c3ZnOmNvbW1lbnQAIEdlbmVyYXRlZCBieSBJY29Nb2' +
-          '9uLmlvIDDLy0gAAAAYdEVYdFRodW1iOjpEb2N1bWVudDo6UGFnZXMAMaf/uy8AAAAYdEVYdFRodW1iOj' +
-          'pJbWFnZTo6SGVpZ2h0ADY2N7Lgj5AAAAAXdEVYdFRodW1iOjpJbWFnZTo6V2lkdGgANzExhvGGCAAAAB' +
-          'l0RVh0VGh1bWI6Ok1pbWV0eXBlAGltYWdlL3BuZz+yVk4AAAAXdEVYdFRodW1iOjpNVGltZQAxMzk4OT' +
-          'Q5OTI2Hzsr2gAAABN0RVh0VGh1bWI6OlNpemUANy4yMUtCQtXNgY4AAABadEVYdFRodW1iOjpVUkkAZm' +
-          'lsZTovLy9ob21lL3d3d3Jvb3Qvd3d3LmVhc3lpY29uLm5ldC9jZG4taW1nLmVhc3lpY29uLmNuL3NyYy' +
-          '8xMTU4Mi8xMTU4Mjc4LnBuZwIRWX8AAAAASUVORK5CYII=',
+      'GPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAK' +
+      'qNIzIAAAAJcEhZcwAAAGQAAABkAA+Wxd0AAAEUSURBVCjPddA9S1txAIXx370JwVCJ0YRCI4FARl2EOr' +
+      'rZdu4USjt0yDewg7uLk1/AF0gcXJylu7MQEUpbaCHcraGNbSik6r1/h2ZIhpzpnIdnOkxnz8B3A/vTMJ' +
+      '5RarpeOFGbr0RSYw+zdFb5ouXSO5/NzYJDQUdxGuZBVVGEIEOmOlljAyKxNz5YFoGykpEhCH47cBqp+O' +
+      'i5X/6Bkif++gMKKnpe8cwnd95qamo6EnQnvWXsq3peEASJb2CI20l/KhOE2IqCWEWMBUsoKSJWlVOwwp' +
+      'VE4sYmdvQl+nax4Voi0Ys1tG0bqWPNuS1n1rFq7KX3arFMKpUJCNLJ+v9RKpXlZY7dW/QTP7S9VtbBUM' +
+      'OFvNwjiZlZspGW2aUAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTUtMDctMjVUMjE6NDk6MzQrMDg6MDAa6y' +
+      'DqAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE0LTA1LTAxVDIxOjEyOjA2KzA4OjAwmIBnWAAAAE50RVh0c2' +
+      '9mdHdhcmUASW1hZ2VNYWdpY2sgNi44LjgtMTAgUTE2IHg4Nl82NCAyMDE1LTA3LTE5IGh0dHA6Ly93d3' +
+      'cuaW1hZ2VtYWdpY2sub3JnBQycNQAAACV0RVh0c3ZnOmNvbW1lbnQAIEdlbmVyYXRlZCBieSBJY29Nb2' +
+      '9uLmlvIDDLy0gAAAAYdEVYdFRodW1iOjpEb2N1bWVudDo6UGFnZXMAMaf/uy8AAAAYdEVYdFRodW1iOj' +
+      'pJbWFnZTo6SGVpZ2h0ADY2N7Lgj5AAAAAXdEVYdFRodW1iOjpJbWFnZTo6V2lkdGgANzExhvGGCAAAAB' +
+      'l0RVh0VGh1bWI6Ok1pbWV0eXBlAGltYWdlL3BuZz+yVk4AAAAXdEVYdFRodW1iOjpNVGltZQAxMzk4OT' +
+      'Q5OTI2Hzsr2gAAABN0RVh0VGh1bWI6OlNpemUANy4yMUtCQtXNgY4AAABadEVYdFRodW1iOjpVUkkAZm' +
+      'lsZTovLy9ob21lL3d3d3Jvb3Qvd3d3LmVhc3lpY29uLm5ldC9jZG4taW1nLmVhc3lpY29uLmNuL3NyYy' +
+      '8xMTU4Mi8xMTU4Mjc4LnBuZwIRWX8AAAAASUVORK5CYII=',
       // databass
       'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAPCAQAAAB+HTb/AAAABGdBTUEAAL' +
-          'GPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAK' +
-          'qNIzIAAAAJcEhZcwAAAGQAAABkAA+Wxd0AAAEXSURBVBjTZck/S5RxAADg5+f75+5t8NTUSktEKCGCFp' +
-          '0U8dwcBMFBNwlu1a8Rrn4CJ0drdDF0bY1e4hAFQcEbTpT0ulfPc2irZ30C3lhWNabsrz/OHPrqLFiy6d' +
-          'KRXEMLmWHvzXlpm1xN6l+pmrzHiKbivyw0jQR36o4cqGtqo6TfpAXz3gUnNnwwpYIHxLiR+247lmnYkh' +
-          'jQL0PLFda0lWOpVUN+amjoIih75dqiUnBsVcWEVEcHkUjHrbrdWMWQfd+UPZOicKfkk3u9sUdzXvjl3I' +
-          '0WEs+99ttH3eDEosikAYmArnu3Ij98ibXN2JEjEuNBR2bdgiJyoaaqT0kikRn0VtWsaZ8Dxq2YNyr1iB' +
-          '6Fc4f2nD4BUO1Rv9s0w+gAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTUtMDctMjVUMjE6NTA6MjYrMDg6MD' +
-          'B8RcVXAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE0LTA1LTAxVDIwOjUwOjM1KzA4OjAwTl0AHAAAAE50RV' +
-          'h0c29mdHdhcmUASW1hZ2VNYWdpY2sgNi44LjgtMTAgUTE2IHg4Nl82NCAyMDE1LTA3LTE5IGh0dHA6Ly' +
-          '93d3cuaW1hZ2VtYWdpY2sub3JnBQycNQAAACV0RVh0c3ZnOmNvbW1lbnQAIEdlbmVyYXRlZCBieSBJY2' +
-          '9Nb29uLmlvIDDLy0gAAAAYdEVYdFRodW1iOjpEb2N1bWVudDo6UGFnZXMAMaf/uy8AAAAYdEVYdFRodW' +
-          '1iOjpJbWFnZTo6SGVpZ2h0ADcxMRUA1lUAAAAXdEVYdFRodW1iOjpJbWFnZTo6V2lkdGgANjI03HRLcw' +
-          'AAABl0RVh0VGh1bWI6Ok1pbWV0eXBlAGltYWdlL3BuZz+yVk4AAAAXdEVYdFRodW1iOjpNVGltZQAxMz' +
-          'k4OTQ4NjM1LMlreQAAABN0RVh0VGh1bWI6OlNpemUAMjEuM0tCQnpsrG8AAABadEVYdFRodW1iOjpVUk' +
-          'kAZmlsZTovLy9ob21lL3d3d3Jvb3Qvd3d3LmVhc3lpY29uLm5ldC9jZG4taW1nLmVhc3lpY29uLmNuL3' +
-          'NyYy8xMTU3Ny8xMTU3NzMyLnBuZxOTOSYAAAAASUVORK5CYII=',
+      'GPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAK' +
+      'qNIzIAAAAJcEhZcwAAAGQAAABkAA+Wxd0AAAEXSURBVBjTZck/S5RxAADg5+f75+5t8NTUSktEKCGCFp' +
+      '0U8dwcBMFBNwlu1a8Rrn4CJ0drdDF0bY1e4hAFQcEbTpT0ulfPc2irZ30C3lhWNabsrz/OHPrqLFiy6d' +
+      'KRXEMLmWHvzXlpm1xN6l+pmrzHiKbivyw0jQR36o4cqGtqo6TfpAXz3gUnNnwwpYIHxLiR+247lmnYkh' +
+      'jQL0PLFda0lWOpVUN+amjoIih75dqiUnBsVcWEVEcHkUjHrbrdWMWQfd+UPZOicKfkk3u9sUdzXvjl3I' +
+      '0WEs+99ttH3eDEosikAYmArnu3Ij98ibXN2JEjEuNBR2bdgiJyoaaqT0kikRn0VtWsaZ8Dxq2YNyr1iB' +
+      '6Fc4f2nD4BUO1Rv9s0w+gAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTUtMDctMjVUMjE6NTA6MjYrMDg6MD' +
+      'B8RcVXAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE0LTA1LTAxVDIwOjUwOjM1KzA4OjAwTl0AHAAAAE50RV' +
+      'h0c29mdHdhcmUASW1hZ2VNYWdpY2sgNi44LjgtMTAgUTE2IHg4Nl82NCAyMDE1LTA3LTE5IGh0dHA6Ly' +
+      '93d3cuaW1hZ2VtYWdpY2sub3JnBQycNQAAACV0RVh0c3ZnOmNvbW1lbnQAIEdlbmVyYXRlZCBieSBJY2' +
+      '9Nb29uLmlvIDDLy0gAAAAYdEVYdFRodW1iOjpEb2N1bWVudDo6UGFnZXMAMaf/uy8AAAAYdEVYdFRodW' +
+      '1iOjpJbWFnZTo6SGVpZ2h0ADcxMRUA1lUAAAAXdEVYdFRodW1iOjpJbWFnZTo6V2lkdGgANjI03HRLcw' +
+      'AAABl0RVh0VGh1bWI6Ok1pbWV0eXBlAGltYWdlL3BuZz+yVk4AAAAXdEVYdFRodW1iOjpNVGltZQAxMz' +
+      'k4OTQ4NjM1LMlreQAAABN0RVh0VGh1bWI6OlNpemUAMjEuM0tCQnpsrG8AAABadEVYdFRodW1iOjpVUk' +
+      'kAZmlsZTovLy9ob21lL3d3d3Jvb3Qvd3d3LmVhc3lpY29uLm5ldC9jZG4taW1nLmVhc3lpY29uLmNuL3' +
+      'NyYy8xMTU3Ny8xMTU3NzMyLnBuZxOTOSYAAAAASUVORK5CYII=',
       // table
       'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAAL' +
-          'GPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAK' +
-          'qNIzIAAAAJcEhZcwAABLAAAASwAJArFzAAAADgSURBVCjPfdA9L0NhGAbg660X7aaHQXo6kKYswmQUhP' +
-          'KT/Yl20sRQ0qKLGFjo11GW0w4t7unK/eRZ7qBsQ/BX3oMb+/j+5RjQDab//COaepUhSryZLGiLvnM7dp' +
-          '1oulhSN8o862FqNNfQU64sWpEaIbWuYpArNUQqBkNtAxTt6SzpgL5LNTWnWhq5mrnO9KJMzwMyQ49zzb' +
-          'pJVFC2iURUlggSUZKrEHxq+kDJkdtch9q5julrqKs713I911WuXpTpusfYQFdnQZPZDkFVUcVAmO8QVM' +
-          'XgTskYq7a9LGjN1w888l4QdsfN6AAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxNS0wNy0yNVQyMTo1MDozMi' +
-          'swODowMESg4doAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTQtMDQtMDZUMDk6NTM6MTcrMDg6MDA8MBsjAA' +
-          'AATnRFWHRzb2Z0d2FyZQBJbWFnZU1hZ2ljayA2LjguOC0xMCBRMTYgeDg2XzY0IDIwMTUtMDctMTkgaH' +
-          'R0cDovL3d3dy5pbWFnZW1hZ2ljay5vcmcFDJw1AAAAI3RFWHRzdmc6Y29tbWVudAAgR2VuZXJhdG9yOi' +
-          'BJY29Nb29uLmlvILwwrIAAAAAYdEVYdFRodW1iOjpEb2N1bWVudDo6UGFnZXMAMaf/uy8AAAAYdEVYdF' +
-          'RodW1iOjpJbWFnZTo6SGVpZ2h0ADUzM8q8AZUAAAAXdEVYdFRodW1iOjpJbWFnZTo6V2lkdGgANTMzWU' +
-          '1RyAAAABl0RVh0VGh1bWI6Ok1pbWV0eXBlAGltYWdlL3BuZz+yVk4AAAAXdEVYdFRodW1iOjpNVGltZQ' +
-          'AxMzk2NzQ5MTk37+6JEgAAABN0RVh0VGh1bWI6OlNpemUAMi45NUtCQn9HCG8AAABadEVYdFRodW1iOj' +
-          'pVUkkAZmlsZTovLy9ob21lL3d3d3Jvb3Qvd3d3LmVhc3lpY29uLm5ldC9jZG4taW1nLmVhc3lpY29uLm' +
-          'NuL3NyYy8xMTQzNS8xMTQzNTI4LnBuZ1baGAoAAAAASUVORK5CYII=',
+      'GPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAK' +
+      'qNIzIAAAAJcEhZcwAABLAAAASwAJArFzAAAADgSURBVCjPfdA9L0NhGAbg660X7aaHQXo6kKYswmQUhP' +
+      'KT/Yl20sRQ0qKLGFjo11GW0w4t7unK/eRZ7qBsQ/BX3oMb+/j+5RjQDab//COaepUhSryZLGiLvnM7dp' +
+      '1oulhSN8o862FqNNfQU64sWpEaIbWuYpArNUQqBkNtAxTt6SzpgL5LNTWnWhq5mrnO9KJMzwMyQ49zzb' +
+      'pJVFC2iURUlggSUZKrEHxq+kDJkdtch9q5julrqKs713I911WuXpTpusfYQFdnQZPZDkFVUcVAmO8QVM' +
+      'XgTskYq7a9LGjN1w888l4QdsfN6AAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxNS0wNy0yNVQyMTo1MDozMi' +
+      'swODowMESg4doAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTQtMDQtMDZUMDk6NTM6MTcrMDg6MDA8MBsjAA' +
+      'AATnRFWHRzb2Z0d2FyZQBJbWFnZU1hZ2ljayA2LjguOC0xMCBRMTYgeDg2XzY0IDIwMTUtMDctMTkgaH' +
+      'R0cDovL3d3dy5pbWFnZW1hZ2ljay5vcmcFDJw1AAAAI3RFWHRzdmc6Y29tbWVudAAgR2VuZXJhdG9yOi' +
+      'BJY29Nb29uLmlvILwwrIAAAAAYdEVYdFRodW1iOjpEb2N1bWVudDo6UGFnZXMAMaf/uy8AAAAYdEVYdF' +
+      'RodW1iOjpJbWFnZTo6SGVpZ2h0ADUzM8q8AZUAAAAXdEVYdFRodW1iOjpJbWFnZTo6V2lkdGgANTMzWU' +
+      '1RyAAAABl0RVh0VGh1bWI6Ok1pbWV0eXBlAGltYWdlL3BuZz+yVk4AAAAXdEVYdFRodW1iOjpNVGltZQ' +
+      'AxMzk2NzQ5MTk37+6JEgAAABN0RVh0VGh1bWI6OlNpemUAMi45NUtCQn9HCG8AAABadEVYdFRodW1iOj' +
+      'pVUkkAZmlsZTovLy9ob21lL3d3d3Jvb3Qvd3d3LmVhc3lpY29uLm5ldC9jZG4taW1nLmVhc3lpY29uLm' +
+      'NuL3NyYy8xMTQzNS8xMTQzNTI4LnBuZ1baGAoAAAAASUVORK5CYII=',
       // column
       'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAPCAQAAABHeoekAAAABGdBTUEAAL' +
-          'GPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAK' +
-          'qNIzIAAAAJcEhZcwAAASwAAAEsAHOI6VIAAAB1SURBVBjTY2TYyrCbATcwY2CoYsAHElgYWBjYkAT+Mz' +
-          'AwMCLxWRgZtjHsQRIQYGBmeIvEN2VhOMswD0nAiYGXYSOcx8jwk4XhO8MHJAWfGBhQ+F+Z0BzFiM5HV4' +
-          'ABhoiC/yj8f+h8FgYNBh8kAQMGLobfyHwAyM8UUNk8qsEAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTUtMD' +
-          'ctMjVUMjE6NDk6MzYrMDg6MDCNdDHDAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE0LTEyLTE5VDE4OjU2Oj' +
-          'EyKzA4OjAwOU9bHwAAAE50RVh0c29mdHdhcmUASW1hZ2VNYWdpY2sgNi44LjgtMTAgUTE2IHg4Nl82NC' +
-          'AyMDE1LTA3LTE5IGh0dHA6Ly93d3cuaW1hZ2VtYWdpY2sub3JnBQycNQAAAGN0RVh0c3ZnOmNvbW1lbn' +
-          'QAIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTYuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLi' +
-          'BTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgcgt1lgAAABh0RVh0VGh1bWI6OkRvY3VtZW50OjpQYW' +
-          'dlcwAxp/+7LwAAABh0RVh0VGh1bWI6OkltYWdlOjpIZWlnaHQAMjY1W+dGYAAAABd0RVh0VGh1bWI6Ok' +
-          'ltYWdlOjpXaWR0aAAyNjZRH0eHAAAAGXRFWHRUaHVtYjo6TWltZXR5cGUAaW1hZ2UvcG5nP7JWTgAAAB' +
-          'd0RVh0VGh1bWI6Ok1UaW1lADE0MTg5ODY1NzJGLGnJAAAAE3RFWHRUaHVtYjo6U2l6ZQAxLjEzS0JCW7' +
-          'QG7wAAAFp0RVh0VGh1bWI6OlVSSQBmaWxlOi8vL2hvbWUvd3d3cm9vdC93d3cuZWFzeWljb24ubmV0L2' +
-          'Nkbi1pbWcuZWFzeWljb24uY24vc3JjLzExODMwLzExODMwMjcucG5nOFxJnwAAAABJRU5ErkJggg=='
+      'GPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAK' +
+      'qNIzIAAAAJcEhZcwAAASwAAAEsAHOI6VIAAAB1SURBVBjTY2TYyrCbATcwY2CoYsAHElgYWBjYkAT+Mz' +
+      'AwMCLxWRgZtjHsQRIQYGBmeIvEN2VhOMswD0nAiYGXYSOcx8jwk4XhO8MHJAWfGBhQ+F+Z0BzFiM5HV4' +
+      'ABhoiC/yj8f+h8FgYNBh8kAQMGLobfyHwAyM8UUNk8qsEAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTUtMD' +
+      'ctMjVUMjE6NDk6MzYrMDg6MDCNdDHDAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE0LTEyLTE5VDE4OjU2Oj' +
+      'EyKzA4OjAwOU9bHwAAAE50RVh0c29mdHdhcmUASW1hZ2VNYWdpY2sgNi44LjgtMTAgUTE2IHg4Nl82NC' +
+      'AyMDE1LTA3LTE5IGh0dHA6Ly93d3cuaW1hZ2VtYWdpY2sub3JnBQycNQAAAGN0RVh0c3ZnOmNvbW1lbn' +
+      'QAIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTYuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLi' +
+      'BTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgcgt1lgAAABh0RVh0VGh1bWI6OkRvY3VtZW50OjpQYW' +
+      'dlcwAxp/+7LwAAABh0RVh0VGh1bWI6OkltYWdlOjpIZWlnaHQAMjY1W+dGYAAAABd0RVh0VGh1bWI6Ok' +
+      'ltYWdlOjpXaWR0aAAyNjZRH0eHAAAAGXRFWHRUaHVtYjo6TWltZXR5cGUAaW1hZ2UvcG5nP7JWTgAAAB' +
+      'd0RVh0VGh1bWI6Ok1UaW1lADE0MTg5ODY1NzJGLGnJAAAAE3RFWHRUaHVtYjo6U2l6ZQAxLjEzS0JCW7' +
+      'QG7wAAAFp0RVh0VGh1bWI6OlVSSQBmaWxlOi8vL2hvbWUvd3d3cm9vdC93d3cuZWFzeWljb24ubmV0L2' +
+      'Nkbi1pbWcuZWFzeWljb24uY24vc3JjLzExODMwLzExODMwMjcucG5nOFxJnwAAAABJRU5ErkJggg=='
     ];
 
     // 左侧拦toolbar
     const toolbar = layout.attachToolbar();
-    toolbar.loadStruct([
-      {
-        id: 'add',
-        text: LANG['list']['add'],
-        icon: 'plus-circle',
-        type: 'button'
-      }, {
-        type: 'separator'
-      }, {
-        id: 'edit',
-        text: LANG['list']['edit'],
-        icon: 'edit',
-        type: 'button',
-        disabled: true
-      }, {
-        type: 'separator'
-      }, {
-        id: 'del',
-        text: LANG['list']['del'],
-        icon: 'trash-o',
-        type: 'button',
-        disabled: true
-      }, {
-        type: 'separator'
-      }, {
-        id: 'check',
-        text: LANG['list']['check'],
-        icon: 'spinner',
-        type: 'button'
-      }
-    ]);
+    toolbar.loadStruct([{
+      id: 'add',
+      text: LANG['list']['add'],
+      icon: 'plus-circle',
+      type: 'button'
+    }, {
+      type: 'separator'
+    }, {
+      id: 'edit',
+      text: LANG['list']['edit'],
+      icon: 'edit',
+      type: 'button',
+      disabled: true
+    }, {
+      type: 'separator'
+    }, {
+      id: 'del',
+      text: LANG['list']['del'],
+      icon: 'trash-o',
+      type: 'button',
+      disabled: true
+    }, {
+      type: 'separator'
+    }, {
+      id: 'check',
+      text: LANG['list']['check'],
+      icon: 'spinner',
+      type: 'button'
+    }]);
     toolbar.attachEvent('onClick', (id) => {
       switch (id) {
         case 'add':
@@ -188,7 +174,11 @@ class Database {
           break;
       }
     });
-    return {imgs: imgs, layout: layout, toolbar: toolbar};
+    return {
+      imgs: imgs,
+      layout: layout,
+      toolbar: toolbar
+    };
   }
 
   // 初始化右侧::SQL执行
@@ -202,53 +192,48 @@ class Database {
     editor = ace.edit(layout.cell.lastChild);
     editor.$blockScrolling = Infinity;
     editor.setTheme('ace/theme/tomorrow');
-    editor
-      .session
-      .setMode('ace/mode/sql');
-    editor
-      .session
-      .setUseWrapMode(true);
-    editor
-      .session
-      .setWrapLimitRange(null, null);
+    editor.session.setMode('ace/mode/sql');
+    editor.session.setUseWrapMode(true);
+    editor.session.setWrapLimitRange(null, null);
 
-    editor.setOptions({fontSize: '14px', enableBasicAutocompletion: true, enableSnippets: true, enableLiveAutocompletion: true});
+    editor.setOptions({
+      fontSize: '14px',
+      enableBasicAutocompletion: true,
+      enableSnippets: true,
+      enableLiveAutocompletion: true
+    });
 
     // 快捷键
-    editor
-      .commands
-      .addCommand({
-        name: 'exec',
-        bindKey: {
-          win: 'Ctrl-E',
-          mac: 'Command-E'
-        },
-        exec: () => {
-          toolbar.callEvent('onClick', ['exec']);
-        }
-      });
+    editor.commands.addCommand({
+      name: 'exec',
+      bindKey: {
+        win: 'Ctrl-E',
+        mac: 'Command-E'
+      },
+      exec: () => {
+        toolbar.callEvent('onClick', ['exec']);
+      }
+    });
 
-    editor
-      .session
-      .setValue("SELECT 'Hello antSword :)' AS welcome;");
+    editor.session.setValue("SELECT 'Hello antSword :)' AS welcome;");
 
     // SQL语句toolbar
     const toolbar = layout.attachToolbar();
     let bookmark = JSON.parse(this.storage('dbbookmarks').get('{}'));
     let reloadToolbar = () => {
-      let bookmark_opts = [
-        {
-          id: 'bookmark_add',
-          type: 'button',
-          icon: 'plus-circle',
-          text: LANG['query']['bookmark']['add'],
-          // enabled:
-          // !!bookmark[Buffer.from(editor.session.getValue()).toString('base64')],
-        }
-      ];
+      let bookmark_opts = [{
+        id: 'bookmark_add',
+        type: 'button',
+        icon: 'plus-circle',
+        text: LANG['query']['bookmark']['add'],
+        // enabled:
+        // !!bookmark[Buffer.from(editor.session.getValue()).toString('base64')],
+      }];
       let global_bookmarks = this.config.bookmarks || {};
       if (Object.keys(global_bookmarks).length > 0) {
-        bookmark_opts.push({type: 'separator'});
+        bookmark_opts.push({
+          type: 'separator'
+        });
         for (let gb in global_bookmarks) {
           bookmark_opts.push({
             id: 'bookmark_' + global_bookmarks[gb],
@@ -261,7 +246,9 @@ class Database {
         }
       }
       if (!$.isEmptyObject(bookmark)) {
-        bookmark_opts.push({type: 'separator'});
+        bookmark_opts.push({
+          type: 'separator'
+        });
       };
       for (let _ in bookmark) {
         bookmark_opts.push({
@@ -274,11 +261,19 @@ class Database {
       }
       // 添加清除按钮
       if (bookmark_opts.length > 2) {
-        bookmark_opts.push({type: 'separator'});
-        bookmark_opts.push({id: 'bookmark_remove', icon: 'remove', text: LANG['query']['bookmark']['del'],
+        bookmark_opts.push({
+          type: 'separator'
+        });
+        bookmark_opts.push({
+          id: 'bookmark_remove',
+          icon: 'remove',
+          text: LANG['query']['bookmark']['del'],
           type: 'button'
         });
-        bookmark_opts.push({id: 'bookmark_clear', icon: 'trash-o', text: LANG['query']['bookmark']['clear'],
+        bookmark_opts.push({
+          id: 'bookmark_clear',
+          icon: 'trash-o',
+          text: LANG['query']['bookmark']['clear'],
           type: 'button'
         });
       };
@@ -291,8 +286,7 @@ class Database {
         }
       })
       toolbar.clearAll();
-      toolbar.loadStruct([
-        {
+      toolbar.loadStruct([{
           id: 'exec',
           text: LANG['query']['exec'],
           icon: 'play',
@@ -340,14 +334,8 @@ class Database {
             value: antSword.noxss(editor.session.getValue()),
             title: LANG['query']['prompt']['add']['title']
           }, (value, i, e) => {
-            bookmark[
-              Buffer
-                .from(editor.session.getValue())
-                .toString('base64')
-            ] = value;
-            self
-              .storage('dbbookmarks')
-              .set(JSON.stringify(bookmark));
+            bookmark[Buffer.from(editor.session.getValue()).toString('base64')] = value;
+            self.storage('dbbookmarks').set(JSON.stringify(bookmark));
             toastr.success(LANG['query']['prompt']['add']['success'](editor.session.getValue()), LANG_T['success']);
             reloadToolbar();
             layer.close(i);
@@ -362,8 +350,8 @@ class Database {
             // 删除书签并刷新
             delete bookmark[
               Buffer
-                .from(editor.session.getValue())
-                .toString('base64')
+              .from(editor.session.getValue())
+              .toString('base64')
             ];
             self
               .storage('dbbookmarks')
@@ -400,7 +388,12 @@ class Database {
       };
     });
 
-    return {reloadToolbar: reloadToolbar, editor: editor, layout: layout, toolbar: toolbar};
+    return {
+      reloadToolbar: reloadToolbar,
+      editor: editor,
+      layout: layout,
+      toolbar: toolbar
+    };
   }
 
   // 初始化右侧::执行结果
@@ -409,17 +402,15 @@ class Database {
     // layout.hideHeader();
 
     const toolbar = layout.attachToolbar();
-    toolbar.loadStruct([
-      {
-        id: 'dump',
-        text: '导出',
-        icon: 'upload',
-        type: 'button',
-        disabled: true
-      }, {
-        type: 'separator'
-      }
-    ]);
+    toolbar.loadStruct([{
+      id: 'dump',
+      text: '导出',
+      icon: 'upload',
+      type: 'button',
+      disabled: true
+    }, {
+      type: 'separator'
+    }]);
     toolbar.attachEvent('onClick', (id) => {
       switch (id) {
         case 'dump':
@@ -429,12 +420,15 @@ class Database {
           break;
       }
     });
-    return {layout: layout, toolbar: toolbar};
+    return {
+      layout: layout,
+      toolbar: toolbar
+    };
   }
 
   // 创建窗口
   createWin(opts) {
-    const hash = (+ new Date * Math.random())
+    const hash = (+new Date * Math.random())
       .toString(16)
       .substr(2, 8);
     // 默认配置
@@ -464,7 +458,11 @@ class Database {
   // 检测数据库函数支持
   checkprobe() {
     let that = this;
-    let win = that.createWin({title: LANG['probedb']['title'], width: 350, height: 400});
+    let win = that.createWin({
+      title: LANG['probedb']['title'],
+      width: 350,
+      height: 400
+    });
     const func_mapping = {
       // PHP
       'mysql_close': 'MYSQL',
@@ -509,16 +507,15 @@ class Database {
           data_arr.push({
             id: i + 1,
             data: [
-              func_mapping.hasOwnProperty(item[0])
-                ? func_mapping[item[0]]
-                : antSword.noxss(item[0]),
-              parseInt(item[1]) === 1
-                ? "√"
-                : "×"
+              func_mapping.hasOwnProperty(item[0]) ?
+              func_mapping[item[0]] :
+              antSword.noxss(item[0]),
+              parseInt(item[1]) === 1 ?
+              "√" :
+              "×"
             ],
-            style: parseInt(item[1]) === 1
-              ? "background-color:#ADF1B9"
-              : ""
+            style: parseInt(item[1]) === 1 ?
+              "background-color:#ADF1B9" : ""
           });
         }
         grid.parse({

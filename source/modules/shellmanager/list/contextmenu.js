@@ -50,8 +50,8 @@ class ContextMenu {
       [
         'copyurl', 'copy', selectedData,
         this
-          .copyUrl
-          .bind(this, data[0])
+        .copyUrl
+        .bind(this, data[0])
       ],
       false,
       [
@@ -60,27 +60,27 @@ class ContextMenu {
       [
         'pluginStore', 'cart-arrow-down', false,
         antSword['menubar']
-          .run
-          .bind(antSword['menubar'], 'plugin-store')
+        .run
+        .bind(antSword['menubar'], 'plugin-store')
       ],
       false,
       [
         'add', 'plus-circle', false,
         this
-          .addData
-          .bind(this)
+        .addData
+        .bind(this)
       ],
       [
         'edit', 'edit', selectedData,
         this
-          .editData
-          .bind(this, data[0])
+        .editData
+        .bind(this, data[0])
       ],
       [
         'delete', 'remove', selectedMultiData,
         this
-          .delData
-          .bind(this, ids)
+        .delData
+        .bind(this, ids)
       ],
       false,
       [
@@ -89,32 +89,34 @@ class ContextMenu {
       [
         'copy', 'copy', selectedData,
         this
-          .copyData
-          .bind(this, data[0])
+        .copyData
+        .bind(this, data[0])
       ],
       [
         'search', 'search', false,
         this
-          .searchData
-          .bind(this, event)
+        .searchData
+        .bind(this, event)
       ],
       false,
       [
         'clearCache', 'trash-o', selectedData,
         this
-          .clearCache
-          .bind(this, id)
+        .clearCache
+        .bind(this, id)
       ],
       [
         'clearAllCache', 'trash', false,
         this
-          .clearAllCache
-          .bind(this)
+        .clearAllCache
+        .bind(this)
       ]
     ].map((menu) => {
       // 分隔符号
       if (!menu) {
-        return menuItems.push({divider: true})
+        return menuItems.push({
+          divider: true
+        })
       }
       let menuObj = {
         text: LANG['contextmenu'][menu[0]],
@@ -122,7 +124,7 @@ class ContextMenu {
         disabled: menu[2]
       }
       // 点击事件
-      if (menu[3]instanceof Function) {
+      if (menu[3] instanceof Function) {
         menuObj['action'] = menu[3];
       }
       // 子菜单
@@ -157,9 +159,9 @@ class ContextMenu {
     for (let _ in plugins) {
       // 0x01 添加分类目录
       pluginItems.push({
-        text: antSword.noxss(_ === 'default'
-          ? LANG['contextmenu']['pluginDefault']
-          : _),
+        text: antSword.noxss(_ === 'default' ?
+          LANG['contextmenu']['pluginDefault'] :
+          _),
         icon: 'fa fa-folder-open-o',
         disabled: plugins[_].length === 0,
         subMenu: ((plugs) => {
@@ -169,8 +171,8 @@ class ContextMenu {
             plugItems.push({
               text: antSword.noxss(p['info']['name']),
               icon: `fa fa-${p['info']['icon'] || 'puzzle-piece'}`,
-              disabled: infos.length > 1
-                ? (() => {
+              disabled: infos.length > 1 ?
+                (() => {
                   let ret = false;
                   // 判断脚本是否支持，不支持则禁止
                   if (p['info']['scripts'] && p['info']['scripts'].length > 0) {
@@ -183,17 +185,17 @@ class ContextMenu {
                   }
                   // 判断是否支持多目标执行
                   return ret || !p['info']['multiple'];
-                })()
-                : info && (p['info']['scripts'] || []).indexOf(info['type']) === -1,
+                })() :
+                info && (p['info']['scripts'] || []).indexOf(info['type']) === -1,
               action: ((plug) => () => {
                 // 如果没有加载到内存，则加载
                 if (!antSword['plugins'][plug['_id']]['module']) {
                   antSword['plugins'][plug['_id']]['module'] = require(path.join(plug['path'], plug['info']['main'] || 'index.js'));
                 }
                 // 执行插件
-                new antSword['plugins'][plug['_id']]['module'](infos.length === 1 && !plug['info']['multiple']
-                  ? info
-                  : infos);
+                new antSword['plugins'][plug['_id']]['module'](infos.length === 1 && !plug['info']['multiple'] ?
+                  info :
+                  infos);
               })(p)
             })
           });
@@ -229,7 +231,7 @@ class ContextMenu {
         ids: ids,
         category: c
       });
-      if (typeof(ret) === 'number') {
+      if (typeof (ret) === 'number') {
         toastr.success(LANG['list']['move']['success'](ret), LANG_T['success']);
         antSword
           .modules
@@ -249,9 +251,9 @@ class ContextMenu {
     let ret = [];
     items.map((_) => {
       ret.push({
-        text: _ === 'default'
-          ? LANG['category']['default']
-          : _,
+        text: _ === 'default' ?
+          LANG['category']['default'] :
+          _,
         icon: 'fa fa-folder-o',
         disabled: category === _,
         action: moveHandler.bind(null, _)
@@ -277,7 +279,8 @@ class ContextMenu {
       },
       otherConf: shellmanager_setting.others || {}
     };
-    new Form({title: LANG['list']['add']['title'],
+    new Form({
+      title: LANG['list']['add']['title'],
       icon: 'plus-circle',
       text: LANG['list']['add']['toolbar']['add']
     }, args, (data) => {
@@ -298,7 +301,8 @@ class ContextMenu {
           antSword
             .modules
             .shellmanager
-            .reloadData({category: data['base']['category']
+            .reloadData({
+              category: data['base']['category']
             });
           return res(LANG['list']['add']['success']);
         } else {
@@ -314,7 +318,8 @@ class ContextMenu {
    * @return {[type]}    [description]
    */
   editData(info) {
-    new Form({title: LANG['list']['edit']['title'](info.url),
+    new Form({
+      title: LANG['list']['edit']['title'](info.url),
       icon: 'save',
       text: LANG['list']['edit']['toolbar']['save']
     }, info, (data) => {
@@ -331,7 +336,9 @@ class ContextMenu {
           antSword
             .modules
             .shellmanager
-            .reloadData({category: info['category']});
+            .reloadData({
+              category: info['category']
+            });
           return res(LANG['list']['edit']['success']);
         } else {
           return rej(LANG['list']['edit']['error'](ret.toString()));
@@ -353,7 +360,7 @@ class ContextMenu {
     }, (_) => {
       layer.close(_);
       const ret = antSword['ipcRenderer'].sendSync('shell-del', ids);
-      if (typeof(ret) === 'number') {
+      if (typeof (ret) === 'number') {
         toastr.success(LANG['list']['del']['success'](ret), LANG_T['success']);
         // 更新UI
         antSword
@@ -400,7 +407,8 @@ class ContextMenu {
       antSword
         .modules
         .shellmanager
-        .reloadData({category: data['base']['category']
+        .reloadData({
+          category: data['base']['category']
         });
       toastr.success(LANG['list']['add']['success']);
     } else {
@@ -432,13 +440,15 @@ class ContextMenu {
       title: `<i class="fa fa-trash"></i> ${LANG['list']['clearCache']['title']}`
     }, (_) => {
       layer.close(_);
-      const ret = antSword['ipcRenderer'].sendSync('cache-clear', {id: id});
+      const ret = antSword['ipcRenderer'].sendSync('cache-clear', {
+        id: id
+      });
       if (ret === true) {
         toastr.success(LANG['list']['clearCache']['success'], LANG_T['success']);
       } else {
-        toastr.error(LANG['list']['clearCache']['error'](ret['errno'] === -2
-          ? 'Not cache file.'
-          : ret['errno']), LANG_T['error']);
+        toastr.error(LANG['list']['clearCache']['error'](ret['errno'] === -2 ?
+          'Not cache file.' :
+          ret['errno']), LANG_T['error']);
       }
     });
   }

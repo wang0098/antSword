@@ -29,29 +29,29 @@ class Decodes {
     var defaultEncoding = options.defaultEncoding || DEFAULT_ENCODING;
     var minConfidence = options.minConfidence || MIN_CONFIDENCE;
     var ret = jschardet.detect(buffer),
-      encoding = ret.encoding === 'ascii'
-        ? 'utf-8'
-        : ret.encoding,
+      encoding = ret.encoding === 'ascii' ?
+      'utf-8' :
+      ret.encoding,
       confidence = ret.confidence;
     // var VALID_ENCODINGS = ['gb2312', 'gbk', 'utf-8', 'big5', 'euc-kr','euc-jp'];
 
     if (encoding === null || !iconv.encodingExists(encoding) || confidence < minConfidence) {
-      return verbose
-        ? {
+      return verbose ?
+        {
           encoding: defaultEncoding,
           oriEncoding: encoding,
           confidence: confidence
-        }
-        : defaultEncoding;
+        } :
+        defaultEncoding;
     } else {
       encoding = encoding.toUpperCase();
-      return verbose
-        ? {
+      return verbose ?
+        {
           encoding: encoding,
           oriEncoding: encoding,
           confidence: confidence
-        }
-        : encoding;
+        } :
+        encoding;
     }
   }
 

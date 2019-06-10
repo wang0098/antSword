@@ -8,7 +8,10 @@ const LANG_T = antSword['language']['toastr'];
 class AProxy {
 
   constructor(sidebar) {
-    sidebar.addItem({id: 'aproxy', text: `<i class="fa fa-paper-plane"></i> ${LANG['title']}`});
+    sidebar.addItem({
+      id: 'aproxy',
+      text: `<i class="fa fa-paper-plane"></i> ${LANG['title']}`
+    });
     const cell = sidebar.cells('aproxy');
     // 代理数据
     const aproxymode = localStorage.getItem('aproxymode') || 'noproxy';
@@ -20,108 +23,98 @@ class AProxy {
 
     // 工具栏
     const toolbar = cell.attachToolbar();
-    toolbar.loadStruct([
-      {
-        id: 'save',
-        type: 'button',
-        text: LANG['toolbar']['save'],
-        icon: 'save'
-      }, {
-        type: 'separator'
-      }, {
-        id: 'test',
-        name: 'test',
-        type: 'button',
-        text: LANG['toolbar']['test'],
-        icon: 'spinner',
-        disabled: aproxymode === 'noproxy'
-      }
-    ]);
+    toolbar.loadStruct([{
+      id: 'save',
+      type: 'button',
+      text: LANG['toolbar']['save'],
+      icon: 'save'
+    }, {
+      type: 'separator'
+    }, {
+      id: 'test',
+      name: 'test',
+      type: 'button',
+      text: LANG['toolbar']['test'],
+      icon: 'spinner',
+      disabled: aproxymode === 'noproxy'
+    }]);
 
     // 表单
-    const form = cell.attachForm([
-      {
-        type: 'settings',
-        position: 'label-left',
-        labelWidth: 150,
-        inputWidth: 200
+    const form = cell.attachForm([{
+      type: 'settings',
+      position: 'label-left',
+      labelWidth: 150,
+      inputWidth: 200
+    }, {
+      type: 'block',
+      inputWidth: 'auto',
+      offsetTop: 12,
+      list: [{
+        type: 'label',
+        label: LANG['form']['label']
       }, {
-        type: 'block',
-        inputWidth: 'auto',
-        offsetTop: 12,
-        list: [
-          {
-            type: 'label',
-            label: LANG['form']['label']
+        type: 'radio',
+        position: 'label-right',
+        label: LANG['form']['mode']['noproxy'],
+        name: 'aproxymode',
+        value: 'noproxy',
+        checked: aproxymode === 'noproxy'
+      }, {
+        type: 'radio',
+        position: 'label-right',
+        label: LANG['form']['mode']['manualproxy'],
+        name: 'aproxymode',
+        value: 'manualproxy',
+        checked: aproxymode === 'manualproxy',
+        list: [{
+          type: 'combo',
+          label: LANG['form']['proxy']['protocol'],
+          readonly: true,
+          name: 'protocol',
+          options: [{
+            text: 'HTTP',
+            value: 'http',
+            selected: aproxyprotocol === 'http'
           }, {
-            type: 'radio',
-            position: 'label-right',
-            label: LANG['form']['mode']['noproxy'],
-            name: 'aproxymode',
-            value: 'noproxy',
-            checked: aproxymode === 'noproxy'
+            text: 'HTTPS',
+            value: 'https',
+            selected: aproxyprotocol === 'https'
           }, {
-            type: 'radio',
-            position: 'label-right',
-            label: LANG['form']['mode']['manualproxy'],
-            name: 'aproxymode',
-            value: 'manualproxy',
-            checked: aproxymode === 'manualproxy',
-            list: [
-              {
-                type: 'combo',
-                label: LANG['form']['proxy']['protocol'],
-                readonly: true,
-                name: 'protocol',
-                options: [
-                  {
-                    text: 'HTTP',
-                    value: 'http',
-                    selected: aproxyprotocol === 'http'
-                  }, {
-                    text: 'HTTPS',
-                    value: 'https',
-                    selected: aproxyprotocol === 'https'
-                  }, {
-                    text: 'SOCKS5',
-                    value: 'socks',
-                    selected: aproxyprotocol === 'socks'
-                  }, {
-                    text: 'SOCKS4',
-                    value: 'socks4',
-                    selected: aproxyprotocol === 'socks4'
-                  }
-                ]
-              }, {
-                type: 'input',
-                label: LANG['form']['proxy']['server'],
-                name: 'server',
-                required: true,
-                validate: "NotEmpty",
-                value: aproxyserver
-              }, {
-                type: 'input',
-                label: LANG['form']['proxy']['port'],
-                name: 'port',
-                required: true,
-                validate: "NotEmpty,ValidInteger",
-                value: aproxyport
-              }, {
-                type: 'input',
-                label: LANG['form']['proxy']['username'],
-                name: 'username',
-                value: aproxyusername
-              }, {
-                type: 'password',
-                label: LANG['form']['proxy']['password'],
-                name: 'password',
-                value: aproxypassword
-              }
-            ]
-          }
-        ]
-      }
-    ], true);
+            text: 'SOCKS5',
+            value: 'socks',
+            selected: aproxyprotocol === 'socks'
+          }, {
+            text: 'SOCKS4',
+            value: 'socks4',
+            selected: aproxyprotocol === 'socks4'
+          }]
+        }, {
+          type: 'input',
+          label: LANG['form']['proxy']['server'],
+          name: 'server',
+          required: true,
+          validate: "NotEmpty",
+          value: aproxyserver
+        }, {
+          type: 'input',
+          label: LANG['form']['proxy']['port'],
+          name: 'port',
+          required: true,
+          validate: "NotEmpty,ValidInteger",
+          value: aproxyport
+        }, {
+          type: 'input',
+          label: LANG['form']['proxy']['username'],
+          name: 'username',
+          value: aproxyusername
+        }, {
+          type: 'password',
+          label: LANG['form']['proxy']['password'],
+          name: 'password',
+          value: aproxypassword
+        }]
+      }]
+    }], true);
     form.enableLiveValidation(true);
     form.attachEvent("onChange", function (name, value, is_checked) {
       if (name == "aproxymode") {
@@ -169,7 +162,9 @@ class AProxy {
                 formType: 0
               }, function (testurl, index) {
                 layer.close(index);
-                var loadindex = layer.load(2, {time: 6 *1000});
+                var loadindex = layer.load(2, {
+                  time: 6 * 1000
+                });
                 var _formvals = form.getValues();
                 var _server = _formvals['server']
                   .replace(/.+:\/\//, '')
@@ -181,7 +176,7 @@ class AProxy {
                   _aproxyauth = _formvals['username'] + ":" + _formvals['password'];
                 }
                 var _aproxyuri = _formvals['protocol'] + '://' + _aproxyauth + '@' + _server + ':' + _formvals['port'];
-                var hash = (String(+ new Date) + String(Math.random()))
+                var hash = (String(+new Date) + String(Math.random()))
                   .substr(10, 10)
                   .replace('.', '_');
 

@@ -16,13 +16,15 @@ class Window {
    */
   constructor(opts) {
     // 生成一个随机ID，用于指定唯一的窗口
-    let id = 'win_' + (Math.random() * + new Date)
+    let id = 'win_' + (Math.random() * +new Date)
       .toString(16)
       .replace('.', '')
       .substr(0, 11);
     // 默认配置
     let opt = $.extend({
-      title: id, width: 500, height: 400,
+      title: id,
+      width: 500,
+      height: 400,
       // 在那个dom内显示
       view: document.body
     }, opts);

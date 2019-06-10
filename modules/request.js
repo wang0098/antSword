@@ -12,7 +12,9 @@ const fs = require('fs'),
   CONF = require('./config'),
   superagent = require('superagent'),
   superagentProxy = require('superagent-proxy');
-const {Readable} = require("stream");
+const {
+  Readable
+} = require("stream");
 
 let logger;
 // 请求UA
@@ -46,9 +48,9 @@ class Request {
    * @return {[type]}       [description]
    */
   onAproxy(event, opts) {
-    logger.debug('aProxy::Set Proxy Mode -', APROXY_CONF['mode'] === 'manualproxy'
-      ? APROXY_CONF['uri']
-      : 'noproxy');
+    logger.debug('aProxy::Set Proxy Mode -', APROXY_CONF['mode'] === 'manualproxy' ?
+      APROXY_CONF['uri'] :
+      'noproxy');
 
     APROXY_CONF['mode'] = opts['aproxymode'];
     APROXY_CONF['uri'] = opts['aproxyuri'];
@@ -145,15 +147,17 @@ class Request {
               .sender
               .send('request-chunk-' + opts['hash'], chunk);
           }, res, (err, ret) => {
-            let buff = ret
-              ? ret
-              : Buffer.from();
+            let buff = ret ?
+              ret :
+              Buffer.from();
             // 自动猜测编码
-            let encoding = detectEncoding(buff, {defaultEncoding: "unknown"});
+            let encoding = detectEncoding(buff, {
+              defaultEncoding: "unknown"
+            });
             logger.debug("detect encoding:", encoding);
-            encoding = encoding != "unknown"
-              ? encoding
-              : opts['encode'];
+            encoding = encoding != "unknown" ?
+              encoding :
+              opts['encode'];
             let text = iconv.decode(buff, encoding);
             if (err && text == "") {
               return event
@@ -221,17 +225,19 @@ class Request {
               .sender
               .send('request-error-' + opts['hash'], err);
           }
-          let buff = ret.hasOwnProperty('body')
-            ? ret.body
-            : Buffer.from();
+          let buff = ret.hasOwnProperty('body') ?
+            ret.body :
+            Buffer.from();
           // 解码
           let text = "";
           // 自动猜测编码
-          let encoding = detectEncoding(buff, {defaultEncoding: "unknown"});
+          let encoding = detectEncoding(buff, {
+            defaultEncoding: "unknown"
+          });
           logger.debug("detect encoding:", encoding);
-          encoding = encoding != "unknown"
-            ? encoding
-            : opts['encode'];
+          encoding = encoding != "unknown" ?
+            encoding :
+            opts['encode'];
           text = iconv.decode(buff, encoding);
           if (err && text == "") {
             return event
@@ -416,16 +422,16 @@ class Request {
         let index_s = chunkHex.indexOf(tagHexS);
         let index_e = chunkHex.lastIndexOf(tagHexE);
         temp = chunkHex.substr(index_s + tagHexS.length, index_e - index_s - tagHexE.length);
-        foundTagS = foundTagE =// 如果只包含前截断，则截取后边
-        true;
+        foundTagS = foundTagE = // 如果只包含前截断，则截取后边
+          true;
       } else if (chunkHex.indexOf(tagHexS) >= 0 && chunkHex.lastIndexOf(tagHexE) === -1) {
         temp = chunkHex.split(tagHexS)[1];
-        foundTagS =// 如果只包含后截断，则截取前边
-        true;
+        foundTagS = // 如果只包含后截断，则截取前边
+          true;
       } else if (chunkHex.indexOf(tagHexS) === -1 && chunkHex.lastIndexOf(tagHexE) >= 0) {
         temp = chunkHex.split(tagHexE)[0];
-        foundTagE =// 如果有没有，那就是中途迷路的数据啦 ^.^
-        true;
+        foundTagE = // 如果有没有，那就是中途迷路的数据啦 ^.^
+          true;
       } else if (foundTagS && !foundTagE) {
         temp = chunkHex;
       }
@@ -465,29 +471,29 @@ function detectEncoding(buffer, options) {
   var defaultEncoding = options.defaultEncoding || DEFAULT_ENCODING;
   var minConfidence = options.minConfidence || MIN_CONFIDENCE;
   var ret = jschardet.detect(buffer),
-    encoding = ret.encoding === 'ascii'
-      ? 'utf-8'
-      : ret.encoding,
+    encoding = ret.encoding === 'ascii' ?
+    'utf-8' :
+    ret.encoding,
     confidence = ret.confidence;
   // var VALID_ENCODINGS = ['gb2312', 'gbk', 'utf-8', 'big5', 'euc-kr','euc-jp'];
 
   if (encoding === null || !iconv.encodingExists(encoding) || confidence < minConfidence) {
-    return verbose
-      ? {
+    return verbose ?
+      {
         encoding: defaultEncoding,
         oriEncoding: encoding,
         confidence: confidence
-      }
-      : defaultEncoding;
+      } :
+      defaultEncoding;
   } else {
     encoding = encoding.toUpperCase();
-    return verbose
-      ? {
+    return verbose ?
+      {
         encoding: encoding,
         oriEncoding: encoding,
         confidence: confidence
-      }
-      : encoding;
+      } :
+      encoding;
   }
 };
 
@@ -503,15 +509,15 @@ class AntRead extends Readable {
     super();
     this.index = 0;
     let o = {};
-    o.step = options.hasOwnProperty('step')
-      ? parseInt(options['step'])
-      : 2;
-    o.step = o.step < 1
-      ? 2
-      : o.step;
-    o.stepmax = options.hasOwnProperty('stepmax')
-      ? options['stepmax']
-      : o.step;
+    o.step = options.hasOwnProperty('step') ?
+      parseInt(options['step']) :
+      2;
+    o.step = o.step < 1 ?
+      2 :
+      o.step;
+    o.stepmax = options.hasOwnProperty('stepmax') ?
+      options['stepmax'] :
+      o.step;
     if (o.stepmax < o.step) {
       o.stepmax = o.step;
     }

@@ -182,9 +182,9 @@ module.exports = {
           min: 'Min Block',
           max: 'Max Block',
           exphint: 'This feature is currently experimental and cannot be used with Multipart. Some t' +
-              'ypes of servers may not support Chunked transfers. In addition, it is recommende' +
-              'd to set the timeout period to 30s or more to avoid data transmission when the n' +
-              'etwork speed is not good.'
+            'ypes of servers may not support Chunked transfers. In addition, it is recommende' +
+            'd to set the timeout period to 30s or more to avoid data transmission when the n' +
+            'etwork speed is not good.'
         },
         terminalCache: "Use the terminal's cache",
         filemanagerCache: "Use the filemanager's cache",

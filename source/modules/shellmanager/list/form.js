@@ -136,28 +136,26 @@ class Form {
    */
   _createToolbar(win, opt) {
     const toolbar = win.attachToolbar();
-    toolbar.loadStruct([
-      {
-        id: 'act',
-        type: 'button',
-        icon: opt['icon'],
-        text: opt['text']
-      }, {
-        type: 'separator'
-      }, {
-        id: 'clear',
-        type: 'button',
-        icon: 'remove',
-        text: LANG['list']['add']['toolbar']['clear']
-      }, {
-        type: 'separator'
-      }, {
-        id: 'test',
-        type: 'button',
-        'icon': 'spinner',
-        text: LANG['list']['add']['toolbar']['test']
-      }
-    ]);
+    toolbar.loadStruct([{
+      id: 'act',
+      type: 'button',
+      icon: opt['icon'],
+      text: opt['text']
+    }, {
+      type: 'separator'
+    }, {
+      id: 'clear',
+      type: 'button',
+      icon: 'remove',
+      text: LANG['list']['add']['toolbar']['clear']
+    }, {
+      type: 'separator'
+    }, {
+      id: 'test',
+      type: 'button',
+      'icon': 'spinner',
+      text: LANG['list']['add']['toolbar']['test']
+    }]);
     return toolbar;
   }
 
@@ -168,18 +166,16 @@ class Form {
    */
   _createAccordion(win) {
     const accordion = win.attachAccordion({
-      items: [
-        {
-          id: 'base',
-          text: `<i class="fa fa-file-text"></i> ${LANG['list']['accordion']['base']}`
-        }, {
-          id: 'http',
-          text: `<i class="fa fa-edge"></i> ${LANG['list']['accordion']['http']}`
-        }, {
-          id: 'other',
-          text: `<i class="fa fa-cogs"></i> ${LANG['list']['accordion']['other']}`
-        }
-      ]
+      items: [{
+        id: 'base',
+        text: `<i class="fa fa-file-text"></i> ${LANG['list']['accordion']['base']}`
+      }, {
+        id: 'http',
+        text: `<i class="fa fa-edge"></i> ${LANG['list']['accordion']['http']}`
+      }, {
+        id: 'other',
+        text: `<i class="fa fa-cogs"></i> ${LANG['list']['accordion']['other']}`
+      }]
     });
     return accordion;
   }
@@ -202,50 +198,46 @@ class Form {
     const form = this
       .accordion
       .cells('base')
-      .attachForm([
-        {
-          type: 'settings',
-          position: 'label-left',
-          labelWidth: 80,
-          inputWidth: 400
+      .attachForm([{
+        type: 'settings',
+        position: 'label-left',
+        labelWidth: 80,
+        inputWidth: 400
+      }, {
+        type: 'block',
+        inputWidth: 'auto',
+        offsetTop: 12,
+        list: [{
+          type: 'input',
+          label: LANG['list']['add']['form']['url'],
+          name: 'url',
+          required: true,
+          value: opt.url
         }, {
-          type: 'block',
-          inputWidth: 'auto',
-          offsetTop: 12,
-          list: [
-            {
-              type: 'input',
-              label: LANG['list']['add']['form']['url'],
-              name: 'url',
-              required: true,
-              value: opt.url
-            }, {
-              type: 'input',
-              label: LANG['list']['add']['form']['pwd'],
-              name: 'pwd',
-              required: true,
-              value: opt.pwd
-            }, {
-              type: 'input',
-              label: LANG['list']['add']['form']['note'],
-              name: 'note',
-              value: opt.note
-            }, {
-              type: 'combo',
-              label: LANG['list']['add']['form']['encode'],
-              name: 'encode',
-              readonly: true,
-              options: this._parseEncodes(opt.encode)
-            }, {
-              type: 'combo',
-              label: LANG['list']['add']['form']['type'],
-              name: 'type',
-              readonly: true,
-              options: this._parseTypes(opt.type, opt.encoder, opt.decoder)
-            }
-          ]
-        }
-      ], true);
+          type: 'input',
+          label: LANG['list']['add']['form']['pwd'],
+          name: 'pwd',
+          required: true,
+          value: opt.pwd
+        }, {
+          type: 'input',
+          label: LANG['list']['add']['form']['note'],
+          name: 'note',
+          value: opt.note
+        }, {
+          type: 'combo',
+          label: LANG['list']['add']['form']['encode'],
+          name: 'encode',
+          readonly: true,
+          options: this._parseEncodes(opt.encode)
+        }, {
+          type: 'combo',
+          label: LANG['list']['add']['form']['type'],
+          name: 'type',
+          readonly: true,
+          options: this._parseTypes(opt.type, opt.encoder, opt.decoder)
+        }]
+      }], true);
 
     form.attachEvent('onChange', (_, id) => {
       // 根据后缀自动修改 shell 类型
@@ -346,25 +338,27 @@ class Form {
         value: c,
         selected: c === _default,
         list: ((c) => {
-          let _ = [
-            {
-              type: 'settings',
-              position: 'label-right',
-              offsetLeft: 60,
-              labelWidth: 200
-            }, {
-              type: 'label',
-              label: LANG['list']['add']['form']['encoder']
-            }, {
+          let _ = [{
+            type: 'settings',
+            position: 'label-right',
+            offsetLeft: 60,
+            labelWidth: 200
+          }, {
+            type: 'label',
+            label: LANG['list']['add']['form']['encoder']
+          }, {
+            type: 'radio',
+            name: `encoder_${c}`,
+            value: 'default',
+            label: `default\t(${LANG['list']['not_recommended']})`,
+            checked: true
+          }];
+          if (c !== 'custom') {
+            _.push({
               type: 'radio',
               name: `encoder_${c}`,
-              value: 'default',
-              label: `default\t(${LANG['list']['not_recommended']})`,
-              checked: true
-            }
-          ];
-          if (c !== 'custom') {
-            _.push({type: 'radio', name: `encoder_${c}`, value: 'random', label: `random\t(${LANG['list']['not_recommended']})`,
+              value: 'random',
+              label: `random\t(${LANG['list']['not_recommended']})`,
               checked: _encoder === 'random'
             });
           }
@@ -378,7 +372,9 @@ class Form {
             })
           });
 
-          _.push({type: 'label', label: LANG['list']['add']['form']['decoder']
+          _.push({
+            type: 'label',
+            label: LANG['list']['add']['form']['decoder']
           });
           decoders.map((e) => {
             _.push({
@@ -416,7 +412,8 @@ class Form {
     };
     // 提取需要的http数据
     let [headers,
-      bodys] = [{}, {}];
+      bodys
+    ] = [{}, {}];
     for (let _ in http) {
       if (_.endsWith('value') || !http[_]) {
         continue
@@ -460,208 +457,198 @@ class Form {
     const form = this
       .accordion
       .cells('other')
-      .attachForm([
-        {
-          type: 'settings',
-          position: 'label-right',
-          inputWidth: 400
+      .attachForm([{
+        type: 'settings',
+        position: 'label-right',
+        inputWidth: 400
+      }, {
+        type: 'block',
+        inputWidth: 'auto',
+        offsetTop: 12,
+        list: [{
+          type: "checkbox",
+          name: 'ignore-https',
+          label: LANG['list']['otherConf']['nohttps'],
+          checked: opt['ignore-https'] === 1
         }, {
-          type: 'block',
-          inputWidth: 'auto',
-          offsetTop: 12,
-          list: [
-            {
+          type: "checkbox",
+          name: 'use-multipart',
+          label: LANG['list']['otherConf']['usemultipart'],
+          checked: opt['use-multipart'] === 1
+        }, {
+          type: 'fieldset',
+          offsetLeft: 0,
+          label: LANG['list']['otherConf']['chunk']['title'],
+          list: [{
+            type: 'block',
+            offsetLeft: 0,
+            list: [{
               type: "checkbox",
-              name: 'ignore-https',
-              label: LANG['list']['otherConf']['nohttps'],
-              checked: opt['ignore-https'] === 1
+              name: 'use-chunk',
+              label: LANG['list']['otherConf']['chunk']['usechunk'],
+              checked: opt['use-chunk'] === 1
+            }]
+          }, {
+            type: 'block',
+            offsetLeft: 0,
+            list: [{
+              type: 'label',
+              label: LANG['list']['otherConf']['chunk']['min']
             }, {
-              type: "checkbox",
-              name: 'use-multipart',
-              label: LANG['list']['otherConf']['usemultipart'],
-              checked: opt['use-multipart'] === 1
+              type: 'newcolumn'
             }, {
-              type: 'fieldset',
-              offsetLeft: 0,
-              label: LANG['list']['otherConf']['chunk']['title'],
-              list: [
-                {
-                  type: 'block',
-                  offsetLeft: 0,
-                  list: [
-                    {
-                      type: "checkbox",
-                      name: 'use-chunk',
-                      label: LANG['list']['otherConf']['chunk']['usechunk'],
-                      checked: opt['use-chunk'] === 1
-                    }
-                  ]
-                }, {
-                  type: 'block',
-                  offsetLeft: 0,
-                  list: [
-                    {
-                      type: 'label',
-                      label: LANG['list']['otherConf']['chunk']['min']
-                    }, {
-                      type: 'newcolumn'
-                    }, {
-                      type: 'combo',
-                      label: '/byte',
-                      validate: 'ValidNumeric',
-                      inputWidth: 50,
-                      name: "chunk-step-byte-min",
-                      options: ((items) => {
-                        let ret = [];
-                        // 如果自定义的路径不在items里，则++
-                        if (items.indexOf(opt['chunk-step-byte-min']) === -1) {
-                          items.unshift(opt['chunk-step-byte-min']);
-                        }
-                        items.map((_) => {
-                          ret.push({
-                            text: _,
-                            value: _,
-                            selected: opt['chunk-step-byte-min'] === _
-                          })
-                        });
-                        return ret;
-                      })([
-                        '2',
-                        '4',
-                        '10',
-                        '50',
-                        '100',
-                        '500'
-                      ])
-                    }, {
-                      type: 'newcolumn'
-                    }, {
-                      type: 'label',
-                      label: LANG['list']['otherConf']['chunk']['max'],
-                      offsetLeft: 30
-                    }, {
-                      type: 'newcolumn'
-                    }, {
-                      type: 'combo',
-                      label: '/byte',
-                      validate: 'ValidNumeric',
-                      inputWidth: 50,
-                      name: "chunk-step-byte-max",
-                      options: ((items) => {
-                        let ret = [];
-                        // 如果自定义的路径不在items里，则++
-                        if (items.indexOf(opt['chunk-step-byte-max']) === -1) {
-                          items.unshift(opt['chunk-step-byte-max']);
-                        }
-                        items.map((_) => {
-                          ret.push({
-                            text: _,
-                            value: _,
-                            selected: opt['chunk-step-byte-max'] === _
-                          })
-                        });
-                        return ret;
-                      })([
-                        '2',
-                        '4',
-                        '10',
-                        '50',
-                        '100',
-                        '500'
-                      ])
-                    }
-                  ]
-                }
-              ]
-            }, {
-              type: "checkbox",
-              name: 'terminal-cache',
-              label: LANG['list']['otherConf']['terminalCache'],
-              checked: opt['terminal-cache'] === 1
-            }, {
-              type: "checkbox",
-              name: 'filemanager-cache',
-              label: LANG['list']['otherConf']['filemanagerCache'],
-              checked: opt['filemanager-cache'] === 1
-            }, {
-              type: "label",
-              label: LANG['list']['otherConf']['uploadFragment']
-            }, {
-              type: "combo",
-              label: '/kb',
-              inputWidth: 100,
-              name: "upload-fragment",
+              type: 'combo',
+              label: '/byte',
+              validate: 'ValidNumeric',
+              inputWidth: 50,
+              name: "chunk-step-byte-min",
               options: ((items) => {
                 let ret = [];
                 // 如果自定义的路径不在items里，则++
-                if (items.indexOf(opt['upload-fragment']) === -1) {
-                  items.unshift(opt['upload-fragment']);
+                if (items.indexOf(opt['chunk-step-byte-min']) === -1) {
+                  items.unshift(opt['chunk-step-byte-min']);
                 }
                 items.map((_) => {
                   ret.push({
                     text: _,
                     value: _,
-                    selected: opt['upload-fragment'] === _
+                    selected: opt['chunk-step-byte-min'] === _
                   })
                 });
                 return ret;
               })([
-                '500',
-                '400',
-                '200',
-                '100',
+                '2',
+                '4',
+                '10',
                 '50',
-                '10'
+                '100',
+                '500'
               ])
             }, {
-              type: "label",
-              label: LANG['list']['otherConf']['requestTimeout']
-            }, {
-              type: "combo",
-              label: '/ms',
-              inputWidth: 100,
-              name: "request-timeout",
-              options: ((items) => {
-                let ret = [];
-                // 如果自定义的路径不在items里，则++
-                if (items.indexOf(opt['request-timeout']) === -1) {
-                  items.unshift(opt['request-timeout']);
-                }
-                items.map((_) => {
-                  ret.push({
-                    text: _,
-                    value: _,
-                    selected: opt['request-timeout'] === _
-                  })
-                });
-                return ret;
-              })(['5000', '10000', '30000', '60000'])
+              type: 'newcolumn'
             }, {
               type: 'label',
-              label: LANG['list']['otherConf']['commandPath']
+              label: LANG['list']['otherConf']['chunk']['max'],
+              offsetLeft: 30
+            }, {
+              type: 'newcolumn'
             }, {
               type: 'combo',
-              name: 'command-path',
-              inputWidth: 200,
+              label: '/byte',
+              validate: 'ValidNumeric',
+              inputWidth: 50,
+              name: "chunk-step-byte-max",
               options: ((items) => {
                 let ret = [];
                 // 如果自定义的路径不在items里，则++
-                if (items.indexOf(opt['command-path']) === -1) {
-                  items.unshift(opt['command-path']);
+                if (items.indexOf(opt['chunk-step-byte-max']) === -1) {
+                  items.unshift(opt['chunk-step-byte-max']);
                 }
                 items.map((_) => {
                   ret.push({
                     text: _,
                     value: _,
-                    selected: opt['command-path'] === _
+                    selected: opt['chunk-step-byte-max'] === _
                   })
                 });
                 return ret;
-              })(['/bin/sh', 'cmd'])
+              })([
+                '2',
+                '4',
+                '10',
+                '50',
+                '100',
+                '500'
+              ])
+            }]
+          }]
+        }, {
+          type: "checkbox",
+          name: 'terminal-cache',
+          label: LANG['list']['otherConf']['terminalCache'],
+          checked: opt['terminal-cache'] === 1
+        }, {
+          type: "checkbox",
+          name: 'filemanager-cache',
+          label: LANG['list']['otherConf']['filemanagerCache'],
+          checked: opt['filemanager-cache'] === 1
+        }, {
+          type: "label",
+          label: LANG['list']['otherConf']['uploadFragment']
+        }, {
+          type: "combo",
+          label: '/kb',
+          inputWidth: 100,
+          name: "upload-fragment",
+          options: ((items) => {
+            let ret = [];
+            // 如果自定义的路径不在items里，则++
+            if (items.indexOf(opt['upload-fragment']) === -1) {
+              items.unshift(opt['upload-fragment']);
             }
-          ]
-        }
-      ], true);
+            items.map((_) => {
+              ret.push({
+                text: _,
+                value: _,
+                selected: opt['upload-fragment'] === _
+              })
+            });
+            return ret;
+          })([
+            '500',
+            '400',
+            '200',
+            '100',
+            '50',
+            '10'
+          ])
+        }, {
+          type: "label",
+          label: LANG['list']['otherConf']['requestTimeout']
+        }, {
+          type: "combo",
+          label: '/ms',
+          inputWidth: 100,
+          name: "request-timeout",
+          options: ((items) => {
+            let ret = [];
+            // 如果自定义的路径不在items里，则++
+            if (items.indexOf(opt['request-timeout']) === -1) {
+              items.unshift(opt['request-timeout']);
+            }
+            items.map((_) => {
+              ret.push({
+                text: _,
+                value: _,
+                selected: opt['request-timeout'] === _
+              })
+            });
+            return ret;
+          })(['5000', '10000', '30000', '60000'])
+        }, {
+          type: 'label',
+          label: LANG['list']['otherConf']['commandPath']
+        }, {
+          type: 'combo',
+          name: 'command-path',
+          inputWidth: 200,
+          options: ((items) => {
+            let ret = [];
+            // 如果自定义的路径不在items里，则++
+            if (items.indexOf(opt['command-path']) === -1) {
+              items.unshift(opt['command-path']);
+            }
+            items.map((_) => {
+              ret.push({
+                text: _,
+                value: _,
+                selected: opt['command-path'] === _
+              })
+            });
+            return ret;
+          })(['/bin/sh', 'cmd'])
+        }]
+      }], true);
     form.attachEvent('onChange', (name, value, state) => {
       switch (name) {
         case 'use-multipart':
@@ -674,7 +661,9 @@ class Form {
             form.uncheckItem('use-multipart');
           }
           if (state == true) {
-            layer.open({title: LANG_T['info'], content: LANG['list']['otherConf']['chunk']['exphint']
+            layer.open({
+              title: LANG_T['info'],
+              content: LANG['list']['otherConf']['chunk']['exphint']
             });
           }
           break;
@@ -700,47 +689,39 @@ class Form {
       .cells('http');
     // 创建toolbar，用于添加数据
     const toolbar = cell.attachToolbar();
-    toolbar.loadStruct([
-      {
-        id: 'add-header',
-        type: 'button',
-        icon: 'plus-square-o',
-        text: 'Header'
-      }, {
-        type: 'separator'
-      }, {
-        id: 'add-body',
-        type: 'button',
-        icon: 'plus-square-o',
-        text: 'Body'
-      }
-    ]);
+    toolbar.loadStruct([{
+      id: 'add-header',
+      type: 'button',
+      icon: 'plus-square-o',
+      text: 'Header'
+    }, {
+      type: 'separator'
+    }, {
+      id: 'add-body',
+      type: 'button',
+      icon: 'plus-square-o',
+      text: 'Body'
+    }]);
     // 创建表单
-    const form = cell.attachForm([
-      {
-        type: 'block',
-        inputWidth: 'auto',
-        offsetTop: 12,
-        name: 'header',
-        list: [
-          {
-            type: "label",
-            label: "HTTP HEADERS"
-          }
-        ]
-      }, {
-        type: 'block',
-        inputWidth: 'auto',
-        offsetTop: 12,
-        name: 'body',
-        list: [
-          {
-            type: "label",
-            label: "HTTP BODY"
-          }
-        ]
-      }
-    ], true);
+    const form = cell.attachForm([{
+      type: 'block',
+      inputWidth: 'auto',
+      offsetTop: 12,
+      name: 'header',
+      list: [{
+        type: "label",
+        label: "HTTP HEADERS"
+      }]
+    }, {
+      type: 'block',
+      inputWidth: 'auto',
+      offsetTop: 12,
+      name: 'body',
+      list: [{
+        type: "label",
+        label: "HTTP BODY"
+      }]
+    }], true);
     // 添加Header
     let _headerCount = 0;
     const _addHeader = (name = '', value = '') => {
@@ -749,23 +730,21 @@ class Form {
         type: "fieldset",
         label: `#${_headerCount}`,
         inputWidth: 480,
-        list: [
-          {
-            type: "input",
-            name: `header-${_headerCount}_name`,
-            inputWidth: 350,
-            labelWidth: 50,
-            label: "Name",
-            value: name
-          }, {
-            type: "input",
-            name: `header-${_headerCount}_value`,
-            inputWidth: 350,
-            labelWidth: 50,
-            label: "Value",
-            value: value
-          }
-        ]
+        list: [{
+          type: "input",
+          name: `header-${_headerCount}_name`,
+          inputWidth: 350,
+          labelWidth: 50,
+          label: "Name",
+          value: name
+        }, {
+          type: "input",
+          name: `header-${_headerCount}_value`,
+          inputWidth: 350,
+          labelWidth: 50,
+          label: "Value",
+          value: value
+        }]
       })
     }
     // 添加Body
@@ -776,23 +755,21 @@ class Form {
         type: "fieldset",
         label: `#${_bodyCount}`,
         inputWidth: 480,
-        list: [
-          {
-            type: "input",
-            name: `body-${_bodyCount}_name`,
-            inputWidth: 350,
-            labelWidth: 50,
-            label: "Name",
-            value: name
-          }, {
-            type: "input",
-            name: `body-${_bodyCount}_value`,
-            inputWidth: 350,
-            labelWidth: 50,
-            label: "Value",
-            value: value
-          }
-        ]
+        list: [{
+          type: "input",
+          name: `body-${_bodyCount}_name`,
+          inputWidth: 350,
+          labelWidth: 50,
+          label: "Name",
+          value: name
+        }, {
+          type: "input",
+          name: `body-${_bodyCount}_value`,
+          inputWidth: 350,
+          labelWidth: 50,
+          label: "Value",
+          value: value
+        }]
       })
     }
     // 监听toolbar事件

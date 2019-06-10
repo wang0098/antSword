@@ -37,7 +37,7 @@ class Cache {
    * @param  {String} id 数据存储文件名
    * @return {[type]}    [description]
    */
-  createDB(id = String(+ new Date)) {
+  createDB(id = String(+new Date)) {
     return new Datastore({
       filename: path.join(CONF.cachePath, id),
       autoload: true

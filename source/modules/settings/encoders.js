@@ -28,101 +28,98 @@ class Encoders {
       }
     }
 
-    sidebar.addItem({id: 'encoders', text: `<i class="fa fa-file-code-o"></i> ${LANG['title']}`});
+    sidebar.addItem({
+      id: 'encoders',
+      text: `<i class="fa fa-file-code-o"></i> ${LANG['title']}`
+    });
 
     that.cell = sidebar.cells('encoders');
     const toolbar = that
       .cell
       .attachToolbar();
 
-    toolbar.loadStruct([
-      {
-        type: 'buttonSelect',
-        text: LANG['toolbar']['new'],
-        icon: 'plus-circle',
-        id: 'new',
-        openAll: true,
-        options: [
-          {
-            id: 'new_asp',
-            icon: 'file-code-o',
-            type: 'button',
-            text: "ASP"
-          }, {
-            id: 'new_aspx',
-            icon: 'file-code-o',
-            type: 'button',
-            text: "ASPX"
-          }, {
-            id: 'new_php',
-            icon: 'file-code-o',
-            type: 'button',
-            text: "PHP"
-          }, {
-            type: 'separator'
-          }, {
-            id: 'new_custom',
-            icon: 'file-code-o',
-            type: 'button',
-            text: "Custom"
-          }, {
-            type: 'separator'
-          }, {
-            id: 'new_php_rsa',
-            icon: 'file-code-o',
-            type: 'button',
-            text: "PHP RSA"
-          }
-        ]
+    toolbar.loadStruct([{
+      type: 'buttonSelect',
+      text: LANG['toolbar']['new'],
+      icon: 'plus-circle',
+      id: 'new',
+      openAll: true,
+      options: [{
+        id: 'new_asp',
+        icon: 'file-code-o',
+        type: 'button',
+        text: "ASP"
       }, {
-        type: 'buttonSelect',
-        text: LANG['toolbar']['new_decoder'],
-        icon: 'plus-circle',
-        id: 'new_decoder',
-        openAll: true,
-        options: [
-          {
-            id: 'new_php_decoder',
-            icon: 'file-code-o',
-            type: 'button',
-            text: "PHP"
-          }, {
-            type: 'separator'
-          }, {
-            id: 'new_custom_decoder',
-            icon: 'file-code-o',
-            type: 'button',
-            text: "Custom"
-          }
-        ]
+        id: 'new_aspx',
+        icon: 'file-code-o',
+        type: 'button',
+        text: "ASPX"
+      }, {
+        id: 'new_php',
+        icon: 'file-code-o',
+        type: 'button',
+        text: "PHP"
       }, {
         type: 'separator'
       }, {
+        id: 'new_custom',
+        icon: 'file-code-o',
         type: 'button',
-        text: LANG['toolbar']['edit'],
-        icon: 'fa fa-edit',
-        id: 'edit'
-      }, {
-        type: 'button',
-        text: LANG['toolbar']['delete'],
-        icon: 'fa fa-trash-o',
-        id: 'delete'
+        text: "Custom"
       }, {
         type: 'separator'
       }, {
+        id: 'new_php_rsa',
+        icon: 'file-code-o',
         type: 'button',
-        text: LANG['toolbar']['rsa'],
-        icon: 'fa fa-key',
-        id: 'rsa'
+        text: "PHP RSA"
+      }]
+    }, {
+      type: 'buttonSelect',
+      text: LANG['toolbar']['new_decoder'],
+      icon: 'plus-circle',
+      id: 'new_decoder',
+      openAll: true,
+      options: [{
+        id: 'new_php_decoder',
+        icon: 'file-code-o',
+        type: 'button',
+        text: "PHP"
       }, {
         type: 'separator'
       }, {
+        id: 'new_custom_decoder',
+        icon: 'file-code-o',
         type: 'button',
-        text: LANG['toolbar']['more'],
-        icon: 'fa fa-chrome',
-        id: 'more'
-      }
-    ]);
+        text: "Custom"
+      }]
+    }, {
+      type: 'separator'
+    }, {
+      type: 'button',
+      text: LANG['toolbar']['edit'],
+      icon: 'fa fa-edit',
+      id: 'edit'
+    }, {
+      type: 'button',
+      text: LANG['toolbar']['delete'],
+      icon: 'fa fa-trash-o',
+      id: 'delete'
+    }, {
+      type: 'separator'
+    }, {
+      type: 'button',
+      text: LANG['toolbar']['rsa'],
+      icon: 'fa fa-key',
+      id: 'rsa'
+    }, {
+      type: 'separator'
+    }, {
+      type: 'button',
+      text: LANG['toolbar']['more'],
+      icon: 'fa fa-chrome',
+      id: 'more'
+    }]);
 
     toolbar.attachEvent("onClick", (id) => {
       switch (id) {
@@ -243,11 +240,11 @@ class Encoders {
     let self = this;
     let idArr = id.split('_');
     let type = idArr[1];
-    let rsa = idArr.length >= 3
-      ? (idArr[2] === 'rsa'
-        ? '_rsa'
-        : '')
-      : '';
+    let rsa = idArr.length >= 3 ?
+      (idArr[2] === 'rsa' ?
+        '_rsa' :
+        '') :
+      '';
 
     layer.prompt({
       value: `my${edtype}`,
@@ -349,16 +346,14 @@ class Encoders {
     let toolbar = _win
       .win
       .attachToolbar();
-    toolbar.loadStruct([
-      {
-        id: 'save',
-        type: 'button',
-        icon: 'save',
-        text: LANG["toolbar"]['save']
-      }, {
-        type: 'separator'
-      }
-    ]);
+    toolbar.loadStruct([{
+      id: 'save',
+      type: 'button',
+      icon: 'save',
+      text: LANG["toolbar"]['save']
+    }, {
+      type: 'separator'
+    }]);
     toolbar.attachEvent('onClick', (id) => {
       if (id === 'save') {
         // 保存代码
@@ -387,7 +382,13 @@ class Encoders {
     editor
       .session
       .setWrapLimitRange(null, null);
-    editor.setOptions({tabSize: 2, fontSize: '14px', enableBasicAutocompletion: true, enableSnippets: true, enableLiveAutocompletion: true});
+    editor.setOptions({
+      tabSize: 2,
+      fontSize: '14px',
+      enableBasicAutocompletion: true,
+      enableSnippets: true,
+      enableLiveAutocompletion: true
+    });
     // 编辑器快捷键
     editor
       .commands
@@ -422,7 +423,9 @@ class Encoders {
 
   // 生成 RSA
   generateRsaKey(bit = 1024) {
-    const key = new NodeRSA({b: bit});
+    const key = new NodeRSA({
+      b: bit
+    });
     let pubKey = key.exportKey('pkcs8-public-pem');
     let priKey = key.exportKey('pkcs1-private-pem');
     let keyPath = this.rsa.keyPath;
@@ -442,12 +445,12 @@ class Encoders {
   // 重新读取 RSA
   reloadRsa() {
     let keyPath = this.rsa.keyPath;
-    let pubKey = fs.existsSync(keyPath.pub)
-      ? fs.readFileSync(keyPath.pub)
-      : '';
-    let priKey = fs.existsSync(keyPath.pri)
-      ? fs.readFileSync(keyPath.pri)
-      : '';
+    let pubKey = fs.existsSync(keyPath.pub) ?
+      fs.readFileSync(keyPath.pub) :
+      '';
+    let priKey = fs.existsSync(keyPath.pri) ?
+      fs.readFileSync(keyPath.pri) :
+      '';
     this
       .rsa
       .form
@@ -494,14 +497,12 @@ eval($cmd);`);
       .win
       .attachForm();
     self.rsa.form = form;
-    toolbar.loadStruct([
-      {
-        id: 'generate',
-        type: 'button',
-        icon: 'repeat',
-        text: LANG["toolbar"]['generate']
-      }
-    ]);
+    toolbar.loadStruct([{
+      id: 'generate',
+      type: 'button',
+      icon: 'repeat',
+      text: LANG["toolbar"]['generate']
+    }]);
     toolbar.attachEvent('onClick', (id) => {
       if (id === 'generate') {
         if (fs.existsSync(self.rsa.keyPath.pub) && fs.existsSync(self.rsa.keyPath.pri)) {
@@ -518,41 +519,37 @@ eval($cmd);`);
         }
       }
     });
-    form.loadStruct([
-      {
-        type: "settings",
-        labelWidth: 750,
-        inputWidth: 750,
-        position: "label-top",
-        labelLeft: 25,
-        inputLeft: 25
+    form.loadStruct([{
+      type: "settings",
+      labelWidth: 750,
+      inputWidth: 750,
+      position: "label-top",
+      labelLeft: 25,
+      inputLeft: 25
+    }, {
+      type: 'block',
+      inputWidth: 'auto',
+      offsetTop: 20,
+      list: [{
+        type: 'input',
+        label: LANG['form']['public_key'],
+        name: 'public_key',
+        rows: 6,
+        value: ''
       }, {
-        type: 'block',
-        inputWidth: 'auto',
-        offsetTop: 20,
-        list: [
-          {
-            type: 'input',
-            label: LANG['form']['public_key'],
-            name: 'public_key',
-            rows: 6,
-            value: ''
-          }, {
-            type: 'input',
-            label: LANG['form']['private_key'],
-            name: 'private_key',
-            rows: 15,
-            value: ''
-          }, {
-            type: 'input',
-            label: LANG['form']['php_code'],
-            name: 'php_code',
-            rows: 20,
-            value: ''
-          }
-        ]
-      }
-    ], true);
+        type: 'input',
+        label: LANG['form']['private_key'],
+        name: 'private_key',
+        rows: 15,
+        value: ''
+      }, {
+        type: 'input',
+        label: LANG['form']['php_code'],
+        name: 'php_code',
+        rows: 20,
+        value: ''
+      }]
+    }], true);
     self.reloadRsa();
   }
 
@@ -760,17 +757,17 @@ module.exports = {
       };
       let userencoder_path = path.join(remote.process.env.AS_WORKDIR, 'antData/encoders');
       // 初始化
-      !fs.existsSync(userencoder_path)
-        ? fs.mkdirSync(userencoder_path)
-        : null;
+      !fs.existsSync(userencoder_path) ?
+        fs.mkdirSync(userencoder_path) :
+        null;
       ['asp', 'aspx', 'php', 'custom'].map((t) => {
-        !fs.existsSync(path.join(userencoder_path, `${t}`))
-          ? fs.mkdirSync(path.join(userencoder_path, `${t}`))
-          : null;
+        !fs.existsSync(path.join(userencoder_path, `${t}`)) ?
+          fs.mkdirSync(path.join(userencoder_path, `${t}`)) :
+          null;
         let t_path = path.join(userencoder_path, `${t}/encoder/`);
-        !fs.existsSync(t_path)
-          ? fs.mkdirSync(t_path)
-          : null;
+        !fs.existsSync(t_path) ?
+          fs.mkdirSync(t_path) :
+          null;
 
         let es = fs.readdirSync(t_path);
         if (es) {
@@ -807,17 +804,17 @@ module.exports = {
       };
       let userdecoder_path = path.join(remote.process.env.AS_WORKDIR, 'antData/encoders');
       // 初始化
-      !fs.existsSync(userdecoder_path)
-        ? fs.mkdirSync(userdecoder_path)
-        : null;
+      !fs.existsSync(userdecoder_path) ?
+        fs.mkdirSync(userdecoder_path) :
+        null;
       ['asp', 'aspx', 'php', 'custom'].map((t) => {
-        !fs.existsSync(path.join(userdecoder_path, `${t}`))
-          ? fs.mkdirSync(path.join(userdecoder_path, `${t}`))
-          : null;
+        !fs.existsSync(path.join(userdecoder_path, `${t}`)) ?
+          fs.mkdirSync(path.join(userdecoder_path, `${t}`)) :
+          null;
         let t_path = path.join(userdecoder_path, `${t}/decoder/`);
-        !fs.existsSync(t_path)
-          ? fs.mkdirSync(t_path)
-          : null;
+        !fs.existsSync(t_path) ?
+          fs.mkdirSync(t_path) :
+          null;
 
         let es = fs.readdirSync(t_path);
         if (es) {

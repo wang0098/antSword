@@ -19,11 +19,11 @@ class Terminal {
       if (id !== `tab_terminal_${hash}`) {
         return
       };
-      this.term
-        ? this
-          .term
-          .focus()
-        : 0;
+      this.term ?
+        this
+        .term
+        .focus() :
+        0;
     });
     // 初始化UI::cell
     const cell = tabbar.cells(`tab_terminal_${hash}`);
@@ -63,9 +63,9 @@ class Terminal {
         }
       })
       .catch((err) => {
-        toastr.error((typeof(err) === 'object')
-          ? JSON.stringify(err)
-          : String(err), LANG_T['error']);
+        toastr.error((typeof (err) === 'object') ?
+          JSON.stringify(err) :
+          String(err), LANG_T['error']);
         this
           .cell
           .progressOff();
@@ -89,7 +89,10 @@ class Terminal {
         .get('info');
       // 如果有缓存？初始化终端：获取信息&&保存缓存&&初始化终端
       if (infoCache) {
-        return ret({dom: dom, info: infoCache});
+        return ret({
+          dom: dom,
+          info: infoCache
+        });
       }
       // 开始获取信息
       this
@@ -105,7 +108,10 @@ class Terminal {
           this
             .cache
             .set('info', _ret['text']);
-          return ret({dom: dom, info: _ret['text']});
+          return ret({
+            dom: dom,
+            info: _ret['text']
+          });
         })
         .catch((e) => {
           rej(e);
@@ -204,7 +210,9 @@ class Terminal {
         }
         this
           .core
-          .request(this.core.command.listcmd({binarr: binarr}))
+          .request(this.core.command.listcmd({
+            binarr: binarr
+          }))
           .then((ret) => {
             let res = ret['text'];
             if (res.indexOf("ERROR://") > -1) {
@@ -216,9 +224,9 @@ class Terminal {
               .map((v) => {
                 var line = v.split('\t');
                 if (line.length == 2) {
-                  var r = parseInt(line[1]) === 1
-                    ? '[[b;#15af63;]OK]'
-                    : '[[b;#E80000;]FAIL]';
+                  var r = parseInt(line[1]) === 1 ?
+                    '[[b;#15af63;]OK]' :
+                    '[[b;#E80000;]FAIL]';
                   result += `${line[0]}\t\t\t${r}\n`;
                 }
               });
@@ -269,9 +277,9 @@ class Terminal {
         return term.resume();
       };
       // 获取自定义执行路径
-      let _bin = this.isWin
-        ? 'cmd'
-        : '/bin/sh';
+      let _bin = this.isWin ?
+        'cmd' :
+        '/bin/sh';
       let _confBin = (this.opts['otherConf'] || {})['command-path'];
       _bin = _confBin || _bin;
       if (self.sessbin !== null) {
@@ -347,50 +355,11 @@ class Terminal {
       exit: false,
       // < 1.0.0 时使用3个参数 completion: (term, value, callback) => {}
       completion: (value, callback) => {
-        callback([
-          'ashelp',
-          'ascmd',
-          'aslistcmd',
-          'aspowershell',
-          'quit',
-          'exit'
-        ].concat(this.isWin
-          ? [
-            'dir',
-            'whoami',
-            'net',
-            'ipconfig',
-            'netstat',
-            'cls',
-            'wscript',
-            'nslookup',
-            'copy',
-            'del',
-            'ren',
-            'md',
-            'type',
-            'ping'
-          ]
-          : [
-            'cd',
-            'ls',
-            'find',
-            'cp',
-            'mv',
-            'rm',
-            'ps',
-            'kill',
-            'file',
-            'tar',
-            'cat',
-            'chown',
-            'chmod',
-            'pwd',
-            'history',
-            'whoami',
-            'ifconfig',
-            'clear',
-            'ping'
+        callback(['ashelp', 'ascmd', 'aslistcmd', 'aspowershell', 'quit', 'exit'].concat(
+          this.isWin ? [
+            'dir', 'whoami', 'net', 'ipconfig', 'netstat', 'cls', 'wscript', 'nslookup', 'copy', 'del', 'ren', 'md', 'type', 'ping'
+          ] : [
+            'cd', 'ls', 'find', 'cp', 'mv', 'rm', 'ps', 'kill', 'file', 'tar', 'cat', 'chown', 'chmod', 'pwd', 'history', 'whoami', 'ifconfig', 'clear', 'ping'
           ]))
       },
       keydown: (event, terminal) => {
@@ -443,11 +412,11 @@ class Terminal {
       .replace(/\\\\/g, '\\')
       .replace(/"/g, '\\"')
       .replace(/\\/g, '\\\\');
-    return (this.isWin
-      ? this.isPowershell
-        ? `cd "${path}";${cmd};echo [S];(pwd).path;echo [E]`
-        : `cd /d "${path}"&${cmd}&echo [S]&cd&echo [E]`
-      : `cd "${path}";${cmd};echo [S];pwd;echo [E]`);
+    return (this.isWin ?
+      this.isPowershell ?
+      `cd "${path}";${cmd};echo [S];(pwd).path;echo [E]` :
+      `cd /d "${path}"&${cmd}&echo [S]&cd&echo [E]` :
+      `cd "${path}";${cmd};echo [S];pwd;echo [E]`);
   }
 
   /**
@@ -456,11 +425,11 @@ class Terminal {
    * @return {String}      term输出字符串
    */
   parsePrompt(user) {
-    return antSword.noxss(this.isWin
-      ? `[[b;white;]${this.path.replace(/\//g, '\\')}> ]`
-      : (user
-        ? `([[b;#E80000;]${user}]:[[;#0F93D2;]`
-        : '[[;0F93D2;]') + this.path + ']) $ ');
+    return antSword.noxss(this.isWin ?
+      `[[b;white;]${this.path.replace(/\//g, '\\')}> ]` :
+      (user ?
+        `([[b;#E80000;]${user}]:[[;#0F93D2;]` :
+        '[[;0F93D2;]') + this.path + ']) $ ');
   }
 
 }

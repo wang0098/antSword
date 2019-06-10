@@ -9,11 +9,11 @@ const rot13encode = (s) => {
   return s.replace(/[a-zA-Z]/g, function (c) {
     // Get the character code of the current character and add 13 to it If it is
     // larger than z's character code then subtract 26 to support wrap around.
-    return String.fromCharCode((c <= "Z"
-      ? 90
-      : 122) >= (c = c.charCodeAt(0) + 13)
-      ? c
-      : c - 26);
+    return String.fromCharCode((c <= "Z" ?
+        90 :
+        122) >= (c = c.charCodeAt(0) + 13) ?
+      c :
+      c - 26);
   });
 };
 

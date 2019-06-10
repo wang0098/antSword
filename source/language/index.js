@@ -14,9 +14,9 @@ const languages = {
 let lang = antSword['storage']('language', false, navigator.language.substr(0, 2));
 
 // 判断本地设置语言是否符合语言模板
-lang = languages[lang]
-  ? lang
-  : 'en';
+lang = languages[lang] ?
+  lang :
+  'en';
 
 // 返回语言模板
 let langModule = require(`./${lang}`);

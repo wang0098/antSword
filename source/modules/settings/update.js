@@ -7,23 +7,24 @@ const LANG_T = antSword['language']['toastr'];
 
 class Update {
   constructor(sidebar) {
-    sidebar.addItem({id: 'update', text: `<i class="fa fa-cloud-download"></i> ${LANG['title']}`});
+    sidebar.addItem({
+      id: 'update',
+      text: `<i class="fa fa-cloud-download"></i> ${LANG['title']}`
+    });
     const cell = sidebar.cells('update');
 
     // 初始化toolbar
     const toolbar = cell.attachToolbar();
-    toolbar.loadStruct([
-      {
-        id: 'check',
-        type: 'button',
-        // 调试或者windows平台不支持更新
-        disabled: antSword['package']['debug'] || process.platform === 'win32',
-        text: LANG['toolbar']['check'],
-        icon: 'check-square-o'
-      }, {
-        type: 'separator'
-      }
-    ]);
+    toolbar.loadStruct([{
+      id: 'check',
+      type: 'button',
+      // 调试或者windows平台不支持更新
+      disabled: antSword['package']['debug'] || process.platform === 'win32',
+      text: LANG['toolbar']['check'],
+      icon: 'check-square-o'
+    }, {
+      type: 'separator'
+    }]);
 
     // toolbar点击事件
     toolbar.attachEvent('onClick', (id) => {
@@ -59,9 +60,9 @@ class Update {
       let info = ret['retVal'];
       // 木有更新
       if (!ret['hasUpdate']) {
-        return typeof info === 'string'
-          ? toastr.error(LANG['check']['fail'](info), LANG_T['error'])
-          : toastr.info(LANG['check']['none'](info['version']), LANG_T['info']);
+        return typeof info === 'string' ?
+          toastr.error(LANG['check']['fail'](info), LANG_T['error']) :
+          toastr.info(LANG['check']['none'](info['version']), LANG_T['info']);
       }
       // 发现更新
       toastr.success(LANG['check']['found'](info['version']), LANG_T['success']);
@@ -121,7 +122,8 @@ class Update {
         }
       });
 
-    }).send('update-check', {local_ver: antSword['package']['version']
+    }).send('update-check', {
+      local_ver: antSword['package']['version']
     });
   }
 

@@ -10,7 +10,10 @@
 // 添加源码目录到全局模块加载变量，以提供后边加载
 const path = require('path');
 const Module = require('module').Module;
-const {remote} = require('electron');
+const {
+  remote
+} = require('electron');
+
 Module
   .globalPaths
   .push(path.join(remote.process.env.AS_WORKDIR, 'source'));
@@ -39,9 +42,9 @@ window.addEventListener('load', () => {
     };
     for (let k in o) {
       if (new RegExp("(" + k + ")").test(format)) {
-        format = format.replace(RegExp.$1, RegExp.$1.length == 1
-          ? o[k]
-          : ("00" + o[k]).substr(("" + o[k]).length));
+        format = format.replace(RegExp.$1, RegExp.$1.length == 1 ?
+          o[k] :
+          ("00" + o[k]).substr(("" + o[k]).length));
       }
     }
     return format;
@@ -107,21 +110,42 @@ window.addEventListener('load', () => {
   }
   loadingUI();
   // 开始加载css
-  loadCSS('ant-static://libs/bmenu/bmenu.css').then(() => loadCSS('ant-static://libs/toastr/toastr.min.css')).then(() => loadCSS('ant-static://libs/layer/src/skin/layer.css')).then(() => loadCSS('ant-static://libs/layer/src/skin/layer.ext.css')).then(() => loadCSS('ant-static://libs/laydate/need/laydate.css')).then(() => loadCSS('ant-static://libs/laydate/skins/default/laydate.css')).then(() => loadCSS('ant-static://libs/terminal/css/jquery.terminal-1.1.1.css')).then(() => loadCSS('ant-static://libs/font-awesome/css/font-awesome.min.css')).then(() => loadCSS('ant-static://libs/dhtmlx/codebase/dhtmlx.css')).then(() => loadCSS('ant-static://libs/dhtmlx/skins/mytheme/dhtmlx.css')).then(() => loadCSS('ant-static://css/index.css'));
+  loadCSS('ant-static://libs/bmenu/bmenu.css')
+    .then(() => loadCSS('ant-static://libs/toastr/toastr.min.css'))
+    .then(() => loadCSS('ant-static://libs/layer/src/skin/layer.css'))
+    .then(() => loadCSS('ant-static://libs/layer/src/skin/layer.ext.css'))
+    .then(() => loadCSS('ant-static://libs/laydate/need/laydate.css'))
+    .then(() => loadCSS('ant-static://libs/laydate/skins/default/laydate.css'))
+    .then(() => loadCSS('ant-static://libs/terminal/css/jquery.terminal-1.1.1.css'))
+    .then(() => loadCSS('ant-static://libs/font-awesome/css/font-awesome.min.css'))
+    .then(() => loadCSS('ant-static://libs/dhtmlx/codebase/dhtmlx.css'))
+    .then(() => loadCSS('ant-static://libs/dhtmlx/skins/mytheme/dhtmlx.css'))
+    .then(() => loadCSS('ant-static://css/index.css'));
 
   // 加载js资源
-  loadJS('ant-static://libs/jquery/jquery.js').then(() => loadJS('ant-static://libs/ace/ace.js')).then(() => loadJS('ant-static://libs/ace/ext-language_tools.js')).then(() => loadJS('ant-static://libs/bmenu/bmenu.js')).then(() => loadJS('ant-static://libs/toastr/toastr.js')).then(() => loadJS('ant-static://libs/layer/src/layer.js')).then(() => loadJS('ant-static://libs/laydate/laydate.js')).then(() => loadJS('ant-static://libs/terminal/js/jquery.terminal-min-1.1.1.js')).then(() => loadJS('ant-static://libs/dhtmlx/codebase/dhtmlx.js')).then(() => {
-    /**
+  loadJS('ant-static://libs/jquery/jquery.js')
+    .then(() => loadJS('ant-static://libs/ace/ace.js'))
+    .then(() => loadJS('ant-static://libs/ace/ext-language_tools.js'))
+    .then(() => loadJS('ant-static://libs/bmenu/bmenu.js'))
+    .then(() => loadJS('ant-static://libs/toastr/toastr.js'))
+    .then(() => loadJS('ant-static://libs/layer/src/layer.js'))
+    .then(() => loadJS('ant-static://libs/laydate/laydate.js'))
+    .then(() => loadJS('ant-static://libs/terminal/js/jquery.terminal-min-1.1.1.js'))
+    .then(() => loadJS('ant-static://libs/dhtmlx/codebase/dhtmlx.js'))
+    .then(() => {
+      /**
        * 配置layer弹出层
        * @param  {[type]} {extend: 'extend/layer.ext.js'} [description]
        * @return {[type]}          [description]
        */
-    layer.config({extend: 'extend/layer.ext.js'});
-    // 加载程序入口
-    require('app.entry');
-    // LOGO
-    console.group('LOGO');
-    console.log(`%c
+      layer.config({
+        extend: 'extend/layer.ext.js'
+      });
+      // 加载程序入口
+      require('app.entry');
+      // LOGO
+      console.group('LOGO');
+      console.log(`%c
           _____     _   _____                 _
          |  _  |___| |_|   __|_ _ _ ___ ___ _| |
          |     |   |  _|__   | | | | . |  _| . |
@@ -132,7 +156,7 @@ window.addEventListener('load', () => {
      -*| End: %c${ + new Date - APP_START_TIME}%c/ms
 
   `, 'color: #F44336;', 'color: #9E9E9E;', 'color: #4CAF50;', 'color: #9E9E9E;', 'color: #2196F3;', 'color: #9E9E9E;', 'color: #FF9800;', 'color: #9E9E9E;');
-    APP_START_TIME = null;
-    console.groupEnd();
-  });
+      APP_START_TIME = null;
+      console.groupEnd();
+    });
 });

@@ -80,9 +80,9 @@ const antSword = window.antSword = {
     if (!value) {
       return localStorage.getItem(key) || def;
     };
-    if (typeof(value) === "object") 
+    if (typeof (value) === "object")
       value = JSON.stringify(value);
-    
+
     // 设置
     localStorage.setItem(key, value);
   },
@@ -152,17 +152,17 @@ antSword['encoders'] = (function () {
   };
   let userencoder_path = path.join(remote.process.env.AS_WORKDIR, 'antData/encoders');
   // 初始化
-  !fs.existsSync(userencoder_path)
-    ? fs.mkdirSync(userencoder_path)
-    : null;
+  !fs.existsSync(userencoder_path) ?
+    fs.mkdirSync(userencoder_path) :
+    null;
   ['asp', 'aspx', 'php', 'custom'].map((t) => {
-    !fs.existsSync(path.join(userencoder_path, `${t}`))
-      ? fs.mkdirSync(path.join(userencoder_path, `${t}`))
-      : null;
+    !fs.existsSync(path.join(userencoder_path, `${t}`)) ?
+      fs.mkdirSync(path.join(userencoder_path, `${t}`)) :
+      null;
     let t_path = path.join(userencoder_path, `${t}/encoder/`);
-    !fs.existsSync(t_path)
-      ? fs.mkdirSync(t_path)
-      : null;
+    !fs.existsSync(t_path) ?
+      fs.mkdirSync(t_path) :
+      null;
 
     let es = fs.readdirSync(t_path);
     if (es) {
@@ -205,17 +205,17 @@ antSword['decoders'] = (function () {
   };
   let userdecoder_path = path.join(remote.process.env.AS_WORKDIR, 'antData/encoders');
   // 初始化
-  !fs.existsSync(userdecoder_path)
-    ? fs.mkdirSync(userdecoder_path)
-    : null;
+  !fs.existsSync(userdecoder_path) ?
+    fs.mkdirSync(userdecoder_path) :
+    null;
   ['asp', 'aspx', 'php', 'custom'].map((t) => {
-    !fs.existsSync(path.join(userdecoder_path, `${t}`))
-      ? fs.mkdirSync(path.join(userdecoder_path, `${t}`))
-      : null;
+    !fs.existsSync(path.join(userdecoder_path, `${t}`)) ?
+      fs.mkdirSync(path.join(userdecoder_path, `${t}`)) :
+      null;
     let t_path = path.join(userdecoder_path, `${t}/decoder/`);
-    !fs.existsSync(t_path)
-      ? fs.mkdirSync(t_path)
-      : null;
+    !fs.existsSync(t_path) ?
+      fs.mkdirSync(t_path) :
+      null;
 
     let es = fs.readdirSync(t_path);
     if (es) {
@@ -253,9 +253,9 @@ const aproxy = {
 }
 antSword['aproxymode'] = aproxy['mode'];
 
-antSword['aproxyauth'] = (!aproxy['username'] || !aproxy['password'])
-  ? ''
-  : `${aproxy['username']}:${aproxy['password']}`;
+antSword['aproxyauth'] = (!aproxy['username'] || !aproxy['password']) ?
+  '' :
+  `${aproxy['username']}:${aproxy['password']}`;
 
 antSword['aproxyuri'] = `${aproxy['protocol']}:\/\/${antSword['aproxyauth']}${antSword['aproxyauth'] === ""
   ? ""
@@ -309,111 +309,113 @@ const groupLog = (opt, color) => {
 
 // 监听后端消息
 ipcRenderer
-/**
+  /**
    * 刷新UI（shellmanager侧边栏
    * @param  {[type]} 'reloadui' [description]
    * @param  {[type]} (          [description]
    * @return {[type]}            [description]
    */
   .on('reloadui', () => {
-  setTimeout(() => {
-    antSword
-      .modules
-      .shellmanager
-      .category
-      .cell
-      .setWidth(222);
-  }, 555);
-})
-/**
+    setTimeout(() => {
+      antSword
+        .modules
+        .shellmanager
+        .category
+        .cell
+        .setWidth(222);
+    }, 555);
+  })
+  /**
    * 通知提示 Loader 更新
    * @param  {[type]} 'notification-loader-update' [description]
    * @param  {[type]} (e,                   opt           [description]
    * @return {[type]}                       [description]
    */
   .on('notification-loader-update', (e, opt) => {
-  const LANG = antSword["language"]["settings"]["update"];
-  let n = new Notification(antSword['language']['update']['title'], {body: antSword['language']['update']['body'](opt['ver'])
-  });
-  n.addEventListener('click', () => {
-    antSword
-      .shell
-      .openExternal(opt['url']);
-  });
-  layer.confirm(LANG['prompt']['loader_body'](opt['ver']), {
-    icon: 3,
-    shift: 6,
-    title: LANG['prompt']['title']
-  }, (_) => {
-    antSword
-      .shell
-      .openExternal(opt['url']);
-    antSword
-      .remote
-      .app
-      .quit();
-  });
-})
-/**
+    const LANG = antSword["language"]["settings"]["update"];
+    let n = new Notification(antSword['language']['update']['title'], {
+      body: antSword['language']['update']['body'](opt['ver'])
+    });
+    n.addEventListener('click', () => {
+      antSword
+        .shell
+        .openExternal(opt['url']);
+    });
+    layer.confirm(LANG['prompt']['loader_body'](opt['ver']), {
+      icon: 3,
+      shift: 6,
+      title: LANG['prompt']['title']
+    }, (_) => {
+      antSword
+        .shell
+        .openExternal(opt['url']);
+      antSword
+        .remote
+        .app
+        .quit();
+    });
+  })
+  /**
    * 通知提示更新
    * @param  {[type]} 'notification-update' [description]
    * @param  {[type]} (e,                   opt           [description]
    * @return {[type]}                       [description]
    */
   .on('notification-update', (e, opt) => {
-  const LANG = antSword["language"]["settings"]["update"];
-  let n = new Notification(antSword['language']['update']['title'], {body: antSword['language']['update']['body'](opt['ver'])
-  });
-  // 文件大小计算
-  const getFileSize = (t) => {
-    let i = false;
-    let b = [
-      "b",
-      "Kb",
-      "Mb",
-      "Gb",
-      "Tb",
-      "Pb",
-      "Eb"
-    ];
-    for (let q = 0; q < b.length; q++) 
-      if (t > 1024) 
-        t = t / 1024;
-      else if (i === false) 
+    const LANG = antSword["language"]["settings"]["update"];
+    let n = new Notification(antSword['language']['update']['title'], {
+      body: antSword['language']['update']['body'](opt['ver'])
+    });
+    // 文件大小计算
+    const getFileSize = (t) => {
+      let i = false;
+      let b = [
+        "b",
+        "Kb",
+        "Mb",
+        "Gb",
+        "Tb",
+        "Pb",
+        "Eb"
+      ];
+      for (let q = 0; q < b.length; q++)
+        if (t > 1024)
+          t = t / 1024;
+        else if (i === false)
         i = q;
-  if (i === false) 
-      i = b.length - 1;
-    return Math.round(t * 100) / 100 + " " + b[i];
-  }
-  n.addEventListener('click', () => {
-    antSword
-      .shell
-      .openExternal(opt['url']);
-  });
-  const WIN = require('ui/window');
-  let win = new WIN({title: antSword['language']['update']['title'],
-    height: 430,
-    width: 480
-  });
-  win
-    .win
-    .setIconCss("update-winicon");
-  win
-    .win
-    .button("minmax")
-    .hide();
-  win
-    .win
-    .denyResize();
-  let uplayout = win
-    .win
-    .attachLayout('1C');
-  uplayout
-    .cells('a')
-    .hideHeader();
+      if (i === false)
+        i = b.length - 1;
+      return Math.round(t * 100) / 100 + " " + b[i];
+    }
+    n.addEventListener('click', () => {
+      antSword
+        .shell
+        .openExternal(opt['url']);
+    });
+    const WIN = require('ui/window');
+    let win = new WIN({
+      title: antSword['language']['update']['title'],
+      height: 430,
+      width: 480
+    });
+    win
+      .win
+      .setIconCss("update-winicon");
+    win
+      .win
+      .button("minmax")
+      .hide();
+    win
+      .win
+      .denyResize();
+    let uplayout = win
+      .win
+      .attachLayout('1C');
+    uplayout
+      .cells('a')
+      .hideHeader();
 
-  let formdata = [
-    {
+    let formdata = [{
       type: "label",
       name: "form_msg",
       label: LANG["prompt"]["body"](opt['ver']),
@@ -426,70 +428,67 @@ ipcRenderer
       inputHeight: 300
     }, {
       type: "block",
-      list: [
-        {
-          type: "newcolumn",
-          offset: 20
-        }, {
-          type: "button",
-          name: "updatebtn",
-          value: `<i class="fa fa-cloud-download"></i> ${LANG["prompt"]["btns"]["ok"]}`,
-          className: "background-color: #39c;"
-        }, {
-          type: "newcolumn",
-          offset: 20
-        }, {
-          type: "button",
-          name: "changelogbtn",
-          value: `<i class="fa fa-chrome"></i> ${LANG["prompt"]["btns"]["changelog"]}`
-        }, {
-          type: "newcolumn",
-          offset: 20
-        }, {
-          type: "button",
-          name: "canclebtn",
-          value: `<i class="fa fa-remove"></i> ${LANG["prompt"]["btns"]["no"]}`
+      list: [{
+        type: "newcolumn",
+        offset: 20
+      }, {
+        type: "button",
+        name: "updatebtn",
+        value: `<i class="fa fa-cloud-download"></i> ${LANG["prompt"]["btns"]["ok"]}`,
+        className: "background-color: #39c;"
+      }, {
+        type: "newcolumn",
+        offset: 20
+      }, {
+        type: "button",
+        name: "changelogbtn",
+        value: `<i class="fa fa-chrome"></i> ${LANG["prompt"]["btns"]["changelog"]}`
+      }, {
+        type: "newcolumn",
+        offset: 20
+      }, {
+        type: "button",
+        name: "canclebtn",
+        value: `<i class="fa fa-remove"></i> ${LANG["prompt"]["btns"]["no"]}`
+      }]
+    }];
+    uplayout
+      .cells('a')
+      .attachForm(formdata, true);
+    win
+      .win
+      .attachEvent('onParkUp', () => {
+        if (win.win.isParked()) {
+          win
+            .win
+            .wins
+            ._winSetSize(win.win._idd, 240, (win.win.wins.w[win.win._idd].hdr.offsetHeight + win.win.wins.conf.ofs_h), false, true);
         }
-      ]
-    }
-  ];
-  uplayout
-    .cells('a')
-    .attachForm(formdata, true);
-  win
-    .win
-    .attachEvent('onParkUp', () => {
-      if (win.win.isParked()) {
         win
           .win
-          .wins
-          ._winSetSize(win.win._idd, 240, (win.win.wins.w[win.win._idd].hdr.offsetHeight + win.win.wins.conf.ofs_h), false, true);
-      }
-      win
-        .win
-        .setPosition(document.body.clientWidth - 300, document.body.clientHeight - 150);
-      return true;
-    });
-  win
-    .win
-    .attachEvent('onParkDown', () => {
-      win
-        .win
-        .setDimension(478, 428);
-      win
-        .win
-        .centerOnScreen();
-      return true;
-    });
-  const form = uplayout
-    .cells('a')
-    .attachForm(formdata, true);
-  let form_body = new dhtmlXLayoutObject(form.getContainer('form_body'), '1C');
-  form_body
-    .cells('a')
-    .hideHeader();
-  const marked = require('marked');
-  let _html = `<html>
+          .setPosition(document.body.clientWidth - 300, document.body.clientHeight - 150);
+        return true;
+      });
+    win
+      .win
+      .attachEvent('onParkDown', () => {
+        win
+          .win
+          .setDimension(478, 428);
+        win
+          .win
+          .centerOnScreen();
+        return true;
+      });
+    const form = uplayout
+      .cells('a')
+      .attachForm(formdata, true);
+    let form_body = new dhtmlXLayoutObject(form.getContainer('form_body'), '1C');
+    form_body
+      .cells('a')
+      .hideHeader();
+    const marked = require('marked');
+    let _html = `<html>
     <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style type="text/css">
@@ -505,98 +504,100 @@ ipcRenderer
       ${marked(opt['body']).replace(/<a.+?(href=".+?")/g, "<a")}
     </body>
     </html>`;
-  form_body
-    .cells('a')
-    .attachHTMLString(`<iframe sandbox="" src="data:text/html;base64,${Buffer.from(_html).toString('base64')}" style="width:100%;height:100%;border:0;padding:0;margin:0;"></iframe>`);
-  form.attachEvent("onButtonClick", (name) => {
-    switch (name) {
-      case "updatebtn":
-        var workdir = antSword.remote.process.env.AS_WORKDIR;
-        if (fs.existsSync(path.join(workdir, ".git/"))) {
-          win.close();
-          layer.alert(LANG["message"]["githint"](workdir));
-          return
-        }
-        const hash = (String(+ new Date) + String(Math.random()))
-          .substr(10, 10)
-          .replace('.', '_');
-        //折叠
-        win
-          .win
-          .park();
-        antSword
-          .ipcRenderer
-          .send("update-download", {hash: hash});
-        win
-          .win
-          .progressOn();
-        win.setTitle(LANG["message"]["prepare"]);
-        antSword['ipcRenderer'].on(`update-dlprogress-${hash}`, (event, progress, isprogress) => {
-          if (isprogress == true) {
-            win.setTitle(LANG["message"]["dling"](progress));
-          } else {
-            win.setTitle(LANG["message"]["dlingnp"](getFileSize(progress)));
+    form_body
+      .cells('a')
+      .attachHTMLString(`<iframe sandbox="" src="data:text/html;base64,${Buffer.from(_html).toString('base64')}" style="width:100%;height:100%;border:0;padding:0;margin:0;"></iframe>`);
+    form.attachEvent("onButtonClick", (name) => {
+      switch (name) {
+        case "updatebtn":
+          var workdir = antSword.remote.process.env.AS_WORKDIR;
+          if (fs.existsSync(path.join(workdir, ".git/"))) {
+            win.close();
+            layer.alert(LANG["message"]["githint"](workdir));
+            return
           }
-        }).once(`update-dlend-${hash}`, (event) => {
-          win.setTitle(LANG["message"]["dlend"]);
+          const hash = (String(+new Date) + String(Math.random()))
+            .substr(10, 10)
+            .replace('.', '_');
+          //折叠
           win
             .win
-            .progressOff();
-          toastr.success(antSword["language"]["success"], LANG["message"]["extract"]);
-        }).once(`update-error-${hash}`, (event, err) => {
+            .park();
+          antSword
+            .ipcRenderer
+            .send("update-download", {
+              hash: hash
+            });
           win
             .win
-            .progressOff();
+            .progressOn();
+          win.setTitle(LANG["message"]["prepare"]);
+          antSword['ipcRenderer'].on(`update-dlprogress-${hash}`, (event, progress, isprogress) => {
+            if (isprogress == true) {
+              win.setTitle(LANG["message"]["dling"](progress));
+            } else {
+              win.setTitle(LANG["message"]["dlingnp"](getFileSize(progress)));
+            }
+          }).once(`update-dlend-${hash}`, (event) => {
+            win.setTitle(LANG["message"]["dlend"]);
+            win
+              .win
+              .progressOff();
+            toastr.success(antSword["language"]["success"], LANG["message"]["extract"]);
+          }).once(`update-error-${hash}`, (event, err) => {
+            win
+              .win
+              .progressOff();
+            win.close();
+            toastr.error(antSword["language"]['error'], LANG["message"]["fail"](err));
+          });
+          break;
+        case "canclebtn":
           win.close();
-          toastr.error(antSword["language"]['error'], LANG["message"]["fail"](err));
-        });
-        break;
-      case "canclebtn":
-        win.close();
-        break;
-      case "changelogbtn":
-        antSword
-          .shell
-          .openExternal(opt['url']);
-        break;
-    }
-  });
-}).on('update-success', (e, opt) => {
-  const LANG = antSword['language']['settings']['update'];
-  toastr.success(antSword["language"]["success"], LANG["message"]["success"]);
-  layer.confirm(LANG['message']['success'], {
-    icon: 1,
-    shift: 6,
-    title: LANG['prompt']['title']
-  }, (_) => {
-    // location.reload();
-    antSword
-      .remote
-      .app
-      .quit();
-  });
-})
-/**
+          break;
+        case "changelogbtn":
+          antSword
+            .shell
+            .openExternal(opt['url']);
+          break;
+      }
+    });
+  }).on('update-success', (e, opt) => {
+    const LANG = antSword['language']['settings']['update'];
+    toastr.success(antSword["language"]["success"], LANG["message"]["success"]);
+    layer.confirm(LANG['message']['success'], {
+      icon: 1,
+      shift: 6,
+      title: LANG['prompt']['title']
+    }, (_) => {
+      // location.reload();
+      antSword
+        .remote
+        .app
+        .quit();
+    });
+  })
+  /**
    * 重新加载本地插件
    * @param  {[type]} 'reloadPlug' [description]
    * @param  {[type]} (            [description]
    * @return {[type]}              [description]
    */
   .on('reloadPlug', antSword.reloadPlug.bind(antSword))
-/**
+  /**
    * 后端日志输出
    * + 用于在前端控制台输出后端的日志
    * - 可使用`antSword.logs[id]`来获取详细日志
    */
   .on('logger-debug', (e, opt) => {
-  groupLog(opt, '#607D8B');
-}).on('logger-info', (e, opt) => {
-  groupLog(opt, '#4CAF50');
-}).on('logger-warn', (e, opt) => {
-  groupLog(opt, '#FF9800');
-}).on('logger-fatal', (e, opt) => {
-  groupLog(opt, '#E91E63');
-});
+    groupLog(opt, '#607D8B');
+  }).on('logger-info', (e, opt) => {
+    groupLog(opt, '#4CAF50');
+  }).on('logger-warn', (e, opt) => {
+    groupLog(opt, '#FF9800');
+  }).on('logger-fatal', (e, opt) => {
+    groupLog(opt, '#E91E63');
+  });
 
 antSword.reloadPlug();
 antSword['menubar'].reg('check-update', () => {
@@ -612,13 +613,7 @@ if (new Date() - new Date(antSword['storage']('lastautocheck', false, "0")) >= 8
   // 检查更新
   antSword['storage']('lastautocheck', new Date().getTime());
   setTimeout(() => {
-    antSword
-      .ipcRenderer
-      .send
-      .bind(antSword.ipcRenderer, 'check-update');
-    antSword
-      .ipcRenderer
-      .send
-      .bind(antSword.ipcRenderer, 'check-loader-update');
+    antSword.ipcRenderer.send.bind(antSword.ipcRenderer, 'check-update');
+    antSword.ipcRenderer.send.bind(antSword.ipcRenderer, 'check-loader-update');
   }, 1000 * 60);
 }

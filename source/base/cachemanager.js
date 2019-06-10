@@ -16,9 +16,9 @@ class CacheManager {
       id: this.id,
       tag: tag
     });
-    return ret
-      ? ret['cache']
-      : false;
+    return ret ?
+      ret['cache'] :
+      false;
   }
 
   // 更新缓存
@@ -40,7 +40,9 @@ class CacheManager {
 
   // 清空缓存
   clear() {
-    return this.sender('cache-clear', {id: this.id});
+    return this.sender('cache-clear', {
+      id: this.id
+    });
   }
 
 }

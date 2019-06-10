@@ -49,37 +49,35 @@ class ViewSite {
     const toolbar = this
       .cell
       .attachToolbar();
-    toolbar.loadStruct([
-      {
-        id: 'url',
-        width: 400,
-        type: 'buttonInput',
-        value: antSword.noxss(this.opts.url) || 'loading..'
-      }, {
-        type: 'separator'
-      }, {
-        id: 'useproxy',
-        type: 'buttonTwoState',
-        icon: 'paper-plane',
-        text: LANG['toolbar'].useproxy(this.useproxy),
-        pressed: this.useproxy,
-        disabled: antSword.aproxymode === "noproxy"
-      }, {
-        type: 'separator'
-      }, {
-        id: 'view',
-        type: 'button',
-        icon: 'chrome',
-        text: LANG['toolbar'].view
-      }, {
-        type: 'separator'
-      }, {
-        id: 'save',
-        type: 'button',
-        icon: 'save',
-        text: LANG['toolbar'].save
-      }
-    ]);
+    toolbar.loadStruct([{
+      id: 'url',
+      width: 400,
+      type: 'buttonInput',
+      value: antSword.noxss(this.opts.url) || 'loading..'
+    }, {
+      type: 'separator'
+    }, {
+      id: 'useproxy',
+      type: 'buttonTwoState',
+      icon: 'paper-plane',
+      text: LANG['toolbar'].useproxy(this.useproxy),
+      pressed: this.useproxy,
+      disabled: antSword.aproxymode === "noproxy"
+    }, {
+      type: 'separator'
+    }, {
+      id: 'view',
+      type: 'button',
+      icon: 'chrome',
+      text: LANG['toolbar'].view
+    }, {
+      type: 'separator'
+    }, {
+      id: 'save',
+      type: 'button',
+      icon: 'save',
+      text: LANG['toolbar'].save
+    }]);
     toolbar.attachEvent('onStateChange', (id, state) => {
       switch (id) {
         case 'useproxy':
@@ -138,23 +136,25 @@ class ViewSite {
    */
   _refreshCookie() {
     CookieMgr
-      .get({url: this.opts['url']})
+      .get({
+        url: this.opts['url']
+      })
       .then((cookie) => {
         let data = [];
         cookie.map((c, i) => {
           data.push({
             id: i + 1,
             data: [
-              c.name, c.value, c.domain, c.path, c.session
-                ? 'Session'
-                : new Date(c.expirationDate).toUTCString(),
+              c.name, c.value, c.domain, c.path, c.session ?
+              'Session' :
+              new Date(c.expirationDate).toUTCString(),
               c.name.length + c.value.length,
-              c.httpOnly
-                ? 'httpOnly'
-                : '',
-              c.secure
-                ? 'Secure'
-                : ''
+              c.httpOnly ?
+              'httpOnly' :
+              '',
+              c.secure ?
+              'Secure' :
+              ''
             ]
           });
         });
@@ -176,13 +176,17 @@ class ViewSite {
    */
   _saveCookie() {
     CookieMgr
-      .getStr({url: this.opts.url})
+      .getStr({
+        url: this.opts.url
+      })
       .then((cookie) => {
         // 1. 获取旧数据
         const oldHttpConf = (antSword.ipcRenderer.sendSync('shell-findOne', this.opts._id).httpConf || {});
         // 2. 添加新数据(cookie)
         const httpConf = Object.assign({}, oldHttpConf, {
-          headers: Object.assign({}, oldHttpConf.headers || {}, {Cookie: cookie})
+          headers: Object.assign({}, oldHttpConf.headers || {}, {
+            Cookie: cookie
+          })
         })
         // 3. 更新数据
         const ret = antSword

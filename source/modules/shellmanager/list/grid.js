@@ -31,9 +31,9 @@ class Grid {
     grid.setColAlign("left,left,left,left,center,center");
     grid.enableMultiselect(true);
     // 根据设置隐藏相应的列
-    const dis_smhc = localStorage.hasOwnProperty('display_shellmanager_hiddencolumns')
-      ? JSON.parse(localStorage.display_shellmanager_hiddencolumns)
-      : [];
+    const dis_smhc = localStorage.hasOwnProperty('display_shellmanager_hiddencolumns') ?
+      JSON.parse(localStorage.display_shellmanager_hiddencolumns) :
+      [];
     dis_smhc.map((_) => {
       grid.setColumnHidden(_, true)
     });

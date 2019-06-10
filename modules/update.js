@@ -201,7 +201,11 @@ class Update {
               // TODO: 需不需要备份?
               // TODO: 删除原来的 node_modules 目录 解压数据
               tar
-                .x({file: savePath, strip: 1, C: process.env.AS_WORKDIR})
+                .x({
+                  file: savePath,
+                  strip: 1,
+                  C: process.env.AS_WORKDIR
+                })
                 .then(_ => {
                   that
                     .logger

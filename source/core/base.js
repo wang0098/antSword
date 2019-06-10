@@ -30,7 +30,7 @@ class Base {
        * @param  {Object} data 请求数据
        * @return {Object}      生成数据
        */
-      default(pwd, data) {
+      default (pwd, data) {
         data[pwd] = data['_'];
         delete data['_'];
         return data;
@@ -161,7 +161,7 @@ class Base {
     // 解析模板
     for (let funcName in templateObj) {
       this[templateName][funcName] = ((args) => {
-        if (typeof(args) === 'object') {
+        if (typeof (args) === 'object') {
           // 如果脚本函数需要参数，则进行解析
           return (argv) => {
             let data = {};
@@ -172,29 +172,31 @@ class Base {
             // 循环替换脚本中的标签
             for (let arg in args) {
               (args[arg].match(/#{([\w\:]+)}/g) || []).map(
-              // example: #{hex::str} = hex(str), #{arg1} = arg1
-              (tag) => {
-                let tagStr = tag.substr(2, tag.length - 3);
-                let tagArr = tagStr.split('::');
-                let func,
-                  retStr;
-                if ((tagArr.length > 0) && (func = formatter[tagArr[0]])) {
-                  // 如果包含有分割标签且该格式化函数存在，则调用该函数进行处理
-                  retStr = func(argv[tagArr[1] || '']);
-                } else {
-                  // 否则替换直接返回字符串
-                  retStr = argv[tagStr] || '';
-                }
-                // 组合最终生成模板代码
-                data[arg] = data[arg].replace(tag, retStr);
-              })
+                // example: #{hex::str} = hex(str), #{arg1} = arg1
+                (tag) => {
+                  let tagStr = tag.substr(2, tag.length - 3);
+                  let tagArr = tagStr.split('::');
+                  let func,
+                    retStr;
+                  if ((tagArr.length > 0) && (func = formatter[tagArr[0]])) {
+                    // 如果包含有分割标签且该格式化函数存在，则调用该函数进行处理
+                    retStr = func(argv[tagArr[1] || '']);
+                  } else {
+                    // 否则替换直接返回字符串
+                    retStr = argv[tagStr] || '';
+                  }
+                  // 组合最终生成模板代码
+                  data[arg] = data[arg].replace(tag, retStr);
+                })
             }
             // 发送HTTP请求
             return data;
           }
         } else {
           // 否则直接返回
-          return () => ({_: args});
+          return () => ({
+            _: args
+          });
         }
       })(templateObj[funcName]);
     }
@@ -211,16 +213,18 @@ class Base {
     // https://github.com/AntSwordProject/antSword/issues/135#issuecomment-475842870
     delete require.cache[require.resolve(`${enc}`)];
     // QAQ！我也不知道为什么，如果直接require变量名，babel编译就会warning，so我只好加个`咯～
-    this['__encoder__'][enc.indexOf(`encoder/`) > -1
-        ? enc.split(`encoder/`)[1]
-        : enc.split(`encoder\\`)[1]] = require(`${enc}`);
+    this['__encoder__'][enc.indexOf(`encoder/`) > -1 ?
+      enc.split(`encoder/`)[1] :
+      enc.split(`encoder\\`)[1]
+    ] = require(`${enc}`);
   }
 
   parseDecoder(dec) {
     delete require.cache[require.resolve(`${dec}`)];
-    this['__decoder__'][dec.indexOf(`decoder/`) > -1
-        ? dec.split(`decoder/`)[1]
-        : dec.split(`decoder\\`)[1]] = require(`${dec}`);
+    this['__decoder__'][dec.indexOf(`decoder/`) > -1 ?
+      dec.split(`decoder/`)[1] :
+      dec.split(`decoder\\`)[1]
+    ] = require(`${dec}`);
   }
 
   /**
@@ -237,7 +241,11 @@ class Base {
     }
     // 编码器处理
     let finalData = this.__encoder__[this.__opts__['encoder']](this.__opts__['pwd'], data, ext);
-    return {'tag_s': tag_s, 'tag_e': tag_e, 'data': finalData};
+    return {
+      'tag_s': tag_s,
+      'tag_e': tag_e,
+      'data': finalData
+    };
   }
 
   /**
@@ -255,56 +263,58 @@ class Base {
     }
     return new Promise((res, rej) => {
       // 随机ID(用于监听数据来源)
-      const hash = (String(+ new Date) + String(Math.random()))
+      const hash = (String(+new Date) + String(Math.random()))
         .substr(10, 10)
         .replace('.', '_');
       // 监听数据返回
       antSword['ipcRenderer']
-      // 请求完毕返回数据{text,buff}
+        // 请求完毕返回数据{text,buff}
         .once(`request-${hash}`, (event, ret) => {
-        let buff = this.__decoder__[this.__opts__['decoder'] || 'default'].decode_buff(ret['buff'], ext);
-        let encoding = antSword
-          .Decodes
-          .detectEncoding(buff, {defaultEncoding: "unknown"});
-        encoding = encoding != "unknown"
-          ? encoding
-          : this.__opts__['encode'];
-        let text = antSword
-          .Decodes
-          .decode(buff, encoding);
-        return res({
-          'encoding': encoding || "",
-          'text': text,
-          'buff': buff
-        });
-      })
-      // HTTP请求返回字节流
+          let buff = this.__decoder__[this.__opts__['decoder'] || 'default'].decode_buff(ret['buff'], ext);
+          let encoding = antSword
+            .Decodes
+            .detectEncoding(buff, {
+              defaultEncoding: "unknown"
+            });
+          encoding = encoding != "unknown" ?
+            encoding :
+            this.__opts__['encode'];
+          let text = antSword
+            .Decodes
+            .decode(buff, encoding);
+          return res({
+            'encoding': encoding || "",
+            'text': text,
+            'buff': buff
+          });
+        })
+        // HTTP请求返回字节流
         .on(`request-chunk-${hash}`, (event, ret) => {
-        return chunkCallBack
-          ? chunkCallBack(this.__decoder__[this.__opts__['decoder'] || 'default'].decode_buff(ret))
-          : null;
-      })
-      // 数据请求错误
+          return chunkCallBack ?
+            chunkCallBack(this.__decoder__[this.__opts__['decoder'] || 'default'].decode_buff(ret)) :
+            null;
+        })
+        // 数据请求错误
         .once(`request-error-${hash}`, (event, ret) => {
-        return rej(ret);
-      })
-      // 发送请求数据
+          return rej(ret);
+        })
+        // 发送请求数据
         .send('request', {
-        url: this.__opts__['url'],
-        hash: hash,
-        data: opt['data'],
-        tag_s: opt['tag_s'],
-        tag_e: opt['tag_e'],
-        encode: this.__opts__['encode'],
-        ignoreHTTPS: (this.__opts__['otherConf'] || {})['ignore-https'] === 1,
-        useChunk: (this.__opts__['otherConf'] || {})['use-chunk'] === 1,
-        chunkStepMin: (this.__opts__['otherConf'] || {})['chunk-step-byte-min'] || 2,
-        chunkStepMax: (this.__opts__['otherConf'] || {})['chunk-step-byte-max'] || 3,
-        useMultipart: (this.__opts__['otherConf'] || {})['use-multipart'] === 1,
-        timeout: parseInt((this.__opts__['otherConf'] || {})['request-timeout']),
-        headers: (this.__opts__['httpConf'] || {})['headers'] || {},
-        body: (this.__opts__['httpConf'] || {})['body'] || {}
-      });
+          url: this.__opts__['url'],
+          hash: hash,
+          data: opt['data'],
+          tag_s: opt['tag_s'],
+          tag_e: opt['tag_e'],
+          encode: this.__opts__['encode'],
+          ignoreHTTPS: (this.__opts__['otherConf'] || {})['ignore-https'] === 1,
+          useChunk: (this.__opts__['otherConf'] || {})['use-chunk'] === 1,
+          chunkStepMin: (this.__opts__['otherConf'] || {})['chunk-step-byte-min'] || 2,
+          chunkStepMax: (this.__opts__['otherConf'] || {})['chunk-step-byte-max'] || 3,
+          useMultipart: (this.__opts__['otherConf'] || {})['use-multipart'] === 1,
+          timeout: parseInt((this.__opts__['otherConf'] || {})['request-timeout']),
+          headers: (this.__opts__['httpConf'] || {})['headers'] || {},
+          body: (this.__opts__['httpConf'] || {})['body'] || {}
+        });
     })
   }
 
@@ -319,43 +329,43 @@ class Base {
     const opt = this.complete(postCode, true);
     return new Promise((ret, rej) => {
       // 随机ID(用于监听数据来源)
-      const hash = (String(+ new Date) + String(Math.random()))
+      const hash = (String(+new Date) + String(Math.random()))
         .substr(10, 10)
         .replace('.', '_');
       // 监听数据返回
       antSword['ipcRenderer']
-      // 请求完毕返回数据(size)
+        // 请求完毕返回数据(size)
         .once(`download-${hash}`, (event, size) => {
-        return ret(size);
-      })
-      // HTTP请求返回字节流大小
+          return ret(size);
+        })
+        // HTTP请求返回字节流大小
         .on(`download-progress-${hash}`, (event, size) => {
-        return progressCallback
-          ? progressCallback(size)
-          : null;
-      })
-      // 数据请求错误
+          return progressCallback ?
+            progressCallback(size) :
+            null;
+        })
+        // 数据请求错误
         .once(`download-error-${hash}`, (event, ret) => {
-        throw new Error(ret);
-      })
-      // 发送请求数据
+          throw new Error(ret);
+        })
+        // 发送请求数据
         .send('download', {
-        url: this.__opts__['url'],
-        hash: hash,
-        path: savePath,
-        data: opt['data'],
-        tag_s: opt['tag_s'],
-        tag_e: opt['tag_e'],
-        encode: this.__opts__['encode'],
-        ignoreHTTPS: (this.__opts__['otherConf'] || {})['ignore-https'] === 1,
-        useChunk: (this.__opts__['otherConf'] || {})['use-chunk'] === 1,
-        chunkStepMin: (this.__opts__['otherConf'] || {})['chunk-step-byte-min'] || 2,
-        chunkStepMax: (this.__opts__['otherConf'] || {})['chunk-step-byte-max'] || 3,
-        useMultipart: (this.__opts__['otherConf'] || {})['use-multipart'] === 1,
-        timeout: parseInt((this.__opts__['otherConf'] || {})['request-timeout']),
-        headers: (this.__opts__['httpConf'] || {})['headers'] || {},
-        body: (this.__opts__['httpConf'] || {})['body'] || {}
-      });
+          url: this.__opts__['url'],
+          hash: hash,
+          path: savePath,
+          data: opt['data'],
+          tag_s: opt['tag_s'],
+          tag_e: opt['tag_e'],
+          encode: this.__opts__['encode'],
+          ignoreHTTPS: (this.__opts__['otherConf'] || {})['ignore-https'] === 1,
+          useChunk: (this.__opts__['otherConf'] || {})['use-chunk'] === 1,
+          chunkStepMin: (this.__opts__['otherConf'] || {})['chunk-step-byte-min'] || 2,
+          chunkStepMax: (this.__opts__['otherConf'] || {})['chunk-step-byte-max'] || 3,
+          useMultipart: (this.__opts__['otherConf'] || {})['use-multipart'] === 1,
+          timeout: parseInt((this.__opts__['otherConf'] || {})['request-timeout']),
+          headers: (this.__opts__['httpConf'] || {})['headers'] || {},
+          body: (this.__opts__['httpConf'] || {})['body'] || {}
+        });
     })
   }
 }
