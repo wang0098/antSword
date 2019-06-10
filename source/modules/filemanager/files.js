@@ -19,18 +19,18 @@ class Files {
     let bookmark = JSON.parse(manager.storage('bookmarks').get('{}'));
     // 重新加载书签
     this.reloadToolbar = () => {
-      let bookmark_opts = [
-        {
-          id: 'bookmark_add',
-          type: 'button',
-          icon: 'plus-circle',
-          text: LANG['bookmark']['add'],
-          enabled: !bookmark[manager.path]
-        }
-      ];
+      let bookmark_opts = [{
+        id: 'bookmark_add',
+        type: 'button',
+        icon: 'plus-circle',
+        text: LANG['bookmark']['add'],
+        enabled: !bookmark[manager.path]
+      }];
       let global_bookmarks = manager.config.bookmarks || {};
       if (Object.keys(global_bookmarks).length > 0) {
-        bookmark_opts.push({type: 'separator'});
+        bookmark_opts.push({
+          type: 'separator'
+        });
         for (let gb in global_bookmarks) {
           bookmark_opts.push({
             id: 'bookmark_' + global_bookmarks[gb],
@@ -42,7 +42,9 @@ class Files {
         }
       }
       if (!$.isEmptyObject(bookmark)) {
-        bookmark_opts.push({type: 'separator'});
+        bookmark_opts.push({
+          type: 'separator'
+        });
       };
       for (let _ in bookmark) {
         bookmark_opts.push({
@@ -55,7 +57,9 @@ class Files {
       }
       // 添加清除按钮
       if (bookmark_opts.length > 2) {
-        bookmark_opts.push({type: 'separator'});
+        bookmark_opts.push({
+          type: 'separator'
+        });
         bookmark_opts.push({
           id: 'bookmark_remove',
           icon: 'remove',
@@ -63,88 +67,89 @@ class Files {
           type: 'button',
           enabled: !!bookmark[manager.path]
         });
-        bookmark_opts.push({id: 'bookmark_clear', icon: 'trash-o', text: LANG['bookmark']['clear'], type: 'button'});
+        bookmark_opts.push({
+          id: 'bookmark_clear',
+          icon: 'trash-o',
+          text: LANG['bookmark']['clear'],
+          type: 'button'
+        });
       };
 
       toolbar.clearAll();
-      toolbar.loadStruct([
-        {
-          id: 'new',
-          type: 'buttonSelect',
-          icon: 'plus-circle',
-          text: LANG['toolbar']['new'],
-          openAll: true,
-          options: [
-            {
-              id: 'new_folder',
-              icon: 'folder-o',
-              type: 'button',
-              text: LANG['toolbar']['folder']
-            }, {
-              id: 'new_file',
-              icon: 'file-o',
-              type: 'button',
-              text: LANG['toolbar']['file']
-            }, {
-              type: 'separator'
-            }, {
-              id: 'new_wget',
-              icon: 'cloud-download',
-              type: 'button',
-              text: LANG['toolbar']['wget']
-            }, {
-              id: 'new_upload',
-              icon: 'cloud-upload',
-              type: 'button',
-              text: LANG['toolbar']['upload']
-            }
-          ]
-        }, {
-          type: 'separator'
-        }, {
-          id: 'up',
+      toolbar.loadStruct([{
+        id: 'new',
+        type: 'buttonSelect',
+        icon: 'plus-circle',
+        text: LANG['toolbar']['new'],
+        openAll: true,
+        options: [{
+          id: 'new_folder',
+          icon: 'folder-o',
           type: 'button',
-          icon: 'arrow-up',
-          text: LANG['toolbar']['up']
+          text: LANG['toolbar']['folder']
         }, {
-          type: 'separator'
-        }, {
-          id: 'refresh',
+          id: 'new_file',
+          icon: 'file-o',
           type: 'button',
-          icon: 'refresh',
-          text: LANG['toolbar']['refresh']
+          text: LANG['toolbar']['file']
         }, {
           type: 'separator'
         }, {
-          id: 'home',
+          id: 'new_wget',
+          icon: 'cloud-download',
           type: 'button',
-          icon: 'home',
-          text: LANG['toolbar']['home']
+          text: LANG['toolbar']['wget']
         }, {
-          type: 'separator'
-        }, {
-          id: 'bookmark',
-          type: 'buttonSelect',
-          icon: 'bookmark',
-          text: LANG['toolbar']['bookmark'],
-          openAll: true,
-          options: bookmark_opts
-        }, {
-          type: 'separator'
-        }, {
-          id: 'path',
-          width: 300,
-          type: 'buttonInput',
-          value: antSword.noxss(manager.path) || 'loading..'
-        }, {
-          id: 'read_path',
+          id: 'new_upload',
+          icon: 'cloud-upload',
           type: 'button',
-          icon: 'arrow-right',
-          text: LANG['toolbar']['read']
-        }, {
-          type: 'separator'
-        }
-      ]);
+          text: LANG['toolbar']['upload']
+        }]
+      }, {
+        type: 'separator'
+      }, {
+        id: 'up',
+        type: 'button',
+        icon: 'arrow-up',
+        text: LANG['toolbar']['up']
+      }, {
+        type: 'separator'
+      }, {
+        id: 'refresh',
+        type: 'button',
+        icon: 'refresh',
+        text: LANG['toolbar']['refresh']
+      }, {
+        type: 'separator'
+      }, {
+        id: 'home',
+        type: 'button',
+        icon: 'home',
+        text: LANG['toolbar']['home']
+      }, {
+        type: 'separator'
+      }, {
+        id: 'bookmark',
+        type: 'buttonSelect',
+        icon: 'bookmark',
+        text: LANG['toolbar']['bookmark'],
+        openAll: true,
+        options: bookmark_opts
+      }, {
+        type: 'separator'
+      }, {
+        id: 'path',
+        width: 300,
+        type: 'buttonInput',
+        value: antSword.noxss(manager.path) || 'loading..'
+      }, {
+        id: 'read_path',
+        type: 'button',
+        icon: 'arrow-right',
+        text: LANG['toolbar']['read']
+      }, {
+        type: 'separator'
+      }]);
     }
 
     this.reloadToolbar();
@@ -258,9 +263,8 @@ class Files {
     grid.enableMultiselect(true);
     // grid.enableDragAndDrop(true); grid.enableMultiline(true); grid右键 空白数据右键fix
     $('.objbox').on('contextmenu', (e) => {
-      (e.target.nodeName === 'DIV' && grid.callEvent instanceof Function && antSword['tabbar'].getActiveTab().startsWith('tab_filemanager_'))
-        ? grid.callEvent('onRightClick', [-1, -1, e])
-        : null;
+      (e.target.nodeName === 'DIV' && grid.callEvent instanceof Function && antSword['tabbar'].getActiveTab().startsWith('tab_filemanager_')) ?
+      grid.callEvent('onRightClick', [-1, -1, e]): null;
     });
     $('.objbox').on('click', (e) => {
       bmenu.hide();
@@ -289,9 +293,9 @@ class Files {
       for (let c in self.Clipboard) {
         _Clipboard.push({
           text: antSword.noxss(c),
-          icon: 'fa fa-' + (c.endsWith('/')
-            ? 'folder-o'
-            : 'file-o'),
+          icon: 'fa fa-' + (c.endsWith('/') ?
+            'folder-o' :
+            'file-o'),
           action: ((source, name) => {
             return () => {
               manager.pasteFile(source, name);
@@ -300,14 +304,19 @@ class Files {
         });
         _Clipboard_num++;
         if (!(_Clipboard_num % 5)) {
-          _Clipboard.push({divider: true});
+          _Clipboard.push({
+            divider: true
+          });
         };
       }
       // 清除最后的divider if (_Clipboard.length % 5 && _Clipboard_num > 5) {
       // _Clipboard.pop() }; all item
       if (_Clipboard.length > 0) {
-        _Clipboard.unshift({divider: true});
-        _Clipboard.unshift({text: LANG['grid']['contextmenu']['paste']['all'],
+        _Clipboard.unshift({
+          divider: true
+        });
+        _Clipboard.unshift({
+          text: LANG['grid']['contextmenu']['paste']['all'],
           count: _Clipboard_num,
           icon: 'fa fa-th-list',
           action: () => {
@@ -325,10 +334,12 @@ class Files {
           }
         });
         // 清空剪贴板
-        !(_Clipboard[_Clipboard.length - 1].divider)
-          ? _Clipboard.push({divider: true})
-          : 0;
-        _Clipboard.push({text: LANG['grid']['contextmenu']['paste']['clear']['title'],
+        !(_Clipboard[_Clipboard.length - 1].divider) ?
+        _Clipboard.push({
+          divider: true
+        }): 0;
+        _Clipboard.push({
+          text: LANG['grid']['contextmenu']['paste']['clear']['title'],
           icon: 'fa fa-trash-o',
           action: () => {
             self.Clipboard = {};
@@ -338,190 +349,196 @@ class Files {
       };
 
       let isFolder = id.endsWith('/');
+      let containsFolder = (ids.join("~assep~") + '~assep~').indexOf('/~assep~') > -1;
       // 可编辑文件后缀
       let isEdited = false;
       'php,asp,aspx,jsp,cfm,js,css,html,py,sh,bat,txt,log,ini,conf,sql'
-        .split(',')
+      .split(',')
         .map((e) => {
           id
             .toLowerCase()
-            .endsWith(`.${e}`)
-            ? isEdited = true
-            : 0;
+            .endsWith(`.${e}`) ?
+            isEdited = true :
+            0;
         });
 
-      let menu = [
-        {
-          text: LANG['grid']['contextmenu']['refresh'],
-          icon: 'fa fa-refresh',
-          action: () => {
-            self.refreshPath();
-          }
-        }, {
-          divider: true
-        }, {
-          text: LANG['grid']['contextmenu']['wget'],
-          icon: 'fa fa-cloud-download',
-          action: manager
-            .wgetFile
-            .bind(manager)
-        }, {
-          text: LANG['grid']['contextmenu']['upload'],
-          icon: 'fa fa-upload',
-          action: manager
-            .uploadFile
-            .bind(manager)
-        }, {
-          text: LANG['grid']['contextmenu']['download'],
-          icon: 'fa fa-download',
-          disabled: isFolder || !id || ids.length > 1,
-          action: () => {
+      let menu = [{
+        text: LANG['grid']['contextmenu']['refresh'],
+        icon: 'fa fa-refresh',
+        action: () => {
+          self.refreshPath();
+        }
+      }, {
+        divider: true
+      }, {
+        text: LANG['grid']['contextmenu']['wget'],
+        icon: 'fa fa-cloud-download',
+        action: manager
+          .wgetFile
+          .bind(manager)
+      }, {
+        text: LANG['grid']['contextmenu']['upload'],
+        icon: 'fa fa-upload',
+        action: manager
+          .uploadFile
+          .bind(manager)
+      }, {
+        text: LANG['grid']['contextmenu']['download'],
+        icon: 'fa fa-download',
+        disabled: isFolder || !id || containsFolder,
+        action: () => {
+          if (ids.length === 1) {
             manager.downloadFile(id, this.getRowAttribute(_ids[0], 'fsize'));
-          }
-        }, {
-          divider: true
-        }, {
-          text: LANG['grid']['contextmenu']['copy']['title'],
-          icon: 'fa fa-copy',
-          subMenu: [
-            {
-              text: LANG['grid']['contextmenu']['copy']['title'],
-              icon: 'fa fa-copy',
-              disabled: !id,
-              action: () => {
-                // 如果只有一个id，则显示id名称，否则显示ids数量
-                ids.map((id) => {
-                  let path = manager.path + id;
-                  // 判断是否已经复制
-                  if (id in self.Clipboard) {
-                    return toastr.warning(LANG['grid']['contextmenu']['copy']['warning'](id), LANG_T['warning']);
-                  };
-                  self.Clipboard[id] = path;
-                  toastr.info(LANG['grid']['contextmenu']['copy']['info'](id), LANG_T['info']);
-                });
-              }
-            }, {
-              text: LANG['grid']['contextmenu']['copy']['copyname'],
-              icon: 'fa fa-file-word-o',
-              disabled: !id || ids.length > 1,
-              action: () => {
-                clipboard.writeText(id);
-                // 检测是否复制成功
-                let txt = clipboard.readText();
-                if (txt == id) {
-                  toastr.success(LANG['grid']['contextmenu']['copy']['copysuccess'], LANG_T['success']);
-                } else {
-                  toastr.error(LANG['grid']['contextmenu']['copy']['copyfail'], LANG_T['error']);
-                }
-              }
-            }, {
-              text: LANG['grid']['contextmenu']['copy']['copypath'],
-              icon: 'fa fa-file-powerpoint-o',
-              disabled: !id || ids.length > 1,
-              action: () => {
-                let txt = `${self.manager.path}${id}`;
-                clipboard.writeText(txt);
-                // 检测是否复制成功
-                let cptxt = clipboard.readText();
-                if (cptxt == txt) {
-                  toastr.success(LANG['grid']['contextmenu']['copy']['copysuccess'], LANG_T['success']);
-                } else {
-                  toastr.error(LANG['grid']['contextmenu']['copy']['copyfail'], LANG_T['error']);
-                }
-              }
+          } else if (ids.length > 1) {
+            let dnames = [];
+            for (let i = 0; i < ids.length; i++) {
+              dnames.push({
+                name: ids[i],
+                size: this.getRowAttribute(_ids[i], 'fsize'),
+              });
             }
-          ]
-        }, {
-          text: LANG['grid']['contextmenu']['paste']['title'],
-          icon: 'fa fa-paste',
-          disabled: _Clipboard_num === 0,
-          subMenu: _Clipboard
-        }, {
-          text: LANG['grid']['contextmenu']['preview'],
-          icon: 'fa fa-eye',
-          disabled: !id || ids.length > 1 || !self.checkPreview(id),
-          action: () => {
-            manager.previewFile(id, this.getRowAttribute(_ids[0], 'fsize'));
-          }
-        }, {
-          divider: true
-        }, {
-          text: LANG['grid']['contextmenu']['edit']['title'],
-          icon: 'fa fa-edit',
-          disabled:/*!isEdited || */
-          !id || ids.length > 1 || isFolder,
-          subMenu: [
-            {
-              text: LANG['grid']['contextmenu']['edit']['opentab'],
-              icon: 'fa fa-external-link',
-              action: () => {
-                manager.editFile(id, true);
-              }
-            }, {
-              text: LANG['grid']['contextmenu']['edit']['openwindow'],
-              icon: 'fa fa-arrows-alt',
-              action: () => {
-                manager.editFile(id, false);
-              }
-            }
-          ]
-        }, {
-          text: LANG['grid']['contextmenu']['delete'],
-          icon: 'fa fa-trash-o',
-          disabled: !id,
-          action: () => {
-            manager.deleteFile(ids);
-          }
-        }, {
-          text: LANG['grid']['contextmenu']['rename'],
-          icon: 'fa fa-font',
-          disabled: !id || ids.length > 1,
-          action: () => {
-            manager.renameFile(id);
-          }
-        }, {
-          text: LANG['grid']['contextmenu']['modify'],
-          icon: 'fa fa-clock-o',
-          disabled: !id || ids.length > 1,
-          action: () => {
-            // manager.retimeFile(id, this.rowsAr[id]['cells'][2].innerText);
-            manager.retimeFile(id, this.getRowAttribute(_ids[0], 'data')[2]);
-          }
-        }, {
-          text: LANG['grid']['contextmenu']['chmod'],
-          icon: 'fa fa-users',
-          disabled: !id || ids.length > 1,
-          action: () => {
-            manager.chmodFile(id, this.getRowAttribute(_ids[0], 'data')[4]);
-          }
-        }, {
-          divider: true
-        }, {
-          text: LANG['grid']['contextmenu']['create']['title'],
-          icon: 'fa fa-plus-circle',
-          subMenu: [
-            {
-              text: LANG['grid']['contextmenu']['create']['folder'],
-              icon: 'fa fa-folder-o',
-              action: manager
-                .createFolder
-                .bind(manager)
-            }, {
-              text: LANG['grid']['contextmenu']['create']['file'],
-              icon: 'fa fa-file-o',
-              action: manager
-                .createFile
-                .bind(manager)
-            }
-          ]
-        }, {
-          text: LANG['grid']['contextmenu']['terminal'],
-          icon: 'fa fa-terminal',
-          action: () => {
-            new Terminal(self.manager.opts, {'path': self.manager.path});
+            manager.downloadFileMulti(dnames);
           }
         }
-      ];
+      }, {
+        divider: true
+      }, {
+        text: LANG['grid']['contextmenu']['copy']['title'],
+        icon: 'fa fa-copy',
+        subMenu: [{
+          text: LANG['grid']['contextmenu']['copy']['title'],
+          icon: 'fa fa-copy',
+          disabled: !id,
+          action: () => {
+            // 如果只有一个id，则显示id名称，否则显示ids数量
+            ids.map((id) => {
+              let path = manager.path + id;
+              // 判断是否已经复制
+              if (id in self.Clipboard) {
+                return toastr.warning(LANG['grid']['contextmenu']['copy']['warning'](id), LANG_T['warning']);
+              };
+              self.Clipboard[id] = path;
+              toastr.info(LANG['grid']['contextmenu']['copy']['info'](id), LANG_T['info']);
+            });
+          }
+        }, {
+          text: LANG['grid']['contextmenu']['copy']['copyname'],
+          icon: 'fa fa-file-word-o',
+          disabled: !id || ids.length > 1,
+          action: () => {
+            clipboard.writeText(id);
+            // 检测是否复制成功
+            let txt = clipboard.readText();
+            if (txt == id) {
+              toastr.success(LANG['grid']['contextmenu']['copy']['copysuccess'], LANG_T['success']);
+            } else {
+              toastr.error(LANG['grid']['contextmenu']['copy']['copyfail'], LANG_T['error']);
+            }
+          }
+        }, {
+          text: LANG['grid']['contextmenu']['copy']['copypath'],
+          icon: 'fa fa-file-powerpoint-o',
+          disabled: !id || ids.length > 1,
+          action: () => {
+            let txt = `${self.manager.path}${id}`;
+            clipboard.writeText(txt);
+            // 检测是否复制成功
+            let cptxt = clipboard.readText();
+            if (cptxt == txt) {
+              toastr.success(LANG['grid']['contextmenu']['copy']['copysuccess'], LANG_T['success']);
+            } else {
+              toastr.error(LANG['grid']['contextmenu']['copy']['copyfail'], LANG_T['error']);
+            }
+          }
+        }]
+      }, {
+        text: LANG['grid']['contextmenu']['paste']['title'],
+        icon: 'fa fa-paste',
+        disabled: _Clipboard_num === 0,
+        subMenu: _Clipboard
+      }, {
+        text: LANG['grid']['contextmenu']['preview'],
+        icon: 'fa fa-eye',
+        disabled: !id || ids.length > 1 || !self.checkPreview(id),
+        action: () => {
+          manager.previewFile(id, this.getRowAttribute(_ids[0], 'fsize'));
+        }
+      }, {
+        divider: true
+      }, {
+        text: LANG['grid']['contextmenu']['edit']['title'],
+        icon: 'fa fa-edit',
+        disabled: /*!isEdited || */
+          !id || ids.length > 1 || isFolder,
+        subMenu: [{
+          text: LANG['grid']['contextmenu']['edit']['opentab'],
+          icon: 'fa fa-external-link',
+          action: () => {
+            manager.editFile(id, true);
+          }
+        }, {
+          text: LANG['grid']['contextmenu']['edit']['openwindow'],
+          icon: 'fa fa-arrows-alt',
+          action: () => {
+            manager.editFile(id, false);
+          }
+        }]
+      }, {
+        text: LANG['grid']['contextmenu']['delete'],
+        icon: 'fa fa-trash-o',
+        disabled: !id,
+        action: () => {
+          manager.deleteFile(ids);
+        }
+      }, {
+        text: LANG['grid']['contextmenu']['rename'],
+        icon: 'fa fa-font',
+        disabled: !id || ids.length > 1,
+        action: () => {
+          manager.renameFile(id);
+        }
+      }, {
+        text: LANG['grid']['contextmenu']['modify'],
+        icon: 'fa fa-clock-o',
+        disabled: !id || ids.length > 1,
+        action: () => {
+          // manager.retimeFile(id, this.rowsAr[id]['cells'][2].innerText);
+          manager.retimeFile(id, this.getRowAttribute(_ids[0], 'data')[2]);
+        }
+      }, {
+        text: LANG['grid']['contextmenu']['chmod'],
+        icon: 'fa fa-users',
+        disabled: !id || ids.length > 1,
+        action: () => {
+          manager.chmodFile(id, this.getRowAttribute(_ids[0], 'data')[4]);
+        }
+      }, {
+        divider: true
+      }, {
+        text: LANG['grid']['contextmenu']['create']['title'],
+        icon: 'fa fa-plus-circle',
+        subMenu: [{
+          text: LANG['grid']['contextmenu']['create']['folder'],
+          icon: 'fa fa-folder-o',
+          action: manager
+            .createFolder
+            .bind(manager)
+        }, {
+          text: LANG['grid']['contextmenu']['create']['file'],
+          icon: 'fa fa-file-o',
+          action: manager
+            .createFile
+            .bind(manager)
+        }]
+      }, {
+        text: LANG['grid']['contextmenu']['terminal'],
+        icon: 'fa fa-terminal',
+        action: () => {
+          new Terminal(self.manager.opts, {
+            'path': self.manager.path
+          });
+        }
+      }];
 
       bmenu(menu, event);
 
@@ -554,7 +571,7 @@ class Files {
     // 键盘按下事件
     grid.attachEvent('onKeyPress', (code, cFlag, sFlag) => {
       switch (true) {
-        case(code <= 90 && code >= 65) || (code <= 57 && code >= 48):
+        case (code <= 90 && code >= 65) || (code <= 57 && code >= 48):
           // A-Z 0-9
           var input = String.fromCharCode(code);
           input = input.toLowerCase();
@@ -572,7 +589,7 @@ class Files {
             }
           }
           break
-        case(code == 38):
+        case (code == 38):
           //up
           var ids = grid
             .getAllRowIds()
@@ -580,12 +597,12 @@ class Files {
           var sid = grid
             .getSelectedRowId()
             .toString();
-          var cid = ids.indexOf(sid) <= 0
-            ? parseInt(ids[0]) - 1
-            : parseInt(ids[ids.indexOf(sid) - 1]) - 1;
+          var cid = ids.indexOf(sid) <= 0 ?
+            parseInt(ids[0]) - 1 :
+            parseInt(ids[ids.indexOf(sid) - 1]) - 1;
           grid.selectRow(cid);
           break;
-        case(code == 40):
+        case (code == 40):
           //down
           var ids = grid
             .getAllRowIds()
@@ -593,9 +610,9 @@ class Files {
           var sid = grid
             .getSelectedRowId()
             .toString();
-          var cid = ids.indexOf(sid) >= ids.length - 1
-            ? parseInt(ids[ids.length - 1]) - 1
-            : parseInt(ids[ids.indexOf(sid) + 1]) - 1;
+          var cid = ids.indexOf(sid) >= ids.length - 1 ?
+            parseInt(ids[ids.length - 1]) - 1 :
+            parseInt(ids[ids.indexOf(sid) + 1]) - 1;
           grid.selectRow(cid);
           break;
         default:
@@ -643,13 +660,13 @@ class Files {
     // 可预览文件后缀
     let isPreviewed = false;
     'jpeg,jpg,png,gif,bmp,ico'
-      .split(',')
+    .split(',')
       .map((e) => {
         name
           .toLowerCase()
-          .endsWith(`.${e}`)
-          ? isPreviewed = true
-          : 0;
+          .endsWith(`.${e}`) ?
+          isPreviewed = true :
+          0;
       });
     return isPreviewed;
   }
@@ -713,9 +730,8 @@ class Files {
         fname: file['name'],
         fsize: parseInt(file['size']),
         // 如果是可执行文件（exe、dll..），则设置为红色字体
-        style: /\.exe$|\.dll$|\.bat$|\.sh$|\.com$/.test(file['name'])
-          ? 'color:red'
-          : '',
+        style: /\.exe$|\.dll$|\.bat$|\.sh$|\.com$/.test(file['name']) ?
+          'color:red' : '',
         data: [
           self.fileIcon(file['name']),
           antSword.noxss(file['name'].replace(/\/$/, '')),
@@ -763,12 +779,12 @@ class Files {
       "Pb",
       "Eb"
     ];
-    for (let q = 0; q < b.length; q++) 
-      if (t > 1024) 
+    for (let q = 0; q < b.length; q++)
+      if (t > 1024)
         t = t / 1024;
-      else if (i === false) 
-        i = q;
-  if (i === false) 
+      else if (i === false)
+      i = q;
+    if (i === false)
       i = b.length - 1;
     return Math.round(t * 100) / 100 + " " + b[i];
   }
