@@ -20,6 +20,10 @@
 
 > 将 pwd payload 全部转换成 `%uxxxx` 这种形式, eg: `Re` => `%u0052%u0065`
 
+### 文件管理
+
+* 「文件下载」支持多文件下载, **不支持选择「文件夹」** #140
+
 ### 其它
 
 * 修复 `jsp_custom_script_for_mysql.jsp` 使用 `base64` 编码器连接数据库时 `characterEncoding` 二次解码导致的无法识别的问题 #171
