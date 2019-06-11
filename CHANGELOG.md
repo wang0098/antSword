@@ -2,7 +2,7 @@
 > 有空会补补BUG、添添新功能。    
 > 同时也欢迎大家的参与！感谢各位朋友的支持！ .TAT.
 
-## `v(2.1.3)`
+## 2019/06/11 `v(2.1.3)`
 
 ### 核心模块
 
@@ -29,6 +29,35 @@
 * 修复 `jsp_custom_script_for_mysql.jsp` 使用 `base64` 编码器连接数据库时 `characterEncoding` 二次解码导致的无法识别的问题 #171
 * 修复 `ASP`、`Custom` 数据库管理导出问题 #172
 * `jsp_custom_script_for_mysql.jsp`, `jsp_custom_script_for_oracle.jsp`, `jspx_custom_script_for_mysql.jspx` 新增解码器支持
+* 现在可以使用 HomeBrew 来安装、更新 `AntSword-Loader` 和 `AntSword` 了。参见 [homebrew-antsword](https://github.com/AntSwordProject/homebrew-antsword/)
+
+  具体步骤如下:
+
+  1. 添加 antsword 源
+  ```
+  $ brew tap antswordproject/antsword
+  ```
+  2. 安装 antsword-loader
+
+  ```
+  $ brew cask install antsword-loader
+  ```
+
+  3. 安装 antsword
+
+  ```
+  $ brew install antsword
+  ```
+
+  安装完毕后，运行 AntSword.app, 选择源码目录为 `/usr/local/opt/antsword`
+
+  **如果使用 HomeBrew 来管理antsword-loader 和 antsword 的版本，请一直使用该方式进行管理**
+
+### 插件相关
+
+* 新增 [「免杀Shell生成」插件](https://github.com/yzddmr6/as_webshell_venom) (Author: @yzddmr6)
+
+> 利用随机异或免杀D盾蚁剑版
 
 ## 2019/05/13 `v(2.1.2)`
 
