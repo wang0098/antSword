@@ -4,6 +4,13 @@
 
 ## `v(2.1.4)`
 
+### 核心模块
+
+* 增加 PHP 执行命令的函数(`proc_open`,`COM('Wscript.shell')`, `shellshock`) #194
+
+  * `COM` 组件执行命令, 该模块为 Windows 专属, 需要目标在 php.ini 中打开 COM 选项: `com.allow_dcom = true`, 注意, PHP 5.4.5 后,com/dotnet模块已经成了单独的扩展, 所以还需要在 php.ini 中配置 `extension=php_com_dotnet.dll`, 如果 PHP < 5.4.5 则不需要。
+  * `shellshock` 利用 bash 破壳(CVE-2014-6271)执行命令, 需要目标的 `/bin/sh` 链接为 `/bin/bash` 且存在破壳漏洞
+
 ### 文件管理
 
 * 修复标签页编辑文件时,路径过长导致右侧按钮不显示的 bug (#192)
