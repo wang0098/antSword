@@ -11,10 +11,16 @@
   * `COM` 组件执行命令, 该模块为 Windows 专属, 需要目标在 php.ini 中打开 COM 选项: `com.allow_dcom = true`, 注意, PHP 5.4.5 后,com/dotnet模块已经成了单独的扩展, 所以还需要在 php.ini 中配置 `extension=php_com_dotnet.dll`, 如果 PHP < 5.4.5 则不需要。
   * `shellshock` 利用 bash 破壳(CVE-2014-6271)执行命令, 需要目标的 `/bin/sh` 链接为 `/bin/bash` 且存在破壳漏洞
 
+* 新增全局变量 antSword['module'] 用于存放所有核心模块, 方便在插件中引入
+
 ### 文件管理
 
 * 修复标签页编辑文件时,路径过长导致右侧按钮不显示的 bug (#192)
 * 新建文件时, 默认内容前面加了 `#` 号(防止在shell当前目录下, 新建 `.htaccess` 语法错误导致整个目录无法解析)
+
+### 虚拟终端
+
+* 新增 `options['exec']` 用于替换当前 Terminal 中生成 payload 函数
 
 ## 2019/06/11 `v(2.1.3)`
 
