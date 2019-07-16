@@ -2,7 +2,7 @@
 > 有空会补补BUG、添添新功能。    
 > 同时也欢迎大家的参与！感谢各位朋友的支持！ .TAT.
 
-## `v(2.1.4)`
+## 2019/07/16 `v(2.1.4)`
 
 ### 核心模块
 
@@ -21,6 +21,22 @@
 ### 虚拟终端
 
 * 新增 `options['exec']` 用于替换当前 Terminal 中生成 payload 函数
+
+### 插件相关
+
+* [绕过 disable_functions](https://github.com/Medicean/as_bypass_php_disable_functions) 更新到 0.4
+
+  * 新增「FastCGI/PHP-FPM」模式
+
+   适用于PHP-FPM/FCGI 监听在 unix socket 或者 tcp socket 上时使用。常见的比如: nginx + fpm。IIS+FPM 使用的是「管道」通信，不适用。
+
+  * 新增「Apache_Mod_CGI」模式
+
+    利用 `.htaccess` 添加一个新的 cgi 后缀, 完成命令执行
+  
+  * 优化了 `.antproxy.php` 性能问题
+  * 修复了 `.antproxy.php` 不会代理 querystring 的问题
+  * 以上模式可在 「AntSword-Labs」仓库中找到相关 Docker 环境, 可自行在本机搭建环境测试
 
 ## 2019/06/11 `v(2.1.3)`
 
