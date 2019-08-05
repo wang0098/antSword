@@ -25,15 +25,19 @@ class Terminal {
         .focus() :
         0;
     });
+    let config = {
+      tsize: 1,
+    };
+    this.config = JSON.parse(antSword['storage']("adefault_terminal", false, JSON.stringify(config)));
+
     // 初始化UI::cell
     const cell = tabbar.cells(`tab_terminal_${hash}`);
     cell.attachHTMLString(`
       <div
         id="div_terminal_${hash}"
-        style="height:100%;margin:0;padding:0 5px 1px 5px;overflow:scroll;--size:1;"
+        style="height:100%;margin:0;padding:0 5px 1px 5px;overflow:scroll;--size:${parseFloat(this.config.tsize)};"
       ></div>
     `);
-
     this.path = '';
     this.opts = opts;
     this.options = options || {};
@@ -63,6 +67,9 @@ class Terminal {
         }
         if (this.options.hasOwnProperty("exec")) {
           this.core.command.exec = this.options.exec;
+        }
+        if (this.options.hasOwnProperty("tsize")) {
+          this.term[0].style.setProperty("--size", parseFloat(this.options.size));
         }
       })
       .catch((err) => {

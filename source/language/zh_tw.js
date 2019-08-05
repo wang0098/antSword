@@ -937,6 +937,10 @@ module.exports = {
           nohttps: '忽略HTTPS證書',
           requestTimeout: '請求超時'
         }
+      },
+      terminal: {
+        title: '虛擬終端',
+        size: '縮放'
       }
     }
   },

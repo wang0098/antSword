@@ -938,6 +938,10 @@ Hot Keys:
           nohttps: 'Ignore HTTPS certificate',
           requestTimeout: 'Request timeout'
         }
+      },
+      terminal: {
+        title: 'Terminal',
+        size: 'Scale'
       }
     }
   },

@@ -938,6 +938,10 @@ module.exports = {
           nohttps: '忽略HTTPS证书',
           requestTimeout: '请求超时'
         }
+      },
+      terminal: {
+        title: '虚拟终端',
+        size: '缩放'
       }
     }
   },

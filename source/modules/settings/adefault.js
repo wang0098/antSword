@@ -29,6 +29,9 @@ class ADefault {
           "ignore-https": 0,
           "request-timeout": '10000'
         }
+      },
+      terminal: {
+        tsize: 1,
       }
     };
     // 读取配置
@@ -55,6 +58,10 @@ class ADefault {
     if (!this.shellmanager_settings.others) {
       this.shellmanager_settings.others = default_config.shellmanager.others;
     }
+
+    const terminal_settings = JSON.parse(antSword['storage']("adefault_terminal", false, JSON.stringify(default_config.terminal)));
+    this.terminal_settings = terminal_settings;
+
     const toolbar = cell.attachToolbar();
     toolbar.loadStruct([{
       id: 'save',
@@ -179,6 +186,31 @@ class ADefault {
               inputWidth: 600,
               inputHeight: 150
             }]
+          }]
+        },
+        {
+          type: 'fieldset',
+          label: `<i class="fa fa-terminal"></i> ${LANG['terminal']['title']}`,
+          list: [{
+            type: 'block',
+            list: [{
+              type: 'label',
+              name: 'terminal_size_label',
+              label: `${LANG['terminal']['size']} x${parseFloat(this.terminal_settings.tsize).toFixed(2)}`
+            }, {
+              type: 'newcolumn',
+              offset: 20
+            }, {
+              type: 'container',
+              name: 'terminal_size',
+              inputWidth: 300,
+              inputHeight: 30
+            }, {
+              type: 'container',
+              name: 'terminal_size_preview',
+              inputWidth: 600,
+              inputHeight: 200
+            }, ]
           }]
         },
         // 后续其它模块
@@ -360,10 +392,13 @@ class ADefault {
             config.shellmanager.bodys = self.shellmanager_settings.bodys;
             config.shellmanager.others["ignore-https"] = _formvals['shellmanager_ignore-https'];
             config.shellmanager.others["request-timeout"] = _formvals['shellmanager_request-timeout'];
+
+            config.terminal.tsize = self.terminal_settings.tsize;
             // save save 文件管理设置
             antSword['storage']('adefault_filemanager', config.filemanager);
             antSword['storage']('adefault_database', config.database);
             antSword['storage']('adefault_shellmanager', config.shellmanager);
+            antSword['storage']('adefault_terminal', config.terminal);
             toastr.success(LANG['success'], LANG_T['success']);
             // 重启应用
             layer.confirm(LANG['confirm']['content'], {
@@ -535,6 +570,37 @@ class ADefault {
 
     shellmanager_bodys_grid.init();
     this.shellmanager_bodys_grid = shellmanager_bodys_grid;
+
+    // Terminal 部分
+    // preview
+    form.getContainer('terminal_size_preview').innerHTML = `<div id="div_terminal_preview" style="height:100%;margin:0;padding:0 5px 1px 5px;overflow:scroll;--size:${this.terminal_settings.tsize};"></div>`;
+    let banner = `[[b;cyan;](*) Information]`;
+    banner += `\n[[b;#99A50D;]Path  ]: [[;#C3C3C3;]/var/www/html]`;
+    banner += `\n[[b;#99A50D;]Driver]: [[;#C3C3C3;]/]`;
+    banner += `\n[[b;#99A50D;]System]: [[;#C3C3C3;]Linux 4.9.125-linuxkit #1 SMP Fri Sep 7 08:20:28 UTC 2018 x86_64]`;
+    banner += `\n[[b;#99A50D;]User  ]: [[;#C3C3C3;]www-data]`;
+    let terminal_size_preview = $("#div_terminal_preview");
+    let term = terminal_size_preview.terminal((cmd, ter) => {
+      ter.reset();
+    }, {
+      prompt: '([[b;#E80000;]www-data]:[[;#0F93D2;]/var/www/html]) $ ',
+      greetings: banner,
+      history: false,
+    });
+    // size slider
+    let terminal_size_slider = new dhtmlXSlider({
+      parent: form.getContainer('terminal_size'),
+      size: 300,
+      value: this.terminal_settings.tsize,
+      step: 0.05,
+      min: 0.5,
+      max: 2,
+    });
+    terminal_size_slider.attachEvent("onSlideEnd", (value) => {
+      this.terminal_settings.tsize = value;
+      form.setItemLabel('terminal_size_label', `${LANG['terminal']['size']} x${parseFloat(value).toFixed(2)}`);
+      term[0].style.setProperty('--size', value);
+    });
 
     // grid右键
     [bookmark_grid, db_bookmark_grid, shellmanager_headers_grid, shellmanager_bodys_grid].forEach((g) => {
