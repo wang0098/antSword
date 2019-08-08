@@ -22,6 +22,16 @@
 * 新增 `options['tsize']` 可覆盖全局缩放设置
 * 支持全局缩放配置 #203
 
+### 插件相关
+
+* 新增插件 [check_rwx-suid](https://github.com/phantom11235/check_rwx-suid) Author: @phantom11235
+
+> 在目标服务器上查询可读可写可执行目录以及可用于suid提权的文件（支持asp,aspx,php）
+
+![check_rwx_suid](https://i.loli.net/2019/08/08/czPuqAjHMD3xWnN.png)
+
+* 新增插件 [inject_und3ad](https://github.com/phantom11235/inject_und3ad) Author: @phantom11235
+
 ## 2019/07/16 `v(2.1.4)`
 
 ### 核心模块
