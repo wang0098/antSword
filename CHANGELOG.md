@@ -32,6 +32,10 @@
 
 * 新增插件 [inject_und3ad](https://github.com/phantom11235/inject_und3ad) Author: @phantom11235
 
+### 其它
+
+* 修复 Linux Gnome 桌面环境下 minimize 时窗口消失问题 #204
+
 ## 2019/07/16 `v(2.1.4)`
 
 ### 核心模块

@@ -76,6 +76,8 @@ app.once('ready', () => {
       event.preventDefault();
       if (process.platform == 'darwin') {
         app.hide();
+      } else if (process.platform == 'linux') {
+        return;
       } else {
         mainWindow.hide();
       }
