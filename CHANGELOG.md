@@ -2,7 +2,7 @@
 > 有空会补补BUG、添添新功能。    
 > 同时也欢迎大家的参与！感谢各位朋友的支持！ .TAT.
 
-## `v(2.1.5)`
+## 2019/08/19 `v(2.1.5)`
 
 ### 核心模块
 
@@ -31,6 +31,10 @@
 ![check_rwx_suid](https://i.loli.net/2019/08/08/czPuqAjHMD3xWnN.png)
 
 * 新增插件 [inject_und3ad](https://github.com/phantom11235/inject_und3ad) Author: @phantom11235
+
+* 「as_webshell_venom」更新到 `v3.2`
+
+* 「绕过 Disable_functions」更新到 `v0.5`
 
 ### 其它
 
