@@ -80,6 +80,8 @@ ChangeLog:
     *   - aes_padding: NoPadding
     *   - aes_keylen: 32
     */
+    // 注意: 以下4项为 encoder/decoder 共用
+    // 如果需要请求和返回采用不同方式, 自行修改
     String aes_mode = "CFB";            // EBC|ECB|CFB|
     String aes_padding = "NoPadding";   // NoPadding|PKCS5Padding|PKCS7Padding
     int aes_keylen = 16;                // 16|32  // 16(AES-128) 32(AES-256)
