@@ -65,7 +65,7 @@ class Toolbar {
     this.toolbar.clearAll();
     var plugsData = [];
     try {
-      var plugsList = JSON.parse(antSword.storage('toolbar'));
+      var plugsList = JSON.parse(antSword.storage('toolbar', false, '[]'));
       plugsList.forEach((plug) => {
         if (plug in antSword["plugins"]) {
           p = antSword["plugins"][plug]["info"];
@@ -113,7 +113,7 @@ class Toolbar {
     var plugsData = [];
     try {
       var i = 1;
-      var plugs = JSON.parse(antSword.storage('toolbar'));
+      var plugs = JSON.parse(antSword.storage('toolbar', false, '[]'));
       for (let plug in antSword["plugins"]) {
         p = antSword["plugins"][plug]["info"];
         plugsData.push({
