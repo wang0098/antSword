@@ -192,6 +192,13 @@ module.exports = {
         requestTimeout: 'Request timeout',
         commandPath: 'Custom terminal-execPath'
       }
+    },
+    toolbar: {
+      select: 'Please select at least one shell',
+      setting: {
+        text: 'Setting',
+        title: 'Setting pligins which you want to show'
+      }
     }
   },
   terminal: {

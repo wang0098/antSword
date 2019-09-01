@@ -131,6 +131,8 @@ const antSword = window.antSword = {
           }
         });
     }
+    // 加载工具栏
+    antSword.modules.shellmanager.toolbar.reloadToolbar()
   }
 };
 

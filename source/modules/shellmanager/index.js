@@ -5,6 +5,7 @@
 
 const Data = require('./data');
 const List = require('./list/');
+const Toolbar = require('./toolbar');
 const Category = require('./category/');
 
 class ShellManager {
@@ -12,11 +13,13 @@ class ShellManager {
     const tabbar = antSword['tabbar'];
     tabbar.addTab('tab_shellmanager', '<i class="fa fa-th-large"></i>', null, null, true, false);
     const cell = tabbar.cells('tab_shellmanager');
-    const layout = cell.attachLayout('2U');
+    const layout = cell.attachLayout('3T');
+    // 初始化顶侧栏：工具栏 - 插件
+    this.toolbar = new Toolbar(layout.cells('a'), this);
     // 初始化左侧栏：数据
-    this.list = new List(layout.cells('a'), this);
+    this.list = new List(layout.cells('b'), this);
     // 初始化右侧栏：目录
-    this.category = new Category(layout.cells('b'), this);
+    this.category = new Category(layout.cells('c'), this);
 
     this.searchPop = null;
     this.searchForm = null;
