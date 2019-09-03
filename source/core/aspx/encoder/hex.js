@@ -7,10 +7,12 @@
 'use strict';
 
 module.exports = (pwd, data, ext = null) => {
-    let randomID = `_0x${Math
-        .random()
-        .toString(16)
-        .substr(2)}`;
+    let randomID;
+    if (ext.opts.otherConf['use-random-variable'] === 1) {
+        randomID = antSword.utils.RandomChoice(antSword['RANDOMWORDS']);
+    } else {
+        randomID = `${antSword['utils'].RandomLowercase()}${Math.random().toString(16).substr(2)}`;
+    }
     let hexencoder = "function HexAsciiConvert(hex:String) {var sb:System.Text.StringBuilder = new Sys" +
         "tem.Text.StringBuilder();var i;for(i=0; i< hex.Length; i+=2){sb.Append(System.Co" +
         "nvert.ToString(System.Convert.ToChar(Int32.Parse(hex.Substring(i,2), System.Glob" +

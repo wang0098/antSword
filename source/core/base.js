@@ -109,9 +109,9 @@ class Base {
     if (this.__opts__.otherConf["use-random-variable"] == 1) {
       // 随机返回单词, 排除 body 和 pwd
       let excludes = Object.keys(this.__opts__.httpConf.body).concat(this.__opts__.pwd);
-      return this.getRandomVariable(antSword['RANDOMWORDS'], excludes, 6);
+      return antSword['utils'].RandomChoice(antSword['RANDOMWORDS'], excludes, 6);
     } else {
-      random = () => `${(Math.random() + Math.random()).toString(16).substr(2)}`; // 返回六个随机变量名数组
+      random = () => `${antSword['utils'].RandomLowercase()}${(Math.random() + Math.random()).toString(16).substr(2)}`; // 返回六个随机变量名数组
       return [
         random(),
         random(),

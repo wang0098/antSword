@@ -280,6 +280,7 @@ antSword['CacheManager'] = CacheManager;
 antSword['Decodes'] = new Decodes();
 antSword['menubar'] = new Menubar();
 antSword['RANDOMWORDS'] = require('./base/words');
+antSword['utils'] = require('./base/utils');
 antSword['package'] = require('../package');
 
 // 加载模块列表

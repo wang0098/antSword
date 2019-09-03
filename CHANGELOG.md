@@ -4,9 +4,35 @@
 
 ## `v(2.1.6)`
 
+### 后端模块
+
+* 修复数据截取 Bug
+
 ### 核心模块
 
-* 数据分割字符随机化增强(随机内容,随机长度 5~12 位)
+* 数据分割字符随机化增强(随机内容, 随机长度 5~12 位), 避免客户端发包产生固定的 `Content-Length`
+* 新增 `antSword["RANDOMWORDS"]` 全局变量, 存放英文单词, 如需要定制字典请修改 `source/base/word.js`
+* 新增 `antSword["utils"]` 全局变量, 包函 `RandomChoice`, `RandomLowercase` 函数
+* 发包随机变量名去除 `_0x` 通用变量前缀
+* 核心模版发包键名支持随机英文单词
+
+### Shell 管理
+
+* 新增「使用随机英文单词变量」配置项, 在发包时非密码变量名会使用随机产生的英文单词 (thx @Ch1ngg)
+
+![ranword_1.png](https://i.loli.net/2019/09/03/vxVCiZ6znb2MGkt.png)
+
+未勾选此配置项时, 发包变量名如下:
+
+![randword_2.png](https://i.loli.net/2019/09/03/bEUonV3QXTa1pSD.png)
+
+勾选此项设置后, 发包变量名如下:
+
+![randword_3.png](https://i.loli.net/2019/09/03/iwRZF8gbh6WEdlO.png)
+
+* 新增常用插件功能面板, 可自定义配置常用插件到此面板, 快速调用
+
+![shell_toolbar.png](https://i.loli.net/2019/09/03/Wu82S65Oq3EPopt.png)
 
 ### 其它
 

