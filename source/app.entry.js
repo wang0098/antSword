@@ -279,6 +279,7 @@ antSword['ipcRenderer'] = ipcRenderer;
 antSword['CacheManager'] = CacheManager;
 antSword['Decodes'] = new Decodes();
 antSword['menubar'] = new Menubar();
+antSword['RANDOMWORDS'] = require('./base/words');
 antSword['package'] = require('../package');
 
 // 加载模块列表

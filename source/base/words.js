@@ -1,4 +1,4 @@
-exports.randomWords = [
+const RANDOMWORDS = [
     "abbreviation",
     "abstract",
     "abstraction",
@@ -706,4 +706,5 @@ exports.randomWords = [
     "window",
     "word",
     "wrapper"
-] 
+];
+module.exports = RANDOMWORDS;

@@ -9,8 +9,6 @@
 const iconv = require('iconv-lite');
 const NodeRSA = require('node-rsa');
 const fs = require('fs');
-const words = require('../../modules/words');
-
 
 class Base {
 
@@ -24,7 +22,7 @@ class Base {
     opts['encode'] = opts['encode'] || 'utf8';
     opts['encoder'] = opts['encoder'] || 'default';
     this.__opts__ = opts;
-    
+
     this['__encoder__'] = {
       /**
        * 默认编码器
@@ -83,12 +81,18 @@ class Base {
     } catch (e) {}
     return key;
   }
-  
-  getRandomVariable(array) {
+
+  /**
+   * 随机从列表返回指定长度的列表
+   * @param {array} array 待选列表
+   * @param {array} excludes 排除列表
+   * @param {int} len 返回的长度,默认 6
+   */
+  getRandomVariable(array, excludes = [], len = 6) {
     var tmp = [];
-    while (tmp.length < 6) {
-        let v = array[Math.ceil(Math.random() * array.length - 1)];
-        tmp.indexOf(v) === -1 && tmp.push(v);
+    while (tmp.length < len) {
+      let v = array[Math.ceil(Math.random() * array.length - 1)];
+      excludes.indexOf(v) === -1 && tmp.indexOf(v) === -1 && tmp.push(v);
     }
     return tmp;
   }
@@ -101,11 +105,12 @@ class Base {
   argv() {
     // 生成一个随机的变量名
     let random;
-    
-    if(this.__opts__.otherConf["use-random-variable"] == 1){
-      //random = () => `${words.randomWords[parseInt(Math.random() * words.randomWords.length)]}`;//从word.js随机返回单词
-      return this.getRandomVariable(words.randomWords);
-    }else{
+
+    if (this.__opts__.otherConf["use-random-variable"] == 1) {
+      // 随机返回单词, 排除 body 和 pwd
+      let excludes = Object.keys(this.__opts__.httpConf.body).concat(this.__opts__.pwd);
+      return this.getRandomVariable(antSword['RANDOMWORDS'], excludes, 6);
+    } else {
       random = () => `${(Math.random() + Math.random()).toString(16).substr(2)}`; // 返回六个随机变量名数组
       return [
         random(),
