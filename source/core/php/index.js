@@ -66,11 +66,11 @@ class PHP extends Base {
     let tag_s = Math
       .random()
       .toString(16)
-      .substr(2, 5); // "->|";
+      .substr(2, parseInt(Math.random() * 8 + 5)); // "->|";
     let tag_e = Math
       .random()
       .toString(16)
-      .substr(2, 5); // "|<-";
+      .substr(2, parseInt(Math.random() * 8 + 5)); // "|<-";
     let asencCode;
     if (!force_default) {
       asencCode = this.__decoder__[this.__opts__['decoder'] || 'default'].asoutput();

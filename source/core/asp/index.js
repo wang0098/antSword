@@ -65,11 +65,11 @@ class ASP extends Base {
     let tag_s = Math
       .random()
       .toString(16)
-      .substr(2, 5); // '->|';
+      .substr(2, parseInt(Math.random() * 8 + 5)); // '->|';
     let tag_e = Math
       .random()
       .toString(16)
-      .substr(2, 5); // '|<-';
+      .substr(2, parseInt(Math.random() * 8 + 5)); // '|<-';
 
     // let formatter = new this.format(this.__opts__['encode']);
     let formatter = Base
