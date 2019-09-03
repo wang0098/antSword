@@ -27,6 +27,7 @@ class ADefault {
         bodys: {},
         others: {
           "ignore-https": 0,
+          "use-random-variable": 0,
           "request-timeout": '10000'
         }
       },
@@ -145,6 +146,12 @@ class ADefault {
               name: 'shellmanager_ignore-https',
               label: LANG['shellmanager']['other']['nohttps'],
               checked: self.shellmanager_settings.others['ignore-https'] === 1
+            }, {
+              type: 'checkbox',
+              position: 'label-right',
+              name: 'shellmanager_use-random-variable',
+              label: LANG['shellmanager']['other']['userandomvariable'],
+              checked: self.shellmanager_settings.others['use-random-variable'] === 1
             }, {
               type: "label",
               label: LANG['shellmanager']['other']['requestTimeout']
@@ -391,6 +398,7 @@ class ADefault {
             config.shellmanager.headers = self.shellmanager_settings.headers;
             config.shellmanager.bodys = self.shellmanager_settings.bodys;
             config.shellmanager.others["ignore-https"] = _formvals['shellmanager_ignore-https'];
+            config.shellmanager.others["use-random-variable"] = _formvals['shellmanager_use-random-variable'];
             config.shellmanager.others["request-timeout"] = _formvals['shellmanager_request-timeout'];
 
             config.terminal.tsize = self.terminal_settings.tsize;

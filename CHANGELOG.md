@@ -39,6 +39,7 @@
 * `jsp_custom_script_for_mysql` 提供 `AES` 编码解码示例
 * `jsp_custom_script_for_mysql` 增加 Version 显示
 * windows 下单击鼠标左键 Tray Icon 显示/隐藏 主窗口 改为 「双击」
+* 默认设置新增 「使用随机英文单词变量」配置项
 
 ## 2019/08/19 `v(2.1.5)`
 

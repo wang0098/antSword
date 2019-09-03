@@ -942,6 +942,7 @@ module.exports = {
         },
         other: {
           nohttps: '忽略HTTPS證書',
+          userandomvariable: '使用隨機英文單詞變量',
           requestTimeout: '請求超時'
         }
       },

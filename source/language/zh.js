@@ -944,6 +944,7 @@ module.exports = {
         },
         other: {
           nohttps: '忽略HTTPS证书',
+          userandomvariable: '使用随机英文单词变量',
           requestTimeout: '请求超时'
         }
       },
