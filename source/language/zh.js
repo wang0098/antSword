@@ -192,6 +192,13 @@ module.exports = {
         requestTimeout: '请求超时',
         commandPath: '自定义终端执行路径'
       }
+    },
+    toolbar: {
+      select: '至少选择一个 webshell 吧',
+      setting: {
+        text: '设置',
+        title: '设置你要添加到工具栏的插件'
+      }
     }
   },
   terminal: {
