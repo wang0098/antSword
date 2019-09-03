@@ -1,7 +1,7 @@
 /**
  * 中国蚁剑::核心模块::基础函数库
  * 开写：2016/04/12
- * 更新：-
+ * 更新：2019/09/02 (@Ch1ngg)
  * 作者：蚁逅 <https://github.com/antoor>
  */
 'use strict';
@@ -9,6 +9,8 @@
 const iconv = require('iconv-lite');
 const NodeRSA = require('node-rsa');
 const fs = require('fs');
+const words = require('../../modules/words');
+
 
 class Base {
 
@@ -22,7 +24,7 @@ class Base {
     opts['encode'] = opts['encode'] || 'utf8';
     opts['encoder'] = opts['encoder'] || 'default';
     this.__opts__ = opts;
-
+    
     this['__encoder__'] = {
       /**
        * 默认编码器
@@ -81,6 +83,16 @@ class Base {
     } catch (e) {}
     return key;
   }
+  
+  getRandomVariable(array) {
+    var tmp = [];
+    while (tmp.length < 6) {
+        let v = array[Math.ceil(Math.random() * array.length - 1)];
+        tmp.indexOf(v) === -1 && tmp.push(v);
+    }
+    return tmp;
+  }
+
 
   /**
    * 返回参数列表
@@ -88,18 +100,22 @@ class Base {
    */
   argv() {
     // 生成一个随机的变量名
-    let random = () => `0x${ (Math.random() + Math.random())
-      .toString(16)
-      .substr(2)}`;
-    // 返回六个随机变量名数组
-    return [
-      random(),
-      random(),
-      random(),
-      random(),
-      random(),
-      random()
-    ];
+    let random;
+    
+    if(this.__opts__.otherConf["use-random-variable"] == 1){
+      //random = () => `${words.randomWords[parseInt(Math.random() * words.randomWords.length)]}`;//从word.js随机返回单词
+      return this.getRandomVariable(words.randomWords);
+    }else{
+      random = () => `${(Math.random() + Math.random()).toString(16).substr(2)}`; // 返回六个随机变量名数组
+      return [
+        random(),
+        random(),
+        random(),
+        random(),
+        random(),
+        random()
+      ];
+    }
   }
 
   /**
@@ -279,9 +295,7 @@ class Base {
           encoding = encoding != "unknown" ?
             encoding :
             this.__opts__['encode'];
-          let text = antSword
-            .Decodes
-            .decode(buff, encoding);
+          let text = antSword.Decodes.decode(buff, encoding);
           return res({
             'encoding': encoding || "",
             'text': text,
@@ -311,6 +325,7 @@ class Base {
           chunkStepMin: (this.__opts__['otherConf'] || {})['chunk-step-byte-min'] || 2,
           chunkStepMax: (this.__opts__['otherConf'] || {})['chunk-step-byte-max'] || 3,
           useMultipart: (this.__opts__['otherConf'] || {})['use-multipart'] === 1,
+          useRandomVariable: (this.__opts__['otherConf'] || {})['use-random-variable'] === 1,
           timeout: parseInt((this.__opts__['otherConf'] || {})['request-timeout']),
           headers: (this.__opts__['httpConf'] || {})['headers'] || {},
           body: (this.__opts__['httpConf'] || {})['body'] || {}
@@ -362,6 +377,7 @@ class Base {
           chunkStepMin: (this.__opts__['otherConf'] || {})['chunk-step-byte-min'] || 2,
           chunkStepMax: (this.__opts__['otherConf'] || {})['chunk-step-byte-max'] || 3,
           useMultipart: (this.__opts__['otherConf'] || {})['use-multipart'] === 1,
+          useRandomVariable: (this.__opts__['otherConf'] || {})['use-random-variable'] === 1,
           timeout: parseInt((this.__opts__['otherConf'] || {})['request-timeout']),
           headers: (this.__opts__['httpConf'] || {})['headers'] || {},
           body: (this.__opts__['httpConf'] || {})['body'] || {}
