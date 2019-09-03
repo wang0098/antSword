@@ -409,7 +409,6 @@ class Request {
     let foundTagS = false;
     let foundTagE = false;
     res.on('data', (chunk) => {
-
       // 这样吧，我们尝试一种新的数据截取算法：
       // 1. 把数据流转换为16进制
       let chunkHex = Buffer
@@ -421,7 +420,7 @@ class Request {
       if (chunkHex.indexOf(tagHexS) >= 0 && chunkHex.lastIndexOf(tagHexE) >= 0) {
         let index_s = chunkHex.indexOf(tagHexS);
         let index_e = chunkHex.lastIndexOf(tagHexE);
-        temp = chunkHex.substr(index_s + tagHexS.length, index_e - index_s - tagHexE.length);
+        temp = chunkHex.substr(index_s + tagHexS.length, index_e - index_s - tagHexS.length);
         foundTagS = foundTagE = // 如果只包含前截断，则截取后边
           true;
       } else if (chunkHex.indexOf(tagHexS) >= 0 && chunkHex.lastIndexOf(tagHexE) === -1) {
@@ -478,8 +477,7 @@ function detectEncoding(buffer, options) {
   // var VALID_ENCODINGS = ['gb2312', 'gbk', 'utf-8', 'big5', 'euc-kr','euc-jp'];
 
   if (encoding === null || !iconv.encodingExists(encoding) || confidence < minConfidence) {
-    return verbose ?
-      {
+    return verbose ? {
         encoding: defaultEncoding,
         oriEncoding: encoding,
         confidence: confidence
@@ -487,8 +485,7 @@ function detectEncoding(buffer, options) {
       defaultEncoding;
   } else {
     encoding = encoding.toUpperCase();
-    return verbose ?
-      {
+    return verbose ? {
         encoding: encoding,
         oriEncoding: encoding,
         confidence: confidence
