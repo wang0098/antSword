@@ -211,6 +211,7 @@ class Request {
         // 忽略HTTPS
         .ignoreHTTPS(opts['ignoreHTTPS'])
         .send(_postarr)
+        .buffer(true)
         .parse((res, callback) => {
           this.parse(opts['tag_s'], opts['tag_e'], (chunk) => {
             event
