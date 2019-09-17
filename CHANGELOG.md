@@ -2,7 +2,7 @@
 > 有空会补补BUG、添添新功能。    
 > 同时也欢迎大家的参与！感谢各位朋友的支持！ .TAT.
 
-## `v(2.1.6)`
+## 2019/09/17 `v(2.1.6)`
 
 ### 后端模块
 
@@ -42,6 +42,14 @@
 * windows 下单击鼠标左键 Tray Icon 显示/隐藏 主窗口 改为 「双击」
 * 默认设置新增 「使用随机英文单词变量」配置项
 * 移除 shells 目录, 示例脚本已转至 [AwesomeScript](https://github.com/AntSwordProject/AwesomeScript) 仓库下
+
+### 插件相关
+
+* 新增插件「[SacnWebShell](https://github.com/virink/as_scanwebshell)」
+
+ > 通过正则匹配，查找后门 webshell
+
+ ![scanwebshell](https://i.loli.net/2019/09/17/jRXD3pLaV5sCUkr.png)
 
 ## 2019/08/19 `v(2.1.5)`
 
