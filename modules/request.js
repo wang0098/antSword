@@ -190,7 +190,14 @@ class Request {
       let _postarr = [];
       if (opts['useMultipart'] == 1) {
         _request.send = _request.field;
-        _postarr = _postData;
+        for (var key in _postData) {
+          if (_postData.hasOwnProperty(key)) {
+            let _tmp = encodeURIComponent(_postData[key]).replace(/asunescape\((.+?)\)/g, function ($, $1) {
+              return unescape($1)
+            });
+            _postarr[key] = _tmp;
+          }
+        }
       } else {
         _request.send = old_send;
         for (var key in _postData) {
