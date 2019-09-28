@@ -512,8 +512,7 @@ class CUSTOM {
         conn: conf['conn'],
         encode: this.manager.opt.encode,
         db: ['access', 'microsoft_jet_oledb_4_0'].indexOf(conf['type']) > -1 ?
-          conf['conn'].match(/[\w]+.mdb$/) :
-          'database'
+          conf['conn'].match(/[\w]+.mdb$/) : 'database'
       }))
       .then((res) => {
         let ret = res['text'];
@@ -656,7 +655,7 @@ class CUSTOM {
             return
           };
           const _column = Buffer
-            .from(_.substr(_, _.lastIndexOf(' ')))
+            .from(_.substr(0, _.length - _.lastIndexOf(' ')))
             .toString('base64');
           this
             .tree

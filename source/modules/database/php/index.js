@@ -1475,7 +1475,7 @@ class PHP {
       // 添加子节点
       arr.map((_) => {
         if (!_) { return };
-        const _column = Buffer.from(_.substr(_, _.lastIndexOf(' '))).toString('base64');
+        const _column = Buffer.from(_.substr(0, _.length - _.lastIndexOf(' '))).toString('base64');
         this.tree.insertNewItem(
           `table::${id}:${_db}:${_table}`,
           `column::${id}:${_db}:${_table}:${_column}`,

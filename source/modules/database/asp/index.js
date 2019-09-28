@@ -527,8 +527,7 @@ class ASP {
       .request(this.core[`database_${conf['type']}`].show_databases({
         conn: conf['conn'],
         dbname: ['access', 'microsoft_jet_oledb_4_0'].indexOf(conf['type']) > -1 ?
-          conf['conn'].match(/[\w]+.mdb$/) :
-          'database'
+          conf['conn'].match(/[\w]+.mdb$/) : 'database'
       }))
       .then((res) => {
         let ret = res['text'];
@@ -694,7 +693,7 @@ class ASP {
             return
           };
           const _column = Buffer
-            .from(_.substr(_, _.lastIndexOf(' ')))
+            .from(_.substr(0, _.length - _.lastIndexOf(' ')))
             .toString('base64');
           this
             .tree
