@@ -85,8 +85,28 @@ class CUSTOM {
             const db = Buffer.from(_co[1], 'base64').toString();
             const table = Buffer.from(_co[2], 'base64').toString();
             const column = Buffer.from(_co[3], 'base64').toString();
-
-            const sql = `SELECT ${column} FROM ${db}.${table} ORDER BY 1 DESC;`;
+            let sql = "";
+            switch (this.dbconf['type']) {
+              case 'mysql':
+                sql = `SELECT \`${column}\` FROM \`${table}\` ORDER BY 1 DESC LIMIT 0,20;`;
+                break;
+              case 'sqlserver':
+              case 'mssql':
+              case 'sqlsrv':
+                sql = `SELECT TOP 20 [${column}] FROM [${table}] ORDER BY 1 DESC;`;
+                break;
+              case 'oracle':
+              case 'oracle_oci8':
+                sql = `SELECT ${column} FROM ${db}.${table} WHERE ROWNUM < 20 ORDER BY 1`;
+                break;
+              case 'postgresql':
+              case 'postgresql_pdo':
+                sql = `SELECT ${column} FROM ${table} ORDER BY 1 DESC LIMIT 20 OFFSET 0;`;
+                break;
+              default:
+                sql = `SELECT \`${column}\` FROM \`${table}\` ORDER BY 1 DESC LIMIT 0,20;`;
+                break;
+            }
             this
               .manager
               .query
