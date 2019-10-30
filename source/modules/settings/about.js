@@ -21,7 +21,8 @@ class About {
         <p>
           <a href="https://github.com/AntSwordProject/AntSword"><i class="fa fa-github-alt"></i> GitHub</a> /
           <a href="http://doc.u0u.us"><i class="fa fa-book"></i> ${LANG['document']}</a> /
-          <a href="https://discord.gg/Uzh5nUf"><i class="fa fa-comments"></i> ${LANG['discord']}</a>
+          <a href="https://discord.gg/Uzh5nUf"><i class="fa fa-comments"></i> ${LANG['discord']}</a> /
+          <a href="https://forms.gle/HrUMxedsyREeXw4R9"><i class="fa fa-bug"></i> ${LANG['securityreport']}</a>
         </p>
         <div>
           <img src="ant-static://imgs/qrcode.jpg" style="width:100px;"/>
@@ -31,7 +32,7 @@ class About {
     `);
 
     // 在默认浏览器中打开链接
-    $('.about').on('click', 'a', function(e) {
+    $('.about').on('click', 'a', function (e) {
       e.preventDefault();
       antSword['shell'].openExternal(this.href);
     });
