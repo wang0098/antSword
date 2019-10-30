@@ -620,6 +620,7 @@ module.exports = {
       document: '文档',
       qqgroup: 'Q群',
       discord: '在线交流',
+      securityreport: '报告漏洞',
       wechat: '关注微信公众号'
     },
     language: {

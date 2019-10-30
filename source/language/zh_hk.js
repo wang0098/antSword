@@ -619,6 +619,7 @@ module.exports = {
       document: '文檔',
       qqgroup: 'Q羣',
       discord: '在線交流',
+      securityreport: '報告漏洞',
       wechat: '關注微信公眾號'
     },
     language: {

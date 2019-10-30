@@ -620,6 +620,7 @@ Hot Keys:
       document: 'Document',
       qqgroup: 'QQ Group',
       discord: 'Discord',
+      securityreport: 'Security Report',
       wechat: 'Fllow us on WeChat'
     },
     language: {
