@@ -640,7 +640,7 @@ antSword['menubar'].reg('check-update', () => {
     .send('check-loader-update');
 });
 
-if (new Date() - new Date(antSword['storage']('lastautocheck', false, "0")) >= 86400000) {
+if (new Date() - new Date(parseInt(antSword['storage']('lastautocheck', false, "0"))) >= 86400000) {
   // 检查更新
   antSword['storage']('lastautocheck', new Date().getTime());
   setTimeout(() => {
