@@ -303,8 +303,8 @@ class Base {
           let text = antSword.Decodes.decode(buff, encoding);
           return res({
             'encoding': encoding || "",
-            'text': text,
-            'buff': buff
+            'text': antSword.noxss(text, false),
+            'buff': Buffer.from(antSword.noxss(buff.toString()), false)
           });
         })
         // HTTP请求返回字节流

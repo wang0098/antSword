@@ -172,7 +172,7 @@ class FileManager {
         path: path
       })
     ).then((res) => {
-      let ret = res['text'];
+      let ret = antSword.unxss(res['text']);
       // 判断是否出错
       if (ret.startsWith('ERROR://')) {
         callback([]);
@@ -1036,8 +1036,8 @@ class FileManager {
         path: path
       })
     ).then((res) => {
-      let ret = res['text'];
-      codes = res['buff'];
+      let ret = antSword.unxss(res['text'], false);
+      codes = Buffer.from(antSword.unxss(res['buff'].toString(), false));
       let encoding = res['encoding'] || this.opts['encode'];
       if (encoding.toUpperCase() == "UTF-8") {
         encoding = "UTF8";

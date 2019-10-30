@@ -192,7 +192,7 @@ class Request {
         _request.send = _request.field;
         for (var key in _postData) {
           if (_postData.hasOwnProperty(key)) {
-            let _tmp = encodeURIComponent(_postData[key]).replace(/asunescape\((.+?)\)/g, function ($, $1) {
+            let _tmp = (_postData[key]).replace(/asunescape\((.+?)\)/g, function ($, $1) {
               return unescape($1)
             });
             _postarr[key] = _tmp;

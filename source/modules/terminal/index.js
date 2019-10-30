@@ -311,7 +311,7 @@ class Terminal {
           bin: _bin
         }))
         .then((ret) => {
-          let _ = ret['text'];
+          let _ = antSword.unxss(ret['text'], false);
           // 解析出命令执行路径
           const indexS = _.lastIndexOf('[S]');
           const indexE = _.lastIndexOf('[E]');
