@@ -797,6 +797,9 @@ class ASP {
     let data_arr = [];
     arr.map((_) => {
       let _data = _.split('\t|\t');
+      for (let i = 0; i < _data.length; i++) {
+        _data[i] = antSword.noxss(_data[i], false);
+      }
       data_arr.push(_data);
     });
     data_arr.pop();
